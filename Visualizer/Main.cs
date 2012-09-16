@@ -9,11 +9,15 @@ using System.Windows.Forms;
 
 namespace Meminator
 {
-    public partial class Main : Form
-    {
-        public Main()
-        {
-            InitializeComponent();
-        }
-    }
+	public partial class Main : Form
+	{
+		Profile Profile;
+
+		public Main()
+		{
+			InitializeComponent();
+
+			AddressSpaceControl.History = Profile.History;
+		}
+	}
 }
