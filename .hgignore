@@ -1,0 +1,22 @@
+syntax: glob
+Visualizer/obj/x86/Debug/Visualizer.csprojResolveAssemblyReference.cache
+Visualizer/obj/x86/Debug/Visualizer.csproj.GenerateResource.Cache
+Visualizer/obj/x86/Debug/Visualizer.csproj.FileListAbsolute.txt
+Visualizer/obj/x86/Debug/TempPE/Properties.Resources.Designer.cs.dll
+Visualizer/obj/x86/Debug/Meminator.pdb
+Visualizer/obj/x86/Debug/Meminator.exe
+Visualizer/obj/x86/Debug/Meminator.Properties.Resources.resources
+Visualizer/obj/x86/Debug/Meminator.Main.resources
+Visualizer/obj/x86/Debug/Meminator.AddressSpace.resources
+Visualizer/obj/x86/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+Visualizer/obj/x86/Debug/DesignTimeResolveAssemblyReferences.cache
+Visualizer/bin/Debug/Meminator.vshost.exe.manifest
+Visualizer/bin/Debug/Meminator.vshost.exe.config
+Visualizer/bin/Debug/Meminator.vshost.exe
+Visualizer/bin/Debug/Meminator.pdb
+Visualizer/bin/Debug/Meminator.exe.lastcodeanalysissucceeded
+Visualizer/bin/Debug/Meminator.exe.config
+Visualizer/bin/Debug/Meminator.exe.CodeAnalysisLog.xml
+Visualizer/bin/Debug/Meminator.exe
+Visualizer/Visualizer.suo
+Visualizer/Visualizer.sln.docstates.suo
