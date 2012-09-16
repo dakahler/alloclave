@@ -20,9 +20,9 @@ namespace Meminator
 			}
 		}
 
-		public void Add(IPacket packet)
+		public void Add(IPacket packet, Int64 timeStamp)
 		{
-			TimeSlice timeSlice = new TimeSlice(packet);
+			TimeSlice timeSlice = new TimeSlice(packet, timeStamp);
 
 			Stack<TimeSlice> data;
 			if (DataDictionary.TryGetValue(packet.GetType(), out data))

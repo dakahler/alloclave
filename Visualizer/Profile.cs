@@ -23,7 +23,7 @@ namespace Meminator
 			: this()
 		{
 			Transport = transport;
-			Transport.PacketReceived += new PacketReceivedEventHandler(HandlePacket);
+			PacketBundle.Instance.PacketReceived += new PacketReceivedEventHandler(HandlePacket);
 		}
 
 		public void Start()
@@ -38,7 +38,7 @@ namespace Meminator
 
 		void HandlePacket(object sender, PacketReceivedEventArgs e)
 		{
-			History.Add(e.Packet);
+			History.Add(e.Packet, e.TimeStamp);
 		}
 
 	}

@@ -42,16 +42,6 @@ namespace Meminator
 			Stack.Deserialize(binaryReader, targetSystemInfo);
 
 			// TODO: User data
-
-			// Swap endianness if necessary
-			bool isLittleEndian = BitConverter.IsLittleEndian;
-			if ((isLittleEndian && targetSystemInfo.Endianness == Common.Endianness.BigEndian) ||
-				(!isLittleEndian && targetSystemInfo.Endianness == Common.Endianness.LittleEndian))
-			{
-				Address = Common.EndianSwap(Address);
-				Size = Common.EndianSwap(Size);
-				Alignment = Common.EndianSwap(Alignment);
-			}
 		}
 	}
 }

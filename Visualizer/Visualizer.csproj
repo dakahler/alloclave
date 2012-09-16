@@ -60,6 +60,7 @@
     <Compile Include="CallStack.cs" />
     <Compile Include="CallStackParser.cs" />
     <Compile Include="Common.cs" />
+    <Compile Include="CustomBinaryReader.cs" />
     <Compile Include="History.cs" />
     <Compile Include="ICustomSerializable.cs" />
     <Compile Include="Main.cs">
@@ -69,6 +70,7 @@
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
     <Compile Include="Packet.cs" />
+    <Compile Include="PacketBundle.cs" />
     <Compile Include="PacketTypeRegistrar.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="Program.cs" />
