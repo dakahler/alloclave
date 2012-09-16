@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Meminator
 {
-	public interface Packet
+	public interface IPacket : ICustomSerializable
 	{
-		void Parse(byte[] data);
+		
 	}
 }

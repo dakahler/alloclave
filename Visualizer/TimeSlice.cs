@@ -7,16 +7,16 @@ namespace Meminator
 {
 	class TimeSlice
 	{
-		Packet Data;
+		IPacket Data;
 		Int64 TimeStamp;
 
-		public TimeSlice(Packet data)
+		public TimeSlice(IPacket data)
 		{
 			Data = data;
 			TimeStamp = DateTime.Now.Ticks;
 		}
 
-		public TimeSlice(Packet data, Int64 timeStamp)
+		public TimeSlice(IPacket data, Int64 timeStamp)
 		{
 			Data = data;
 			TimeStamp = timeStamp;

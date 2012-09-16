@@ -20,7 +20,7 @@ namespace Meminator
 			}
 		}
 
-		public void Add(Packet packet)
+		public void Add(IPacket packet)
 		{
 			TimeSlice timeSlice = new TimeSlice(packet);
 

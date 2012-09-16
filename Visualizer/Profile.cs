@@ -12,6 +12,7 @@ namespace Meminator
 		FileInfo FileInfo;
 		bool Dirty;
 		Transport Transport;
+		TargetSystemInfo TargetSystemInfo;
 
 		public Profile()
 		{

@@ -11,7 +11,7 @@ namespace Meminator
 {
 	public partial class Main : Form
 	{
-		Profile Profile;
+		Profile Profile = new Profile();
 
 		public Main()
 		{

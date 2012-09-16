@@ -7,6 +7,12 @@ namespace Meminator
 {
 	public class Win32Transport : Transport
 	{
+		public Win32Transport(TargetSystemInfo targetSystemInfo)
+			: base(targetSystemInfo)
+		{
+
+		}
+
 		public override void Connect()
 		{
 

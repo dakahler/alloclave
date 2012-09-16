@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using System.IO;
 
 namespace Meminator
 {
-	public class Screenshot : Packet
+	public class Screenshot : IPacket
 	{
 		Image Image;
 
@@ -15,9 +16,14 @@ namespace Meminator
 			Image = image;
 		}
 
-		public void Parse(byte[] data)
+		public byte[] Serialize(TargetSystemInfo targetSystemInfo)
 		{
+			throw new NotImplementedException();
+		}
 
+		public void Deserialize(BinaryReader binaryReader, TargetSystemInfo targetSystemInfo)
+		{
+			// TODO
 		}
 	}
 }

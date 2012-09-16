@@ -2,18 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace Meminator
 {
 	public class PacketReceivedEventArgs : EventArgs
 	{
-		public Packet Packet;
+		public IPacket Packet;
 	}
 
 	public delegate void PacketReceivedEventHandler(object sender, PacketReceivedEventArgs e);
 	public abstract class Transport
 	{
 		public event PacketReceivedEventHandler PacketReceived;
+		private TargetSystemInfo TargetSystemInfo;
+
+		public Transport(TargetSystemInfo targetSystemInfo)
+		{
+			TargetSystemInfo = targetSystemInfo;
+		}
 
 		public abstract void Connect();
 		public abstract void Disconnect();
@@ -24,18 +31,21 @@ namespace Meminator
 			{
 				return;
 			}
-			
-			if (!Enum.IsDefined(typeof(PacketTypeRegistrar.PacketTypes), packet[0]))
+
+			// ASCII encoding is specified so PeekChar only looks at the first byte
+			MemoryStream memoryStream = new MemoryStream(packet);
+			BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.ASCII);
+
+			if (!Enum.IsDefined(typeof(PacketTypeRegistrar.PacketTypes), binaryReader.PeekChar()))
 			{
 				throw new NotImplementedException();
 			}
 
-			PacketTypeRegistrar.PacketTypes packetType = (PacketTypeRegistrar.PacketTypes)packet[0];
-			Packet specificPacket = PacketTypeRegistrar.Generate(packetType);
+			PacketTypeRegistrar.PacketTypes packetType = (PacketTypeRegistrar.PacketTypes)binaryReader.ReadByte();
+			IPacket specificPacket = PacketTypeRegistrar.Generate(packetType);
 
 			// Pass in everything after the first byte, since that contained the type ID
-			byte[] subArray = packet.Skip(1).ToArray();
-			specificPacket.Parse(subArray);
+			specificPacket.Deserialize(binaryReader, TargetSystemInfo);
 
 			PacketReceivedEventArgs e = new PacketReceivedEventArgs();
 			e.Packet = specificPacket;

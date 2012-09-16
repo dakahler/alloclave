@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace Meminator
 {
-	class CallStack
+	class CallStack : ICustomSerializable
 	{
 		public class Frame
 		{
@@ -24,6 +25,16 @@ namespace Meminator
 		static void RegisterParser(ICallStackParser parser)
 		{
 			Parser = parser;
+		}
+
+		public byte[] Serialize(TargetSystemInfo targetSystemInfo)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Deserialize(BinaryReader binaryReader, TargetSystemInfo targetSystemInfo)
+		{
+
 		}
 
 		static ICallStackParser Parser;

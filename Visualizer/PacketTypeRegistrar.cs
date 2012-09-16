@@ -26,9 +26,9 @@ namespace Meminator
 		}
 
 
-		public static Packet Generate(PacketTypes type)
+		public static IPacket Generate(PacketTypes type)
 		{
-			return (Packet)Activator.CreateInstance(GetType(type));
+			return (IPacket)Activator.CreateInstance(GetType(type));
 		}
 
 		public static Type GetType(PacketTypes type)
