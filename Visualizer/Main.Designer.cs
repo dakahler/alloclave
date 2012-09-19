@@ -1,4 +1,4 @@
-﻿namespace Meminator
+﻿namespace Alloclave
 {
 	partial class Main
 	{
@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.AddressSpaceControl = new Meminator.AddressSpace();
+			this.AddressSpaceControl = new Alloclave.AddressSpace();
 			this.SuspendLayout();
 			// 
 			// AddressSpaceControl
@@ -46,7 +46,7 @@
 			this.ClientSize = new System.Drawing.Size(1017, 613);
 			this.Controls.Add(this.AddressSpaceControl);
 			this.Name = "Main";
-			this.Text = "Meminator Visualizer";
+			this.Text = "Alloclave Visualizer";
 			this.ResumeLayout(false);
 
 		}

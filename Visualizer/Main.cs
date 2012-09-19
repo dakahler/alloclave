@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Meminator
+namespace Alloclave
 {
 	public partial class Main : Form
 	{

@@ -1,4 +1,4 @@
-﻿namespace Meminator
+﻿namespace Alloclave
 {
 	partial class AddressSpace
 	{

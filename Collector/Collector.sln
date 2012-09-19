@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Collector", "Collector.vcxproj", "{5E835BE4-39E6-406D-8536-9EF3238E6D40}"
 EndProject
 Global

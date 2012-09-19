@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace Meminator
+namespace Alloclave
 {
 	/// <summary>
 	/// Extends BinaryReader and transparently swaps endianness when necessary

@@ -5,7 +5,7 @@ using System.Text;
 using System.Drawing;
 using System.IO;
 
-namespace Meminator
+namespace Alloclave
 {
 	public class Screenshot : IPacket
 	{
