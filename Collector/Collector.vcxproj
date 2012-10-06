@@ -62,6 +62,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Allocation.h" />
+    <ClInclude Include="Buffer.h" />
+    <ClInclude Include="ICustomSerializable.h" />
+    <ClInclude Include="IPacket.h" />
+    <ClInclude Include="Queue.h" />
+    <ClInclude Include="Registration.h" />
+    <ClInclude Include="Screenshot.h" />
+    <ClInclude Include="Transport.h" />
+    <ClInclude Include="Win32Transport.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Allocation.cpp" />
+    <ClCompile Include="Buffer.cpp" />
+    <ClCompile Include="Queue.cpp" />
+    <ClCompile Include="Registration.cpp" />
+    <ClCompile Include="Screenshot.cpp" />
+    <ClCompile Include="Transport.cpp" />
+    <ClCompile Include="Win32Transport.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
