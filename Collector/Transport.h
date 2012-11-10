@@ -21,7 +21,7 @@ namespace Alloclave
 
 	protected:
 
-		virtual void Flush();
+		virtual void Flush() = 0;
 
 		Queue PacketQueue;
 	};

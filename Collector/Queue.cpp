@@ -5,7 +5,7 @@ namespace Alloclave
 
 void Queue::Enqueue(const Buffer& buffer)
 {
-
+	// TODO
 }
 
 Buffer Queue::Dequeue()

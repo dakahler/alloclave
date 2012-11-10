@@ -14,19 +14,23 @@ namespace Alloclave
 	{
 	public:
 		Buffer();
-
 		Buffer(unsigned int initialSize);
+		Buffer(const Buffer& other);
 
 		virtual ~Buffer();
 
 		void Resize(unsigned int newSize);
 
-		char* Data;
+		void Add(void* data, unsigned int dataSize);
 
 	private:
 
 		static const unsigned int DefaultSize = 64;
 		unsigned int CurrentSize;
+
+		unsigned int Position;
+
+		char* Data;
 	};
 
 };
