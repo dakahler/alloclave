@@ -82,3 +82,5 @@ Collector/TestCollector/Debug/CL.write.1.tlog
 Collector/TestCollector/Debug/CL.read.1.tlog
 Collector/Debug/MemoryOverrides.obj
 Collector/Debug/Collector.Build.CppClean.log
+Collector/TestCollector/Debug/vc.nativecodeanalysis.all.xml
+Collector/TestCollector/Debug/Main.cpp.nativecodeanalysis.xml
