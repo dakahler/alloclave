@@ -11,12 +11,19 @@ namespace Alloclave
 {
 	public partial class Main : Form
 	{
-		Profile Profile = new Profile();
+		Profile Profile;
+
+		// TODO: This should be set in the UI
+		Transport Transport;
 
 		public Main()
 		{
 			InitializeComponent();
 
+			TargetSystemInfo targetSystemInfo = new TargetSystemInfo();
+			Transport = new Win32Transport(targetSystemInfo);
+
+			Profile = new Profile(Transport);
 			AddressSpaceControl.History = Profile.History;
 		}
 	}

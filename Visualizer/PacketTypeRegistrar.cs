@@ -16,6 +16,7 @@ namespace Alloclave
 		public enum PacketTypes
 		{
 			Allocation = 0,
+			//Free,
 			Screenshot,
 		};
 

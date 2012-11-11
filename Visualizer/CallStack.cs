@@ -17,6 +17,11 @@ namespace Alloclave
 
 		Stack<Frame> Frames = new Stack<Frame>();
 
+		public CallStack()
+		{
+
+		}
+
 		public CallStack(String callStack)
 		{
 			Frames = Parser.Parse(callStack);

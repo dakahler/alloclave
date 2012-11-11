@@ -6,7 +6,7 @@
 namespace Alloclave
 {
 
-	class Allocation : public IPacket
+	class Allocation : public Packet
 	{
 	public:
 		void* Address;
@@ -18,6 +18,9 @@ namespace Alloclave
 
 		virtual Buffer Serialize() const;
 		virtual void Deserialize(const Buffer& buffer, unsigned int bufferLength);
+
+	protected:
+		PacketType GetPacketType() const;
 	};
 
 };

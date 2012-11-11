@@ -6,7 +6,7 @@
 namespace Alloclave
 {
 
-	class Screenshot : public IPacket
+	class Screenshot : public Packet
 	{
 	public:
 
@@ -14,6 +14,9 @@ namespace Alloclave
 
 		virtual Buffer Serialize() const;
 		virtual void Deserialize(const Buffer& buffer, unsigned int bufferLength);
+
+	protected:
+		PacketType GetPacketType() const;
 	};
 
 };

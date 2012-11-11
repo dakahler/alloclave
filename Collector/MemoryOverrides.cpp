@@ -24,6 +24,9 @@ void* operator new (size_t size)
 
 void operator delete (void *p)
 {
-	free(p);
-	RegisterFree(p);
+	if (p)
+	{
+		RegisterFree(p);
+		free(p);
+	}
 }

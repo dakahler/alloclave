@@ -13,8 +13,7 @@ Allocation::Allocation()
 
 Buffer Allocation::Serialize() const
 {
-	unsigned int bufferSize = sizeof(Address) + sizeof(Size) + sizeof(Alignment);
-	Buffer buffer(bufferSize);
+	Buffer buffer = Packet::Serialize();
 
 	buffer.Add((void*)&Address, sizeof(Address));
 	buffer.Add((void*)&Size, sizeof(Size));
@@ -26,6 +25,11 @@ Buffer Allocation::Serialize() const
 void Allocation::Deserialize(const Buffer& buffer, unsigned int bufferLength)
 {
 
+}
+
+Packet::PacketType Allocation::GetPacketType() const
+{
+	return PacketType_Allocation;
 }
 
 }

@@ -9,9 +9,31 @@ namespace Alloclave
 	class Queue
 	{
 	public:
+		Queue();
+		~Queue();
+
 		void Enqueue(const Buffer& buffer);
 		Buffer Dequeue();
-		const Buffer& Peek();
+		const Buffer& Peek() const;
+		unsigned int GetNumItems() const;
+
+	private:
+		struct QueueItem
+		{
+			// TODO: Move to cpp
+			QueueItem()
+			{
+				Next = NULL;
+			}
+
+			Buffer Data;
+			QueueItem* Next;
+		};
+
+		QueueItem* Head;
+		QueueItem* Tail;
+
+		unsigned int NumItems;
 	};
 
 };

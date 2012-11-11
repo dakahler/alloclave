@@ -18,4 +18,9 @@ void Screenshot::Deserialize(const Buffer& buffer, unsigned int bufferLength)
 
 }
 
+Packet::PacketType Screenshot::GetPacketType() const
+{
+	return PacketType_Screenshot;
+}
+
 }

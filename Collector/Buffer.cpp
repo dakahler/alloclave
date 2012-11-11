@@ -29,7 +29,15 @@ Buffer::Buffer(const Buffer& other)
 	if (CurrentSize > 0)
 	{
 		Data = (char*)malloc(CurrentSize);
-		memcpy(Data, other.Data, CurrentSize);
+		if (Data)
+		{
+			memcpy(Data, other.Data, CurrentSize);
+		}
+		else
+		{
+			CurrentSize = 0;
+			Position = 0;
+		}
 	}
 }
 
@@ -48,14 +56,14 @@ void Buffer::Resize(unsigned int newSize)
 	{
 		char* newData = (char*)malloc(newSize);
 		unsigned int numBytesToCopy = MIN(newSize, CurrentSize);
-		memmove(newData, Data, numBytesToCopy);
+		memcpy(newData, Data, numBytesToCopy);
 		free(Data);
 		Data = newData;
 
-		if (Position > newSize)
-		{
-			Position = newSize;
-		}
+		//if (Position > newSize)
+		//{
+		//	Position = newSize;
+		//}
 	}
 
 	CurrentSize = newSize;
@@ -64,8 +72,29 @@ void Buffer::Resize(unsigned int newSize)
 void Buffer::Add(void* data, unsigned int dataSize)
 {
 	// TODO: Error checking
+	while (Position + dataSize >= CurrentSize)
+	{
+		// TODO: Better resizing approach?
+		Resize(CurrentSize * 2);
+	}
 
 	memcpy(Data + Position, data, dataSize);
+	Position += dataSize;
+}
+
+void Buffer::Add(const Buffer& buffer)
+{
+	Add(buffer.Data, buffer.CurrentSize);
+}
+
+const void* Buffer::GetData() const
+{
+	return Data;
+}
+
+unsigned int Buffer::GetSize() const
+{
+	return Position;
 }
 
 }

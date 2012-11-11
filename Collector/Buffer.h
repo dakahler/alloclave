@@ -22,6 +22,10 @@ namespace Alloclave
 		void Resize(unsigned int newSize);
 
 		void Add(void* data, unsigned int dataSize);
+		void Add(const Buffer& buffer);
+
+		const void* GetData() const;
+		unsigned int GetSize() const;
 
 	private:
 

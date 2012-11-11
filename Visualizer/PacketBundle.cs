@@ -53,7 +53,7 @@ namespace Alloclave
 
 				IPacket specificPacket = PacketTypeRegistrar.Generate(packetType);
 
-				// Pass in everything after the first byte, since that contained the type ID
+				// Deserialize everything else
 				specificPacket.Deserialize(binaryReader, targetSystemInfo);
 
 				PacketReceivedEventArgs e = new PacketReceivedEventArgs();

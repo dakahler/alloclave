@@ -2,6 +2,7 @@
 #define _ALLOCLAVE_WIN32TRANSPORT_H
 
 #include "Transport.h"
+#include <Windows.h>
 
 namespace Alloclave
 {
@@ -13,12 +14,18 @@ namespace Alloclave
 
 		virtual ~Win32Transport();
 
-		virtual void Connect();
-		virtual void Disconnect();
+		void Connect();
+		void Disconnect();
 
 	protected:
 
-		virtual void Flush();
+		void Flush();
+
+	private:
+
+		void FindVisualizer();
+
+		HWND VisualizerHandle;
 	};
 
 };

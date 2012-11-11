@@ -12,7 +12,7 @@ namespace Alloclave
 		UInt64 Address;
 		UInt64 Size;
 		UInt64 Alignment;
-		CallStack Stack;
+		CallStack Stack = new CallStack();
 		byte[] UserData;
 
 		// Tool-side-only data
