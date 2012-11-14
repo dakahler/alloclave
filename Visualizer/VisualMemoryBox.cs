@@ -10,7 +10,7 @@ namespace Alloclave
 {
 	class VisualMemoryBox
 	{
-		public readonly Rectangle DefaultBox = new Rectangle(0, 0, 20, 20);
+		public readonly Rectangle DefaultBox = new Rectangle(0, 0, 1, 1);
 		public Matrix Transform = new Matrix();
 	}
 }

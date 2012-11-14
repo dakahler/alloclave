@@ -18,43 +18,61 @@ namespace Alloclave
 				throw new ArgumentOutOfRangeException();
 			}
 
-			UInt64 compensatedWidth = constraints.RowAddressWidth + 1;
+			Create(startAddress, size, constraints);
+		}
 
-			UInt64 offset = startAddress - constraints.StartAddress;
-			UInt64 rowNum = offset / compensatedWidth;
-			UInt64 rowStartAddress = rowNum * compensatedWidth;
-			UInt64 offsetFromRowStart = offset - rowStartAddress;
-			while (rowStartAddress < offset + size)
+		private void Create(UInt64 startAddress, UInt64 size, VisualConstraints constraints)
+		{
+			// Subtract out where logical memory begins
+			UInt64 workingStartAddress = startAddress - constraints.StartAddress;
+			UInt64 endAddress = startAddress + size;
+
+			// Find row start and end addresses
+			// Note that this is the same operation as memory alignment
+			// TODO: Have an alignment helper function?
+			UInt64 rowStartAddress = workingStartAddress & ~constraints.RowAddressWidth;
+			UInt64 rowEndAddress = rowStartAddress + constraints.RowAddressWidth;
+
+			// The box should go to either the end of the row or the end of the allocation
+			endAddress = Math.Min(endAddress, rowEndAddress);
+
+			// Box creation
+			// Transform address space range to pixel space range
+			// X
+			UInt64 offset = workingStartAddress - rowStartAddress;
+			float scaleFactor = (float)(offset) / (float)constraints.RowAddressWidth;
+			UInt64 pixelX = (UInt64)(constraints.RowAddressPixelWidth * scaleFactor);
+
+			// Y
+			UInt64 rowNum = rowStartAddress / constraints.RowAddressWidth;
+			UInt64 pixelY = rowNum * constraints.RowPixelHeight;
+
+			// ScaleX
+			float scaleX = (float)(endAddress - workingStartAddress) / (float)constraints.RowAddressWidth;
+			scaleX *= constraints.RowAddressPixelWidth;
+
+			// TODO: ScaleY
+			float scaleY = 1.0f;
+			scaleY *= constraints.RowPixelHeight;
+
+			AddBox(pixelX, pixelY, scaleX, scaleY);
+
+			// Build the box for the next row of the allocation, if necessary
+			UInt64 sizeCovered = endAddress - startAddress + 1;
+			if (sizeCovered < size)
 			{
-				// TODO: Find way to make this flow nicer and be easier to understand
-				// TODO: Using the default box width to scale along x here
-				// is not correct. Change it to take the row width into account.
-
-				UInt64 rowEnd = (rowNum * compensatedWidth) + compensatedWidth;
-
-				// Clamp box width to current row
-				UInt64 currentRowBoxWidth = rowEnd - offset;
-				currentRowBoxWidth = Math.Min(currentRowBoxWidth, size);
-
-				// Get percentage for actual width
-				float percentage = (float)offsetFromRowStart / (float)compensatedWidth;
-
-				VisualMemoryBox newBox = new VisualMemoryBox();
-				newBox.Transform.Translate(percentage * constraints.RowAddressPixelWidth,
-					rowNum * constraints.RowPixelHeight);
-
-				newBox.Transform.Scale((float)currentRowBoxWidth, 1.0f);
-
-				Boxes.Add(newBox);
-
-				// Setup for next row
-				rowNum++;
-				rowStartAddress = rowNum * compensatedWidth;
-				offset = rowStartAddress;
-				offsetFromRowStart = 0;
-
-				size -= currentRowBoxWidth;
+				// TODO: Will this cause stack overflows for large allocations?
+				// May need to do this iteratively, after all
+				Create(endAddress + 1, size - sizeCovered, constraints);
 			}
+		}
+
+		private void AddBox(UInt64 x, UInt64 y, float scaleX, float scaleY)
+		{
+			VisualMemoryBox box = new VisualMemoryBox();
+			box.Transform.Translate(x, y);
+			box.Transform.Scale(scaleX, scaleY);
+			Boxes.Add(box);
 		}
 	}
 }

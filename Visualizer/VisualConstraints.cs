@@ -16,8 +16,8 @@ namespace Alloclave
 		public VisualConstraints()
 		{
 			StartAddress = 0;
-			RowAddressWidth = 0xFF;
-			RowPixelHeight = 20;
+			RowAddressWidth = 0xF;
+			RowPixelHeight = 2;
 			RowAddressPixelWidth = 500;
 		}
 	}
