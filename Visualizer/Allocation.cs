@@ -9,11 +9,12 @@ namespace Alloclave
 	public class Allocation : IPacket
 	{
 		// Data passed in from target system
-		UInt64 Address;
-		UInt64 Size;
-		UInt64 Alignment;
-		CallStack Stack = new CallStack();
-		byte[] UserData;
+		// TODO: Better encapsulation
+		public UInt64 Address;
+		public UInt64 Size;
+		public UInt64 Alignment;
+		public CallStack Stack = new CallStack();
+		public byte[] UserData;
 
 		// Tool-side-only data
 		String Notes;

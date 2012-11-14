@@ -37,5 +37,18 @@ namespace Alloclave
 			EventArgs e = new EventArgs();
 			Updated.Invoke(this, e);
 		}
+
+		public Stack<TimeSlice> Get(Type type)
+		{
+			Stack<TimeSlice> data;
+			if (DataDictionary.TryGetValue(type, out data))
+			{
+				return data;
+			}
+			else
+			{
+				return new Stack<TimeSlice>();
+			}
+		}
 	}
 }

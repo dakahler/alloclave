@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Alloclave
 {
-	class CallStack : ICustomSerializable
+	public class CallStack : ICustomSerializable
 	{
 		public class Frame
 		{

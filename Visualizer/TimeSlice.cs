@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Alloclave
 {
-	class TimeSlice
+	public class TimeSlice
 	{
-		IPacket Data;
-		Int64 TimeStamp;
+		public IPacket Data;
+		public Int64 TimeStamp;
 
 		public TimeSlice(IPacket data)
 		{
