@@ -7,7 +7,7 @@ namespace Alloclave
 {
 	public class History
 	{
-		Dictionary<Type, Stack<TimeSlice>> DataDictionary = new Dictionary<Type, Stack<TimeSlice>>();
+		Dictionary<Type, SortedList<TimeStamp, IPacket>> DataDictionary = new Dictionary<Type, SortedList<TimeStamp, IPacket>>();
 
 		public event EventHandler Updated;
 
@@ -16,18 +16,16 @@ namespace Alloclave
 			Array valuesArray = Enum.GetValues(typeof(PacketTypeRegistrar.PacketTypes));
 			foreach (PacketTypeRegistrar.PacketTypes packetType in valuesArray)
 			{
-				DataDictionary.Add(PacketTypeRegistrar.GetType(packetType), new Stack<TimeSlice>());
+				DataDictionary.Add(PacketTypeRegistrar.GetType(packetType), new SortedList<TimeStamp, IPacket>());
 			}
 		}
 
-		public void Add(IPacket packet, Int64 timeStamp)
+		public void Add(IPacket packet, UInt64 timeStamp)
 		{
-			TimeSlice timeSlice = new TimeSlice(packet, timeStamp);
-
-			Stack<TimeSlice> data;
+			SortedList<TimeStamp, IPacket> data;
 			if (DataDictionary.TryGetValue(packet.GetType(), out data))
 			{
-				data.Push(timeSlice);
+				data.Add(new TimeStamp(timeStamp), packet);
 			}
 			else
 			{
@@ -38,16 +36,16 @@ namespace Alloclave
 			Updated.Invoke(this, e);
 		}
 
-		public Stack<TimeSlice> Get(Type type)
+		public SortedList<TimeStamp, IPacket> Get(Type type)
 		{
-			Stack<TimeSlice> data;
+			SortedList<TimeStamp, IPacket> data;
 			if (DataDictionary.TryGetValue(type, out data))
 			{
 				return data;
 			}
 			else
 			{
-				return new Stack<TimeSlice>();
+				return new SortedList<TimeStamp, IPacket>();
 			}
 		}
 	}

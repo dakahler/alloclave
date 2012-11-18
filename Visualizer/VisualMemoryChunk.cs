@@ -25,7 +25,7 @@ namespace Alloclave
 		{
 			// Subtract out where logical memory begins
 			UInt64 workingStartAddress = startAddress - constraints.StartAddress;
-			UInt64 endAddress = startAddress + size;
+			UInt64 endAddress = workingStartAddress + size;
 
 			// Find row start and end addresses
 			// Note that this is the same operation as memory alignment
@@ -40,7 +40,7 @@ namespace Alloclave
 			// Transform address space range to pixel space range
 			// X
 			UInt64 offset = workingStartAddress - rowStartAddress;
-			float scaleFactor = (float)(offset) / (float)constraints.RowAddressWidth;
+			float scaleFactor = ((float)(offset) / (float)constraints.RowAddressWidth);
 			UInt64 pixelX = (UInt64)(constraints.RowAddressPixelWidth * scaleFactor);
 
 			// Y
@@ -58,12 +58,12 @@ namespace Alloclave
 			AddBox(pixelX, pixelY, scaleX, scaleY);
 
 			// Build the box for the next row of the allocation, if necessary
-			UInt64 sizeCovered = endAddress - startAddress + 1;
+			UInt64 sizeCovered = endAddress - workingStartAddress + 1;
 			if (sizeCovered < size)
 			{
 				// TODO: Will this cause stack overflows for large allocations?
 				// May need to do this iteratively, after all
-				Create(endAddress + 1, size - sizeCovered, constraints);
+				Create(constraints.StartAddress + endAddress + 1, size - sizeCovered, constraints);
 			}
 		}
 

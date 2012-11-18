@@ -14,6 +14,10 @@ namespace Alloclave
 	{
 		Bitmap MainBitmap;
 		VisualConstraints VisualConstraints = new VisualConstraints();
+		Matrix GlobalTransform = new Matrix();
+		bool IsLeftMouseDown;
+		Point LastMouseLocation;
+		const int WheelDelta = 120;
 
 		private History _History;
 		public History History
@@ -42,10 +46,50 @@ namespace Alloclave
 
 		private void Rebuild()
 		{
-			Stack<TimeSlice> allocations = History.Get(typeof(Allocation));
-			foreach (TimeSlice timeSlice in allocations)
+			VisualMemoryChunks.Clear();
+			SortedList<TimeStamp, IPacket> allocations = History.Get(typeof(Allocation));
+			SortedList<TimeStamp, IPacket> frees = History.Get(typeof(Free));
+
+			// Combine allocation and free lists
+			IEnumerable<KeyValuePair<TimeStamp, IPacket>> combinedList = allocations.Union(frees);
+
+			// Create final list, removing allocations as frees are encountered
+			SortedList<TimeStamp, IPacket> finalList = new SortedList<TimeStamp, IPacket>();
+			foreach (var pair in combinedList)
 			{
-				Allocation allocation = timeSlice.Data as Allocation;
+				if (pair.Value is Allocation)
+				{
+					finalList.Add(pair.Key, pair.Value);
+				}
+				else
+				{
+					int index = finalList.IndexOfValue(pair.Value);
+					if (index != -1)
+					{
+						finalList.RemoveAt(index);
+					}
+					else
+					{
+						// This indicates a memory problem on the target side
+						// TODO: User-facing error reporting
+						throw new InvalidConstraintException();
+					}
+				}
+			}
+
+			// Start by determining the lowest address
+			VisualConstraints.StartAddress = UInt64.MaxValue;
+			foreach (var pair in combinedList)
+			{
+				Allocation allocation = pair.Value as Allocation;
+				VisualConstraints.StartAddress = Math.Min(VisualConstraints.StartAddress, allocation.Address);
+			}
+			VisualConstraints.StartAddress = VisualConstraints.StartAddress & ~VisualConstraints.RowAddressWidth;
+
+			// Then actually build the visual data
+			foreach (var pair in combinedList)
+			{
+				Allocation allocation = pair.Value as Allocation;
 				VisualMemoryChunk chunk = new VisualMemoryChunk(allocation.Address,
 					allocation.Size, VisualConstraints);
 
@@ -61,14 +105,13 @@ namespace Alloclave
 			this.DoubleBuffered = true;
 
 			MainBitmap = new Bitmap(this.Width, this.Height);
+			this.MouseWheel += AddressSpace_MouseWheel;
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			Graphics gForm = e.Graphics;
 			gForm.Clear(Color.White);
-
-			//GraphicsPath gp = new GraphicsPath();
 
 			Graphics g = Graphics.FromImage(MainBitmap);
 			g.Clear(Color.White);
@@ -80,24 +123,56 @@ namespace Alloclave
 					Rectangle rectangle = box.DefaultBox;
 					Region region = new Region(rectangle);
 					region.Transform(box.Transform);
+					region.Transform(GlobalTransform);
 					
 					SolidBrush brush = new SolidBrush(Color.Red);
 					g.FillRegion(brush, region);
 				}
 			}
 
-			//gp.Transform(matrix);
-
-			//PointF[] pts=gp.PathPoints;
-
-			//Pen pen = new Pen(Color.Red);
-			//g.DrawPolygon(pen, pts);
-
 			gForm.DrawImage(MainBitmap, 0, 0, MainBitmap.Width, MainBitmap.Height);
 
 			g.Dispose();
 
 			base.OnPaint(e);
+		}
+
+		private void AddressSpace_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (IsLeftMouseDown)
+			{
+				Point mouseDelta = Point.Subtract(e.Location, new Size(LastMouseLocation));
+				LastMouseLocation = e.Location;
+
+				GlobalTransform.Translate(mouseDelta.X, mouseDelta.Y);
+				Invalidate();
+			}
+		}
+
+		private void AddressSpace_MouseDown(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+			{
+				IsLeftMouseDown = true;
+				LastMouseLocation = e.Location;
+			}
+		}
+
+		private void AddressSpace_MouseUp(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+			{
+				IsLeftMouseDown = false;
+			}
+		}
+
+		void AddressSpace_MouseWheel(object sender, MouseEventArgs e)
+		{
+
+			int amountToMove = e.Delta / WheelDelta;
+			float finalScale = 1.0f + (float)amountToMove / 5.0f;
+			GlobalTransform.Scale(finalScale, finalScale);
+			Invalidate();
 		}
 	}
 }

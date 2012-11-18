@@ -9,7 +9,7 @@ namespace Alloclave
 	public class PacketReceivedEventArgs : EventArgs
 	{
 		public IPacket Packet;
-		public Int64 TimeStamp;
+		public UInt64 TimeStamp;
 	}
 
 	public delegate void PacketReceivedEventHandler(object sender, PacketReceivedEventArgs e);
@@ -49,7 +49,7 @@ namespace Alloclave
 				}
 
 				PacketTypeRegistrar.PacketTypes packetType = (PacketTypeRegistrar.PacketTypes)binaryReader.ReadByte();
-				Int64 timeStamp = binaryReader.ReadInt64();
+				UInt64 timeStamp = binaryReader.ReadUInt64();
 
 				IPacket specificPacket = PacketTypeRegistrar.Generate(packetType);
 

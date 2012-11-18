@@ -96,6 +96,7 @@
     <Compile Include="CallStackParser.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="CustomBinaryReader.cs" />
+    <Compile Include="Free.cs" />
     <Compile Include="History.cs" />
     <Compile Include="ICustomSerializable.cs" />
     <Compile Include="Main.cs">
@@ -116,6 +117,7 @@
     <Compile Include="Screenshot.cs" />
     <Compile Include="TargetSystemInfo.cs" />
     <Compile Include="TimeSlice.cs" />
+    <Compile Include="TimeStamp.cs" />
     <Compile Include="Transport.cs" />
     <Compile Include="VisualConstraints.cs" />
     <Compile Include="VisualMemoryBox.cs" />

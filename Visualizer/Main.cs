@@ -30,7 +30,7 @@ namespace Alloclave
 		private void TEST_Click(object sender, EventArgs e)
 		{
 			Allocation testAllocation1 = new Allocation();
-			testAllocation1.Address = 0x1;
+			testAllocation1.Address = 0x0;
 			testAllocation1.Size = 8;
 			Profile.History.Add(testAllocation1, 0);
 

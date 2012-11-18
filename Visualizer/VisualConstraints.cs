@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Alloclave
 {
-	class VisualConstraints
+	public class VisualConstraints
 	{
 		public UInt64 StartAddress;
 		public UInt64 RowAddressWidth;

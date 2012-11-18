@@ -16,13 +16,14 @@ namespace Alloclave
 		public enum PacketTypes
 		{
 			Allocation = 0,
-			//Free,
+			Free,
 			Screenshot,
 		};
 
 		static PacketTypeRegistrar()
 		{
 			Types.Add(PacketTypes.Allocation, typeof(Allocation));
+			Types.Add(PacketTypes.Free, typeof(Free));
 			Types.Add(PacketTypes.Screenshot, typeof(Screenshot));
 		}
 

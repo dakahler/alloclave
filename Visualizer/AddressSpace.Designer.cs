@@ -37,6 +37,9 @@
 			this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.Name = "AddressSpace";
 			this.Size = new System.Drawing.Size(674, 393);
+			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseDown);
+			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseMove);
+			this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseUp);
 			this.ResumeLayout(false);
 
 		}
