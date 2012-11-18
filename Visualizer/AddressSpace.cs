@@ -16,7 +16,9 @@ namespace Alloclave
 		VisualConstraints VisualConstraints = new VisualConstraints();
 		Matrix GlobalTransform = new Matrix();
 		bool IsLeftMouseDown;
+		bool IsMiddleMouseDown;
 		Point LastMouseLocation;
+		Point MouseDownLocation;
 		const int WheelDelta = 120;
 
 		private History _History;
@@ -139,7 +141,7 @@ namespace Alloclave
 
 		private void AddressSpace_MouseMove(object sender, MouseEventArgs e)
 		{
-			if (IsLeftMouseDown)
+			if (IsLeftMouseDown || IsMiddleMouseDown)
 			{
 				Point mouseDelta = Point.Subtract(e.Location, new Size(LastMouseLocation));
 				LastMouseLocation = e.Location;
@@ -155,6 +157,13 @@ namespace Alloclave
 			{
 				IsLeftMouseDown = true;
 				LastMouseLocation = e.Location;
+				MouseDownLocation = e.Location;
+			}
+			else if (e.Button == MouseButtons.Middle)
+			{
+				IsMiddleMouseDown = true;
+				LastMouseLocation = e.Location;
+				MouseDownLocation = e.Location;
 			}
 		}
 
@@ -163,6 +172,18 @@ namespace Alloclave
 			if (e.Button == MouseButtons.Left)
 			{
 				IsLeftMouseDown = false;
+				if (MouseDownLocation == e.Location)
+				{
+					SelectAt(MouseDownLocation);
+				}
+			}
+			else if (e.Button == MouseButtons.Middle)
+			{
+				IsMiddleMouseDown = false;
+				if (MouseDownLocation == e.Location)
+				{
+					SelectAt(MouseDownLocation);
+				}
 			}
 		}
 
@@ -173,6 +194,11 @@ namespace Alloclave
 			float finalScale = 1.0f + (float)amountToMove / 5.0f;
 			GlobalTransform.Scale(finalScale, finalScale);
 			Invalidate();
+		}
+
+		void SelectAt(Point location)
+		{
+			// TODO
 		}
 	}
 }
