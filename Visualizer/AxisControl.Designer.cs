@@ -1,6 +1,6 @@
 ﻿namespace Alloclave
 {
-	partial class AddressSpace
+	partial class AxisControl
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -30,23 +30,16 @@
 		{
 			this.SuspendLayout();
 			// 
-			// AddressSpace
+			// AxisControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.Name = "AddressSpace";
-			this.Size = new System.Drawing.Size(674, 393);
-			this.SizeChanged += new System.EventHandler(this.AddressSpace_SizeChanged);
-			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseDown);
-			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseMove);
-			this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseUp);
+			this.Name = "AxisControl";
+			this.Size = new System.Drawing.Size(580, 36);
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
-
-
 	}
 }

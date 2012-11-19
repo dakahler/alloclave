@@ -7,16 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WeifenLuo.WinFormsUI.Docking;
 
 namespace Alloclave
 {
-	public partial class AllocationForm : ToolForm
+	public partial class ItemDetailForm : Form
 	{
-		public AllocationForm()
+		public ItemDetailForm()
 		{
 			InitializeComponent();
-			ModeComboBox.SelectedIndex = 0;
 		}
 	}
 }

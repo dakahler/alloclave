@@ -12,7 +12,6 @@ namespace Alloclave
 {
 	public partial class AddressSpace : UserControl
 	{
-		Bitmap MainBitmap;
 		VisualConstraints VisualConstraints = new VisualConstraints();
 		Matrix GlobalTransform = new Matrix();
 		bool IsLeftMouseDown;
@@ -21,14 +20,15 @@ namespace Alloclave
 		Point MouseDownLocation;
 		const int WheelDelta = 120;
 
+		// TODO: Too inefficient?
+		History LastHistory = new History();
 		
-
 		List<VisualMemoryChunk> VisualMemoryChunks = new List<VisualMemoryChunk>();
 
 		public void History_Updated(object sender, EventArgs e)
 		{
-			History history = sender as History;
-			Rebuild(ref history);
+			LastHistory = sender as History;
+			Rebuild(ref LastHistory);
 		}
 
 		public void Rebuild(ref History history)
@@ -91,7 +91,6 @@ namespace Alloclave
 			InitializeComponent();
 			this.DoubleBuffered = true;
 
-			MainBitmap = new Bitmap(this.Width, this.Height);
 			this.MouseWheel += AddressSpace_MouseWheel;
 		}
 
@@ -99,9 +98,6 @@ namespace Alloclave
 		{
 			Graphics gForm = e.Graphics;
 			gForm.Clear(Color.White);
-
-			Graphics g = Graphics.FromImage(MainBitmap);
-			g.Clear(Color.White);
 
 			foreach (VisualMemoryChunk chunk in VisualMemoryChunks)
 			{
@@ -113,13 +109,9 @@ namespace Alloclave
 					region.Transform(GlobalTransform);
 					
 					SolidBrush brush = new SolidBrush(Color.Red);
-					g.FillRegion(brush, region);
+					gForm.FillRegion(brush, region);
 				}
 			}
-
-			gForm.DrawImage(MainBitmap, 0, 0, MainBitmap.Width, MainBitmap.Height);
-
-			g.Dispose();
 
 			base.OnPaint(e);
 		}
@@ -184,6 +176,14 @@ namespace Alloclave
 		void SelectAt(Point location)
 		{
 			// TODO
+		}
+
+		private void AddressSpace_SizeChanged(object sender, EventArgs e)
+		{
+			// TODO: Might not be viable to do this dynamically for large datasets
+			VisualConstraints.RowAddressPixelWidth = (uint)Width;
+			//VisualConstraints.RowAddressPixelHeight = (uint)Height;
+			Rebuild(ref LastHistory);
 		}
 	}
 }

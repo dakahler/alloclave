@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WeifenLuo.WinFormsUI.Docking;
 
 namespace Alloclave
 {
-	public partial class AllocationForm : ToolForm
+	public partial class Scrubber : UserControl
 	{
-		public AllocationForm()
+		public Scrubber()
 		{
 			InitializeComponent();
-			ModeComboBox.SelectedIndex = 0;
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿namespace Alloclave
 {
-	partial class AddressSpace
+	partial class Scrubber
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -28,25 +28,33 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
 			this.SuspendLayout();
 			// 
-			// AddressSpace
+			// hScrollBar1
+			// 
+			this.hScrollBar1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.hScrollBar1.Location = new System.Drawing.Point(0, 0);
+			this.hScrollBar1.Maximum = 1000;
+			this.hScrollBar1.Name = "hScrollBar1";
+			this.hScrollBar1.Size = new System.Drawing.Size(0, 0);
+			this.hScrollBar1.TabIndex = 0;
+			// 
+			// Scrubber
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.Name = "AddressSpace";
-			this.Size = new System.Drawing.Size(674, 393);
-			this.SizeChanged += new System.EventHandler(this.AddressSpace_SizeChanged);
-			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseDown);
-			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseMove);
-			this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseUp);
+			this.AutoSize = true;
+			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.Controls.Add(this.hScrollBar1);
+			this.Name = "Scrubber";
+			this.Size = new System.Drawing.Size(0, 0);
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-
+		private System.Windows.Forms.HScrollBar hScrollBar1;
 	}
 }

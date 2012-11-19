@@ -98,6 +98,12 @@
     <Compile Include="AllocationForm.Designer.cs">
       <DependentUpon>AllocationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AxisControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AxisControl.Designer.cs">
+      <DependentUpon>AxisControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="CallStack.cs" />
     <Compile Include="CallStackParser.cs" />
     <Compile Include="Common.cs" />
@@ -105,6 +111,12 @@
     <Compile Include="Free.cs" />
     <Compile Include="History.cs" />
     <Compile Include="ICustomSerializable.cs" />
+    <Compile Include="ItemDetailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ItemDetailForm.Designer.cs">
+      <DependentUpon>ItemDetailForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +133,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screenshot.cs" />
+    <Compile Include="Scrubber.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scrubber.Designer.cs">
+      <DependentUpon>Scrubber.cs</DependentUpon>
+    </Compile>
     <Compile Include="TargetSystemInfo.cs" />
     <Compile Include="TimeSlice.cs" />
     <Compile Include="TimeStamp.cs" />
@@ -142,6 +160,12 @@
     <EmbeddedResource Include="AllocationForm.resx">
       <DependentUpon>AllocationForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AxisControl.resx">
+      <DependentUpon>AxisControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ItemDetailForm.resx">
+      <DependentUpon>ItemDetailForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -155,6 +179,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Scrubber.resx">
+      <DependentUpon>Scrubber.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>

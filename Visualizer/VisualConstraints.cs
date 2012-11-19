@@ -10,14 +10,16 @@ namespace Alloclave
 	{
 		public UInt64 StartAddress;
 		public UInt64 RowAddressWidth;
-		public uint RowPixelHeight;
+
+		// TODO: Should this just be based on control size?
+		public uint RowAddressPixelHeight;
 		public uint RowAddressPixelWidth;
 
 		public VisualConstraints()
 		{
 			StartAddress = 0;
 			RowAddressWidth = 0xF;
-			RowPixelHeight = 2;
+			RowAddressPixelHeight = 2;
 			RowAddressPixelWidth = 500;
 		}
 	}

@@ -45,7 +45,7 @@ namespace Alloclave
 
 			// Y
 			UInt64 rowNum = rowStartAddress / constraints.RowAddressWidth;
-			UInt64 pixelY = rowNum * constraints.RowPixelHeight;
+			UInt64 pixelY = rowNum * constraints.RowAddressPixelHeight;
 
 			// ScaleX
 			float scaleX = (float)(endAddress - workingStartAddress) / (float)constraints.RowAddressWidth;
@@ -53,7 +53,7 @@ namespace Alloclave
 
 			// TODO: ScaleY
 			float scaleY = 1.0f;
-			scaleY *= constraints.RowPixelHeight;
+			scaleY *= constraints.RowAddressPixelHeight;
 
 			AddBox(pixelX, pixelY, scaleX, scaleY);
 
