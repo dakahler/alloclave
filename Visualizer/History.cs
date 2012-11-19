@@ -32,8 +32,11 @@ namespace Alloclave
 				throw new NotImplementedException();
 			}
 
-			EventArgs e = new EventArgs();
-			Updated.Invoke(this, e);
+			if (Updated != null)
+			{
+				EventArgs e = new EventArgs();
+				Updated.Invoke(this, e);
+			}
 		}
 
 		public SortedList<TimeStamp, IPacket> Get(Type type)

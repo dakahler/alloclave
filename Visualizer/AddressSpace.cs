@@ -21,36 +21,21 @@ namespace Alloclave
 		Point MouseDownLocation;
 		const int WheelDelta = 120;
 
-		private History _History;
-		public History History
-		{
-			get
-			{ 
-				return _History;
-			}
-			set
-			{
-				_History = value;
-				if (_History != null)
-				{
-					_History.Updated += new EventHandler(History_Updated);
-					Rebuild();
-				}
-			}
-		}
+		
 
 		List<VisualMemoryChunk> VisualMemoryChunks = new List<VisualMemoryChunk>();
 
-		void History_Updated(object sender, EventArgs e)
+		public void History_Updated(object sender, EventArgs e)
 		{
-			Rebuild();
+			History history = sender as History;
+			Rebuild(ref history);
 		}
 
-		private void Rebuild()
+		public void Rebuild(ref History history)
 		{
 			VisualMemoryChunks.Clear();
-			SortedList<TimeStamp, IPacket> allocations = History.Get(typeof(Allocation));
-			SortedList<TimeStamp, IPacket> frees = History.Get(typeof(Free));
+			SortedList<TimeStamp, IPacket> allocations = history.Get(typeof(Allocation));
+			SortedList<TimeStamp, IPacket> frees = history.Get(typeof(Free));
 
 			// Combine allocation and free lists
 			IEnumerable<KeyValuePair<TimeStamp, IPacket>> combinedList = allocations.Union(frees);

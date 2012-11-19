@@ -92,6 +92,12 @@
       <DependentUpon>AddressSpace.cs</DependentUpon>
     </Compile>
     <Compile Include="Allocation.cs" />
+    <Compile Include="AllocationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AllocationForm.Designer.cs">
+      <DependentUpon>AllocationForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CallStack.cs" />
     <Compile Include="CallStackParser.cs" />
     <Compile Include="Common.cs" />
@@ -118,6 +124,12 @@
     <Compile Include="TargetSystemInfo.cs" />
     <Compile Include="TimeSlice.cs" />
     <Compile Include="TimeStamp.cs" />
+    <Compile Include="ToolForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ToolForm.Designer.cs">
+      <DependentUpon>ToolForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Transport.cs" />
     <Compile Include="VisualConstraints.cs" />
     <Compile Include="VisualMemoryBox.cs" />
@@ -126,6 +138,9 @@
     <Compile Include="Win32Transport.cs" />
     <EmbeddedResource Include="AddressSpace.resx">
       <DependentUpon>AddressSpace.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AllocationForm.resx">
+      <DependentUpon>AllocationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
@@ -170,6 +185,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\External\dockpanelsuite\WinFormsUI\WinFormsUI.csproj">
+      <Project>{c75532c4-765b-418e-b09b-46d36b2abdb1}</Project>
+      <Name>WinFormsUI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

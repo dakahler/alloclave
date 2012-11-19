@@ -16,6 +16,25 @@ namespace Alloclave
 		// TODO: This should be set in the UI
 		Transport Transport;
 
+		AllocationForm AllocationForm = new AllocationForm();
+
+		public History History
+		{
+			get
+			{
+				return Profile.History;
+			}
+			set
+			{
+				Profile.History = value;
+				if (Profile.History != null)
+				{
+					Profile.History.Updated += new EventHandler(AllocationForm.AddressSpaceControl.History_Updated);
+					AllocationForm.AddressSpaceControl.Rebuild(ref Profile.History);
+				}
+			}
+		}
+
 		public Main()
 		{
 			InitializeComponent();
@@ -24,10 +43,12 @@ namespace Alloclave
 			Transport = new Win32Transport(targetSystemInfo);
 
 			Profile = new Profile(Transport);
-			AddressSpaceControl.History = Profile.History;
+			History = new History();
+
+			AllocationForm.Show(DockPanel);
 		}
 
-		private void TEST_Click(object sender, EventArgs e)
+		private void testToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Allocation testAllocation1 = new Allocation();
 			testAllocation1.Address = 0x0;
