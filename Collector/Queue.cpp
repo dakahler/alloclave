@@ -1,6 +1,8 @@
-#include "Queue.h"
+
 #include <stdlib.h>
 #include <new>
+
+#include "Queue.h"
 
 namespace Alloclave
 {
@@ -50,8 +52,9 @@ Buffer Queue::Dequeue()
 	if (Head)
 	{
 		Buffer buffer = Head->Data;
+		QueueItem* oldHead = Head;
 		Head = Head->Next;
-		free(Head);
+		free(oldHead);
 		NumItems--;
 		return buffer;
 	}

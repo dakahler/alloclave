@@ -1,11 +1,11 @@
 #ifndef _ALLOCLAVE_TRANSPORT_H
 #define _ALLOCLAVE_TRANSPORT_H
 
-#include "IPacket.h"
 #include "Queue.h"
 
 namespace Alloclave
 {
+	class Packet;
 
 	class Transport
 	{

@@ -1,10 +1,9 @@
 #ifndef _ALLOCLAVE_REGISTRATION_H
 #define _ALLOCLAVE_REGISTRATION_H
 
-#include "Transport.h"
-
 namespace Alloclave
 {
+	class Transport;
 
 	void RegisterTransport(Transport* transport);
 	void RegisterAllocation(void* address, unsigned int size, unsigned int alignment);

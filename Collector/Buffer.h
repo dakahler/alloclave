@@ -2,6 +2,7 @@
 #define _ALLOCLAVE_BUFFER_H
 
 #include <string.h>
+#include "Common.h"
 
 // TODO: Better implementation of these
 #define MIN(a,b) (((a)<(b))?(a):(b))

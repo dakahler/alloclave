@@ -1,6 +1,7 @@
 #include "Registration.h"
 #include "Allocation.h"
 #include "Screenshot.h"
+#include "Transport.h"
 
 namespace Alloclave
 {

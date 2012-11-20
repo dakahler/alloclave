@@ -1,5 +1,6 @@
-#include "Buffer.h"
+
 #include <stdlib.h>
+#include "Buffer.h"
 
 namespace Alloclave
 {

@@ -42,6 +42,12 @@
     <ClInclude Include="Registration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryOverrides.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Registration.cpp">

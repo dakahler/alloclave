@@ -1,8 +1,8 @@
 #ifndef _ALLOCLAVE_WIN32TRANSPORT_H
 #define _ALLOCLAVE_WIN32TRANSPORT_H
 
-#include "Transport.h"
 #include <Windows.h>
+#include "Transport.h"
 
 namespace Alloclave
 {

@@ -1,4 +1,5 @@
 #include "Transport.h"
+#include "IPacket.h"
 
 namespace Alloclave
 {
