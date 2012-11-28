@@ -45,7 +45,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <LangVersion>5</LangVersion>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -57,7 +57,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <LangVersion>5</LangVersion>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
@@ -74,6 +74,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -123,9 +124,6 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="MessageWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Packet.cs" />
     <Compile Include="PacketBundle.cs" />
     <Compile Include="PacketTypeRegistrar.cs" />
@@ -149,11 +147,16 @@
       <DependentUpon>ToolForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Transport.cs" />
+    <Compile Include="TransportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TransportForm.Designer.cs">
+      <DependentUpon>TransportForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="VisualConstraints.cs" />
     <Compile Include="VisualMemoryBox.cs" />
     <Compile Include="VisualMemoryChunk.cs" />
     <Compile Include="Win32CallStackParser.cs" />
-    <Compile Include="Win32Transport.cs" />
     <EmbeddedResource Include="AddressSpace.resx">
       <DependentUpon>AddressSpace.cs</DependentUpon>
     </EmbeddedResource>
@@ -181,6 +184,9 @@
     </Compile>
     <EmbeddedResource Include="Scrubber.resx">
       <DependentUpon>Scrubber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TransportForm.resx">
+      <DependentUpon>TransportForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config">
       <SubType>Designer</SubType>
@@ -217,6 +223,10 @@
     <ProjectReference Include="..\External\dockpanelsuite\WinFormsUI\WinFormsUI.csproj">
       <Project>{c75532c4-765b-418e-b09b-46d36b2abdb1}</Project>
       <Name>WinFormsUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\External\nbug\NBug\NBug.csproj">
+      <Project>{62ced1d5-f603-40de-8bf5-3e49d3a392f4}</Project>
+      <Name>NBug</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

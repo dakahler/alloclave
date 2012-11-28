@@ -19,7 +19,7 @@ namespace Alloclave
 			History = new History();
 		}
 
-		public Profile(Transport transport)
+		public Profile(ref Transport transport)
 			: this()
 		{
 			Transport = transport;
