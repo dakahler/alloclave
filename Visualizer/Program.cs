@@ -88,7 +88,17 @@ namespace Alloclave
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new Main());
+
+			Licensing licensing = new Licensing();
+			if (!licensing.Disposing && !licensing.IsDisposed)
+			{
+				Application.Run(licensing);
+			}
+
+			if (Licensing.CurrentLicenseStatus != Licensing.LicenseStatus.Invalid)
+			{
+				Application.Run(new Main());
+			}
 		}
 	}
 }
