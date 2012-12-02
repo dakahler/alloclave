@@ -17,6 +17,10 @@ namespace Alloclave
 
 		public abstract void Connect();
 		public abstract void Disconnect();
+		public virtual void SpawnCustomUI()
+		{
+
+		}
 
 		protected virtual void ProcessPacket(byte[] packet)
 		{

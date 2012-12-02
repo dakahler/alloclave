@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{5BD4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Win32Transport", "plugins\transport\Win32Transport\Win32Transport.csproj", "{C2C823A0-12C5-4D48-98C9-C9305C0A7E7B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessSpyTransport", "plugins\transport\ProcessSpyTransport\ProcessSpyTransport.csproj", "{9C29B700-3859-4E79-8C75-06FA32CF9479}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,16 @@ Global
 		{C2C823A0-12C5-4D48-98C9-C9305C0A7E7B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C2C823A0-12C5-4D48-98C9-C9305C0A7E7B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C2C823A0-12C5-4D48-98C9-C9305C0A7E7B}.Release|x86.ActiveCfg = Release|Any CPU
+		{9C29B700-3859-4E79-8C75-06FA32CF9479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C29B700-3859-4E79-8C75-06FA32CF9479}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C29B700-3859-4E79-8C75-06FA32CF9479}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9C29B700-3859-4E79-8C75-06FA32CF9479}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9C29B700-3859-4E79-8C75-06FA32CF9479}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9C29B700-3859-4E79-8C75-06FA32CF9479}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C29B700-3859-4E79-8C75-06FA32CF9479}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C29B700-3859-4E79-8C75-06FA32CF9479}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9C29B700-3859-4E79-8C75-06FA32CF9479}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9C29B700-3859-4E79-8C75-06FA32CF9479}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,5 +83,6 @@ Global
 		{62CED1D5-F603-40DE-8BF5-3E49D3A392F4} = {430007DC-F0CB-4310-8614-BBB6AB48A91C}
 		{C75532C4-765B-418E-B09B-46D36B2ABDB1} = {430007DC-F0CB-4310-8614-BBB6AB48A91C}
 		{C2C823A0-12C5-4D48-98C9-C9305C0A7E7B} = {5BD4137A-17EE-45F7-86DD-4F91D54D267E}
+		{9C29B700-3859-4E79-8C75-06FA32CF9479} = {5BD4137A-17EE-45F7-86DD-4F91D54D267E}
 	EndGlobalSection
 EndGlobal
