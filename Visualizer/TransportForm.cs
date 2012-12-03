@@ -28,7 +28,7 @@ namespace Alloclave
 				Profile.History = value;
 				if (Profile.History != null)
 				{
-					Profile.History.Updated += new EventHandler(AllocationForm.AddressSpaceControl.History_Updated);
+					History.Updated += new EventHandler(AllocationForm.AddressSpaceControl.History_Updated);
 					AllocationForm.AddressSpaceControl.Rebuild(ref Profile.History);
 				}
 			}

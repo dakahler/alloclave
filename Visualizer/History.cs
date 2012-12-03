@@ -9,10 +9,15 @@ namespace Alloclave
 	{
 		Dictionary<Type, SortedList<TimeStamp, IPacket>> DataDictionary = new Dictionary<Type, SortedList<TimeStamp, IPacket>>();
 
-		public event EventHandler Updated;
+		// TODO: Might not be able to make these static
+		public static event EventHandler Updated;
+		public static bool SuspendRebuilding = false;
+		private static History Instance = null;
 
 		public History()
 		{
+			Instance = this;
+
 			Array valuesArray = Enum.GetValues(typeof(PacketTypeRegistrar.PacketTypes));
 			foreach (PacketTypeRegistrar.PacketTypes packetType in valuesArray)
 			{
@@ -32,7 +37,7 @@ namespace Alloclave
 				throw new NotImplementedException();
 			}
 
-			if (Updated != null)
+			if (Updated != null && !SuspendRebuilding)
 			{
 				EventArgs e = new EventArgs();
 				Updated.Invoke(this, e);
@@ -50,6 +55,12 @@ namespace Alloclave
 			{
 				return new SortedList<TimeStamp, IPacket>();
 			}
+		}
+
+		public static void ForceRebuild()
+		{
+			EventArgs e = new EventArgs();
+			Updated.Invoke(Instance, e);
 		}
 	}
 }

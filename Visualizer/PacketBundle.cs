@@ -15,7 +15,7 @@ namespace Alloclave
 	public delegate void PacketReceivedEventHandler(object sender, PacketReceivedEventArgs e);
 	public sealed class PacketBundle : ICustomSerializable
 	{
-		private const UInt16 Version = 0;
+		public static readonly UInt16 Version = 0;
 
 		public event PacketReceivedEventHandler PacketReceived;
 

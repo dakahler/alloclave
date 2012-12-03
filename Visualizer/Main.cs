@@ -41,10 +41,12 @@ namespace Alloclave
 					if (transportName == newForm.TransportComboBox.SelectedItem.ToString())
 					{
 						Transport transport = transportAdapter.CreateExport().Value;
-						transport.SpawnCustomUI();
 
 						TransportForm transportForm = new TransportForm(ref transport);
 						transportForm.Text = transportName;
+
+						transport.SpawnCustomUI();
+
 						transportForm.Show(DockPanel);
 						break;
 					}

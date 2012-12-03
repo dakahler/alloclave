@@ -20,6 +20,8 @@ namespace Alloclave
 		Point MouseDownLocation;
 		const int WheelDelta = 120;
 
+		Bitmap MainBitmap;
+
 		// TODO: Too inefficient?
 		History LastHistory = new History();
 		
@@ -83,6 +85,24 @@ namespace Alloclave
 				VisualMemoryChunks.Add(chunk);
 			}
 
+			MainBitmap = new Bitmap((int)VisualConstraints.RowAddressPixelWidth, 500);
+			Graphics gForm = Graphics.FromImage(MainBitmap);
+			gForm.Clear(Color.White);
+			gForm.SmoothingMode = SmoothingMode.HighSpeed;
+
+			foreach (VisualMemoryChunk chunk in VisualMemoryChunks)
+			{
+				foreach (VisualMemoryBox box in chunk.Boxes)
+				{
+					Rectangle rectangle = box.DefaultBox;
+					Region region = new Region(rectangle);
+					region.Transform(box.Transform);
+
+					SolidBrush brush = new SolidBrush(Color.Red);
+					gForm.FillRegion(brush, region);
+				}
+			}
+
 			Invalidate();
 		}
 
@@ -98,20 +118,10 @@ namespace Alloclave
 		{
 			Graphics gForm = e.Graphics;
 			gForm.Clear(Color.White);
-
-			foreach (VisualMemoryChunk chunk in VisualMemoryChunks)
-			{
-				foreach (VisualMemoryBox box in chunk.Boxes)
-				{
-					Rectangle rectangle = box.DefaultBox;
-					Region region = new Region(rectangle);
-					region.Transform(box.Transform);
-					region.Transform(GlobalTransform);
-					
-					SolidBrush brush = new SolidBrush(Color.Red);
-					gForm.FillRegion(brush, region);
-				}
-			}
+			gForm.SmoothingMode = SmoothingMode.HighSpeed;
+			gForm.InterpolationMode = InterpolationMode.NearestNeighbor;
+			gForm.MultiplyTransform(GlobalTransform);
+			gForm.DrawImage(MainBitmap, new Point(0, 0));
 
 			base.OnPaint(e);
 		}
