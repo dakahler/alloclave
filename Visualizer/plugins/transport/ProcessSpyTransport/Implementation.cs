@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Threading;
+using System.IO;
+using Alloclave;
+using System.Windows.Threading;
 
 namespace Alloclave_Plugin
 {
@@ -13,8 +17,11 @@ namespace Alloclave_Plugin
 	[ExportMetadata("Name", "Process Spy")]
 	public class ProcessSpyTransport : Alloclave.Transport
 	{
-		static Alloclave.TargetSystemInfo temp;
+		static Alloclave.TargetSystemInfo temp = new Alloclave.TargetSystemInfo(
+			"Process Spy", "", 0, Common.Architecture._64Bit, Common.Endianness.LittleEndian);
 		Process TargetProcess;
+
+		System.Windows.Threading.Dispatcher Dispatcher = Dispatcher.CurrentDispatcher;
 
 		public ProcessSpyTransport()
 			: base(temp)
@@ -30,7 +37,7 @@ namespace Alloclave_Plugin
 
 		public override void Connect()
 		{
-
+			
 		}
 
 		public override void Disconnect()
@@ -53,7 +60,50 @@ namespace Alloclave_Plugin
 						break;
 					}
 				}
+
+				// TODO: Should probably be in Connect?
+				var task3 = new Task(() => MonitorHeap(ref TargetProcess), TaskCreationOptions.LongRunning);
+				task3.Start();
 			}
+		}
+
+		private void MonitorHeap(ref Process process)
+		{
+			int pid = process.Id;
+			HeapWalker heapWalker = new HeapWalker();
+			History.SuspendRebuilding = true;
+			while (true)
+			{
+				List<AllocationData> allocationData = heapWalker.GetHeapData((UInt64)pid);
+
+				// TODO: Hacky
+				// Need better location for building up a packet from C#
+				MemoryStream memoryStream = new MemoryStream();
+				BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
+
+				binaryWriter.Write(PacketBundle.Version); // version
+				binaryWriter.Write((UInt16)allocationData.Count);
+				foreach (AllocationData allocation in allocationData)
+				{
+					byte packetType = (byte)PacketTypeRegistrar.PacketTypes.Allocation;
+					binaryWriter.Write(packetType);
+
+					UInt64 timeStamp = (UInt64)DateTime.UtcNow.Ticks;
+					binaryWriter.Write(timeStamp);
+
+					binaryWriter.Write(allocation.Address);
+					binaryWriter.Write(allocation.Size);
+					binaryWriter.Write((UInt64)4);
+				}
+
+				Dispatcher.Invoke(new Action(() => ProcessPacket(memoryStream.GetBuffer())));
+
+				break;
+				//Thread.Sleep(500);
+			}
+
+			History.SuspendRebuilding = false;
+			Dispatcher.Invoke(new Action(() => History.ForceRebuild()));
 		}
 	}
 }
