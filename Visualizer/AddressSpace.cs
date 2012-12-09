@@ -34,6 +34,11 @@ namespace Alloclave
 
 		RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
 
+		BufferedGraphicsContext BackbufferContext;
+		BufferedGraphics BackbufferGraphics;
+		Graphics DrawingGraphics;
+		bool FinishedInitialization;
+
 		public void History_Updated(object sender, EventArgs e)
 		{
 			LastHistory = sender as History;
@@ -110,7 +115,8 @@ namespace Alloclave
 				}
 			}
 
-			Refresh();
+			FinishedInitialization = true;
+			Redraw();
 		}
 
 		public AddressSpace()
@@ -126,29 +132,72 @@ namespace Alloclave
 			Tooltip.RtbPCtrl = printCtrl;
 
 			this.MouseWheel += AddressSpace_MouseWheel;
+
+			// Set the control style to double buffer.
+			this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
+			this.SetStyle(ControlStyles.SupportsTransparentBackColor, false);
+			this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+
+			BackbufferContext = BufferedGraphicsManager.Current;
+
+			RecreateBuffers();
 		}
 
-		protected override void OnPaint(PaintEventArgs e)
+		void RecreateBuffers()
 		{
-			Graphics gForm = e.Graphics;
-			gForm.Clear(Color.White);
-			gForm.SmoothingMode = SmoothingMode.HighSpeed;
-			gForm.InterpolationMode = InterpolationMode.NearestNeighbor;
-			gForm.MultiplyTransform(GlobalTransform);
+			BackbufferContext.MaximumBuffer = new Size(this.Width + 1, this.Height + 1);
+
+			if (BackbufferGraphics != null)
+				BackbufferGraphics.Dispose();
+
+			BackbufferGraphics = BackbufferContext.Allocate(this.CreateGraphics(),
+				new Rectangle(0, 0, Math.Max(this.Width, 1), Math.Max(this.Height, 1)));
+
+			// Assign the Graphics object on backbufferGraphics to "drawingGraphics" for easy reference elsewhere.
+			DrawingGraphics = BackbufferGraphics.Graphics;
+
+			// This is a good place to assign drawingGraphics.SmoothingMode if you want a better anti-aliasing technique.
+
+			// Invalidate the control so a repaint gets called somewhere down the line.
+			this.Invalidate();
+		}
+
+		void Redraw()
+		{
+			if (!FinishedInitialization)
+			{
+				return;
+			}
+
+			DrawingGraphics.Clear(Color.White);
+			DrawingGraphics.SmoothingMode = SmoothingMode.HighSpeed;
+			DrawingGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+			DrawingGraphics.ResetTransform();
+			DrawingGraphics.MultiplyTransform(GlobalTransform);
 
 			ColorMatrix cm = new ColorMatrix();
 			cm.Matrix33 = MainBitmapOpacity;
 			ImageAttributes ia = new ImageAttributes();
 			ia.SetColorMatrix(cm);
 
-			gForm.DrawImage(MainBitmap,
+			DrawingGraphics.DrawImage(MainBitmap,
 				new Rectangle(0, 0, MainBitmap.Width, MainBitmap.Height),
 				0, 0, MainBitmap.Width, MainBitmap.Height,
 				GraphicsUnit.Pixel, ia);
 
-			gForm.DrawImage(OverlayBitmap, 0, 0);
+			DrawingGraphics.DrawImage(OverlayBitmap, 0, 0);
 
-			base.OnPaint(e);
+			this.Refresh();
+		}
+
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			// TODO: Still get tearing here, possibly due to no vsync
+			// May have to switch to DirectX to fix this
+			if (BackbufferGraphics != null)
+			{
+				BackbufferGraphics.Render(e.Graphics);
+			}
 		}
 
 		private void AddressSpace_MouseMove(object sender, MouseEventArgs e)
@@ -167,7 +216,7 @@ namespace Alloclave
 				InvertedTransform.TransformVectors(points);
 
 				GlobalTransform.Translate(points[0].X, points[0].Y);
-				Refresh();
+				Redraw();
 			}
 			else
 			{
@@ -214,11 +263,25 @@ namespace Alloclave
 
 		void AddressSpace_MouseWheel(object sender, MouseEventArgs e)
 		{
+			Point[] pointBefore = { CurrentMouseLocation };
+			Matrix InvertedTransform = GlobalTransform.Clone();
+			InvertedTransform.Invert();
+			InvertedTransform.TransformPoints(pointBefore);
 
 			int amountToMove = e.Delta / WheelDelta;
 			float finalScale = 1.0f + (float)amountToMove / 5.0f;
 			GlobalTransform.Scale(finalScale, finalScale);
-			Refresh();
+
+			Point[] pointAfter = { CurrentMouseLocation };
+			InvertedTransform = GlobalTransform.Clone();
+			InvertedTransform.Invert();
+			InvertedTransform.TransformPoints(pointAfter);
+
+			Point delta = Point.Subtract(pointAfter[0], new Size(pointBefore[0]));
+
+			GlobalTransform.Translate(delta.X, delta.Y);
+
+			Redraw();
 		}
 
 		void SelectAt(Point location)
@@ -297,7 +360,7 @@ namespace Alloclave
 				MainBitmapOpacity = 1.0f;
 			}
 
-			Refresh();
+			Redraw();
 		}
 	}
 }

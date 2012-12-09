@@ -63,7 +63,7 @@
 			// TableLayoutPanel
 			// 
 			this.TableLayoutPanel.ColumnCount = 2;
-			this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.TableLayoutPanel.Controls.Add(this.AddressSpaceControl, 0, 1);
 			this.TableLayoutPanel.Controls.Add(this.scrubber1, 0, 2);
