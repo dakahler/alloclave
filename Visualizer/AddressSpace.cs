@@ -160,7 +160,13 @@ namespace Alloclave
 				Point mouseDelta = Point.Subtract(e.Location, new Size(LastMouseLocation));
 				LastMouseLocation = e.Location;
 
-				GlobalTransform.Translate(mouseDelta.X, mouseDelta.Y);
+				Point[] points = { mouseDelta };
+
+				Matrix InvertedTransform = GlobalTransform.Clone();
+				InvertedTransform.Invert();
+				InvertedTransform.TransformVectors(points);
+
+				GlobalTransform.Translate(points[0].X, points[0].Y);
 				Refresh();
 			}
 			else
