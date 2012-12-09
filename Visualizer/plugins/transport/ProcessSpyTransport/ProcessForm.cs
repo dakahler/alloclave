@@ -26,6 +26,8 @@ namespace Alloclave_Plugin
 			processNames.Sort();
 
 			ProcessComboBox.Items.AddRange(processNames.ToArray());
+
+			ProcessComboBox.SelectedIndex = 0;
 		}
 	}
 }

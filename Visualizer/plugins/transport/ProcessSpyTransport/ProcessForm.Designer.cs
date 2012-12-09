@@ -56,11 +56,15 @@
 			// 
 			// ProcessComboBox
 			// 
+			this.ProcessComboBox.DropDownHeight = 300;
 			this.ProcessComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.ProcessComboBox.FormattingEnabled = true;
+			this.ProcessComboBox.IntegralHeight = false;
 			this.ProcessComboBox.Location = new System.Drawing.Point(172, 22);
+			this.ProcessComboBox.MaxDropDownItems = 16;
 			this.ProcessComboBox.Name = "ProcessComboBox";
 			this.ProcessComboBox.Size = new System.Drawing.Size(247, 21);
+			this.ProcessComboBox.Sorted = true;
 			this.ProcessComboBox.TabIndex = 5;
 			// 
 			// ChooseTransportTypeLabel

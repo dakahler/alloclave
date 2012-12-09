@@ -16,6 +16,8 @@ namespace Alloclave
 
 		// TODO: Should this be spawned immediately?
 		AllocationForm AllocationForm = new AllocationForm();
+		MessagesForm MessagesForm = new MessagesForm();
+		InfoForm InfoForm = new InfoForm();
 
 		public History History
 		{
@@ -46,6 +48,8 @@ namespace Alloclave
 			History = new History();
 
 			AllocationForm.Show(DockPanel);
+			MessagesForm.Show(DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottomAutoHide);
+			InfoForm.Show(DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottomAutoHide);
 		}
 
 		private void testToolStripMenuItem_Click(object sender, EventArgs e)

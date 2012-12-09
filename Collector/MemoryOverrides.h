@@ -17,6 +17,9 @@ namespace Alloclave
 {
 	extern void* _malloc(size_t size);
 	extern void _free(void* p);
+
+	extern void* real_malloc(size_t size);
+	extern void real_free(void* p);
 };
 
 // This redefines everyone else's malloc/free calls to point

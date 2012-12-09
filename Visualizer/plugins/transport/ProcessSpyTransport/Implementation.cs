@@ -45,10 +45,10 @@ namespace Alloclave_Plugin
 
 		}
 
-		public override void SpawnCustomUI()
+		public override void SpawnCustomUI(IWin32Window owner)
 		{
 			ProcessForm processForm = new ProcessForm();
-			if (processForm.ShowDialog() == DialogResult.OK)
+			if (processForm.ShowDialog(owner) == DialogResult.OK)
 			{
 				String targetProcessName = processForm.ProcessComboBox.SelectedItem.ToString();
 				Process[] processes = Process.GetProcesses();
@@ -78,25 +78,30 @@ namespace Alloclave_Plugin
 
 				// TODO: Hacky
 				// Need better location for building up a packet from C#
-				MemoryStream memoryStream = new MemoryStream();
-				BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
-
-				binaryWriter.Write(PacketBundle.Version); // version
-				binaryWriter.Write((UInt16)allocationData.Count);
-				foreach (AllocationData allocation in allocationData)
+				if (allocationData != null)
 				{
-					byte packetType = (byte)PacketTypeRegistrar.PacketTypes.Allocation;
-					binaryWriter.Write(packetType);
+					MemoryStream memoryStream = new MemoryStream();
+					BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
 
-					UInt64 timeStamp = (UInt64)DateTime.UtcNow.Ticks;
-					binaryWriter.Write(timeStamp);
+					binaryWriter.Write(PacketBundle.Version); // version
+					binaryWriter.Write((UInt16)allocationData.Count);
+					foreach (AllocationData allocation in allocationData)
+					{
+						byte packetType = (byte)PacketTypeRegistrar.PacketTypes.Allocation;
+						binaryWriter.Write(packetType);
 
-					binaryWriter.Write(allocation.Address);
-					binaryWriter.Write(allocation.Size);
-					binaryWriter.Write((UInt64)4);
+						UInt64 timeStamp = (UInt64)DateTime.UtcNow.Ticks;
+						binaryWriter.Write(timeStamp);
+
+						binaryWriter.Write(allocation.Address);
+						binaryWriter.Write(allocation.Size);
+						binaryWriter.Write((UInt64)4);
+
+						Console.WriteLine("Wrote allocation: {0:X}, {1:X}", allocation.Address, allocation.Size);
+					}
+
+					Dispatcher.Invoke(new Action(() => ProcessPacket(memoryStream.GetBuffer())));
 				}
-
-				Dispatcher.Invoke(new Action(() => ProcessPacket(memoryStream.GetBuffer())));
 
 				break;
 				//Thread.Sleep(500);

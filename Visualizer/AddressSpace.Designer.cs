@@ -28,7 +28,13 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.Tooltip = new Alloclave.RichToolTip();
 			this.SuspendLayout();
+			// 
+			// Tooltip
+			// 
+			this.Tooltip.OwnerDraw = true;
+			this.Tooltip.ShowAlways = true;
 			// 
 			// AddressSpace
 			// 
@@ -39,6 +45,7 @@
 			this.Size = new System.Drawing.Size(674, 393);
 			this.SizeChanged += new System.EventHandler(this.AddressSpace_SizeChanged);
 			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseDown);
+			this.MouseHover += new System.EventHandler(this.AddressSpace_MouseHover);
 			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseMove);
 			this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseUp);
 			this.ResumeLayout(false);
@@ -46,6 +53,8 @@
 		}
 
 		#endregion
+
+		private RichToolTip Tooltip;
 
 
 	}

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace Alloclave
 {
@@ -18,14 +19,20 @@ namespace Alloclave
 		bool IsMiddleMouseDown;
 		Point LastMouseLocation;
 		Point MouseDownLocation;
+		Point CurrentMouseLocation;
 		const int WheelDelta = 120;
 
 		Bitmap MainBitmap;
+		float MainBitmapOpacity = 1.0f;
+
+		Bitmap OverlayBitmap;
 
 		// TODO: Too inefficient?
 		History LastHistory = new History();
 		
 		List<VisualMemoryChunk> VisualMemoryChunks = new List<VisualMemoryChunk>();
+
+		RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
 
 		public void History_Updated(object sender, EventArgs e)
 		{
@@ -98,18 +105,25 @@ namespace Alloclave
 					Region region = new Region(rectangle);
 					region.Transform(box.Transform);
 
-					SolidBrush brush = new SolidBrush(Color.Red);
+					SolidBrush brush = new SolidBrush(box.Color);
 					gForm.FillRegion(brush, region);
 				}
 			}
 
-			Invalidate();
+			Refresh();
 		}
 
 		public AddressSpace()
 		{
 			InitializeComponent();
 			this.DoubleBuffered = true;
+
+			OverlayBitmap = new Bitmap((int)VisualConstraints.RowAddressPixelWidth, 500);
+			Graphics gForm = Graphics.FromImage(OverlayBitmap);
+			gForm.Clear(Color.White);
+			gForm.SmoothingMode = SmoothingMode.HighSpeed;
+
+			Tooltip.RtbPCtrl = printCtrl;
 
 			this.MouseWheel += AddressSpace_MouseWheel;
 		}
@@ -121,21 +135,39 @@ namespace Alloclave
 			gForm.SmoothingMode = SmoothingMode.HighSpeed;
 			gForm.InterpolationMode = InterpolationMode.NearestNeighbor;
 			gForm.MultiplyTransform(GlobalTransform);
-			gForm.DrawImage(MainBitmap, new Point(0, 0));
+
+			ColorMatrix cm = new ColorMatrix();
+			cm.Matrix33 = MainBitmapOpacity;
+			ImageAttributes ia = new ImageAttributes();
+			ia.SetColorMatrix(cm);
+
+			gForm.DrawImage(MainBitmap,
+				new Rectangle(0, 0, MainBitmap.Width, MainBitmap.Height),
+				0, 0, MainBitmap.Width, MainBitmap.Height,
+				GraphicsUnit.Pixel, ia);
+
+			gForm.DrawImage(OverlayBitmap, 0, 0);
 
 			base.OnPaint(e);
 		}
 
 		private void AddressSpace_MouseMove(object sender, MouseEventArgs e)
 		{
+			CurrentMouseLocation = e.Location;
+
 			if (IsLeftMouseDown || IsMiddleMouseDown)
 			{
 				Point mouseDelta = Point.Subtract(e.Location, new Size(LastMouseLocation));
 				LastMouseLocation = e.Location;
 
 				GlobalTransform.Translate(mouseDelta.X, mouseDelta.Y);
-				Invalidate();
+				Refresh();
 			}
+			else
+			{
+				UpdateOverlay();
+			}
+			
 		}
 
 		private void AddressSpace_MouseDown(object sender, MouseEventArgs e)
@@ -180,7 +212,7 @@ namespace Alloclave
 			int amountToMove = e.Delta / WheelDelta;
 			float finalScale = 1.0f + (float)amountToMove / 5.0f;
 			GlobalTransform.Scale(finalScale, finalScale);
-			Invalidate();
+			Refresh();
 		}
 
 		void SelectAt(Point location)
@@ -188,12 +220,78 @@ namespace Alloclave
 			// TODO
 		}
 
+		void HoverAt(Point location)
+		{
+			printCtrl.Text = "TESSSSST";
+			Tooltip.Show("", this);
+		}
+
 		private void AddressSpace_SizeChanged(object sender, EventArgs e)
 		{
 			// TODO: Might not be viable to do this dynamically for large datasets
 			VisualConstraints.RowAddressPixelWidth = (uint)Width;
 			//VisualConstraints.RowAddressPixelHeight = (uint)Height;
+			OverlayBitmap = new Bitmap((int)VisualConstraints.RowAddressPixelWidth, 500);
 			Rebuild(ref LastHistory);
+		}
+
+		private void AddressSpace_MouseHover(object sender, EventArgs e)
+		{
+			HoverAt(CurrentMouseLocation);
+		}
+
+		private void UpdateOverlay()
+		{
+			Point[] points = { CurrentMouseLocation };
+			Point[] invertedPoints = { CurrentMouseLocation };
+			GlobalTransform.TransformPoints(points);
+
+			Matrix InvertedTransform = GlobalTransform.Clone();
+			InvertedTransform.Invert();
+			InvertedTransform.TransformPoints(invertedPoints);
+
+			Point transformedPoint = points[0];
+			Point invertedPoint = invertedPoints[0];
+
+			Point[] bitmapBounds = { new Point(0, 0), new Point(MainBitmap.Size.Width, MainBitmap.Size.Height) };
+
+			GlobalTransform.TransformPoints(bitmapBounds);
+			Size scaledSize = new Size(bitmapBounds[1].X - bitmapBounds[0].X, bitmapBounds[1].Y - bitmapBounds[0].Y);
+			Rectangle bitmapRectangle = new Rectangle(bitmapBounds[0], scaledSize);
+
+			if (bitmapRectangle.Contains(CurrentMouseLocation))
+			{
+				MainBitmapOpacity = 0.5f;
+
+				// Find the allocation we're hovering over
+				foreach (VisualMemoryChunk chunk in VisualMemoryChunks)
+				{
+					if (chunk.Contains(invertedPoint))
+					{
+						Graphics gForm = Graphics.FromImage(OverlayBitmap);
+						gForm.Clear(Color.White);
+						foreach (VisualMemoryBox box in chunk.Boxes)
+						{
+							Rectangle rectangle = box.DefaultBox;
+							Region region = new Region(rectangle);
+							region.Transform(box.Transform);
+
+							SolidBrush brush = new SolidBrush(Color.Black);
+							gForm.FillRegion(brush, region);
+						}
+
+						OverlayBitmap.MakeTransparent(Color.White);
+
+						break;
+					}
+				}
+			}
+			else
+			{
+				MainBitmapOpacity = 1.0f;
+			}
+
+			Refresh();
 		}
 	}
 }

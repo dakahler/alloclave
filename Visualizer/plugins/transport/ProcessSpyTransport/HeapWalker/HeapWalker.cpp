@@ -1,6 +1,6 @@
 // This is the main DLL file.
 
-#include "stdafx.h"
+//#include "stdafx.h"
 
 #include "HeapWalker.h"
 
@@ -105,22 +105,26 @@ namespace
 
 
 		ULONG heapNodeCount = db->HeapInformation ? *PULONG(db->HeapInformation):0;
-
-		PDEBUG_HEAP_INFORMATION heapInfo = PDEBUG_HEAP_INFORMATION(PULONG(db-> HeapInformation) + 1);
-
-		// Go through each of the heap nodes and dispaly the information
-		// heapNodeCount
-		// TODO: Multi-heap support
-		List<Alloclave_Plugin::AllocationData^>^ allocationList;
-		for (unsigned int i = 0; i < 1; i++)
+		List<Alloclave_Plugin::AllocationData^>^ allocationList = nullptr;
+		if (heapNodeCount > 0)
 		{
-			//printf("\n Base Address = 0x%.8x", heapInfo[i].Base);
-			//printf("\n Block count = %d", heapInfo[i].BlockCount);
-			//printf("\n Committed Size= 0x%.8x", heapInfo[i].Committed);
-			//printf("\n Allocated Size = 0x%.8x", heapInfo[i].Allocated);
-			//printf("\n Flags = 0x%.8x", heapInfo[i].Flags);
 
-			allocationList = DisplayHeapBlocks(pid, heapInfo[i].Base);
+			PDEBUG_HEAP_INFORMATION heapInfo = PDEBUG_HEAP_INFORMATION(PULONG(db-> HeapInformation) + 1);
+
+			// Go through each of the heap nodes and dispaly the information
+			// heapNodeCount
+			// TODO: Multi-heap support
+			for (unsigned int i = 0; i < 1; i++)
+			{
+				//printf("\n Base Address = 0x%.8x", heapInfo[i].Base);
+				//printf("\n Block count = %d", heapInfo[i].BlockCount);
+				//printf("\n Committed Size= 0x%.8x", heapInfo[i].Committed);
+				//printf("\n Allocated Size = 0x%.8x", heapInfo[i].Allocated);
+				//printf("\n Flags = 0x%.8x", heapInfo[i].Flags);
+
+				allocationList = DisplayHeapBlocks(pid, heapInfo[i].Base);
+			}
+
 		}
 
 		// Clean up the buffer
@@ -144,6 +148,8 @@ namespace
 		// Get process heap data
 		LONG ret = RtlQueryProcessDebugInformation( pid, PDI_HEAPS | PDI_HEAP_BLOCKS, db);
 
+		HANDLE hCrtHeap = GetProcessHeap();
+
 		ULONG heapNodeCount = db->HeapInformation ? *PULONG(db->HeapInformation) : 0;
 
 		PDEBUG_HEAP_INFORMATION heapInfo = PDEBUG_HEAP_INFORMATION(PULONG(db->HeapInformation) + 1);
@@ -164,6 +170,12 @@ namespace
 						//printf("\n Block count = %d", c+1);
 						//printf("\n Block address = 0x%.8x", hb.dwAddress);
 						//printf("\n Block Size = 0x%.8x", hb.dwSize);
+
+						if (c+1 == 186)
+						{
+							int x;
+							x=0;
+						}
 
 						if( hb.dwFlags == LF32_FREE )
 						{
@@ -249,7 +261,7 @@ namespace
 						return FALSE;
 
 					hb->reserved++;
-					//blockAddress = block + 4; //move to next block
+					block = block + 4; //move to next block
 					hb->dwSize = *block;
 				}
 				while( ( *(block+1) & 2 ) == 2 );

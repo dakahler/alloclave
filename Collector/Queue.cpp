@@ -24,7 +24,7 @@ Queue::~Queue()
 
 void Queue::Enqueue(const Buffer& buffer)
 {
-	QueueItem* newItem = (QueueItem*)malloc(sizeof(QueueItem));
+	QueueItem* newItem = (QueueItem*)real_malloc(sizeof(QueueItem));
 	if (newItem == NULL)
 	{
 		return;
@@ -54,7 +54,7 @@ Buffer Queue::Dequeue()
 		Buffer buffer = Head->Data;
 		QueueItem* oldHead = Head;
 		Head = Head->Next;
-		free(oldHead);
+		real_free(oldHead);
 		NumItems--;
 		return buffer;
 	}
@@ -69,7 +69,9 @@ const Buffer& Queue::Peek() const
 		return Head->Data;
 	}
 
-	return Buffer();
+	// TODO: Make this better
+	static Buffer s_buffer;
+	return s_buffer;
 }
 
 unsigned int Queue::GetNumItems() const

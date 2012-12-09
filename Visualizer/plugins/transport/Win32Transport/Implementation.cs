@@ -11,7 +11,7 @@ namespace Alloclave_Plugin
 	[ExportMetadata("Name", "Win32 Messaging")]
 	public class Win32Transport : Alloclave.Transport
 	{
-		static Alloclave.TargetSystemInfo temp;
+		static Alloclave.TargetSystemInfo temp = new Alloclave.TargetSystemInfo();
 		MessageWindow MessageWindow = new MessageWindow();
 
 		public Win32Transport()

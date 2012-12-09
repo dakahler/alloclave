@@ -87,6 +87,20 @@ namespace Alloclave
 			free(p);
 		}
 	}
+
+	void* real_malloc(size_t size)
+	{
+		void* p = malloc(size);
+		return p;
+	}
+
+	void real_free(void* p)
+	{
+		if (p)
+		{
+			free(p);
+		}
+	}
 };
 
 #endif // ALLOCLAVE_OVERRIDE_MALLOC

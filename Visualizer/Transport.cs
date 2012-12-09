@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Windows.Forms;
 
 namespace Alloclave
 {
@@ -17,7 +18,7 @@ namespace Alloclave
 
 		public abstract void Connect();
 		public abstract void Disconnect();
-		public virtual void SpawnCustomUI()
+		public virtual void SpawnCustomUI(IWin32Window owner)
 		{
 
 		}

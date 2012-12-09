@@ -29,7 +29,7 @@ Buffer::Buffer(const Buffer& other)
 
 	if (CurrentSize > 0)
 	{
-		Data = (char*)malloc(CurrentSize);
+		Data = (char*)real_malloc(CurrentSize);
 		if (Data)
 		{
 			memcpy(Data, other.Data, CurrentSize);
@@ -44,21 +44,21 @@ Buffer::Buffer(const Buffer& other)
 
 Buffer::~Buffer()
 {
-	free(Data);
+	real_free(Data);
 }
 
 void Buffer::Resize(unsigned int newSize)
 {
 	if (Data == NULL)
 	{
-		Data = (char*)malloc(newSize);
+		Data = (char*)real_malloc(newSize);
 	}
 	else
 	{
-		char* newData = (char*)malloc(newSize);
+		char* newData = (char*)real_malloc(newSize);
 		unsigned int numBytesToCopy = MIN(newSize, CurrentSize);
 		memcpy(newData, Data, numBytesToCopy);
-		free(Data);
+		real_free(Data);
 		Data = newData;
 
 		//if (Position > newSize)

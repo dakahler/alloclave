@@ -45,7 +45,7 @@ namespace Alloclave
 						TransportForm transportForm = new TransportForm(ref transport);
 						transportForm.Text = transportName;
 
-						transport.SpawnCustomUI();
+						transport.SpawnCustomUI(this);
 
 						transportForm.Show(DockPanel);
 						break;
