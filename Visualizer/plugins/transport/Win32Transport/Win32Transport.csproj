@@ -50,6 +50,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\ConstantsBridge\ConstantsBridge.vcxproj">
+      <Project>{7809cd92-e80e-4c83-83e3-f98bfc1a142a}</Project>
+      <Name>ConstantsBridge</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Visualizer.csproj">
       <Project>{da73fd41-0cf7-41f6-803b-471a943923b9}</Project>
       <Name>Visualizer</Name>

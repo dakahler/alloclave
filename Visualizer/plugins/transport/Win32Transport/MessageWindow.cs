@@ -37,7 +37,7 @@ namespace Alloclave_Plugin
 		public MessageWindow()
 		{
 			var accessHandle = this.Handle;
-			this.Text = "857E3F44-91FB-456B-9D53-03B75C751B28";
+			this.Text = Alloclave.ConstantsBridge.Win32Guid;
 		}
 
 		protected override void OnHandleCreated(EventArgs e)
@@ -57,6 +57,12 @@ namespace Alloclave_Plugin
 			if (m.Msg == WM_COPYDATA)
 			{
 				CopyDataStruct cps = (CopyDataStruct)Marshal.PtrToStructure(m.LParam, typeof(CopyDataStruct));
+
+				if ((uint)cps.dwData != Alloclave.ConstantsBridge.Win32Id)
+				{
+					// TODO: Error
+					return;
+				}
 
 				MessageReceivedEventArgs e = new MessageReceivedEventArgs();
 				e.Bytes = new byte[cps.cbData];
