@@ -200,6 +200,11 @@ namespace Alloclave
 			}
 		}
 
+		protected override void OnPaintBackground(PaintEventArgs e)
+		{
+			return;
+		}
+
 		private void AddressSpace_MouseMove(object sender, MouseEventArgs e)
 		{
 			CurrentMouseLocation = e.Location;
