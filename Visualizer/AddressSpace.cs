@@ -11,13 +11,6 @@ using System.Drawing.Imaging;
 
 namespace Alloclave
 {
-	public class SelectionChangedEventArgs : EventArgs
-	{
-		public VisualMemoryChunk SelectedChunk;
-	}
-
-	public delegate void SelectionChangedEventHandler(object sender, SelectionChangedEventArgs e);
-
 	public partial class AddressSpace : UserControl
 	{
 		VisualConstraints VisualConstraints = new VisualConstraints();
@@ -58,6 +51,11 @@ namespace Alloclave
 
 		public void Rebuild(ref History history)
 		{
+			if (Parent == null)
+			{
+				return;
+			}
+
 			VisualMemoryChunks.Clear();
 			SortedList<TimeStamp, IPacket> allocations = history.Get(typeof(Allocation));
 			SortedList<TimeStamp, IPacket> frees = history.Get(typeof(Free));
@@ -98,6 +96,8 @@ namespace Alloclave
 			}
 			VisualConstraints.StartAddress = VisualConstraints.StartAddress & ~VisualConstraints.RowAddressWidth;
 
+			VisualConstraints.RowAddressPixelWidth = (uint)this.Width;
+
 			// Then actually build the visual data
 			foreach (var pair in combinedList)
 			{
@@ -107,7 +107,10 @@ namespace Alloclave
 				VisualMemoryChunks.Add(chunk);
 			}
 
-			MainBitmap = new Bitmap((int)VisualConstraints.RowAddressPixelWidth, 500);
+			//MainBitmap = new Bitmap((int)VisualConstraints.RowAddressPixelWidth, 500);
+			//this.Width = Parent.Width;
+			//this.Height = Parent.Height;
+			MainBitmap = new Bitmap(this.Width, this.Height);
 			Graphics gForm = Graphics.FromImage(MainBitmap);
 			gForm.Clear(Color.White);
 			gForm.SmoothingMode = SmoothingMode.HighSpeed;
@@ -125,9 +128,15 @@ namespace Alloclave
 				}
 			}
 
+			OverlayBitmap = new Bitmap(this.Width, this.Height);
+			Graphics gOverlay = Graphics.FromImage(OverlayBitmap);
+			gOverlay.Clear(Color.White);
+			gOverlay.SmoothingMode = SmoothingMode.HighSpeed;
+
 			SelectedChunk = null;
 
 			FinishedInitialization = true;
+			RecreateBuffers();
 			Redraw();
 		}
 
@@ -135,11 +144,6 @@ namespace Alloclave
 		{
 			InitializeComponent();
 			this.DoubleBuffered = true;
-
-			OverlayBitmap = new Bitmap((int)VisualConstraints.RowAddressPixelWidth, 500);
-			Graphics gForm = Graphics.FromImage(OverlayBitmap);
-			gForm.Clear(Color.White);
-			gForm.SmoothingMode = SmoothingMode.HighSpeed;
 
 			Tooltip.RtbPCtrl = printCtrl;
 
@@ -407,4 +411,11 @@ namespace Alloclave
 			Redraw();
 		}
 	}
+
+	public class SelectionChangedEventArgs : EventArgs
+	{
+		public VisualMemoryChunk SelectedChunk;
+	}
+
+	public delegate void SelectionChangedEventHandler(object sender, SelectionChangedEventArgs e);
 }

@@ -31,8 +31,6 @@
 			this.AddressSpaceControl = new Alloclave.AddressSpace();
 			this.scrubber1 = new Alloclave.Scrubber();
 			this.TableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.XAxisControl = new Alloclave.AxisControl();
-			this.YAxisControl = new Alloclave.AxisControl();
 			this.OptionsPanel = new System.Windows.Forms.Panel();
 			this.ModeComboBox = new System.Windows.Forms.ComboBox();
 			this.ModeLabel = new System.Windows.Forms.Label();
@@ -44,59 +42,40 @@
 			// 
 			this.AddressSpaceControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.AddressSpaceControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.AddressSpaceControl.Location = new System.Drawing.Point(6, 26);
+			this.AddressSpaceControl.Location = new System.Drawing.Point(6, 6);
 			this.AddressSpaceControl.Name = "AddressSpaceControl";
-			this.AddressSpaceControl.Size = new System.Drawing.Size(697, 342);
+			this.AddressSpaceControl.Size = new System.Drawing.Size(717, 361);
 			this.AddressSpaceControl.TabIndex = 0;
 			// 
 			// scrubber1
 			// 
 			this.scrubber1.AutoSize = true;
 			this.scrubber1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.TableLayoutPanel.SetColumnSpan(this.scrubber1, 2);
 			this.scrubber1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.scrubber1.Location = new System.Drawing.Point(6, 374);
+			this.scrubber1.Location = new System.Drawing.Point(6, 373);
 			this.scrubber1.Name = "scrubber1";
-			this.scrubber1.Size = new System.Drawing.Size(717, 17);
+			this.scrubber1.Size = new System.Drawing.Size(717, 18);
 			this.scrubber1.TabIndex = 1;
 			// 
 			// TableLayoutPanel
 			// 
-			this.TableLayoutPanel.ColumnCount = 2;
+			this.TableLayoutPanel.ColumnCount = 1;
 			this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.TableLayoutPanel.Controls.Add(this.AddressSpaceControl, 0, 1);
-			this.TableLayoutPanel.Controls.Add(this.scrubber1, 0, 2);
-			this.TableLayoutPanel.Controls.Add(this.XAxisControl, 0, 0);
-			this.TableLayoutPanel.Controls.Add(this.YAxisControl, 1, 1);
-			this.TableLayoutPanel.Controls.Add(this.OptionsPanel, 0, 3);
+			this.TableLayoutPanel.Controls.Add(this.AddressSpaceControl, 0, 0);
+			this.TableLayoutPanel.Controls.Add(this.scrubber1, 0, 1);
+			this.TableLayoutPanel.Controls.Add(this.OptionsPanel, 0, 2);
 			this.TableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.TableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.TableLayoutPanel.Name = "TableLayoutPanel";
 			this.TableLayoutPanel.Padding = new System.Windows.Forms.Padding(3);
-			this.TableLayoutPanel.RowCount = 4;
-			this.TableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.TableLayoutPanel.RowCount = 3;
 			this.TableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 93.70277F));
 			this.TableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6.29723F));
 			this.TableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+			this.TableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.TableLayoutPanel.Size = new System.Drawing.Size(729, 478);
 			this.TableLayoutPanel.TabIndex = 2;
-			// 
-			// XAxisControl
-			// 
-			this.XAxisControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.XAxisControl.Location = new System.Drawing.Point(6, 6);
-			this.XAxisControl.Name = "XAxisControl";
-			this.XAxisControl.Size = new System.Drawing.Size(697, 14);
-			this.XAxisControl.TabIndex = 2;
-			// 
-			// YAxisControl
-			// 
-			this.YAxisControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.YAxisControl.Location = new System.Drawing.Point(709, 26);
-			this.YAxisControl.Name = "YAxisControl";
-			this.YAxisControl.Size = new System.Drawing.Size(14, 342);
-			this.YAxisControl.TabIndex = 3;
 			// 
 			// OptionsPanel
 			// 
@@ -105,7 +84,7 @@
 			this.OptionsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.OptionsPanel.Location = new System.Drawing.Point(6, 397);
 			this.OptionsPanel.Name = "OptionsPanel";
-			this.OptionsPanel.Size = new System.Drawing.Size(697, 75);
+			this.OptionsPanel.Size = new System.Drawing.Size(717, 75);
 			this.OptionsPanel.TabIndex = 4;
 			// 
 			// ModeComboBox
@@ -152,8 +131,6 @@
 		public AddressSpace AddressSpaceControl;
 		private Scrubber scrubber1;
 		private System.Windows.Forms.TableLayoutPanel TableLayoutPanel;
-		private AxisControl XAxisControl;
-		private AxisControl YAxisControl;
 		private System.Windows.Forms.Panel OptionsPanel;
 		private System.Windows.Forms.ComboBox ModeComboBox;
 		private System.Windows.Forms.Label ModeLabel;
