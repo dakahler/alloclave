@@ -27,10 +27,10 @@ namespace Alloclave
 			}
 			else
 			{
-				AddressLabel.Text = String.Format("Size: 0x{0:X16}", allocation.Address);
+				AddressLabel.Text = String.Format("Address: 0x{0:X16}", allocation.Address);
 			}
 
-			SizeLabel.Text = String.Format("Address: {0} bytes", allocation.Size);
+			SizeLabel.Text = String.Format("Size: {0} bytes", allocation.Size);
 		}
 	}
 }
