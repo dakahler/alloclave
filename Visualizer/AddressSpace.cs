@@ -11,6 +11,13 @@ using System.Drawing.Imaging;
 
 namespace Alloclave
 {
+	public class SelectionChangedEventArgs : EventArgs
+	{
+		public VisualMemoryChunk SelectedChunk;
+	}
+
+	public delegate void SelectionChangedEventHandler(object sender, SelectionChangedEventArgs e);
+
 	public partial class AddressSpace : UserControl
 	{
 		VisualConstraints VisualConstraints = new VisualConstraints();
@@ -40,6 +47,8 @@ namespace Alloclave
 		bool FinishedInitialization;
 
 		VisualMemoryChunk SelectedChunk;
+
+		public event SelectionChangedEventHandler SelectionChanged;
 
 		public void History_Updated(object sender, EventArgs e)
 		{
@@ -93,8 +102,7 @@ namespace Alloclave
 			foreach (var pair in combinedList)
 			{
 				Allocation allocation = pair.Value as Allocation;
-				VisualMemoryChunk chunk = new VisualMemoryChunk(allocation.Address,
-					allocation.Size, VisualConstraints);
+				VisualMemoryChunk chunk = new VisualMemoryChunk(allocation, VisualConstraints);
 
 				VisualMemoryChunks.Add(chunk);
 			}
@@ -305,6 +313,10 @@ namespace Alloclave
 					break;
 				}
 			}
+
+			SelectionChangedEventArgs e = new SelectionChangedEventArgs();
+			e.SelectedChunk = SelectedChunk;
+			SelectionChanged(this, e);
 
 			UpdateOverlay();
 		}

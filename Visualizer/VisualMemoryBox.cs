@@ -8,7 +8,7 @@ using System.Drawing.Drawing2D;
 
 namespace Alloclave
 {
-	class VisualMemoryBox
+	public class VisualMemoryBox
 	{
 		public readonly Rectangle DefaultBox = new Rectangle(0, 0, 1, 1);
 		public Matrix Transform = new Matrix();

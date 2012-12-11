@@ -39,6 +39,13 @@ namespace Alloclave
 		public TransportForm()
 		{
 			InitializeComponent();
+
+			AllocationForm.AddressSpaceControl.SelectionChanged += AddressSpaceControl_SelectionChanged;
+		}
+
+		void AddressSpaceControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			InfoForm.Update(e.SelectedChunk.Allocation);
 		}
 
 		public TransportForm(ref Transport transport)

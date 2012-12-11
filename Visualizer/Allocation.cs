@@ -24,6 +24,8 @@ namespace Alloclave
 		public CallStack Stack = new CallStack();
 		public byte[] UserData;
 
+		public Common.Architecture Architecture;
+
 		// Tool-side-only data
 		String Notes;
 
@@ -47,6 +49,8 @@ namespace Alloclave
 				Size = binaryReader.ReadUInt64();
 				Alignment = binaryReader.ReadUInt64();
 			}
+
+			Architecture = targetSystemInfo.Architecture;
 
 			Type = (AllocationType)binaryReader.ReadByte();
 			HeapId = binaryReader.ReadUInt16();

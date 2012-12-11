@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Alloclave
 {
-	class VisualMemoryChunk
+	public class VisualMemoryChunk
 	{
 		// TODO: Better encapsulation
 		public List<VisualMemoryBox> Boxes = new List<VisualMemoryBox>();
@@ -15,7 +15,10 @@ namespace Alloclave
 		static List<Color> colors = new List<Color>();
 		static int colorIndex = 0;
 
-		public VisualMemoryChunk(UInt64 startAddress, UInt64 size, VisualConstraints constraints)
+		// TODO: Too specific?
+		public Allocation Allocation;
+
+		public VisualMemoryChunk(Allocation allocation, VisualConstraints constraints)
 		{
 			// TODO: Put this somewhere else? Maybe user definable.
 			if (colors.Count == 0)
@@ -25,19 +28,21 @@ namespace Alloclave
 				colorIndex = 0;
 			}
 
-			if (startAddress < constraints.StartAddress)
+			if (allocation.Address < constraints.StartAddress)
 			{
 				throw new ArgumentOutOfRangeException();
 			}
 
-			Create(startAddress, size, constraints);
+			Allocation = allocation;
+
+			Create(allocation, constraints);
 		}
 
-		
-		private void Create(UInt64 startAddress, UInt64 size, VisualConstraints constraints)
+
+		private void Create(Allocation allocation, VisualConstraints constraints)
 		{
-			UInt64 currentAddress = startAddress;
-			UInt64 currentSize = size;
+			UInt64 currentAddress = allocation.Address;
+			UInt64 currentSize = allocation.Size;
 			int tempCounter = 0;
 
 			while (true)
