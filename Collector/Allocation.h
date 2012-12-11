@@ -9,9 +9,18 @@ namespace Alloclave
 	class Allocation : public Packet
 	{
 	public:
+		enum AllocationType
+		{
+			AllocationType_Allocation,
+			AllocationType_Heap,
+		};
+
 		void* Address;
 		unsigned int Size;
 		unsigned int Alignment;
+		AllocationType Type;
+		unsigned short HeapId;
+
 		char* Stack;
 
 		Allocation();

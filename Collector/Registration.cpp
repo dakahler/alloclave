@@ -1,3 +1,4 @@
+
 #include "Registration.h"
 #include "Allocation.h"
 #include "Screenshot.h"
@@ -12,7 +13,7 @@ namespace Alloclave
 		s_Transport = transport;
 	}
 
-	void RegisterAllocation(void* address, unsigned int size, unsigned int alignment)
+	void RegisterAllocation(void* address, unsigned int size, unsigned int alignment, unsigned short heapId)
 	{
 		if (s_Transport == NULL)
 		{
@@ -23,7 +24,20 @@ namespace Alloclave
 		allocation.Address = address;
 		allocation.Size = size;
 		allocation.Alignment = alignment;
+		allocation.Type = Allocation::AllocationType_Allocation;
+		allocation.HeapId = heapId;
 		s_Transport->Send(allocation);
+	}
+
+	void RegisterHeap(void* address, unsigned int size, unsigned int alignment, unsigned short heapId)
+	{
+		Allocation heap;
+		heap.Address = address;
+		heap.Size = size;
+		heap.Alignment = alignment;
+		heap.Type = Allocation::AllocationType_Heap;
+		heap.HeapId = heapId;
+		s_Transport->Send(heap);
 	}
 
 	void RegisterFree(void* address)

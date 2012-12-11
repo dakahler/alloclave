@@ -279,6 +279,10 @@
       <Project>{62ced1d5-f603-40de-8bf5-3e49d3a392f4}</Project>
       <Name>NBug</Name>
     </ProjectReference>
+    <ProjectReference Include="ConstantsBridge\ConstantsBridge.vcxproj">
+      <Project>{7809cd92-e80e-4c83-83e3-f98bfc1a142a}</Project>
+      <Name>ConstantsBridge</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

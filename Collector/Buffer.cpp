@@ -60,11 +60,6 @@ void Buffer::Resize(unsigned int newSize)
 		memcpy(newData, Data, numBytesToCopy);
 		real_free(Data);
 		Data = newData;
-
-		//if (Position > newSize)
-		//{
-		//	Position = newSize;
-		//}
 	}
 
 	CurrentSize = newSize;

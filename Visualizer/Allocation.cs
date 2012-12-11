@@ -8,11 +8,19 @@ namespace Alloclave
 {
 	public class Allocation : IPacket
 	{
+		public enum AllocationType
+		{
+			Allocation,
+			Heap,
+		}
+
 		// Data passed in from target system
 		// TODO: Better encapsulation
 		public UInt64 Address;
 		public UInt64 Size;
 		public UInt64 Alignment;
+		public AllocationType Type;
+		public UInt16 HeapId;
 		public CallStack Stack = new CallStack();
 		public byte[] UserData;
 
@@ -39,6 +47,9 @@ namespace Alloclave
 				Size = binaryReader.ReadUInt64();
 				Alignment = binaryReader.ReadUInt64();
 			}
+
+			Type = (AllocationType)binaryReader.ReadByte();
+			HeapId = binaryReader.ReadUInt16();
 
 			Stack.Deserialize(binaryReader, targetSystemInfo);
 

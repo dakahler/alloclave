@@ -35,7 +35,7 @@ void Win32Transport::Flush()
 
 	// Send win32 WM_COPYDATA message to visualizer
 	COPYDATASTRUCT cds;
-	cds.dwData = 0x729a04e2; // Magic number identifier
+	cds.dwData = Constants::Win32Id;
 	cds.cbData = buffer.GetSize();
 	cds.lpData = (void*)buffer.GetData(); // TODO: constness
 	if (!SendMessage(VisualizerHandle, WM_COPYDATA, (WPARAM)VisualizerHandle, (LPARAM)(LPVOID)&cds))
@@ -50,7 +50,7 @@ void Win32Transport::FindVisualizer()
 	// TODO: Correct names
 	if (VisualizerHandle == NULL)
 	{
-		VisualizerHandle = FindWindow(NULL, "857E3F44-91FB-456B-9D53-03B75C751B28");
+		VisualizerHandle = FindWindow(NULL, Constants::Win32Guid);
 	}
 }
 
