@@ -39,6 +39,8 @@ namespace Alloclave
 		Graphics DrawingGraphics;
 		bool FinishedInitialization;
 
+		VisualMemoryChunk SelectedChunk;
+
 		public void History_Updated(object sender, EventArgs e)
 		{
 			LastHistory = sender as History;
@@ -114,6 +116,8 @@ namespace Alloclave
 					gForm.FillRegion(brush, region);
 				}
 			}
+
+			SelectedChunk = null;
 
 			FinishedInitialization = true;
 			Redraw();
@@ -291,7 +295,18 @@ namespace Alloclave
 
 		void SelectAt(Point location)
 		{
-			// TODO
+			SelectedChunk = null;
+			Point localLocation = GetLocalMouseLocation(location);
+			foreach (VisualMemoryChunk chunk in VisualMemoryChunks)
+			{
+				if (chunk.Contains(localLocation))
+				{
+					SelectedChunk = chunk;
+					break;
+				}
+			}
+
+			UpdateOverlay();
 		}
 
 		void HoverAt(Point location)
@@ -314,18 +329,23 @@ namespace Alloclave
 			HoverAt(CurrentMouseLocation);
 		}
 
+		private Point GetLocalMouseLocation(Point worldMouseLocation)
+		{
+			Point[] points = { worldMouseLocation };
+
+			Matrix invertedTransform = GlobalTransform.Clone();
+			invertedTransform.Invert();
+			invertedTransform.TransformPoints(points);
+
+			return points[0];
+		}
+
 		private void UpdateOverlay()
 		{
 			Point[] points = { CurrentMouseLocation };
-			Point[] invertedPoints = { CurrentMouseLocation };
 			GlobalTransform.TransformPoints(points);
 
-			Matrix InvertedTransform = GlobalTransform.Clone();
-			InvertedTransform.Invert();
-			InvertedTransform.TransformPoints(invertedPoints);
-
 			Point transformedPoint = points[0];
-			Point invertedPoint = invertedPoints[0];
 
 			Point[] bitmapBounds = { new Point(0, 0), new Point(MainBitmap.Size.Width, MainBitmap.Size.Height) };
 
@@ -338,27 +358,34 @@ namespace Alloclave
 				MainBitmapOpacity = 0.5f;
 
 				// Find the allocation we're hovering over
+				Graphics gForm = Graphics.FromImage(OverlayBitmap);
+				gForm.Clear(Color.White);
 				foreach (VisualMemoryChunk chunk in VisualMemoryChunks)
 				{
-					if (chunk.Contains(invertedPoint))
+					if (chunk.Contains(GetLocalMouseLocation(CurrentMouseLocation)) || chunk == SelectedChunk)
 					{
-						Graphics gForm = Graphics.FromImage(OverlayBitmap);
-						gForm.Clear(Color.White);
 						foreach (VisualMemoryBox box in chunk.Boxes)
 						{
 							Rectangle rectangle = box.DefaultBox;
 							Region region = new Region(rectangle);
 							region.Transform(box.Transform);
 
-							SolidBrush brush = new SolidBrush(Color.Black);
+							SolidBrush brush = null;
+							if (chunk == SelectedChunk)
+							{
+								brush = new SolidBrush(Color.FromArgb(255, 0, 0, 0));
+							}
+							else
+							{
+								brush = new SolidBrush(Color.FromArgb(128, 0, 0, 0));
+							}
+
 							gForm.FillRegion(brush, region);
 						}
-
-						OverlayBitmap.MakeTransparent(Color.White);
-
-						break;
 					}
 				}
+
+				OverlayBitmap.MakeTransparent(Color.White);
 			}
 			else
 			{
