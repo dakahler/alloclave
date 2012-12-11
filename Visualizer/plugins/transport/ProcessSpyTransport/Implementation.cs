@@ -95,9 +95,9 @@ namespace Alloclave_Plugin
 
 						binaryWriter.Write(allocation.Address);
 						binaryWriter.Write(allocation.Size);
-						binaryWriter.Write((UInt64)4);
-
-						Console.WriteLine("Wrote allocation: {0:X}, {1:X}", allocation.Address, allocation.Size);
+						binaryWriter.Write((UInt64)4); // alignment
+						binaryWriter.Write(Allocation.AllocationType.Allocation);
+						binaryWriter.Write((UInt16)0); // heap id
 					}
 
 					Dispatcher.Invoke(new Action(() => ProcessPacket(memoryStream.GetBuffer())));

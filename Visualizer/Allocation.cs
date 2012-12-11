@@ -8,9 +8,9 @@ namespace Alloclave
 {
 	public class Allocation : IPacket
 	{
-		public enum AllocationType
+		public enum AllocationType : byte
 		{
-			Allocation,
+			Allocation = 0,
 			Heap,
 		}
 
