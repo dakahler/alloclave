@@ -12,6 +12,5 @@ namespace Alloclave
 	{
 		public readonly Rectangle DefaultBox = new Rectangle(0, 0, 1, 1);
 		public Matrix Transform = new Matrix();
-		public Color Color = Color.Red;
 	}
 }

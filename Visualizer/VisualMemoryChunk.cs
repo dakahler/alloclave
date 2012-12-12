@@ -15,16 +15,20 @@ namespace Alloclave
 		static List<Color> colors = new List<Color>();
 		static int colorIndex = 0;
 
+		public Color _Color = Color.Red;
+
 		// TODO: Too specific?
 		public Allocation Allocation;
+
+		public Region Region = new Region();
 
 		public VisualMemoryChunk(Allocation allocation, VisualConstraints constraints)
 		{
 			// TODO: Put this somewhere else? Maybe user definable.
 			if (colors.Count == 0)
 			{
-				colors.Add(Color.FromArgb(230, 0, 0));
-				colors.Add(Color.FromArgb(200, 0, 0));
+				colors.Add(Color.FromArgb(255, 230, 0, 0));
+				colors.Add(Color.FromArgb(255, 100, 0, 0));
 				colorIndex = 0;
 			}
 
@@ -43,7 +47,8 @@ namespace Alloclave
 		{
 			UInt64 currentAddress = allocation.Address;
 			UInt64 currentSize = allocation.Size;
-			int tempCounter = 0;
+
+			Region.MakeEmpty();
 
 			while (true)
 			{
@@ -79,9 +84,7 @@ namespace Alloclave
 				float scaleY = 1.0f;
 				scaleY *= constraints.RowAddressPixelHeight;
 
-				AddBox(pixelX, pixelY, scaleX, scaleY, colors[colorIndex]);
-
-				tempCounter++;
+				AddBox(pixelX, pixelY, scaleX, scaleY);
 
 				// Build the box for the next row of the allocation, if necessary
 				UInt64 sizeCovered = endAddress - workingStartAddress + 1;
@@ -98,16 +101,21 @@ namespace Alloclave
 				}
 			}
 
+			_Color = colors[colorIndex];
 			colorIndex = (colorIndex + 1) % colors.Count;
 		}
 
-		private void AddBox(UInt64 x, UInt64 y, float scaleX, float scaleY, Color color)
+		private void AddBox(UInt64 x, UInt64 y, float scaleX, float scaleY)
 		{
 			VisualMemoryBox box = new VisualMemoryBox();
 			box.Transform.Translate(x, y);
 			box.Transform.Scale(scaleX, scaleY);
-			box.Color = color;
 			Boxes.Add(box);
+
+			Rectangle rectangle = box.DefaultBox;
+			Region region = new Region(rectangle);
+			region.Transform(box.Transform);
+			Region.Union(region);
 		}
 
 		public bool Contains(Point point)

@@ -99,45 +99,36 @@ namespace Alloclave
 			VisualConstraints.RowAddressPixelWidth = (uint)this.Width;
 
 			// Then actually build the visual data
+			MainBitmap = new Bitmap(this.Width, this.Height);
+			Graphics gForm = Graphics.FromImage(MainBitmap);
+			gForm.Clear(Color.White);
+			gForm.SmoothingMode = SmoothingMode.HighSpeed;
+			
 			foreach (var pair in combinedList)
 			{
 				Allocation allocation = pair.Value as Allocation;
 				VisualMemoryChunk chunk = new VisualMemoryChunk(allocation, VisualConstraints);
 
 				VisualMemoryChunks.Add(chunk);
-			}
 
-			//MainBitmap = new Bitmap((int)VisualConstraints.RowAddressPixelWidth, 500);
-			//this.Width = Parent.Width;
-			//this.Height = Parent.Height;
-			MainBitmap = new Bitmap(this.Width, this.Height);
-			Graphics gForm = Graphics.FromImage(MainBitmap);
-			gForm.Clear(Color.White);
-			gForm.SmoothingMode = SmoothingMode.HighSpeed;
-
-			foreach (VisualMemoryChunk chunk in VisualMemoryChunks)
-			{
-				foreach (VisualMemoryBox box in chunk.Boxes)
-				{
-					Rectangle rectangle = box.DefaultBox;
-					Region region = new Region(rectangle);
-					region.Transform(box.Transform);
-
-					SolidBrush brush = new SolidBrush(box.Color);
-					gForm.FillRegion(brush, region);
-				}
+				SolidBrush brush = new SolidBrush(chunk._Color);
+				gForm.FillRegion(brush, chunk.Region);
 			}
 
 			OverlayBitmap = new Bitmap(this.Width, this.Height);
 			Graphics gOverlay = Graphics.FromImage(OverlayBitmap);
 			gOverlay.Clear(Color.White);
 			gOverlay.SmoothingMode = SmoothingMode.HighSpeed;
+			UpdateOverlay();
 
 			SelectedChunk = null;
 
 			FinishedInitialization = true;
 			RecreateBuffers();
 			Redraw();
+
+			gForm.Dispose();
+			gOverlay.Dispose();
 		}
 
 		public AddressSpace()
@@ -338,8 +329,6 @@ namespace Alloclave
 			//VisualConstraints.RowAddressPixelHeight = (uint)Height;
 			OverlayBitmap = new Bitmap((int)VisualConstraints.RowAddressPixelWidth, 500);
 			Rebuild(ref LastHistory);
-			RecreateBuffers();
-			Redraw();
 		}
 
 		private void AddressSpace_MouseHover(object sender, EventArgs e)
@@ -404,10 +393,17 @@ namespace Alloclave
 				}
 
 				OverlayBitmap.MakeTransparent(Color.White);
+
+				gForm.Dispose();
 			}
 			else
 			{
 				MainBitmapOpacity = 1.0f;
+
+				Graphics gForm = Graphics.FromImage(OverlayBitmap);
+				gForm.Clear(Color.White);
+				OverlayBitmap.MakeTransparent(Color.White);
+				gForm.Dispose();
 			}
 
 			Redraw();
