@@ -338,6 +338,8 @@ namespace Alloclave
 			//VisualConstraints.RowAddressPixelHeight = (uint)Height;
 			OverlayBitmap = new Bitmap((int)VisualConstraints.RowAddressPixelWidth, 500);
 			Rebuild(ref LastHistory);
+			RecreateBuffers();
+			Redraw();
 		}
 
 		private void AddressSpace_MouseHover(object sender, EventArgs e)
@@ -409,6 +411,11 @@ namespace Alloclave
 			}
 
 			Redraw();
+		}
+
+		private void AddressSpace_Resize(object sender, EventArgs e)
+		{
+
 		}
 	}
 

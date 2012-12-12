@@ -96,7 +96,7 @@ namespace Alloclave_Plugin
 						binaryWriter.Write(allocation.Address);
 						binaryWriter.Write(allocation.Size);
 						binaryWriter.Write((UInt64)4); // alignment
-						binaryWriter.Write(Allocation.AllocationType.Allocation);
+						binaryWriter.Write((byte)Allocation.AllocationType.Allocation);
 						binaryWriter.Write((UInt16)0); // heap id
 					}
 

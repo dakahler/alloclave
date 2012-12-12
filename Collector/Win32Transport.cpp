@@ -35,7 +35,7 @@ void Win32Transport::Flush()
 
 	// Send win32 WM_COPYDATA message to visualizer
 	COPYDATASTRUCT cds;
-	cds.dwData = Constants::Win32Id;
+	cds.dwData = ALLOCLAVE_WIN32_ID;
 	cds.cbData = buffer.GetSize();
 	cds.lpData = (void*)buffer.GetData(); // TODO: constness
 	if (!SendMessage(VisualizerHandle, WM_COPYDATA, (WPARAM)VisualizerHandle, (LPARAM)(LPVOID)&cds))
@@ -50,7 +50,7 @@ void Win32Transport::FindVisualizer()
 	// TODO: Correct names
 	if (VisualizerHandle == NULL)
 	{
-		VisualizerHandle = FindWindow(NULL, Constants::Win32Guid);
+		VisualizerHandle = FindWindow(NULL, ALLOCLAVE_WIN32_GUID);
 	}
 }
 
