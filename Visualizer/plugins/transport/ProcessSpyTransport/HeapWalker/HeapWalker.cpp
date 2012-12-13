@@ -247,7 +247,7 @@ namespace
 		// Make it point to next block address entry
 		block = block + hb->reserved * 4;
 
-		try
+		__try
 		{
 			if( ( *(block+1) & 2 ) == 2 )
 			{
@@ -283,7 +283,7 @@ namespace
 			else if( (flags & 0x0100) != 0 )
 				hb->dwFlags = 2;
 		}
-		catch (...)
+		__except (EXCEPTION_EXECUTE_HANDLER)
 		{
 			printf("Exception!\n");
 			return FALSE;
@@ -295,6 +295,6 @@ namespace
 
 List<Alloclave_Plugin::AllocationData^>^ Alloclave_Plugin::HeapWalker::GetHeapData(System::UInt64 pid)
 {
-	return DisplayHeapNodes(pid);
+	return DisplayHeapNodes((DWORD)pid);
 }
 
