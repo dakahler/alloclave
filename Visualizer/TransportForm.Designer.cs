@@ -43,16 +43,16 @@
 			WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient3 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
 			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient6 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
 			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient7 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-			this.DockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+			this._DockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
 			this.SuspendLayout();
 			// 
-			// DockPanel
+			// _DockPanel
 			// 
-			this.DockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.DockPanel.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
-			this.DockPanel.Location = new System.Drawing.Point(0, 0);
-			this.DockPanel.Name = "DockPanel";
-			this.DockPanel.Size = new System.Drawing.Size(784, 505);
+			this._DockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this._DockPanel.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
+			this._DockPanel.Location = new System.Drawing.Point(0, 0);
+			this._DockPanel.Name = "DockPanel";
+			this._DockPanel.Size = new System.Drawing.Size(784, 505);
 			dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
 			dockPanelGradient1.StartColor = System.Drawing.SystemColors.ControlLight;
 			autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
@@ -98,15 +98,15 @@
 			dockPaneStripToolWindowGradient1.InactiveTabGradient = tabGradient7;
 			dockPaneStripSkin1.ToolWindowGradient = dockPaneStripToolWindowGradient1;
 			dockPanelSkin1.DockPaneStripSkin = dockPaneStripSkin1;
-			this.DockPanel.Skin = dockPanelSkin1;
-			this.DockPanel.TabIndex = 0;
+			this._DockPanel.Skin = dockPanelSkin1;
+			this._DockPanel.TabIndex = 0;
 			// 
 			// TransportForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(784, 505);
-			this.Controls.Add(this.DockPanel);
+			this.Controls.Add(this._DockPanel);
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "TransportForm";
 			this.Text = "TransportForm";
@@ -116,6 +116,6 @@
 
 		#endregion
 
-		private WeifenLuo.WinFormsUI.Docking.DockPanel DockPanel;
+		private WeifenLuo.WinFormsUI.Docking.DockPanel _DockPanel;
 	}
 }

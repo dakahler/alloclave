@@ -48,7 +48,6 @@
 			this.MouseHover += new System.EventHandler(this.AddressSpace_MouseHover);
 			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseMove);
 			this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseUp);
-			this.Resize += new System.EventHandler(this.AddressSpace_Resize);
 			this.ResumeLayout(false);
 
 		}

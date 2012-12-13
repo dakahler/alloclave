@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.CancelButton = new System.Windows.Forms.Button();
+			this._CancelButton = new System.Windows.Forms.Button();
 			this.OkButton = new System.Windows.Forms.Button();
 			this.ProcessComboBox = new System.Windows.Forms.ComboBox();
 			this.ChooseTransportTypeLabel = new System.Windows.Forms.Label();
@@ -36,13 +36,13 @@
 			// 
 			// CancelButton
 			// 
-			this.CancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.CancelButton.Location = new System.Drawing.Point(333, 84);
-			this.CancelButton.Name = "CancelButton";
-			this.CancelButton.Size = new System.Drawing.Size(75, 23);
-			this.CancelButton.TabIndex = 7;
-			this.CancelButton.Text = "Cancel";
-			this.CancelButton.UseVisualStyleBackColor = true;
+			this._CancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this._CancelButton.Location = new System.Drawing.Point(333, 84);
+			this._CancelButton.Name = "CancelButton";
+			this._CancelButton.Size = new System.Drawing.Size(75, 23);
+			this._CancelButton.TabIndex = 7;
+			this._CancelButton.Text = "Cancel";
+			this._CancelButton.UseVisualStyleBackColor = true;
 			// 
 			// OkButton
 			// 
@@ -82,7 +82,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(458, 135);
-			this.Controls.Add(this.CancelButton);
+			this.Controls.Add(this._CancelButton);
 			this.Controls.Add(this.OkButton);
 			this.Controls.Add(this.ProcessComboBox);
 			this.Controls.Add(this.ChooseTransportTypeLabel);
@@ -96,7 +96,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.Button CancelButton;
+		private System.Windows.Forms.Button _CancelButton;
 		private System.Windows.Forms.Button OkButton;
 		public System.Windows.Forms.ComboBox ProcessComboBox;
 		private System.Windows.Forms.Label ChooseTransportTypeLabel;

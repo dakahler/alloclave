@@ -39,6 +39,9 @@ namespace Alloclave
 		Graphics DrawingGraphics;
 		bool FinishedInitialization;
 
+		Graphics MainGraphics;
+		Graphics OverlayGraphics;
+
 		VisualMemoryChunk SelectedChunk;
 
 		public event SelectionChangedEventHandler SelectionChanged;
@@ -51,6 +54,8 @@ namespace Alloclave
 
 		public void Rebuild(ref History history)
 		{
+			// TODO: Should probably move this to a separate thread and render to a secondary bitmap
+
 			if (Parent == null)
 			{
 				return;
@@ -89,21 +94,29 @@ namespace Alloclave
 
 			// Start by determining the lowest address
 			VisualConstraints.StartAddress = UInt64.MaxValue;
+			UInt64 endAddress = 0;
 			foreach (var pair in combinedList)
 			{
 				Allocation allocation = pair.Value as Allocation;
 				VisualConstraints.StartAddress = Math.Min(VisualConstraints.StartAddress, allocation.Address);
+				endAddress = Math.Max(endAddress, allocation.Address);
 			}
 			VisualConstraints.StartAddress = VisualConstraints.StartAddress & ~VisualConstraints.RowAddressWidth;
 
 			VisualConstraints.RowAddressPixelWidth = (uint)this.Width;
 
+			UInt64 numRows = (endAddress - VisualConstraints.StartAddress) / VisualConstraints.RowAddressWidth;
+
 			// Then actually build the visual data
-			MainBitmap = new Bitmap(this.Width, this.Height);
-			Graphics gForm = Graphics.FromImage(MainBitmap);
-			gForm.Clear(Color.White);
-			gForm.SmoothingMode = SmoothingMode.HighSpeed;
-			
+			MainBitmap = new Bitmap(this.Width, (int)numRows * 2);
+			if (MainGraphics != null)
+			{
+				MainGraphics.Dispose();
+			}
+			MainGraphics = Graphics.FromImage(MainBitmap);
+			MainGraphics.Clear(Color.White);
+			MainGraphics.SmoothingMode = SmoothingMode.HighSpeed;
+
 			foreach (var pair in combinedList)
 			{
 				Allocation allocation = pair.Value as Allocation;
@@ -112,13 +125,17 @@ namespace Alloclave
 				VisualMemoryChunks.Add(chunk);
 
 				SolidBrush brush = new SolidBrush(chunk._Color);
-				gForm.FillRegion(brush, chunk.Region);
+				MainGraphics.FillPath(brush, chunk.GraphicsPath);
 			}
 
-			OverlayBitmap = new Bitmap(this.Width, this.Height);
-			Graphics gOverlay = Graphics.FromImage(OverlayBitmap);
-			gOverlay.Clear(Color.White);
-			gOverlay.SmoothingMode = SmoothingMode.HighSpeed;
+			OverlayBitmap = new Bitmap(this.Width, (int)numRows * 2);
+			if (OverlayGraphics != null)
+			{
+				OverlayGraphics.Dispose();
+			}
+			OverlayGraphics = Graphics.FromImage(OverlayBitmap);
+			OverlayGraphics.Clear(Color.White);
+			OverlayGraphics.SmoothingMode = SmoothingMode.HighSpeed;
 			UpdateOverlay();
 
 			SelectedChunk = null;
@@ -126,9 +143,6 @@ namespace Alloclave
 			FinishedInitialization = true;
 			RecreateBuffers();
 			Redraw();
-
-			gForm.Dispose();
-			gOverlay.Dispose();
 		}
 
 		public AddressSpace()
@@ -148,6 +162,19 @@ namespace Alloclave
 			BackbufferContext = BufferedGraphicsManager.Current;
 
 			RecreateBuffers();
+		}
+
+		~AddressSpace()
+		{
+			if (MainGraphics != null)
+			{
+				MainGraphics.Dispose();
+			}
+
+			if (OverlayGraphics != null)
+			{
+				OverlayGraphics.Dispose();
+			}
 		}
 
 		void RecreateBuffers()
@@ -327,7 +354,6 @@ namespace Alloclave
 			// TODO: Might not be viable to do this dynamically for large datasets
 			VisualConstraints.RowAddressPixelWidth = (uint)Width;
 			//VisualConstraints.RowAddressPixelHeight = (uint)Height;
-			OverlayBitmap = new Bitmap((int)VisualConstraints.RowAddressPixelWidth, 500);
 			Rebuild(ref LastHistory);
 		}
 
@@ -349,6 +375,11 @@ namespace Alloclave
 
 		private void UpdateOverlay()
 		{
+			if (MainBitmap == null || OverlayBitmap == null)
+			{
+				return;
+			}
+
 			Point[] points = { CurrentMouseLocation };
 			GlobalTransform.TransformPoints(points);
 
@@ -365,53 +396,32 @@ namespace Alloclave
 				MainBitmapOpacity = 0.5f;
 
 				// Find the allocation we're hovering over
-				Graphics gForm = Graphics.FromImage(OverlayBitmap);
-				gForm.Clear(Color.White);
+				OverlayGraphics.Clear(Color.Transparent);
 				foreach (VisualMemoryChunk chunk in VisualMemoryChunks)
 				{
 					if (chunk.Contains(GetLocalMouseLocation(CurrentMouseLocation)) || chunk == SelectedChunk)
 					{
-						foreach (VisualMemoryBox box in chunk.Boxes)
+						SolidBrush brush = null;
+						if (chunk == SelectedChunk)
 						{
-							Rectangle rectangle = box.DefaultBox;
-							Region region = new Region(rectangle);
-							region.Transform(box.Transform);
-
-							SolidBrush brush = null;
-							if (chunk == SelectedChunk)
-							{
-								brush = new SolidBrush(Color.FromArgb(255, 0, 0, 0));
-							}
-							else
-							{
-								brush = new SolidBrush(Color.FromArgb(128, 0, 0, 0));
-							}
-
-							gForm.FillRegion(brush, region);
+							brush = new SolidBrush(Color.FromArgb(255, 0, 0, 0));
 						}
+						else
+						{
+							brush = new SolidBrush(Color.FromArgb(128, 0, 0, 0));
+						}
+
+						OverlayGraphics.FillPath(brush, chunk.GraphicsPath);
 					}
 				}
-
-				OverlayBitmap.MakeTransparent(Color.White);
-
-				gForm.Dispose();
 			}
 			else
 			{
 				MainBitmapOpacity = 1.0f;
-
-				Graphics gForm = Graphics.FromImage(OverlayBitmap);
-				gForm.Clear(Color.White);
-				OverlayBitmap.MakeTransparent(Color.White);
-				gForm.Dispose();
+				OverlayGraphics.Clear(Color.Transparent);
 			}
 
 			Redraw();
-		}
-
-		private void AddressSpace_Resize(object sender, EventArgs e)
-		{
-
 		}
 	}
 

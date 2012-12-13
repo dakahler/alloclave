@@ -54,32 +54,9 @@ namespace Alloclave
 			Profile = new Profile(ref transport);
 			History = new History();
 
-			AllocationForm.Show(DockPanel);
-			MessagesForm.Show(DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottomAutoHide);
-			InfoForm.Show(DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottomAutoHide);
-		}
-
-		private void testToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Allocation testAllocation1 = new Allocation();
-			testAllocation1.Address = 0x0;
-			testAllocation1.Size = 8;
-			Profile.History.Add(testAllocation1, 0);
-
-			Allocation testAllocation2 = new Allocation();
-			testAllocation2.Address = 0x1fe;
-			testAllocation2.Size = 32;
-			Profile.History.Add(testAllocation2, 0);
-
-			Allocation testAllocation3 = new Allocation();
-			testAllocation3.Address = 0x404;
-			testAllocation3.Size = 15;
-			Profile.History.Add(testAllocation3, 0);
-
-			Allocation testAllocation4 = new Allocation();
-			testAllocation4.Address = 0x6a0;
-			testAllocation4.Size = 4;
-			Profile.History.Add(testAllocation4, 0);
+			AllocationForm.Show(_DockPanel);
+			MessagesForm.Show(_DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottomAutoHide);
+			InfoForm.Show(_DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottomAutoHide);
 		}
 	}
 }

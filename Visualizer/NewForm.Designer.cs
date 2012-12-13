@@ -31,7 +31,7 @@
 			this.ChooseTransportTypeLabel = new System.Windows.Forms.Label();
 			this.TransportComboBox = new System.Windows.Forms.ComboBox();
 			this.OkButton = new System.Windows.Forms.Button();
-			this.CancelButton = new System.Windows.Forms.Button();
+			this._CancelButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// ChooseTransportTypeLabel
@@ -64,25 +64,25 @@
 			this.OkButton.UseVisualStyleBackColor = true;
 			this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
 			// 
-			// CancelButton
+			// _CancelButton
 			// 
-			this.CancelButton.Location = new System.Drawing.Point(386, 91);
-			this.CancelButton.Name = "CancelButton";
-			this.CancelButton.Size = new System.Drawing.Size(75, 23);
-			this.CancelButton.TabIndex = 3;
-			this.CancelButton.Text = "Cancel";
-			this.CancelButton.UseVisualStyleBackColor = true;
-			this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+			this._CancelButton.Location = new System.Drawing.Point(386, 91);
+			this._CancelButton.Name = "CancelButton";
+			this._CancelButton.Size = new System.Drawing.Size(75, 23);
+			this._CancelButton.TabIndex = 3;
+			this._CancelButton.Text = "Cancel";
+			this._CancelButton.UseVisualStyleBackColor = true;
+			this._CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
 			// 
 			// NewForm
 			// 
 			this.AcceptButton = this.OkButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.CancelButton;
+			this.CancelButton = this._CancelButton;
 			this.ClientSize = new System.Drawing.Size(501, 137);
 			this.ControlBox = false;
-			this.Controls.Add(this.CancelButton);
+			this.Controls.Add(this._CancelButton);
 			this.Controls.Add(this.OkButton);
 			this.Controls.Add(this.TransportComboBox);
 			this.Controls.Add(this.ChooseTransportTypeLabel);
@@ -104,6 +104,6 @@
 		private System.Windows.Forms.Label ChooseTransportTypeLabel;
 		public System.Windows.Forms.ComboBox TransportComboBox;
 		private System.Windows.Forms.Button OkButton;
-		private System.Windows.Forms.Button CancelButton;
+		private System.Windows.Forms.Button _CancelButton;
 	}
 }

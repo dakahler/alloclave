@@ -18,9 +18,9 @@ namespace Alloclave
 		private static CompositionContainer _container;
 
 		public static IEnumerable<ExportFactory<Transport, ITransportName>> TransportAdapters;
-
+		
 		[ImportMany]
-		private IEnumerable<ExportFactory<Transport, ITransportName>> InternalTransportAdapters;
+		private IEnumerable<ExportFactory<Transport, ITransportName>> InternalTransportAdapters = null;
 
 		private static void ImportPlugins()
 		{
