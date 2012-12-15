@@ -71,7 +71,12 @@ namespace Alloclave
 
 		public Point GetLocalMouseLocation()
 		{
-			Point[] points = { _CurrentMouseLocation };
+			return GetLocalMouseLocation(_CurrentMouseLocation);
+		}
+
+		public Point GetLocalMouseLocation(Point worldLocation)
+		{
+			Point[] points = { worldLocation };
 
 			Matrix invertedTransform = _ViewMatrix.Clone();
 			invertedTransform.Invert();
