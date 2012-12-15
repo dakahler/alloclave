@@ -76,6 +76,9 @@ namespace Alloclave
 			// Assign the Graphics object on backbufferGraphics to "drawingGraphics" for easy reference elsewhere.
 			DrawingGraphics = BackbufferGraphics.Graphics;
 			DrawingGraphics.Clip = new System.Drawing.Region(new Rectangle(0, 0, _Size.Width, _Size.Height));
+			DrawingGraphics.CompositingQuality = CompositingQuality.HighSpeed;
+			DrawingGraphics.SmoothingMode = SmoothingMode.HighSpeed;
+			DrawingGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
 
 			// This is a good place to assign drawingGraphics.SmoothingMode if you want a better anti-aliasing technique.
 
@@ -100,7 +103,9 @@ namespace Alloclave
 			}
 			MainGraphics = Graphics.FromImage(MainBitmap);
 			MainGraphics.Clear(Color.White);
+			MainGraphics.CompositingQuality = CompositingQuality.HighSpeed;
 			MainGraphics.SmoothingMode = SmoothingMode.HighSpeed;
+			MainGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
 
 			foreach (VisualMemoryBlock block in _Blocks)
 			{
@@ -114,7 +119,9 @@ namespace Alloclave
 				OverlayGraphics.Dispose();
 			}
 			OverlayGraphics = Graphics.FromImage(OverlayBitmap);
+			OverlayGraphics.CompositingQuality = CompositingQuality.HighSpeed;
 			OverlayGraphics.SmoothingMode = SmoothingMode.HighSpeed;
+			OverlayGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
 
 			UpdateOverlay();
 		}
