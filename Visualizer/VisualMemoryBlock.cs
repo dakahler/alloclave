@@ -44,7 +44,12 @@ namespace Alloclave
 	public class VisualMemoryBlock
 	{
 		// TODO: Better encapsulation
-		static List<Color> colors = new List<Color>();
+		static List<Color> colors = new List<Color>()
+		{
+			Color.FromArgb(255, 230, 0, 0),
+			Color.FromArgb(255, 100, 0, 0),
+		};
+
 		static int colorIndex = 0;
 		const int RowHeight = 2;
 
@@ -62,14 +67,6 @@ namespace Alloclave
 
 		public VisualMemoryBlock(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width)
 		{
-			// TODO: Put this somewhere else? Maybe user definable.
-			if (colors.Count == 0)
-			{
-				colors.Add(Color.FromArgb(255, 230, 0, 0));
-				colors.Add(Color.FromArgb(255, 100, 0, 0));
-				colorIndex = 0;
-			}
-
 			if (allocation.Address < startAddress)
 			{
 				throw new ArgumentOutOfRangeException();
