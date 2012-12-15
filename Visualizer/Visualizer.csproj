@@ -193,9 +193,7 @@
     <Compile Include="TransportForm.Designer.cs">
       <DependentUpon>TransportForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="VisualConstraints.cs" />
-    <Compile Include="VisualMemoryBox.cs" />
-    <Compile Include="VisualMemoryChunk.cs" />
+    <Compile Include="VisualMemoryBlock.cs" />
     <Compile Include="Win32CallStackParser.cs" />
     <EmbeddedResource Include="AddressSpace.resx">
       <DependentUpon>AddressSpace.cs</DependentUpon>

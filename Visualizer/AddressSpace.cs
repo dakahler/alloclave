@@ -27,13 +27,13 @@ namespace Alloclave
 		// TODO: Too inefficient?
 		History LastHistory = new History();
 		
-		List<VisualMemoryChunk> VisualMemoryChunks = new List<VisualMemoryChunk>();
+		List<VisualMemoryBlock> VisualMemoryChunks = new List<VisualMemoryBlock>();
 
 		RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
 
 		AddressSpaceRenderer Renderer = new AddressSpaceRenderer_GDI();
 
-		VisualMemoryChunk SelectedChunk;
+		VisualMemoryBlock SelectedChunk;
 
 		public event SelectionChangedEventHandler SelectionChanged;
 
@@ -102,7 +102,7 @@ namespace Alloclave
 			foreach (var pair in finalList)
 			{
 				Allocation allocation = pair.Value as Allocation;
-				VisualMemoryChunk chunk = new VisualMemoryChunk(allocation, startAllocation.Address, AddressWidth, Width);
+				VisualMemoryBlock chunk = new VisualMemoryBlock(allocation, startAllocation.Address, AddressWidth, Width);
 
 				VisualMemoryChunks.Add(chunk);
 			}
@@ -237,7 +237,7 @@ namespace Alloclave
 		{
 			SelectedChunk = null;
 			Point localLocation = Renderer.GetLocalMouseLocation();
-			foreach (VisualMemoryChunk chunk in VisualMemoryChunks)
+			foreach (VisualMemoryBlock chunk in VisualMemoryChunks)
 			{
 				if (chunk.Contains(localLocation))
 				{
@@ -274,7 +274,7 @@ namespace Alloclave
 
 	public class SelectionChangedEventArgs : EventArgs
 	{
-		public VisualMemoryChunk SelectedChunk;
+		public VisualMemoryBlock SelectedChunk;
 	}
 
 	public delegate void SelectionChangedEventHandler(object sender, SelectionChangedEventArgs e);

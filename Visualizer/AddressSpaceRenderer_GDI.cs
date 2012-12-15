@@ -101,7 +101,7 @@ namespace Alloclave
 			MainGraphics.Clear(Color.White);
 			MainGraphics.SmoothingMode = SmoothingMode.HighSpeed;
 
-			foreach (VisualMemoryChunk block in _Blocks)
+			foreach (VisualMemoryBlock block in _Blocks)
 			{
 				SolidBrush brush = new SolidBrush(block._Color);
 				MainGraphics.FillPath(brush, block.GraphicsPath);
@@ -140,13 +140,13 @@ namespace Alloclave
 
 			// Find the allocation we're hovering over
 			OverlayGraphics.Clear(Color.Transparent);
-			VisualMemoryChunk tempBlock = new VisualMemoryChunk();
+			VisualMemoryBlock tempBlock = new VisualMemoryBlock();
 			Point localMouseLocation = GetLocalMouseLocation();
 			tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1,1)));
-			int index = _Blocks.BinarySearch(tempBlock, new VisualMemoryChunkComparer());
+			int index = _Blocks.BinarySearch(tempBlock, new VisualMemoryBlockComparer());
 			if (index >= 0)
 			{
-				VisualMemoryChunk targetBlock = _Blocks[index];
+				VisualMemoryBlock targetBlock = _Blocks[index];
 
 				SolidBrush brush = new SolidBrush(Color.FromArgb(128, 0, 0, 0));
 				OverlayGraphics.FillPath(brush, targetBlock.GraphicsPath);
@@ -155,7 +155,7 @@ namespace Alloclave
 			Redraw();
 		}
 
-		public override List<VisualMemoryChunk> Blocks
+		public override List<VisualMemoryBlock> Blocks
 		{
 			set
 			{
@@ -164,7 +164,7 @@ namespace Alloclave
 			}
 		}
 
-		public override VisualMemoryChunk SelectedBlock
+		public override VisualMemoryBlock SelectedBlock
 		{
 			set
 			{

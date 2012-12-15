@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Alloclave
 {
-	public class VisualMemoryChunkComparer : IComparer<VisualMemoryChunk>
+	public class VisualMemoryBlockComparer : IComparer<VisualMemoryBlock>
 	{
-		public int Compare(VisualMemoryChunk a, VisualMemoryChunk b)
+		public int Compare(VisualMemoryBlock a, VisualMemoryBlock b)
 		{
 			if (a.GraphicsPath.IsVisible(b.GraphicsPath.PathPoints[0]))
 			{
@@ -41,7 +41,7 @@ namespace Alloclave
 		}
 	}
 
-	public class VisualMemoryChunk
+	public class VisualMemoryBlock
 	{
 		// TODO: Better encapsulation
 		static List<Color> colors = new List<Color>();
@@ -55,12 +55,12 @@ namespace Alloclave
 
 		public GraphicsPath GraphicsPath = new GraphicsPath();
 
-		public VisualMemoryChunk()
+		public VisualMemoryBlock()
 		{
 
 		}
 
-		public VisualMemoryChunk(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width)
+		public VisualMemoryBlock(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width)
 		{
 			// TODO: Put this somewhere else? Maybe user definable.
 			if (colors.Count == 0)

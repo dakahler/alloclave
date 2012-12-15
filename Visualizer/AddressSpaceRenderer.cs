@@ -10,8 +10,8 @@ namespace Alloclave
 {
 	abstract class AddressSpaceRenderer
 	{
-		protected List<VisualMemoryChunk> _Blocks;
-		public virtual List<VisualMemoryChunk> Blocks
+		protected List<VisualMemoryBlock> _Blocks;
+		public virtual List<VisualMemoryBlock> Blocks
 		{
 			set
 			{
@@ -19,8 +19,8 @@ namespace Alloclave
 			}
 		}
 
-		protected VisualMemoryChunk _SelectedBlock;
-		public virtual VisualMemoryChunk SelectedBlock
+		protected VisualMemoryBlock _SelectedBlock;
+		public virtual VisualMemoryBlock SelectedBlock
 		{
 			set
 			{
