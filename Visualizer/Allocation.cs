@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Alloclave
 {
-	public class Allocation : IPacket
+	public class Allocation : IPacket, IComparable
 	{
 		public enum AllocationType : byte
 		{
@@ -28,6 +28,24 @@ namespace Alloclave
 
 		// Tool-side-only data
 		String Notes;
+
+		public int CompareTo(object obj)
+		{
+			if (obj is Allocation)
+			{
+				Allocation other = obj as Allocation;
+				if (this.Address <= other.Address)
+					{
+						return -1;
+					}
+					else
+					{
+						return 1;
+					}
+			}
+
+			throw new ArgumentException("object is not a Allocation");
+		}
 
 		public byte[] Serialize(TargetSystemInfo targetSystemInfo)
 		{

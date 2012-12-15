@@ -100,6 +100,8 @@
     <Compile Include="AddressSpace.Designer.cs">
       <DependentUpon>AddressSpace.cs</DependentUpon>
     </Compile>
+    <Compile Include="AddressSpaceRenderer.cs" />
+    <Compile Include="AddressSpaceRenderer_GDI.cs" />
     <Compile Include="Allocation.cs" />
     <Compile Include="AllocationForm.cs">
       <SubType>Form</SubType>

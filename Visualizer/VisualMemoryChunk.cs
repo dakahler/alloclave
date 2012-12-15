@@ -10,22 +10,57 @@ using System.Threading.Tasks;
 
 namespace Alloclave
 {
+	public class VisualMemoryChunkComparer : IComparer<VisualMemoryChunk>
+	{
+		public int Compare(VisualMemoryChunk a, VisualMemoryChunk b)
+		{
+			if (a.GraphicsPath.IsVisible(b.GraphicsPath.PathPoints[0]))
+			{
+				return 0;
+			}
+
+			if (a.GraphicsPath.PathPoints[0].Y < b.GraphicsPath.PathPoints[0].Y)
+			{
+				return -1;
+			}
+			else if (a.GraphicsPath.PathPoints[0].Y > b.GraphicsPath.PathPoints[0].Y)
+			{
+				return 1;
+			}
+			else
+			{
+				if (a.GraphicsPath.PathPoints[0].X < b.GraphicsPath.PathPoints[0].X)
+				{
+					return 1;
+				}
+				else
+				{
+					return -1;
+				}
+			}
+		}
+	}
+
 	public class VisualMemoryChunk
 	{
 		// TODO: Better encapsulation
 		static List<Color> colors = new List<Color>();
 		static int colorIndex = 0;
+		const int RowHeight = 2;
 
 		public Color _Color = Color.Red;
 
 		// TODO: Too specific?
 		public Allocation Allocation;
 
-		public Region Region = new Region();
-
 		public GraphicsPath GraphicsPath = new GraphicsPath();
 
-		public VisualMemoryChunk(Allocation allocation, VisualConstraints constraints)
+		public VisualMemoryChunk()
+		{
+
+		}
+
+		public VisualMemoryChunk(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width)
 		{
 			// TODO: Put this somewhere else? Maybe user definable.
 			if (colors.Count == 0)
@@ -35,62 +70,61 @@ namespace Alloclave
 				colorIndex = 0;
 			}
 
-			if (allocation.Address < constraints.StartAddress)
+			if (allocation.Address < startAddress)
 			{
 				throw new ArgumentOutOfRangeException();
 			}
 
 			Allocation = allocation;
 
-			Create(allocation, constraints);
+			Create(allocation, startAddress, addressWidth, width);
 		}
 
-		private Point GetPixelPos(UInt64 address, VisualConstraints constraints)
+		private Point GetPixelPos(UInt64 address, UInt64 startAddress, UInt64 addressWidth, int width)
 		{
-			UInt64 workingStartAddress = address - constraints.StartAddress;
+			UInt64 workingStartAddress = address - startAddress;
 
 			// Find row start and end addresses
 			// Note that this is the same operation as memory alignment
 			// TODO: Have an alignment helper function?
-			UInt64 rowStartAddress = workingStartAddress & ~constraints.RowAddressWidth;
-			UInt64 rowEndAddress = rowStartAddress + constraints.RowAddressWidth;
+			UInt64 rowStartAddress = workingStartAddress & ~addressWidth;
+			UInt64 rowEndAddress = rowStartAddress + addressWidth;
 
 			// Box creation
 			// Transform address space range to pixel space range
 			// X
 			UInt64 offset = workingStartAddress - rowStartAddress;
-			float scaleFactor = ((float)(offset) / (float)constraints.RowAddressWidth);
-			UInt64 pixelX = (UInt64)(constraints.RowAddressPixelWidth * scaleFactor);
+			float scaleFactor = ((float)(offset) / (float)addressWidth);
+			UInt64 pixelX = (UInt64)(width * scaleFactor);
 
 			// Y
-			UInt64 rowNum = rowStartAddress / constraints.RowAddressWidth;
-			UInt64 pixelY = rowNum * constraints.RowAddressPixelHeight;
+			UInt64 rowNum = rowStartAddress / addressWidth;
+			UInt64 pixelY = rowNum * RowHeight;
 
 			return new Point((int)pixelX, (int)pixelY);
 		}
 
-		private void Create(Allocation allocation, VisualConstraints constraints)
+		private void Create(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width)
 		{
-			UInt64 startAddress = allocation.Address;
+			UInt64 currentStartAddress = allocation.Address;
 			UInt64 size = allocation.Size;
-			UInt64 endAddress = startAddress + size;
-			UInt64 numRows = (endAddress - startAddress) / constraints.RowAddressWidth;
+			UInt64 endAddress = currentStartAddress + size;
+			UInt64 numRows = ((endAddress - currentStartAddress) / addressWidth);
 
-			Region.MakeEmpty();
 			GraphicsPath.Reset();
 
 			List<Point> polygonPoints = new List<Point>();
 			HashSet<Point> polygonPointSet = new HashSet<Point>();
 
-			Point rowOneUpperLeft = GetPixelPos(startAddress, constraints);
-			Point rowOneLowerLeft = Point.Add(rowOneUpperLeft, new Size(0, (int)constraints.RowAddressPixelHeight));
+			Point rowOneUpperLeft = GetPixelPos(currentStartAddress, startAddress, addressWidth, width);
+			Point rowOneLowerLeft = Point.Add(rowOneUpperLeft, new Size(0, RowHeight));
 			Point rowOneFarLeftLowerLeft = new Point(0, rowOneUpperLeft.Y);
-			Point rowOneFarRightUpperRight = new Point((int)constraints.RowAddressPixelWidth, rowOneUpperLeft.Y);
+			Point rowOneFarRightUpperRight = new Point((int)width, rowOneUpperLeft.Y);
 
-			Point lastRowUpperRight = GetPixelPos(endAddress, constraints);
-			Point lastRowLowerRight = Point.Add(lastRowUpperRight, new Size(0, (int)constraints.RowAddressPixelHeight));
+			Point lastRowUpperRight = GetPixelPos(endAddress, startAddress, addressWidth, width);
+			Point lastRowLowerRight = Point.Add(lastRowUpperRight, new Size(0, RowHeight));
 			Point lastRowFarLeftLowerLeft = new Point(0, lastRowLowerRight.Y);
-			Point lastRowFarRightUpperRight = new Point((int)constraints.RowAddressPixelWidth, lastRowUpperRight.Y);
+			Point lastRowFarRightUpperRight = new Point((int)width, lastRowUpperRight.Y);
 
 			// Create block by specifying polygon points
 			// Use the hash set to make sure the list has unique points
