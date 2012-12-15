@@ -96,12 +96,14 @@
 			// 
 			// logoPictureBox
 			// 
+			this.logoPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.logoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("logoPictureBox.Image")));
 			this.logoPictureBox.Location = new System.Drawing.Point(23, 12);
 			this.logoPictureBox.Name = "logoPictureBox";
 			this.logoPictureBox.Size = new System.Drawing.Size(249, 50);
 			this.logoPictureBox.TabIndex = 0;
 			this.logoPictureBox.TabStop = false;
+			this.logoPictureBox.Click += new System.EventHandler(this.logoPictureBox_Click);
 			// 
 			// panel2
 			// 
@@ -182,6 +184,9 @@
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "AboutForm";
+			this.ShowIcon = false;
+			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "About Alloclave";
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);

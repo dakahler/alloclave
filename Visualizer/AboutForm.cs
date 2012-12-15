@@ -31,16 +31,26 @@ namespace Alloclave
 			dataGrid.Rows.Add("Placeholder Name");
 			dataGrid.Rows.Add("placeholder@example.com");
 			dataGrid.Rows.Add("Support Ends 1/1/2010");
+
+			ToolTip tt = new ToolTip();
+			tt.SetToolTip(logoPictureBox, "Open http://www.alloclave.com/");
 		}
 
 		private void purchaseButton_Click(object sender, EventArgs e)
 		{
-
+			System.Diagnostics.Process.Start("http://www.alloclave.com/purchase");
 		}
 
 		private void checkForUpdatesButton_Click(object sender, EventArgs e)
 		{
+			// TODO: There should be a more intelligent way of checking for updates
+			// than just directing the user to a webpage
+			System.Diagnostics.Process.Start("http://www.alloclave.com/update");
+		}
 
+		private void logoPictureBox_Click(object sender, EventArgs e)
+		{
+			System.Diagnostics.Process.Start("http://www.alloclave.com/");
 		}
 	}
 }
