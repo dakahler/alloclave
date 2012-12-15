@@ -89,6 +89,14 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>pushd $(MSBuildProjectDirectory)
+..\External\makeitso\output\MakeItSo.exe
+popd</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Generating makefiles...</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Allocation.h" />
