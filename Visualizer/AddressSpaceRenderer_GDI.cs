@@ -58,7 +58,7 @@ namespace Alloclave
 		{
 			TaskList[(int)Tasks.RecreateBuffers] = false;
 
-			ClippedBitmap = new Bitmap(_Size.Width, _Size.Height);
+			ClippedBitmap = new Bitmap(_Size.Width, _Size.Height, PixelFormat.Format32bppPArgb);
 			if (ClippedGraphics != null)
 			{
 				ClippedGraphics.Dispose();
@@ -75,6 +75,7 @@ namespace Alloclave
 
 			// Assign the Graphics object on backbufferGraphics to "drawingGraphics" for easy reference elsewhere.
 			DrawingGraphics = BackbufferGraphics.Graphics;
+			DrawingGraphics.Clip = new System.Drawing.Region(new Rectangle(0, 0, _Size.Width, _Size.Height));
 
 			// This is a good place to assign drawingGraphics.SmoothingMode if you want a better anti-aliasing technique.
 
@@ -92,7 +93,7 @@ namespace Alloclave
 			TaskList[(int)Tasks.Render] = false;
 
 			// Then actually build the visual data
-			MainBitmap = new Bitmap(_WorldSize.Width, _WorldSize.Height);
+			MainBitmap = new Bitmap(_WorldSize.Width, _WorldSize.Height, PixelFormat.Format32bppPArgb);
 			if (MainGraphics != null)
 			{
 				MainGraphics.Dispose();
@@ -107,7 +108,7 @@ namespace Alloclave
 				MainGraphics.FillPath(brush, block.GraphicsPath);
 			}
 
-			OverlayBitmap = new Bitmap(_WorldSize.Width, _WorldSize.Height);
+			OverlayBitmap = new Bitmap(_WorldSize.Width, _WorldSize.Height, PixelFormat.Format32bppPArgb);
 			if (OverlayGraphics != null)
 			{
 				OverlayGraphics.Dispose();
