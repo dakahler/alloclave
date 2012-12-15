@@ -47,6 +47,25 @@ namespace Alloclave
 			}
 		}
 
+		public static String LicenseName
+		{
+			get
+			{
+				if (_LicenseStatus == LicenseStatus.Trial || _License == null)
+				{
+					return "Licensed to: Trial User";
+				}
+				else
+				{
+					StringReader reader = new StringReader(_License);
+					String firstLine = reader.ReadLine();
+					int index = firstLine.IndexOf('(');
+					String finalText = firstLine.Substring(0, index);
+					return finalText;
+				}
+			}
+		}
+
 		public Licensing()
 		{
 			#if !_INSTALLER

@@ -35,6 +35,8 @@ namespace Alloclave
 					}
 				}
 			}
+
+			licenseToolStripMenuItem.Text = Licensing.LicenseName;
 		}
 
 		private void newToolStripMenuItem_Click(object sender, EventArgs e)
