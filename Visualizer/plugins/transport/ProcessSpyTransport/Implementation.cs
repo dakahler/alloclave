@@ -10,6 +10,7 @@ using System.Threading;
 using System.IO;
 using Alloclave;
 using System.Windows.Threading;
+using CommandLine;
 
 namespace Alloclave_Plugin
 {
@@ -21,10 +22,13 @@ namespace Alloclave_Plugin
 			"Process Spy", "", 0, Common.Architecture._64Bit, Common.Endianness.LittleEndian);
 		Process TargetProcess;
 
+		CommandLineOptions options = new CommandLineOptions();
+		String TargetProcessName;
+
 		System.Windows.Threading.Dispatcher Dispatcher = Dispatcher.CurrentDispatcher;
 
 		public ProcessSpyTransport()
-			: base(temp)
+			: this(temp)
 		{
 			
 		}
@@ -32,7 +36,15 @@ namespace Alloclave_Plugin
 		public ProcessSpyTransport(Alloclave.TargetSystemInfo targetSystemInfo)
 			: base(targetSystemInfo)
 		{
-			
+			ICommandLineParser parser = new CommandLineParser();
+			String[] args = Environment.GetCommandLineArgs();
+			if (parser.ParseArguments(args, options))
+			{
+				if (options.ProcessName != null)
+				{
+					TargetProcessName = options.ProcessName;
+				}
+			}
 		}
 
 		public override void Connect()
@@ -47,21 +59,30 @@ namespace Alloclave_Plugin
 
 		public override void SpawnCustomUI(IWin32Window owner)
 		{
-			ProcessForm processForm = new ProcessForm();
-			if (processForm.ShowDialog(owner) == DialogResult.OK)
+			if (TargetProcessName == null)
 			{
-				String targetProcessName = processForm.ProcessComboBox.SelectedItem.ToString();
-				Process[] processes = Process.GetProcesses();
-				foreach (Process process in processes)
+				ProcessForm processForm = new ProcessForm();
+				if (processForm.ShowDialog(owner) != DialogResult.OK)
 				{
-					if (targetProcessName == process.ProcessName)
-					{
-						TargetProcess = process;
-						break;
-					}
+					return;
 				}
 
-				// TODO: Should probably be in Connect?
+				TargetProcessName = processForm.ProcessComboBox.SelectedItem.ToString();
+			}
+
+			Process[] processes = Process.GetProcesses();
+			foreach (Process process in processes)
+			{
+				if (TargetProcessName == process.ProcessName)
+				{
+					TargetProcess = process;
+					break;
+				}
+			}
+
+			// TODO: Should probably be in Connect?
+			if (TargetProcess != null)
+			{
 				var task3 = new Task(() => MonitorHeap(ref TargetProcess), TaskCreationOptions.LongRunning);
 				task3.Start();
 			}

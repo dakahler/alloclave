@@ -7,14 +7,34 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using CommandLine;
 
 namespace Alloclave
 {
 	public partial class Main : Form
 	{
+		CommandLineOptions options = new CommandLineOptions();
+
 		public Main()
 		{
 			InitializeComponent();
+
+			ICommandLineParser parser = new CommandLineParser();
+			String[] args = Environment.GetCommandLineArgs();
+			if (parser.ParseArguments(args, options))
+			{
+				if (options.TransportType != null)
+				{
+					foreach (ExportFactory<Transport, ITransportName> transportAdapter in Program.TransportAdapters)
+					{
+						String transportName = transportAdapter.Metadata.Name;
+						if (transportName == options.TransportType)
+						{
+							SpawnTransport(transportAdapter);
+						}
+					}
+				}
+			}
 		}
 
 		private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -40,20 +60,22 @@ namespace Alloclave
 					String transportName = transportAdapter.Metadata.Name;
 					if (transportName == newForm.TransportComboBox.SelectedItem.ToString())
 					{
-						Transport transport = transportAdapter.CreateExport().Value;
-
-						TransportForm transportForm = new TransportForm(ref transport);
-						transportForm.Text = transportName;
-
-						transport.SpawnCustomUI(this);
-
-						transportForm.Show(DockPanel);
+						SpawnTransport(transportAdapter);
 						break;
 					}
 				}
 			}
+		}
 
-			
+		private void SpawnTransport(ExportFactory<Transport, ITransportName> transportAdapter)
+		{
+			Transport transport = transportAdapter.CreateExport().Value;
+
+			TransportForm transportForm = new TransportForm(ref transport);
+			transportForm.Text = transportAdapter.Metadata.Name;
+
+			transport.SpawnCustomUI(this);
+			transportForm.Show(DockPanel);
 		}
 	}
 }
