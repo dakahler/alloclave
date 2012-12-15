@@ -255,5 +255,10 @@ namespace Alloclave
 		{
 			BackbufferGraphics.Render(deviceContext);
 		}
+
+		public override Bitmap GetMainBitmap()
+		{
+			return MainBitmap;
+		}
 	}
 }

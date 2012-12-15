@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Alloclave
 {
@@ -20,6 +22,7 @@ namespace Alloclave
 		Point CurrentMouseLocation;
 		const int WheelDelta = 120;
 		float MainBitmapOpacity = 1.0f;
+		float GlobalScale = 1.0f;
 
 		// TODO: This should be exposed in the UI
 		UInt64 AddressWidth = 0xFF;
@@ -37,10 +40,17 @@ namespace Alloclave
 
 		public event SelectionChangedEventHandler SelectionChanged;
 
+		public event EventHandler Rebuilt;
+
 		public void History_Updated(object sender, EventArgs e)
 		{
 			LastHistory = sender as History;
 			Rebuild(ref LastHistory);
+		}
+
+		public Bitmap GetMainBitmap()
+		{
+			return Renderer.GetMainBitmap();
 		}
 
 		public void Rebuild(ref History history)
@@ -117,6 +127,12 @@ namespace Alloclave
 
 			Renderer.Update();
 			Refresh();
+
+			if (Rebuilt != null)
+			{
+				EventArgs e = new EventArgs();
+				Rebuilt(this, e);
+			}
 		}
 
 		public AddressSpace()
@@ -231,6 +247,7 @@ namespace Alloclave
 
 			int amountToMove = e.Delta / WheelDelta;
 			float finalScale = 1.0f + (float)amountToMove / 5.0f;
+			GlobalScale *= finalScale;
 			Renderer.ViewMatrix.Scale(finalScale, finalScale);
 
 			Point[] pointAfter = { CurrentMouseLocation };
@@ -282,6 +299,20 @@ namespace Alloclave
 		private void AddressSpace_MouseHover(object sender, EventArgs e)
 		{
 			HoverAt(CurrentMouseLocation);
+		}
+
+		public void CenterAt(Point location)
+		{
+			Point topLeft = new Point(location.X - (Width / 2), location.Y - (Height / 2));
+			Renderer.ViewMatrix.Reset();
+			Renderer.ViewMatrix.Scale(GlobalScale, GlobalScale);
+			Renderer.ViewMatrix.Translate(-topLeft.X, -topLeft.Y);
+
+			// HACK
+			Renderer.ViewMatrix = Renderer.ViewMatrix;
+
+			Renderer.Update();
+			Refresh();
 		}
 	}
 

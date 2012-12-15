@@ -108,6 +108,12 @@
     </Compile>
     <Compile Include="AddressSpaceRenderer.cs" />
     <Compile Include="AddressSpaceRenderer_GDI.cs" />
+    <Compile Include="AddressSpaceScroller.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AddressSpaceScroller.Designer.cs">
+      <DependentUpon>AddressSpaceScroller.cs</DependentUpon>
+    </Compile>
     <Compile Include="Allocation.cs" />
     <Compile Include="AllocationForm.cs">
       <SubType>Form</SubType>
@@ -207,6 +213,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AddressSpace.resx">
       <DependentUpon>AddressSpace.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddressSpaceScroller.resx">
+      <DependentUpon>AddressSpaceScroller.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AllocationForm.resx">
       <DependentUpon>AllocationForm.cs</DependentUpon>

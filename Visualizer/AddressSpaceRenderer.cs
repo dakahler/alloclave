@@ -85,6 +85,8 @@ namespace Alloclave
 			return points[0];
 		}
 
+		public abstract Bitmap GetMainBitmap();
+
 		// TODO: Better name?
 		protected abstract void Render();
 

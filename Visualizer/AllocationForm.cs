@@ -17,6 +17,20 @@ namespace Alloclave
 		{
 			InitializeComponent();
 			ModeComboBox.SelectedIndex = 0;
+
+			AddressSpaceControl.Rebuilt += AddressSpaceControl_Rebuilt;
+			addressSpaceScroller.FocusChanged += addressSpaceScroller_FocusChanged;
+		}
+
+		void addressSpaceScroller_FocusChanged(object sender, MouseEventArgs e)
+		{
+			AddressSpaceControl.CenterAt(e.Location);
+		}
+
+		void AddressSpaceControl_Rebuilt(object sender, EventArgs e)
+		{
+			Bitmap mainBitmap = AddressSpaceControl.GetMainBitmap();
+			addressSpaceScroller.MainBitmap = mainBitmap;
 		}
 	}
 }
