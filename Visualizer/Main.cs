@@ -77,5 +77,11 @@ namespace Alloclave
 			transport.SpawnCustomUI(this);
 			transportForm.Show(DockPanel);
 		}
+
+		private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			AboutForm aboutForm = new AboutForm();
+			aboutForm.ShowDialog();
+		}
 	}
 }
