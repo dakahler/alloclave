@@ -51,7 +51,6 @@ namespace Alloclave
 				return;
 			}
 
-			VisualMemoryChunks.Clear();
 			SortedList<TimeStamp, IPacket> allocations = history.Get(typeof(Allocation));
 			SortedList<TimeStamp, IPacket> frees = history.Get(typeof(Free));
 
@@ -61,7 +60,7 @@ namespace Alloclave
 			// Create final list, removing allocations as frees are encountered
 			// TODO: This will get slower the longer the profile is running
 			// Need to come up with a better way
-			SortedList<UInt64, IPacket> finalList = new SortedList<UInt64, IPacket>();
+			SortedList<UInt64, IPacket> finalList = new SortedList<UInt64, IPacket>(allocations.Count);
 			foreach (var pair in combinedList)
 			{
 				if (pair.Value is Allocation)
@@ -99,6 +98,8 @@ namespace Alloclave
 			UInt64 numRows = (endAllocation.Address - startAddress) / AddressWidth;
 
 			// Now build up the actual polygons
+			VisualMemoryChunks.Clear();
+			VisualMemoryChunks.Capacity = finalList.Count;
 			foreach (var pair in finalList)
 			{
 				Allocation allocation = pair.Value as Allocation;
@@ -157,13 +158,25 @@ namespace Alloclave
 				Point mouseDelta = Point.Subtract(e.Location, new Size(LastMouseLocation));
 				LastMouseLocation = e.Location;
 
-				Point[] points = { mouseDelta };
+				{
+					Point[] points = { mouseDelta };
 
-				Matrix InvertedTransform = Renderer.ViewMatrix.Clone();
-				InvertedTransform.Invert();
-				InvertedTransform.TransformVectors(points);
+					Matrix InvertedTransform = Renderer.ViewMatrix.Clone();
+					InvertedTransform.Invert();
+					InvertedTransform.TransformVectors(points);
 
-				Renderer.ViewMatrix.Translate(points[0].X, points[0].Y);
+					Renderer.ViewMatrix.Translate(points[0].X, points[0].Y);
+				}
+
+				// Constrain translation
+				if (Renderer.ViewMatrix.OffsetX > 0.0f)
+				{
+					Renderer.ViewMatrix.Translate(-Renderer.ViewMatrix.OffsetX, 0);
+				}
+				if (Renderer.ViewMatrix.OffsetY > 0.0f)
+				{
+					Renderer.ViewMatrix.Translate(0, -Renderer.ViewMatrix.OffsetY);
+				}
 			}
 
 			Renderer.Update();
