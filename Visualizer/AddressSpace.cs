@@ -387,6 +387,13 @@ namespace Alloclave
 			Renderer.Update();
 			Refresh();
 		}
+
+		private void AddressSpace_MouseLeave(object sender, EventArgs e)
+		{
+			Renderer.CurrentMouseLocation = new Point(-1, -1);
+			Renderer.Update();
+			Refresh();
+		}
 	}
 
 	public class SelectionChangedEventArgs : EventArgs
