@@ -129,6 +129,41 @@
     </Compile>
     <Compile Include="CallStack.cs" />
     <Compile Include="CallStackParser.cs" />
+    <Compile Include="ColorPicker\ColorBar.cs" />
+    <Compile Include="ColorPicker\ColorPickerCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ColorPicker\ColorPickerCtrl.designer.cs">
+      <DependentUpon>ColorPickerCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ColorPicker\ColorPickerDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ColorPicker\ColorPickerDialog.designer.cs">
+      <DependentUpon>ColorPickerDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ColorPicker\ColorTable.cs" />
+    <Compile Include="ColorPicker\ColorWheel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ColorPicker\ColorWheelCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ColorPicker\ColorWheelCtrl.designer.cs">
+      <DependentUpon>ColorWheelCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ColorPicker\DropdownContainerControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ColorPicker\EyedropColorPicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ColorPicker\HSLColor.cs" />
+    <Compile Include="ColorPicker\Images.cs" />
+    <Compile Include="ColorPicker\LabelRotate.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ColorPicker\Util.cs" />
     <Compile Include="CommandLineOptions.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="CustomBinaryReader.cs" />
@@ -223,6 +258,15 @@
     <EmbeddedResource Include="AxisControl.resx">
       <DependentUpon>AxisControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ColorPicker\ColorPickerCtrl.resx">
+      <DependentUpon>ColorPickerCtrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ColorPicker\ColorPickerDialog.resx">
+      <DependentUpon>ColorPickerDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ColorPicker\ColorWheelCtrl.resx">
+      <DependentUpon>ColorWheelCtrl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -242,7 +286,7 @@
       <DependentUpon>NewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -262,8 +306,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\app.manifest" />
+    <None Include="Properties\DataSources\Alloclave.Properties.Settings.datasource" />
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Compile Include="Properties\Settings.Designer.cs">
@@ -306,6 +351,11 @@
       <Project>{7809cd92-e80e-4c83-83e3-f98bfc1a142a}</Project>
       <Name>ConstantsBridge</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ColorPicker\colorbarIndicators.bmp" />
+    <Resource Include="ColorPicker\eyedropper.bmp" />
+    <Content Include="ColorPicker\popupcontainerbuttons.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

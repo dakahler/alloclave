@@ -47,6 +47,13 @@ namespace Alloclave
 			}
 
 			licenseToolStripMenuItem.Text = Licensing.LicenseName;
+
+			FormClosing += Main_FormClosing;
+		}
+
+		void Main_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			Properties.Settings.Default.Save();
 		}
 
 		public bool PreFilterMessage(ref Message m)
@@ -103,13 +110,29 @@ namespace Alloclave
 			transportForm.Text = transportAdapter.Metadata.Name;
 
 			transport.SpawnCustomUI(this);
-			transportForm.Show(DockPanel);
+
+			transportForm.TopLevel = false;
+			transportForm.FormBorderStyle = FormBorderStyle.None;
+			transportForm.Dock = DockStyle.Fill;
+			transportForm.Visible = true;
+			_DockPanel.Controls.Add(transportForm);
 		}
 
 		private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			AboutForm aboutForm = new AboutForm();
 			aboutForm.ShowDialog();
+		}
+
+		private void customizeToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Alloclave.ColorPickerDialog dialog = new Alloclave.ColorPickerDialog();
+			dialog.ShowDialog();
+		}
+
+		private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Application.Exit();
 		}
 	}
 }

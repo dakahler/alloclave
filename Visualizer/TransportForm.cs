@@ -55,8 +55,9 @@ namespace Alloclave
 			History = new History();
 
 			AllocationForm.Show(_DockPanel);
-			MessagesForm.Show(_DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottomAutoHide);
-			InfoForm.Show(_DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottomAutoHide);
+			MessagesForm.Show(_DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
+			InfoForm.Show(_DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
+			InfoForm.DockTo(MessagesForm.Pane, DockStyle.Right, 0);
 		}
 	}
 }

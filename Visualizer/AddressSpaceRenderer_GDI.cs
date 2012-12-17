@@ -160,6 +160,12 @@ namespace Alloclave
 				OverlayGraphics.FillPath(brush, targetBlock.GraphicsPath);
 			}
 
+			if (_SelectedBlock != null)
+			{
+				SolidBrush selectedBrush = new SolidBrush(Color.FromArgb(255, 0, 0, 0));
+				OverlayGraphics.FillPath(selectedBrush, _SelectedBlock.GraphicsPath);
+			}
+
 			Redraw();
 		}
 

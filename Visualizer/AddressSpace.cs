@@ -110,12 +110,38 @@ namespace Alloclave
 			// Now build up the actual polygons
 			VisualMemoryChunks.Clear();
 			VisualMemoryChunks.Capacity = finalList.Count;
+			VisualMemoryBlock lastBlock = null;
 			foreach (var pair in finalList)
 			{
 				Allocation allocation = pair.Value as Allocation;
 				VisualMemoryBlock chunk = new VisualMemoryBlock(allocation, startAllocation.Address, AddressWidth, Width);
 
 				VisualMemoryChunks.Add(chunk);
+
+				if (lastBlock != null)
+				{
+					UInt64 lastBlockEnd = lastBlock.Allocation.Address + lastBlock.Allocation.Size;
+					if (lastBlockEnd != chunk.Allocation.Address)
+					{
+						Console.WriteLine("Non-contiguous!");
+					}
+
+					Region lastRegion = new Region(lastBlock.GraphicsPath);
+					Region thisRegion = new Region(chunk.GraphicsPath);
+					lastRegion.Intersect(thisRegion);
+
+					if (Renderer.GetMainBitmap() != null)
+					{
+						Graphics g = Graphics.FromImage(Renderer.GetMainBitmap());
+						if (!lastRegion.IsEmpty(g))
+						{
+							int x;
+							x = 0;
+						}
+						g.Dispose();
+					}
+				}
+				lastBlock = chunk;
 			}
 
 			SelectedChunk = null;
@@ -148,6 +174,13 @@ namespace Alloclave
 			this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
 			this.SetStyle(ControlStyles.SupportsTransparentBackColor, false);
 			this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+
+			ColorPickerDialog.ColorChanged += ColorPickerDialog_ColorChanged;
+		}
+
+		void ColorPickerDialog_ColorChanged(object sender, EventArgs e)
+		{
+			Rebuild(ref LastHistory);
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -181,17 +214,16 @@ namespace Alloclave
 					InvertedTransform.Invert();
 					InvertedTransform.TransformVectors(points);
 
-					Renderer.ViewMatrix.Translate(points[0].X, points[0].Y);
-				}
+					Matrix tempViewMatrix = Renderer.ViewMatrix.Clone();
+					tempViewMatrix.Translate(points[0].X, points[0].Y);
 
-				// Constrain translation
-				if (Renderer.ViewMatrix.OffsetX > 0.0f)
-				{
-					Renderer.ViewMatrix.Translate(-Renderer.ViewMatrix.OffsetX, 0);
-				}
-				if (Renderer.ViewMatrix.OffsetY > 0.0f)
-				{
-					Renderer.ViewMatrix.Translate(0, -Renderer.ViewMatrix.OffsetY);
+					Rectangle bitmapRectangle = new Rectangle((int)tempViewMatrix.OffsetX, (int)tempViewMatrix.OffsetY, Renderer.GetMainBitmap().Width, Renderer.GetMainBitmap().Height);
+					bitmapRectangle.Width = (int)((float)bitmapRectangle.Width * GlobalScale);
+					bitmapRectangle.Height = (int)((float)bitmapRectangle.Height * GlobalScale);
+					//if (bitmapRectangle.Contains(DisplayRectangle))
+					{
+						Renderer.ViewMatrix = tempViewMatrix.Clone();
+					}
 				}
 			}
 
@@ -246,9 +278,37 @@ namespace Alloclave
 			InvertedTransform.TransformPoints(pointBefore);
 
 			int amountToMove = e.Delta / WheelDelta;
+
+			// TODO: Clamp method?
+			if (amountToMove < -4)
+			{
+				amountToMove = -4;
+			}
+			else if (amountToMove > 4)
+			{
+				amountToMove = 4;
+			}
+
 			float finalScale = 1.0f + (float)amountToMove / 5.0f;
 			GlobalScale *= finalScale;
-			Renderer.ViewMatrix.Scale(finalScale, finalScale);
+
+			// TODO: Better correction
+			if (GlobalScale < 10.0)
+			{
+				Renderer.ViewMatrix.Scale(finalScale, finalScale);
+			}
+			else
+			{
+				GlobalScale = 10.0f;
+			}
+
+			// Scale is not allowed to be < 1.0
+			if (GlobalScale < 1.0f)
+			{
+				float correctionFactor = 1.0f / GlobalScale;
+				GlobalScale = 1.0f;
+				Renderer.ViewMatrix.Scale(correctionFactor, correctionFactor);
+			}
 
 			Point[] pointAfter = { CurrentMouseLocation };
 			InvertedTransform = Renderer.ViewMatrix.Clone();
@@ -259,26 +319,39 @@ namespace Alloclave
 
 			Renderer.ViewMatrix.Translate(delta.X, delta.Y);
 
+			//if (Renderer.ViewMatrix.OffsetX > 0.0f)
+			//{
+			//	Renderer.ViewMatrix.Translate(-Renderer.ViewMatrix.OffsetX, 0);
+			//}
+			//if (Renderer.ViewMatrix.OffsetY > 0.0f)
+			//{
+			//	Renderer.ViewMatrix.Translate(0, -Renderer.ViewMatrix.OffsetY);
+			//}
+
+			//if (Renderer.ViewMatrix.OffsetX < -Width * GlobalScale)
+			//{
+			//	float offsetX = -Renderer.ViewMatrix.OffsetX - (float)Width * GlobalScale;
+			//	Renderer.ViewMatrix.Translate(offsetX * (1 / GlobalScale), 0);
+			//}
+
 			Renderer.Update();
 			Refresh();
 		}
 
 		void SelectAt()
 		{
-			SelectedChunk = null;
-			Point localLocation = Renderer.GetLocalMouseLocation();
-			foreach (VisualMemoryBlock chunk in VisualMemoryChunks)
+			Renderer.SelectedBlock = null;
+			VisualMemoryBlock tempBlock = new VisualMemoryBlock();
+			Point localMouseLocation = Renderer.GetLocalMouseLocation();
+			tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1,1)));
+			int index = VisualMemoryChunks.BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+			if (index >= 0)
 			{
-				if (chunk.Contains(localLocation))
-				{
-					SelectedChunk = chunk;
-					break;
-				}
+				Renderer.SelectedBlock = VisualMemoryChunks[index];
+				SelectionChangedEventArgs e = new SelectionChangedEventArgs();
+				e.SelectedChunk = VisualMemoryChunks[index];
+				SelectionChanged(this, e);
 			}
-
-			SelectionChangedEventArgs e = new SelectionChangedEventArgs();
-			e.SelectedChunk = SelectedChunk;
-			SelectionChanged(this, e);
 
 			Renderer.Update();
 			Refresh();

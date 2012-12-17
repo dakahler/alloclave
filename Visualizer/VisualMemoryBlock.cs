@@ -19,7 +19,7 @@ namespace Alloclave
 				return 0;
 			}
 
-			if (a.GraphicsPath.PathPoints[0].Y < b.GraphicsPath.PathPoints[0].Y)
+			if (a.GraphicsPath.PathPoints[0].Y + 1 < b.GraphicsPath.PathPoints[0].Y)
 			{
 				return -1;
 			}
@@ -31,11 +31,11 @@ namespace Alloclave
 			{
 				if (a.GraphicsPath.PathPoints[0].X < b.GraphicsPath.PathPoints[0].X)
 				{
-					return 1;
+					return -1;
 				}
 				else
 				{
-					return -1;
+					return 1;
 				}
 			}
 		}
@@ -44,13 +44,8 @@ namespace Alloclave
 	public class VisualMemoryBlock
 	{
 		// TODO: Better encapsulation
-		static List<Color> colors = new List<Color>()
-		{
-			Color.FromArgb(255, 230, 0, 0),
-			Color.FromArgb(255, 100, 0, 0),
-		};
+		static bool isSecondaryColor = false;
 
-		static int colorIndex = 0;
 		const int RowHeight = 2;
 
 		public Color _Color = Color.Red;
@@ -85,7 +80,6 @@ namespace Alloclave
 			// Note that this is the same operation as memory alignment
 			// TODO: Have an alignment helper function?
 			UInt64 rowStartAddress = workingStartAddress & ~addressWidth;
-			UInt64 rowEndAddress = rowStartAddress + addressWidth;
 
 			// Box creation
 			// Transform address space range to pixel space range
@@ -106,7 +100,9 @@ namespace Alloclave
 			UInt64 currentStartAddress = allocation.Address;
 			UInt64 size = allocation.Size;
 			UInt64 endAddress = currentStartAddress + size;
-			UInt64 numRows = ((endAddress - currentStartAddress) / addressWidth);
+
+			UInt64 rowStartAddress = (currentStartAddress - startAddress) & ~addressWidth;
+			UInt64 rowEndAddress = (endAddress - startAddress) & ~addressWidth;
 
 			GraphicsPath.Reset();
 
@@ -115,7 +111,7 @@ namespace Alloclave
 
 			Point rowOneUpperLeft = GetPixelPos(currentStartAddress, startAddress, addressWidth, width);
 			Point rowOneLowerLeft = Point.Add(rowOneUpperLeft, new Size(0, RowHeight));
-			Point rowOneFarLeftLowerLeft = new Point(0, rowOneUpperLeft.Y);
+			Point rowOneFarLeftLowerLeft = new Point(0, rowOneLowerLeft.Y);
 			Point rowOneFarRightUpperRight = new Point((int)width, rowOneUpperLeft.Y);
 
 			Point lastRowUpperRight = GetPixelPos(endAddress, startAddress, addressWidth, width);
@@ -123,53 +119,73 @@ namespace Alloclave
 			Point lastRowFarLeftLowerLeft = new Point(0, lastRowLowerRight.Y);
 			Point lastRowFarRightUpperRight = new Point((int)width, lastRowUpperRight.Y);
 
+			//if (rowStartAddress != rowEndAddress)
+			//{
+			//	GraphicsPath.AddLine(new Point(0, 0), new Point(0, 0));
+			//	return;
+			//}
+
 			// Create block by specifying polygon points
 			// Use the hash set to make sure the list has unique points
 			// TODO: Clean up
-			if (polygonPointSet.Add(rowOneUpperLeft))
+			//if (polygonPointSet.Add(rowOneUpperLeft))
 			{
 				polygonPoints.Add(rowOneUpperLeft);
 			}
 
-			if (polygonPointSet.Add(rowOneLowerLeft))
+			//if (polygonPointSet.Add(rowOneLowerLeft))
 			{
 				polygonPoints.Add(rowOneLowerLeft);
 			}
 
-			if (polygonPointSet.Add(rowOneFarLeftLowerLeft))
+			if (rowStartAddress != rowEndAddress)
 			{
-				polygonPoints.Add(rowOneFarLeftLowerLeft);
+				//if (polygonPointSet.Add(rowOneFarLeftLowerLeft))
+				{
+					polygonPoints.Add(rowOneFarLeftLowerLeft);
+				}
+
+				//if (polygonPointSet.Add(lastRowFarLeftLowerLeft))
+				{
+					polygonPoints.Add(lastRowFarLeftLowerLeft);
+				}
 			}
 
-			if (polygonPointSet.Add(lastRowFarLeftLowerLeft))
-			{
-				polygonPoints.Add(lastRowFarLeftLowerLeft);
-			}
-
-			if (polygonPointSet.Add(lastRowLowerRight))
+			//if (polygonPointSet.Add(lastRowLowerRight))
 			{
 				polygonPoints.Add(lastRowLowerRight);
 			}
 
-			if (polygonPointSet.Add(lastRowUpperRight))
+			//if (polygonPointSet.Add(lastRowUpperRight))
 			{
 				polygonPoints.Add(lastRowUpperRight);
 			}
 
-			if (polygonPointSet.Add(lastRowFarRightUpperRight))
+			if (rowStartAddress != rowEndAddress)
 			{
-				polygonPoints.Add(lastRowFarRightUpperRight);
-			}
+				//if (polygonPointSet.Add(lastRowFarRightUpperRight))
+				{
+					polygonPoints.Add(lastRowFarRightUpperRight);
+				}
 
-			if (polygonPointSet.Add(rowOneFarRightUpperRight))
-			{
-				polygonPoints.Add(rowOneFarRightUpperRight);
+				//if (polygonPointSet.Add(rowOneFarRightUpperRight))
+				{
+					polygonPoints.Add(rowOneFarRightUpperRight);
+				}
 			}
 
 			GraphicsPath.AddPolygon(polygonPoints.ToArray());
 
-			_Color = colors[colorIndex];
-			colorIndex = (colorIndex + 1) % colors.Count;
+			if (!isSecondaryColor)
+			{
+				_Color = Properties.Settings.Default.Allocation1;
+			}
+			else
+			{
+				_Color = Properties.Settings.Default.Allocation2;
+			}
+
+			isSecondaryColor = !isSecondaryColor;
 		}
 
 		public bool Contains(Point point)

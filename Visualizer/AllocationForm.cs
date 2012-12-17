@@ -16,7 +16,6 @@ namespace Alloclave
 		public AllocationForm()
 		{
 			InitializeComponent();
-			ModeComboBox.SelectedIndex = 0;
 
 			AddressSpaceControl.Rebuilt += AddressSpaceControl_Rebuilt;
 			addressSpaceScroller.FocusChanged += addressSpaceScroller_FocusChanged;
