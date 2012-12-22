@@ -45,6 +45,7 @@
 			this.Size = new System.Drawing.Size(674, 393);
 			this.SizeChanged += new System.EventHandler(this.AddressSpace_SizeChanged);
 			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseDown);
+			this.MouseLeave += new System.EventHandler(this.AddressSpace_MouseLeave);
 			this.MouseHover += new System.EventHandler(this.AddressSpace_MouseHover);
 			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseMove);
 			this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseUp);

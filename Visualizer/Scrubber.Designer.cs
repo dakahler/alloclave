@@ -28,17 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
 			this.SuspendLayout();
-			// 
-			// hScrollBar1
-			// 
-			this.hScrollBar1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.hScrollBar1.Location = new System.Drawing.Point(0, 0);
-			this.hScrollBar1.Maximum = 1000;
-			this.hScrollBar1.Name = "hScrollBar1";
-			this.hScrollBar1.Size = new System.Drawing.Size(0, 0);
-			this.hScrollBar1.TabIndex = 0;
 			// 
 			// Scrubber
 			// 
@@ -46,15 +36,19 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.Controls.Add(this.hScrollBar1);
+			this.DoubleBuffered = true;
 			this.Name = "Scrubber";
 			this.Size = new System.Drawing.Size(0, 0);
+			this.SizeChanged += new System.EventHandler(this.Scrubber_SizeChanged);
+			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Scrubber_MouseDown);
+			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Scrubber_MouseMove);
+			this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Scrubber_MouseUp);
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private System.Windows.Forms.HScrollBar hScrollBar1;
+
 	}
 }

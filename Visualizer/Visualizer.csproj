@@ -129,7 +129,9 @@
     </Compile>
     <Compile Include="CallStack.cs" />
     <Compile Include="CallStackParser.cs" />
-    <Compile Include="ColorPicker\ColorBar.cs" />
+    <Compile Include="ColorPicker\ColorBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ColorPicker\ColorPickerCtrl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -142,7 +144,9 @@
     <Compile Include="ColorPicker\ColorPickerDialog.designer.cs">
       <DependentUpon>ColorPickerDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="ColorPicker\ColorTable.cs" />
+    <Compile Include="ColorPicker\ColorTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ColorPicker\ColorWheel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -353,6 +357,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ScrubberDot.png" />
     <Resource Include="ColorPicker\colorbarIndicators.bmp" />
     <Resource Include="ColorPicker\eyedropper.bmp" />
     <Content Include="ColorPicker\popupcontainerbuttons.bmp" />
