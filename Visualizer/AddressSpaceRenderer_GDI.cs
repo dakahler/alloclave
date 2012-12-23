@@ -95,6 +95,16 @@ namespace Alloclave
 
 			TaskList[(int)Tasks.Render] = false;
 
+			if (MainBitmap != null)
+			{
+				MainBitmap.Dispose();
+			}
+
+			if (_WorldSize.Width == 0 || _WorldSize.Height == 0)
+			{
+				return;
+			}
+
 			// Then actually build the visual data
 			MainBitmap = new Bitmap(_WorldSize.Width, _WorldSize.Height, PixelFormat.Format32bppPArgb);
 			if (MainGraphics != null)
@@ -111,6 +121,11 @@ namespace Alloclave
 			{
 				SolidBrush brush = new SolidBrush(block._Color);
 				MainGraphics.FillPath(brush, block.GraphicsPath);
+			}
+
+			if (OverlayBitmap != null)
+			{
+				OverlayBitmap.Dispose();
 			}
 
 			OverlayBitmap = new Bitmap(_WorldSize.Width, _WorldSize.Height, PixelFormat.Format32bppPArgb);
