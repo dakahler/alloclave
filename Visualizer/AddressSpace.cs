@@ -76,7 +76,29 @@ namespace Alloclave
 				if (pair.Value is Allocation)
 				{
 					Allocation allocation = pair.Value as Allocation;
-					finalList.Add(allocation.Address, pair.Value);
+
+					try
+					{
+						// HACK:
+						// There is no good way (that I can find) of making sure an allocation
+						// is new when that allocation is exactly the same address/size as
+						// the old one. When this happens, this block will get hit.
+						// Treat it as a free/allocation combo here
+						// This makes it so genuine double allocations cannot be caught/reported,
+						// so it must be fixed in the future!
+						if (finalList.ContainsKey(allocation.Address))
+						{
+							finalList.Remove(allocation.Address);
+						}
+
+						finalList.Add(allocation.Address, pair.Value);
+					}
+					catch (ArgumentException)
+					{
+						// TODO: User-facing error reporting
+						//Console.WriteLine("Duplicate allocation!");
+						//throw new InvalidConstraintException();
+					}
 				}
 				else
 				{
@@ -89,7 +111,8 @@ namespace Alloclave
 					{
 						// This indicates a memory problem on the target side
 						// TODO: User-facing error reporting
-						throw new InvalidConstraintException();
+						//Console.WriteLine("Duplicate free!");
+						//throw new InvalidConstraintException();
 					}
 				}
 			}
@@ -118,35 +141,37 @@ namespace Alloclave
 
 				VisualMemoryChunks.Add(chunk);
 
-				if (lastBlock != null)
-				{
-					UInt64 lastBlockEnd = lastBlock.Allocation.Address + lastBlock.Allocation.Size;
-					if (lastBlockEnd != chunk.Allocation.Address)
-					{
-						Console.WriteLine("Non-contiguous!");
-					}
+				//if (lastBlock != null)
+				//{
+				//	UInt64 lastBlockEnd = lastBlock.Allocation.Address + lastBlock.Allocation.Size;
+				//	if (lastBlockEnd != chunk.Allocation.Address)
+				//	{
+				//		Console.WriteLine("Non-contiguous!");
+				//	}
 
-					Region lastRegion = new Region(lastBlock.GraphicsPath);
-					Region thisRegion = new Region(chunk.GraphicsPath);
-					lastRegion.Intersect(thisRegion);
+				//	Region lastRegion = new Region(lastBlock.GraphicsPath);
+				//	Region thisRegion = new Region(chunk.GraphicsPath);
+				//	lastRegion.Intersect(thisRegion);
 
-					if (Renderer.GetMainBitmap() != null)
-					{
-						Graphics g = Graphics.FromImage(Renderer.GetMainBitmap());
-						if (!lastRegion.IsEmpty(g))
-						{
-							int x;
-							x = 0;
-						}
-						g.Dispose();
-					}
-				}
-				lastBlock = chunk;
+				//	if (Renderer.GetMainBitmap() != null)
+				//	{
+				//		Graphics g = Graphics.FromImage(Renderer.GetMainBitmap());
+				//		if (!lastRegion.IsEmpty(g))
+				//		{
+				//			int x;
+				//			x = 0;
+				//		}
+				//		g.Dispose();
+				//	}
+				//}
+				//lastBlock = chunk;
 			}
 
 			SelectedChunk = null;
 
-			Renderer.WorldSize = new Size(this.Width, (int)numRows * 2);
+			int finalHeight = (int)numRows * 2;
+			finalHeight = Math.Min(finalHeight, 10000);
+			Renderer.WorldSize = new Size(this.Width, finalHeight);
 			Renderer.Size = this.Size;
 			Renderer.Blocks = VisualMemoryChunks;
 			Renderer.SelectedBlock = SelectedChunk;
