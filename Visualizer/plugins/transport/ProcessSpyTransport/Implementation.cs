@@ -92,21 +92,26 @@ namespace Alloclave_Plugin
 		{
 			int pid = process.Id;
 			HeapWalker heapWalker = new HeapWalker();
-			History.SuspendRebuilding = true;
+			List<AllocationData> oldData = new List<AllocationData>();
 			while (true)
 			{
-				List<AllocationData> allocationData = heapWalker.GetHeapData((UInt64)pid);
+				List<AllocationData> newData = heapWalker.GetHeapData((UInt64)pid);
+				IEnumerable<AllocationData> newAllocations = newData.Except(oldData, new AllocationDataEqualityComparer());
+				IEnumerable<AllocationData> newFrees = oldData.Except(newData, new AllocationDataEqualityComparer());
+				oldData = newData;
 
 				// TODO: Hacky
 				// Need better location for building up a packet from C#
-				if (allocationData != null)
+				if (newAllocations != null && newAllocations.Count() > 0)
 				{
+					History.SuspendRebuilding = true;
+
 					MemoryStream memoryStream = new MemoryStream();
 					BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
 
 					binaryWriter.Write(PacketBundle.Version); // version
-					binaryWriter.Write((UInt16)allocationData.Count);
-					foreach (AllocationData allocation in allocationData)
+					binaryWriter.Write((UInt16)newAllocations.Count());
+					foreach (AllocationData allocation in newAllocations)
 					{
 						byte packetType = (byte)PacketTypeRegistrar.PacketTypes.Allocation;
 						binaryWriter.Write(packetType);
@@ -122,14 +127,43 @@ namespace Alloclave_Plugin
 					}
 
 					Dispatcher.Invoke(new Action(() => ProcessPacket(memoryStream.GetBuffer())));
+
+					History.SuspendRebuilding = false;
+					Dispatcher.Invoke(new Action(() => History.ForceRebuild()));
 				}
 
-				break;
-				//Thread.Sleep(500);
-			}
+				if (newFrees != null && newFrees.Count() > 0)
+				{
+					History.SuspendRebuilding = true;
 
-			History.SuspendRebuilding = false;
-			Dispatcher.Invoke(new Action(() => History.ForceRebuild()));
+					MemoryStream memoryStream = new MemoryStream();
+					BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
+
+					binaryWriter.Write(PacketBundle.Version); // version
+					binaryWriter.Write((UInt16)newFrees.Count());
+					foreach (AllocationData allocation in newAllocations)
+					{
+						byte packetType = (byte)PacketTypeRegistrar.PacketTypes.Free;
+						binaryWriter.Write(packetType);
+
+						UInt64 timeStamp = (UInt64)DateTime.UtcNow.Ticks;
+						binaryWriter.Write(timeStamp);
+
+						binaryWriter.Write(allocation.Address);
+						//binaryWriter.Write(allocation.Size);
+						//binaryWriter.Write((UInt64)4); // alignment
+						//binaryWriter.Write((byte)Allocation.AllocationType.Allocation);
+						binaryWriter.Write((UInt16)0); // heap id
+					}
+
+					Dispatcher.Invoke(new Action(() => ProcessPacket(memoryStream.GetBuffer())));
+
+					History.SuspendRebuilding = false;
+					Dispatcher.Invoke(new Action(() => History.ForceRebuild()));
+				}
+
+				Thread.Sleep(1000);
+			}
 		}
 	}
 }
