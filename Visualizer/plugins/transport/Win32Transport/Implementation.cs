@@ -15,9 +15,9 @@ namespace Alloclave_Plugin
 		MessageWindow MessageWindow = new MessageWindow();
 
 		public Win32Transport()
-			: base(temp)
+			: this(temp)
 		{
-			MessageWindow.MessageReceived += MessageWindow_MessageReceived;
+			
 		}
 
 		public Win32Transport(Alloclave.TargetSystemInfo targetSystemInfo)
