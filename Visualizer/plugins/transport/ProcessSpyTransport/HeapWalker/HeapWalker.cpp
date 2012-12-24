@@ -60,6 +60,15 @@ struct HeapBlock
 	ULONG reserved;
 };
 
+// This is the internal structure used by the CRT for each heap node block
+struct HeapBlockInternal
+{
+	DWORD size;
+	DWORD flag;
+	DWORD unknown;
+	DWORD address;
+};
+
 #define PDI_MODULES                       0x01
 #define PDI_BACKTRACE                     0x02
 #define PDI_HEAPS                         0x04
@@ -171,12 +180,6 @@ namespace
 						//printf("\n Block address = 0x%.8x", hb.dwAddress);
 						//printf("\n Block Size = 0x%.8x", hb.dwSize);
 
-						if (c+1 == 186)
-						{
-							int x;
-							x=0;
-						}
-
 						if( hb.dwFlags == LF32_FREE )
 						{
 							//printf("\n Status = Free");
@@ -208,24 +211,26 @@ namespace
 
 	BOOL GetFirstHeapBlock( PDEBUG_HEAP_INFORMATION curHeapNode, HeapBlock *hb)
 	{
-		int *block;
+		HeapBlockInternal* block;
 
 		hb->reserved = 0;
 		hb->dwAddress = 0;
 		hb->dwFlags = 0;
 
-		block = (int*) curHeapNode->Blocks;
+		block = (HeapBlockInternal*)curHeapNode->Blocks;
 
-		while( ( *(block+1) & 2 ) == 2 )
+		block->unknown = 4;
+
+		while( ( (block->flag) & 2 ) == 2 )
 		{
 			hb->reserved++;
-			hb->dwAddress = (void *) ( *(block+3) + curHeapNode->Granularity );
-			block = block+4;
-			hb->dwSize = *block;
+			hb->dwAddress = (void *) ( (block->address) + curHeapNode->Granularity );
+			block++;
+			hb->dwSize = block->size;
 		}
 
 		// Update the flags...
-		USHORT flags = *(block+1);
+		USHORT flags = (block->flag);
 
 		if( ( flags & 0xF1 ) != 0 || ( flags & 0x0200 ) != 0 )
 			hb->dwFlags = 1;
@@ -239,42 +244,42 @@ namespace
 
 	BOOL GetNextHeapBlock( PDEBUG_HEAP_INFORMATION curHeapNode, HeapBlock *hb)
 	{
-		int *block;
+		HeapBlockInternal* block;
 
 		hb->reserved++;
-		block = (int*) curHeapNode->Blocks;
+		block = (HeapBlockInternal*)curHeapNode->Blocks;
 
 		// Make it point to next block address entry
-		block = block + hb->reserved * 4;
+		block += hb->reserved;
 
 		__try
 		{
-			if( ( *(block+1) & 2 ) == 2 )
+			if( ( (block->flag) & 2 ) == 2 )
 			{
 				do
 				{
 					// new address = curBlockAddress + Granularity ;
-					hb->dwAddress = (void *) ( *(block+3) + curHeapNode->Granularity );
+					hb->dwAddress = (void *) ( (block->address) + curHeapNode->Granularity );
 
 					// If all the blocks have been enumerated....exit
 					if( hb->reserved > curHeapNode->BlockCount)
 						return FALSE;
 
 					hb->reserved++;
-					block = block + 4; //move to next block
-					hb->dwSize = *block;
+					block++; //move to next block
+					hb->dwSize = block->size;
 				}
-				while( ( *(block+1) & 2 ) == 2 );
+				while( ( (block->flag) & 2 ) == 2 );
 			}
 			else
 			{
 				// New Address = prev Address + prev block size ;
 				hb->dwAddress = (void*) ( (int)hb->dwAddress + hb->dwSize );
-				hb->dwSize = *block;
+				hb->dwSize = block->size;
 			}
 
 			// Update the flags...
-			USHORT flags = *( block+1);
+			USHORT flags = ( block->flag);
 
 			if( ( flags & 0xF1 ) != 0 || ( flags & 0x0200 ) != 0 )
 				hb->dwFlags = 1;
