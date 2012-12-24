@@ -102,15 +102,17 @@ namespace Alloclave
 				}
 				else
 				{
-					int index = finalList.IndexOfValue(pair.Value);
-					if (index != -1)
+					Free free = pair.Value as Free;
+
+					if (finalList.ContainsKey(free.Address))
 					{
-						finalList.RemoveAt(index);
+						finalList.Remove(free.Address);
 					}
 					else
 					{
 						// This indicates a memory problem on the target side
 						// TODO: User-facing error reporting
+						// This is going to hit naturally due to the hack above
 						//Console.WriteLine("Duplicate free!");
 						//throw new InvalidConstraintException();
 					}
