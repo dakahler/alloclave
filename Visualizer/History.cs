@@ -9,6 +9,10 @@ namespace Alloclave
 	{
 		Dictionary<Type, SortedList<TimeStamp, IPacket>> DataDictionary = new Dictionary<Type, SortedList<TimeStamp, IPacket>>();
 
+		// Position tracker
+		// TODO: Should this be integrated into a single dictionary somehow?
+		Dictionary<Type, int> PositionDictionary = new Dictionary<Type, int>();
+
 		// TODO: Might not be able to make these static
 		public static event EventHandler Updated;
 		public static bool SuspendRebuilding = false;
@@ -22,6 +26,7 @@ namespace Alloclave
 			foreach (PacketTypeRegistrar.PacketTypes packetType in valuesArray)
 			{
 				DataDictionary.Add(PacketTypeRegistrar.GetType(packetType), new SortedList<TimeStamp, IPacket>());
+				PositionDictionary.Add(PacketTypeRegistrar.GetType(packetType), 0);
 			}
 		}
 
@@ -50,6 +55,21 @@ namespace Alloclave
 			if (DataDictionary.TryGetValue(type, out data))
 			{
 				return data;
+			}
+			else
+			{
+				return new SortedList<TimeStamp, IPacket>();
+			}
+		}
+
+		public IEnumerable<KeyValuePair<TimeStamp, IPacket>> GetNew(Type type)
+		{
+			SortedList<TimeStamp, IPacket> data;
+			if (DataDictionary.TryGetValue(type, out data))
+			{
+				var finalList = data.Skip(PositionDictionary[type]);
+				PositionDictionary[type] = data.Count;
+				return finalList;
 			}
 			else
 			{

@@ -38,6 +38,9 @@ namespace Alloclave
 
 		VisualMemoryBlock SelectedChunk;
 
+		// TODO: Better name
+		SortedList<UInt64, IPacket> CombinedList = new SortedList<UInt64, IPacket>();
+
 		public event SelectionChangedEventHandler SelectionChanged;
 
 		public event EventHandler Rebuilt;
@@ -53,6 +56,11 @@ namespace Alloclave
 			return Renderer.GetMainBitmap();
 		}
 
+		static int CompareKeyValuePair(KeyValuePair<TimeStamp, IPacket> a, KeyValuePair<TimeStamp, IPacket> b)
+		{
+			return a.Key.CompareTo(b.Key);
+		}
+
 		public void Rebuild(ref History history)
 		{
 			// TODO: Should probably move this to a separate thread and render to a secondary bitmap
@@ -61,17 +69,17 @@ namespace Alloclave
 				return;
 			}
 
-			SortedList<TimeStamp, IPacket> allocations = history.Get(typeof(Allocation));
-			SortedList<TimeStamp, IPacket> frees = history.Get(typeof(Free));
+			IEnumerable<KeyValuePair<TimeStamp, IPacket>> newAllocations = history.GetNew(typeof(Allocation));
+			IEnumerable<KeyValuePair<TimeStamp, IPacket>> newFrees = history.GetNew(typeof(Free));
 
 			// Combine allocation and free lists
-			IEnumerable<KeyValuePair<TimeStamp, IPacket>> combinedList = allocations.Union(frees);
+			var newList = newAllocations.Union(newFrees);
+			newList.OrderBy(pair => pair.Key);
 
 			// Create final list, removing allocations as frees are encountered
 			// TODO: This will get slower the longer the profile is running
 			// Need to come up with a better way
-			SortedList<UInt64, IPacket> finalList = new SortedList<UInt64, IPacket>(allocations.Count);
-			foreach (var pair in combinedList)
+			foreach (var pair in newList)
 			{
 				if (pair.Value is Allocation)
 				{
@@ -86,12 +94,12 @@ namespace Alloclave
 						// Treat it as a free/allocation combo here
 						// This makes it so genuine double allocations cannot be caught/reported,
 						// so it must be fixed in the future!
-						if (finalList.ContainsKey(allocation.Address))
+						if (CombinedList.ContainsKey(allocation.Address))
 						{
-							finalList.Remove(allocation.Address);
+							CombinedList.Remove(allocation.Address);
 						}
 
-						finalList.Add(allocation.Address, pair.Value);
+						CombinedList.Add(allocation.Address, pair.Value);
 					}
 					catch (ArgumentException)
 					{
@@ -104,9 +112,9 @@ namespace Alloclave
 				{
 					Free free = pair.Value as Free;
 
-					if (finalList.ContainsKey(free.Address))
+					if (CombinedList.ContainsKey(free.Address))
 					{
-						finalList.Remove(free.Address);
+						CombinedList.Remove(free.Address);
 					}
 					else
 					{
@@ -119,14 +127,14 @@ namespace Alloclave
 				}
 			}
 
-			if (finalList.Count == 0)
+			if (CombinedList.Count == 0)
 			{
 				return;
 			}
 
 			// Start by determining the lowest address
-			Allocation startAllocation = (Allocation)finalList.ElementAt(0).Value;
-			Allocation endAllocation = (Allocation)finalList.ElementAt(finalList.Count - 1).Value;
+			Allocation startAllocation = (Allocation)CombinedList.ElementAt(0).Value;
+			Allocation endAllocation = (Allocation)CombinedList.ElementAt(CombinedList.Count - 1).Value;
 
 			// Align to the beginning of the row
 			UInt64 startAddress = startAllocation.Address & ~AddressWidth;
@@ -134,9 +142,11 @@ namespace Alloclave
 
 			// Now build up the actual polygons
 			VisualMemoryChunks.Clear();
-			VisualMemoryChunks.Capacity = finalList.Count;
-			VisualMemoryBlock lastBlock = null;
-			foreach (var pair in finalList)
+			VisualMemoryChunks.Capacity = CombinedList.Count;
+			//VisualMemoryBlock lastBlock = null;
+
+			// TODO: This section needs incremental building as well
+			foreach (var pair in CombinedList)
 			{
 				Allocation allocation = pair.Value as Allocation;
 				VisualMemoryBlock chunk = new VisualMemoryBlock(allocation, startAllocation.Address, AddressWidth, Width);
