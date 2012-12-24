@@ -141,7 +141,7 @@ namespace Alloclave_Plugin
 
 					binaryWriter.Write(PacketBundle.Version); // version
 					binaryWriter.Write((UInt16)newFrees.Count());
-					foreach (AllocationData allocation in newAllocations)
+					foreach (AllocationData free in newFrees)
 					{
 						byte packetType = (byte)PacketTypeRegistrar.PacketTypes.Free;
 						binaryWriter.Write(packetType);
@@ -149,7 +149,7 @@ namespace Alloclave_Plugin
 						UInt64 timeStamp = (UInt64)DateTime.UtcNow.Ticks;
 						binaryWriter.Write(timeStamp);
 
-						binaryWriter.Write(allocation.Address);
+						binaryWriter.Write(free.Address);
 						//binaryWriter.Write(allocation.Size);
 						//binaryWriter.Write((UInt64)4); // alignment
 						//binaryWriter.Write((byte)Allocation.AllocationType.Allocation);
