@@ -27,10 +27,13 @@ namespace Alloclave
 		// TODO: This should be exposed in the UI
 		UInt64 AddressWidth = 0xFF;
 
+		UInt64 AllocationMin = UInt64.MaxValue;
+		UInt64 AllocationMax = UInt64.MinValue;
+
 		// TODO: Too inefficient?
 		History LastHistory = new History();
-		
-		List<VisualMemoryBlock> VisualMemoryChunks = new List<VisualMemoryBlock>();
+
+		SortedList<UInt64, VisualMemoryBlock> VisualMemoryChunks = new SortedList<UInt64, VisualMemoryBlock>();
 
 		RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
 
@@ -76,9 +79,23 @@ namespace Alloclave
 			var newList = newAllocations.Union(newFrees);
 			newList.OrderBy(pair => pair.Key);
 
+			// Start by determining the lowest address
+			foreach (var pair in newAllocations)
+			{
+				AllocationMin = Math.Min(AllocationMin, ((Allocation)pair.Value).Address);
+				AllocationMax = Math.Max(AllocationMin, ((Allocation)pair.Value).Address);
+			}
+
+			if (AllocationMax < AllocationMin)
+			{
+				return;
+			}
+
+			// Align to the beginning of the row
+			UInt64 startAddress = AllocationMin & ~AddressWidth;
+			UInt64 numRows = (AllocationMax - startAddress) / AddressWidth;
+
 			// Create final list, removing allocations as frees are encountered
-			// TODO: This will get slower the longer the profile is running
-			// Need to come up with a better way
 			foreach (var pair in newList)
 			{
 				if (pair.Value is Allocation)
@@ -97,9 +114,13 @@ namespace Alloclave
 						if (CombinedList.ContainsKey(allocation.Address))
 						{
 							CombinedList.Remove(allocation.Address);
+							VisualMemoryChunks.Remove(allocation.Address);
 						}
 
 						CombinedList.Add(allocation.Address, pair.Value);
+
+						VisualMemoryBlock chunk = new VisualMemoryBlock(allocation, AllocationMin, AddressWidth, Width);
+						VisualMemoryChunks.Add(allocation.Address, chunk);
 					}
 					catch (ArgumentException)
 					{
@@ -124,59 +145,14 @@ namespace Alloclave
 						//Console.WriteLine("Duplicate free!");
 						//throw new InvalidConstraintException();
 					}
+
+					VisualMemoryChunks.Remove(free.Address);
 				}
 			}
 
 			if (CombinedList.Count == 0)
 			{
 				return;
-			}
-
-			// Start by determining the lowest address
-			Allocation startAllocation = (Allocation)CombinedList.ElementAt(0).Value;
-			Allocation endAllocation = (Allocation)CombinedList.ElementAt(CombinedList.Count - 1).Value;
-
-			// Align to the beginning of the row
-			UInt64 startAddress = startAllocation.Address & ~AddressWidth;
-			UInt64 numRows = (endAllocation.Address - startAddress) / AddressWidth;
-
-			// Now build up the actual polygons
-			VisualMemoryChunks.Clear();
-			VisualMemoryChunks.Capacity = CombinedList.Count;
-			//VisualMemoryBlock lastBlock = null;
-
-			// TODO: This section needs incremental building as well
-			foreach (var pair in CombinedList)
-			{
-				Allocation allocation = pair.Value as Allocation;
-				VisualMemoryBlock chunk = new VisualMemoryBlock(allocation, startAllocation.Address, AddressWidth, Width);
-
-				VisualMemoryChunks.Add(chunk);
-
-				//if (lastBlock != null)
-				//{
-				//	UInt64 lastBlockEnd = lastBlock.Allocation.Address + lastBlock.Allocation.Size;
-				//	if (lastBlockEnd != chunk.Allocation.Address)
-				//	{
-				//		Console.WriteLine("Non-contiguous!");
-				//	}
-
-				//	Region lastRegion = new Region(lastBlock.GraphicsPath);
-				//	Region thisRegion = new Region(chunk.GraphicsPath);
-				//	lastRegion.Intersect(thisRegion);
-
-				//	if (Renderer.GetMainBitmap() != null)
-				//	{
-				//		Graphics g = Graphics.FromImage(Renderer.GetMainBitmap());
-				//		if (!lastRegion.IsEmpty(g))
-				//		{
-				//			int x;
-				//			x = 0;
-				//		}
-				//		g.Dispose();
-				//	}
-				//}
-				//lastBlock = chunk;
 			}
 
 			SelectedChunk = null;
@@ -381,12 +357,13 @@ namespace Alloclave
 			VisualMemoryBlock tempBlock = new VisualMemoryBlock();
 			Point localMouseLocation = Renderer.GetLocalMouseLocation();
 			tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1,1)));
-			int index = VisualMemoryChunks.BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+
+			int index = VisualMemoryChunks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
 			if (index >= 0)
 			{
-				Renderer.SelectedBlock = VisualMemoryChunks[index];
+				Renderer.SelectedBlock = VisualMemoryChunks.Values[index];
 				SelectionChangedEventArgs e = new SelectionChangedEventArgs();
-				e.SelectedChunk = VisualMemoryChunks[index];
+				e.SelectedChunk = VisualMemoryChunks.Values[index];
 				SelectionChanged(this, e);
 			}
 

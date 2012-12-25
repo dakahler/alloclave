@@ -117,10 +117,10 @@ namespace Alloclave
 			MainGraphics.SmoothingMode = SmoothingMode.HighSpeed;
 			MainGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
 
-			foreach (VisualMemoryBlock block in _Blocks)
+			foreach (var block in _Blocks)
 			{
-				SolidBrush brush = new SolidBrush(block._Color);
-				MainGraphics.FillPath(brush, block.GraphicsPath);
+				SolidBrush brush = new SolidBrush(block.Value._Color);
+				MainGraphics.FillPath(brush, block.Value.GraphicsPath);
 			}
 
 			if (OverlayBitmap != null)
@@ -166,10 +166,11 @@ namespace Alloclave
 			VisualMemoryBlock tempBlock = new VisualMemoryBlock();
 			Point localMouseLocation = GetLocalMouseLocation();
 			tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1,1)));
-			int index = _Blocks.BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+
+			int index = _Blocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
 			if (index >= 0)
 			{
-				VisualMemoryBlock targetBlock = _Blocks[index];
+				VisualMemoryBlock targetBlock = _Blocks.Values[index];
 
 				SolidBrush brush = new SolidBrush(Color.FromArgb(128, 0, 0, 0));
 				OverlayGraphics.FillPath(brush, targetBlock.GraphicsPath);
@@ -184,7 +185,7 @@ namespace Alloclave
 			Redraw();
 		}
 
-		public override List<VisualMemoryBlock> Blocks
+		public override SortedList<UInt64, VisualMemoryBlock> Blocks
 		{
 			set
 			{
