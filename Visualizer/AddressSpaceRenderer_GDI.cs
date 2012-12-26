@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Alloclave
 {
@@ -35,8 +36,11 @@ namespace Alloclave
 		private BufferedGraphics BackbufferGraphics;
 		private Graphics DrawingGraphics;
 
-		public AddressSpaceRenderer_GDI()
+		AddressSpace Parent;
+
+		public AddressSpaceRenderer_GDI(AddressSpace parent)
 		{
+			Parent = parent;
 			BackbufferContext = BufferedGraphicsManager.Current;
 			RecreateBuffers();
 		}

@@ -28,6 +28,15 @@ namespace Alloclave
 			}
 		}
 
+		protected VisualMemoryBlock _HoverBlock;
+		public virtual VisualMemoryBlock HoverBlock
+		{
+			set
+			{
+				_HoverBlock = value;
+			}
+		}
+
 		protected Matrix _ViewMatrix = new Matrix();
 		public virtual Matrix ViewMatrix
 		{

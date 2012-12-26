@@ -10,6 +10,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using OpenTK;
 
 namespace Alloclave
 {
@@ -21,8 +22,7 @@ namespace Alloclave
 		Point MouseDownLocation;
 		Point CurrentMouseLocation;
 		const int WheelDelta = 120;
-		float MainBitmapOpacity = 1.0f;
-		float GlobalScale = 1.0f;
+		public float GlobalScale = 1.0f;
 
 		// TODO: This should be exposed in the UI
 		UInt64 AddressWidth = 0xFF;
@@ -37,9 +37,10 @@ namespace Alloclave
 
 		RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
 
-		AddressSpaceRenderer Renderer = new AddressSpaceRenderer_GDI();
+		AddressSpaceRenderer Renderer;
 
 		VisualMemoryBlock SelectedChunk;
+		VisualMemoryBlock HoverChunk;
 
 		// TODO: Better name
 		SortedList<UInt64, IPacket> CombinedList = new SortedList<UInt64, IPacket>();
@@ -156,6 +157,8 @@ namespace Alloclave
 			}
 
 			SelectedChunk = null;
+			HoverChunk = null;
+			Renderer.HoverBlock = null;
 
 			int finalHeight = (int)numRows * 2;
 			finalHeight = Math.Min(finalHeight, 10000);
@@ -178,6 +181,8 @@ namespace Alloclave
 		{
 			InitializeComponent();
 			this.DoubleBuffered = true;
+
+			Renderer = new AddressSpaceRenderer_OGL(this);
 
 			Tooltip.RtbPCtrl = printCtrl;
 
@@ -210,7 +215,7 @@ namespace Alloclave
 			return;
 		}
 
-		private void AddressSpace_MouseMove(object sender, MouseEventArgs e)
+		public void AddressSpace_MouseMove(object sender, MouseEventArgs e)
 		{
 			Renderer.CurrentMouseLocation = e.Location;
 			CurrentMouseLocation = e.Location;
@@ -230,9 +235,9 @@ namespace Alloclave
 					Matrix tempViewMatrix = Renderer.ViewMatrix.Clone();
 					tempViewMatrix.Translate(points[0].X, points[0].Y);
 
-					Rectangle bitmapRectangle = new Rectangle((int)tempViewMatrix.OffsetX, (int)tempViewMatrix.OffsetY, Renderer.GetMainBitmap().Width, Renderer.GetMainBitmap().Height);
-					bitmapRectangle.Width = (int)((float)bitmapRectangle.Width * GlobalScale);
-					bitmapRectangle.Height = (int)((float)bitmapRectangle.Height * GlobalScale);
+					//Rectangle bitmapRectangle = new Rectangle((int)tempViewMatrix.OffsetX, (int)tempViewMatrix.OffsetY, Renderer.GetMainBitmap().Width, Renderer.GetMainBitmap().Height);
+					//bitmapRectangle.Width = (int)((float)bitmapRectangle.Width * GlobalScale);
+					//bitmapRectangle.Height = (int)((float)bitmapRectangle.Height * GlobalScale);
 					//if (bitmapRectangle.Contains(DisplayRectangle))
 					{
 						Renderer.ViewMatrix = tempViewMatrix.Clone();
@@ -240,11 +245,22 @@ namespace Alloclave
 				}
 			}
 
+			Renderer.HoverBlock = null;
+			VisualMemoryBlock tempBlock = new VisualMemoryBlock();
+			Point localMouseLocation = Renderer.GetLocalMouseLocation();
+			tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1, 1)));
+
+			int index = VisualMemoryChunks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+			if (index >= 0)
+			{
+				Renderer.HoverBlock = VisualMemoryChunks.Values[index];
+			}
+
 			Renderer.Update();
 			Refresh();
 		}
 
-		private void AddressSpace_MouseDown(object sender, MouseEventArgs e)
+		public void AddressSpace_MouseDown(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 			{
@@ -260,7 +276,7 @@ namespace Alloclave
 			}
 		}
 
-		private void AddressSpace_MouseUp(object sender, MouseEventArgs e)
+		public void AddressSpace_MouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 			{
@@ -280,7 +296,7 @@ namespace Alloclave
 			}
 		}
 
-		void AddressSpace_MouseWheel(object sender, MouseEventArgs e)
+		public void AddressSpace_MouseWheel(object sender, MouseEventArgs e)
 		{
 			// HACK
 			Renderer.ViewMatrix = Renderer.ViewMatrix;
@@ -402,7 +418,7 @@ namespace Alloclave
 			Refresh();
 		}
 
-		private void AddressSpace_MouseLeave(object sender, EventArgs e)
+		public void AddressSpace_MouseLeave(object sender, EventArgs e)
 		{
 			Renderer.CurrentMouseLocation = new Point(-1, -1);
 			Renderer.Update();
