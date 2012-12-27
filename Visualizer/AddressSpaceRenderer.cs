@@ -22,6 +22,10 @@ namespace Alloclave
 		protected VisualMemoryBlock _SelectedBlock;
 		public virtual VisualMemoryBlock SelectedBlock
 		{
+			get
+			{
+				return _SelectedBlock;
+			}
 			set
 			{
 				_SelectedBlock = value;

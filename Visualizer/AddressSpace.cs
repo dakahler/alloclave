@@ -33,14 +33,13 @@ namespace Alloclave
 		// TODO: Too inefficient?
 		History LastHistory = new History();
 
-		SortedList<UInt64, VisualMemoryBlock> VisualMemoryChunks = new SortedList<UInt64, VisualMemoryBlock>();
+		SortedList<UInt64, VisualMemoryBlock> VisualMemoryBlocks = new SortedList<UInt64, VisualMemoryBlock>();
 
 		RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
 
 		AddressSpaceRenderer Renderer;
 
-		VisualMemoryBlock SelectedChunk;
-		VisualMemoryBlock HoverChunk;
+		VisualMemoryBlock HoverBlock;
 
 		// TODO: Better name
 		SortedList<UInt64, IPacket> CombinedList = new SortedList<UInt64, IPacket>();
@@ -115,13 +114,13 @@ namespace Alloclave
 						if (CombinedList.ContainsKey(allocation.Address))
 						{
 							CombinedList.Remove(allocation.Address);
-							VisualMemoryChunks.Remove(allocation.Address);
+							VisualMemoryBlocks.Remove(allocation.Address);
 						}
 
 						CombinedList.Add(allocation.Address, pair.Value);
 
-						VisualMemoryBlock chunk = new VisualMemoryBlock(allocation, AllocationMin, AddressWidth, Width);
-						VisualMemoryChunks.Add(allocation.Address, chunk);
+						VisualMemoryBlock block = new VisualMemoryBlock(allocation, AllocationMin, AddressWidth, Width);
+						VisualMemoryBlocks.Add(allocation.Address, block);
 					}
 					catch (ArgumentException)
 					{
@@ -147,7 +146,7 @@ namespace Alloclave
 						//throw new InvalidConstraintException();
 					}
 
-					VisualMemoryChunks.Remove(free.Address);
+					VisualMemoryBlocks.Remove(free.Address);
 				}
 			}
 
@@ -156,16 +155,19 @@ namespace Alloclave
 				return;
 			}
 
-			SelectedChunk = null;
-			HoverChunk = null;
+			if (!VisualMemoryBlocks.ContainsValue(Renderer.SelectedBlock))
+			{
+				Renderer.SelectedBlock = null;
+			}
+
+			HoverBlock = null;
 			Renderer.HoverBlock = null;
 
 			int finalHeight = (int)numRows * 2;
 			finalHeight = Math.Min(finalHeight, 10000);
 			Renderer.WorldSize = new Size(this.Width, finalHeight);
 			Renderer.Size = this.Size;
-			Renderer.Blocks = VisualMemoryChunks;
-			Renderer.SelectedBlock = SelectedChunk;
+			Renderer.Blocks = VisualMemoryBlocks;
 
 			Renderer.Update();
 			Refresh();
@@ -250,10 +252,10 @@ namespace Alloclave
 			Point localMouseLocation = Renderer.GetLocalMouseLocation();
 			tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1, 1)));
 
-			int index = VisualMemoryChunks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+			int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
 			if (index >= 0)
 			{
-				Renderer.HoverBlock = VisualMemoryChunks.Values[index];
+				Renderer.HoverBlock = VisualMemoryBlocks.Values[index];
 			}
 
 			Renderer.Update();
@@ -374,12 +376,12 @@ namespace Alloclave
 			Point localMouseLocation = Renderer.GetLocalMouseLocation();
 			tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1,1)));
 
-			int index = VisualMemoryChunks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+			int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
 			if (index >= 0)
 			{
-				Renderer.SelectedBlock = VisualMemoryChunks.Values[index];
+				Renderer.SelectedBlock = VisualMemoryBlocks.Values[index];
 				SelectionChangedEventArgs e = new SelectionChangedEventArgs();
-				e.SelectedChunk = VisualMemoryChunks.Values[index];
+				e.SelectedBlock = VisualMemoryBlocks.Values[index];
 				SelectionChanged(this, e);
 			}
 
@@ -428,7 +430,7 @@ namespace Alloclave
 
 	public class SelectionChangedEventArgs : EventArgs
 	{
-		public VisualMemoryBlock SelectedChunk;
+		public VisualMemoryBlock SelectedBlock;
 	}
 
 	public delegate void SelectionChangedEventHandler(object sender, SelectionChangedEventArgs e);
