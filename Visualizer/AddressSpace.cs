@@ -23,7 +23,6 @@ namespace Alloclave
 		Point MouseDownLocation;
 		Point CurrentMouseLocation;
 		const int WheelDelta = 120;
-		public float GlobalScale = 1.0f;
 
 		// TODO: This should be exposed in the UI
 		UInt64 AddressWidth = 0xFF;
@@ -246,22 +245,24 @@ namespace Alloclave
 				LastMouseLocation = e.Location;
 
 				{
-					Point[] points = { mouseDelta };
+					//Point[] points = { mouseDelta };
 
-					Matrix InvertedTransform = Renderer.ViewMatrix.Clone();
-					InvertedTransform.Invert();
-					InvertedTransform.TransformVectors(points);
+					//Matrix InvertedTransform = Renderer.ViewMatrix.Clone();
+					//InvertedTransform.Invert();
+					//InvertedTransform.TransformVectors(points);
 
-					Matrix tempViewMatrix = Renderer.ViewMatrix.Clone();
-					tempViewMatrix.Translate(points[0].X, points[0].Y);
+					//Matrix tempViewMatrix = Renderer.ViewMatrix.Clone();
+					//tempViewMatrix.Translate(points[0].X, points[0].Y);
 
-					//Rectangle bitmapRectangle = new Rectangle((int)tempViewMatrix.OffsetX, (int)tempViewMatrix.OffsetY, Renderer.GetMainBitmap().Width, Renderer.GetMainBitmap().Height);
-					//bitmapRectangle.Width = (int)((float)bitmapRectangle.Width * GlobalScale);
-					//bitmapRectangle.Height = (int)((float)bitmapRectangle.Height * GlobalScale);
-					//if (bitmapRectangle.Contains(DisplayRectangle))
-					{
-						Renderer.ViewMatrix = tempViewMatrix.Clone();
-					}
+					////Rectangle bitmapRectangle = new Rectangle((int)tempViewMatrix.OffsetX, (int)tempViewMatrix.OffsetY, Renderer.GetMainBitmap().Width, Renderer.GetMainBitmap().Height);
+					////bitmapRectangle.Width = (int)((float)bitmapRectangle.Width * GlobalScale);
+					////bitmapRectangle.Height = (int)((float)bitmapRectangle.Height * GlobalScale);
+					////if (bitmapRectangle.Contains(DisplayRectangle))
+					//{
+					//	Renderer.ViewMatrix = tempViewMatrix.Clone();
+					//}
+
+					Renderer.Offset = Point.Add(Renderer.Offset, new Size(mouseDelta));
 				}
 			}
 
@@ -306,13 +307,14 @@ namespace Alloclave
 
 		public void AddressSpace_MouseWheel(object sender, MouseEventArgs e)
 		{
-			// HACK
-			Renderer.ViewMatrix = Renderer.ViewMatrix;
-
+			// TODO: Figure out this mess
 			Point[] pointBefore = { CurrentMouseLocation };
-			Matrix InvertedTransform = Renderer.ViewMatrix.Clone();
+			Matrix InvertedTransform = new Matrix();
+			InvertedTransform.Translate(Renderer.Offset.X, Renderer.Offset.Y);
+			InvertedTransform.Scale(Renderer.Scale, Renderer.Scale);
 			InvertedTransform.Invert();
 			InvertedTransform.TransformPoints(pointBefore);
+			//Point pointBefore = Renderer.GetLocalMouseLocation(CurrentMouseLocation);
 
 			int amountToMove = e.Delta / WheelDelta;
 
@@ -326,50 +328,21 @@ namespace Alloclave
 				amountToMove = 4;
 			}
 
-			float finalScale = 1.0f + (float)amountToMove / 5.0f;
-			GlobalScale *= finalScale;
-
-			// TODO: Better correction
-			if (GlobalScale < 10.0)
-			{
-				Renderer.ViewMatrix.Scale(finalScale, finalScale);
-			}
-			else
-			{
-				GlobalScale = 10.0f;
-			}
-
-			// Scale is not allowed to be < 1.0
-			if (GlobalScale < 1.0f)
-			{
-				float correctionFactor = 1.0f / GlobalScale;
-				GlobalScale = 1.0f;
-				Renderer.ViewMatrix.Scale(correctionFactor, correctionFactor);
-			}
+			float finalScale = (float)amountToMove / 5.0f;
+			Renderer.Scale += finalScale;
 
 			Point[] pointAfter = { CurrentMouseLocation };
-			InvertedTransform = Renderer.ViewMatrix.Clone();
+			InvertedTransform = new Matrix();
+			InvertedTransform.Translate(Renderer.Offset.X, Renderer.Offset.Y);
+			InvertedTransform.Scale(Renderer.Scale, Renderer.Scale);
 			InvertedTransform.Invert();
-			InvertedTransform.TransformPoints(pointAfter);
+			InvertedTransform.TransformPoints(pointBefore);
+			//Point pointAfter = Renderer.GetLocalMouseLocation(CurrentMouseLocation);
 
 			Point delta = Point.Subtract(pointAfter[0], new Size(pointBefore[0]));
+			//Point delta = new Point(-10, -10);
 
-			Renderer.ViewMatrix.Translate(delta.X, delta.Y);
-
-			//if (Renderer.ViewMatrix.OffsetX > 0.0f)
-			//{
-			//	Renderer.ViewMatrix.Translate(-Renderer.ViewMatrix.OffsetX, 0);
-			//}
-			//if (Renderer.ViewMatrix.OffsetY > 0.0f)
-			//{
-			//	Renderer.ViewMatrix.Translate(0, -Renderer.ViewMatrix.OffsetY);
-			//}
-
-			//if (Renderer.ViewMatrix.OffsetX < -Width * GlobalScale)
-			//{
-			//	float offsetX = -Renderer.ViewMatrix.OffsetX - (float)Width * GlobalScale;
-			//	Renderer.ViewMatrix.Translate(offsetX * (1 / GlobalScale), 0);
-			//}
+			Renderer.Offset = Point.Subtract(Renderer.Offset, new Size((int)((float)delta.X / 1.0f), (int)((float)delta.Y / 1.0f)));
 
 			Renderer.Update();
 			Refresh();
@@ -453,12 +426,8 @@ namespace Alloclave
 		public void CenterAt(Point location)
 		{
 			Point topLeft = new Point(location.X - (Width / 2), location.Y - (Height / 2));
-			Renderer.ViewMatrix.Reset();
-			Renderer.ViewMatrix.Scale(GlobalScale, GlobalScale);
-			Renderer.ViewMatrix.Translate(-topLeft.X, -topLeft.Y);
-
-			// HACK
-			Renderer.ViewMatrix = Renderer.ViewMatrix;
+			//Renderer.Scale = GlobalScale; // ?
+			Renderer.Offset = Point.Subtract(new Point(0, 0), new Size(topLeft));
 
 			Renderer.Update();
 			Refresh();
