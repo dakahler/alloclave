@@ -11,6 +11,7 @@ using System.Drawing.Imaging;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using OpenTK;
+using System.Threading;
 
 namespace Alloclave
 {
@@ -41,6 +42,11 @@ namespace Alloclave
 
 		VisualMemoryBlock HoverBlock;
 
+		private Object RebuildDataLock = new Object();
+		private Object RebuildGfxLock = new Object();
+		private AutoResetEvent RecalculateSelectedBlock = new AutoResetEvent(false);
+		private AutoResetEvent RecalculateHoverBlock = new AutoResetEvent(false);
+
 		// TODO: Better name
 		SortedList<UInt64, IPacket> CombinedList = new SortedList<UInt64, IPacket>();
 
@@ -51,7 +57,7 @@ namespace Alloclave
 		public void History_Updated(object sender, EventArgs e)
 		{
 			LastHistory = sender as History;
-			Rebuild(ref LastHistory);
+			Rebuild(LastHistory);
 		}
 
 		public Bitmap GetMainBitmap()
@@ -64,7 +70,7 @@ namespace Alloclave
 			return a.Key.CompareTo(b.Key);
 		}
 
-		public void Rebuild(ref History history)
+		public void Rebuild(History history)
 		{
 			// TODO: Should probably move this to a separate thread and render to a secondary bitmap
 			if (Parent == null)
@@ -72,111 +78,120 @@ namespace Alloclave
 				return;
 			}
 
-			IEnumerable<KeyValuePair<TimeStamp, IPacket>> newAllocations = history.GetNew(typeof(Allocation));
-			IEnumerable<KeyValuePair<TimeStamp, IPacket>> newFrees = history.GetNew(typeof(Free));
-
-			// Combine allocation and free lists
-			var newList = newAllocations.Union(newFrees);
-			newList.OrderBy(pair => pair.Key);
-
-			// Start by determining the lowest address
-			foreach (var pair in newAllocations)
+			var task3 = new Task(() => 
 			{
-				AllocationMin = Math.Min(AllocationMin, ((Allocation)pair.Value).Address);
-				AllocationMax = Math.Max(AllocationMin, ((Allocation)pair.Value).Address);
-			}
+				List<KeyValuePair<TimeStamp, IPacket>> newAllocations = history.GetNew(typeof(Allocation));
+				List<KeyValuePair<TimeStamp, IPacket>> newFrees = history.GetNew(typeof(Free));
 
-			if (AllocationMax < AllocationMin)
-			{
-				return;
-			}
+				// Combine allocation and free lists
+				var newList = newAllocations.Union(newFrees);
+				newList.OrderBy(pair => pair.Key);
 
-			// Align to the beginning of the row
-			UInt64 startAddress = AllocationMin & ~AddressWidth;
-			UInt64 numRows = (AllocationMax - startAddress) / AddressWidth;
-
-			// Create final list, removing allocations as frees are encountered
-			foreach (var pair in newList)
-			{
-				if (pair.Value is Allocation)
+				// Start by determining the lowest address
+				foreach (var pair in newAllocations)
 				{
-					Allocation allocation = pair.Value as Allocation;
+					AllocationMin = Math.Min(AllocationMin, ((Allocation)pair.Value).Address);
+					AllocationMax = Math.Max(AllocationMin, ((Allocation)pair.Value).Address);
+				}
 
-					try
+				if (AllocationMax < AllocationMin)
+				{
+					return;
+				}
+
+				// Align to the beginning of the row
+				UInt64 startAddress = AllocationMin & ~AddressWidth;
+				UInt64 numRows = (AllocationMax - startAddress) / AddressWidth;
+
+				// Create final list, removing allocations as frees are encountered
+				lock (RebuildDataLock)
+				{
+					foreach (var pair in newList)
 					{
-						// HACK:
-						// There is no good way (that I can find) of making sure an allocation
-						// is new when that allocation is exactly the same address/size as
-						// the old one. When this happens, this block will get hit.
-						// Treat it as a free/allocation combo here
-						// This makes it so genuine double allocations cannot be caught/reported,
-						// so it must be fixed in the future!
-						if (CombinedList.ContainsKey(allocation.Address))
+						if (pair.Value is Allocation)
 						{
-							CombinedList.Remove(allocation.Address);
-							VisualMemoryBlocks.Remove(allocation.Address);
+							Allocation allocation = pair.Value as Allocation;
+
+							try
+							{
+								// HACK:
+								// There is no good way (that I can find) of making sure an allocation
+								// is new when that allocation is exactly the same address/size as
+								// the old one. When this happens, this block will get hit.
+								// Treat it as a free/allocation combo here
+								// This makes it so genuine double allocations cannot be caught/reported,
+								// so it must be fixed in the future!
+								if (CombinedList.ContainsKey(allocation.Address))
+								{
+									CombinedList.Remove(allocation.Address);
+									VisualMemoryBlocks.Remove(allocation.Address);
+								}
+
+								CombinedList.Add(allocation.Address, pair.Value);
+
+								VisualMemoryBlock block = new VisualMemoryBlock(allocation, AllocationMin, AddressWidth, Width);
+								VisualMemoryBlocks.Add(allocation.Address, block);
+							}
+							catch (ArgumentException)
+							{
+								// TODO: User-facing error reporting
+								//Console.WriteLine("Duplicate allocation!");
+								//throw new InvalidConstraintException();
+							}
 						}
+						else
+						{
+							Free free = pair.Value as Free;
 
-						CombinedList.Add(allocation.Address, pair.Value);
+							if (CombinedList.ContainsKey(free.Address))
+							{
+								CombinedList.Remove(free.Address);
+							}
+							else
+							{
+								// This indicates a memory problem on the target side
+								// TODO: User-facing error reporting
+								// This is going to hit naturally due to the hack above
+								//Console.WriteLine("Duplicate free!");
+								//throw new InvalidConstraintException();
+							}
 
-						VisualMemoryBlock block = new VisualMemoryBlock(allocation, AllocationMin, AddressWidth, Width);
-						VisualMemoryBlocks.Add(allocation.Address, block);
+							VisualMemoryBlocks.Remove(free.Address);
+						}
 					}
-					catch (ArgumentException)
+
+					if (CombinedList.Count == 0)
 					{
-						// TODO: User-facing error reporting
-						//Console.WriteLine("Duplicate allocation!");
-						//throw new InvalidConstraintException();
+						return;
 					}
+
+					if (!VisualMemoryBlocks.ContainsValue(Renderer.SelectedBlock))
+					{
+						Renderer.SelectedBlock = null;
+					}
+
+					HoverBlock = null;
+					Renderer.HoverBlock = null;
+
+					int finalHeight = (int)numRows * 2;
+					finalHeight = Math.Min(finalHeight, 10000);
+					Renderer.WorldSize = new Size(this.Width, finalHeight);
+					Renderer.Size = this.Size;
+					Renderer.Blocks = VisualMemoryBlocks;
+
+					Renderer.Update();
 				}
-				else
+
+				this.Invoke((MethodInvoker)( () => Refresh()));
+
+				if (Rebuilt != null)
 				{
-					Free free = pair.Value as Free;
-
-					if (CombinedList.ContainsKey(free.Address))
-					{
-						CombinedList.Remove(free.Address);
-					}
-					else
-					{
-						// This indicates a memory problem on the target side
-						// TODO: User-facing error reporting
-						// This is going to hit naturally due to the hack above
-						//Console.WriteLine("Duplicate free!");
-						//throw new InvalidConstraintException();
-					}
-
-					VisualMemoryBlocks.Remove(free.Address);
+					EventArgs e = new EventArgs();
+					Rebuilt.Invoke(this, e);
 				}
-			}
+			});
 
-			if (CombinedList.Count == 0)
-			{
-				return;
-			}
-
-			if (!VisualMemoryBlocks.ContainsValue(Renderer.SelectedBlock))
-			{
-				Renderer.SelectedBlock = null;
-			}
-
-			HoverBlock = null;
-			Renderer.HoverBlock = null;
-
-			int finalHeight = (int)numRows * 2;
-			finalHeight = Math.Min(finalHeight, 10000);
-			Renderer.WorldSize = new Size(this.Width, finalHeight);
-			Renderer.Size = this.Size;
-			Renderer.Blocks = VisualMemoryBlocks;
-
-			Renderer.Update();
-			Refresh();
-
-			if (Rebuilt != null)
-			{
-				EventArgs e = new EventArgs();
-				Rebuilt(this, e);
-			}
+			task3.Start();
 		}
 
 		public AddressSpace()
@@ -196,11 +211,14 @@ namespace Alloclave
 			this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
 			ColorPickerDialog.ColorChanged += ColorPickerDialog_ColorChanged;
+
+			Task.Factory.StartNew(() => HoverTask());
+			Task.Factory.StartNew(() => SelectTask());
 		}
 
 		void ColorPickerDialog_ColorChanged(object sender, EventArgs e)
 		{
-			Rebuild(ref LastHistory);
+			Rebuild(LastHistory);
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -247,19 +265,7 @@ namespace Alloclave
 				}
 			}
 
-			Renderer.HoverBlock = null;
-			VisualMemoryBlock tempBlock = new VisualMemoryBlock();
-			Point localMouseLocation = Renderer.GetLocalMouseLocation();
-			tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1, 1)));
-
-			int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
-			if (index >= 0)
-			{
-				Renderer.HoverBlock = VisualMemoryBlocks.Values[index];
-			}
-
-			Renderer.Update();
-			Refresh();
+			RecalculateHoverBlock.Set();
 		}
 
 		public void AddressSpace_MouseDown(object sender, MouseEventArgs e)
@@ -371,34 +377,72 @@ namespace Alloclave
 
 		void SelectAt()
 		{
-			Renderer.SelectedBlock = null;
-			VisualMemoryBlock tempBlock = new VisualMemoryBlock();
-			Point localMouseLocation = Renderer.GetLocalMouseLocation();
-			tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1,1)));
+			RecalculateSelectedBlock.Set();
+		}
 
-			int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
-			if (index >= 0)
+		void HoverTask()
+		{
+			while (true)
 			{
-				Renderer.SelectedBlock = VisualMemoryBlocks.Values[index];
-				SelectionChangedEventArgs e = new SelectionChangedEventArgs();
-				e.SelectedBlock = VisualMemoryBlocks.Values[index];
-				SelectionChanged(this, e);
-			}
+				RecalculateHoverBlock.WaitOne();
 
-			Renderer.Update();
-			Refresh();
+				//Renderer.HoverBlock = null;
+				//VisualMemoryBlock tempBlock = new VisualMemoryBlock();
+				//Point localMouseLocation = Renderer.GetLocalMouseLocation();
+				//tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1, 1)));
+
+				//lock (RebuildDataLock)
+				//{
+				//	int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+				//	if (index >= 0)
+				//	{
+				//		Renderer.HoverBlock = VisualMemoryBlocks.Values[index];
+				//	}
+				//}
+
+				//Renderer.Update();
+				//this.Invoke((MethodInvoker)(() => Refresh()));
+			}
+		}
+
+		void SelectTask()
+		{
+			while (true)
+			{
+				RecalculateSelectedBlock.WaitOne();
+
+				//Renderer.SelectedBlock = null;
+				//VisualMemoryBlock tempBlock = new VisualMemoryBlock();
+				//Point localMouseLocation = Renderer.GetLocalMouseLocation();
+				//tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1, 1)));
+
+				//lock (RebuildDataLock)
+				//{
+				//	int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+				//	if (index >= 0)
+				//	{
+				//		Renderer.SelectedBlock = VisualMemoryBlocks.Values[index];
+				//		SelectionChangedEventArgs e = new SelectionChangedEventArgs();
+				//		e.SelectedBlock = VisualMemoryBlocks.Values[index];
+				//		this.Invoke((MethodInvoker)(() => SelectionChanged(this, e)));
+				//	}
+				//}
+
+				//Renderer.Update();
+				//this.Invoke((MethodInvoker)(() => Refresh()));
+			}
 		}
 
 		void HoverAt(Point location)
 		{
-			printCtrl.Text = "TESSSSST";
-			Tooltip.Show("", this);
+			//printCtrl.Text = "TESSSSST";
+			//Tooltip.Show("", this);
 		}
 
 		private void AddressSpace_SizeChanged(object sender, EventArgs e)
 		{
 			// TODO: Might not be viable to do this dynamically for large datasets
-			Rebuild(ref LastHistory);
+			Rebuild(LastHistory);
 		}
 
 		private void AddressSpace_MouseHover(object sender, EventArgs e)

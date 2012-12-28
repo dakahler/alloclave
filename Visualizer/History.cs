@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,11 +8,11 @@ namespace Alloclave
 {
 	public class History
 	{
-		Dictionary<Type, SortedList<TimeStamp, IPacket>> DataDictionary = new Dictionary<Type, SortedList<TimeStamp, IPacket>>();
+		ConcurrentDictionary<Type, SortedList<TimeStamp, IPacket>> DataDictionary = new ConcurrentDictionary<Type, SortedList<TimeStamp, IPacket>>();
 
 		// Position tracker
 		// TODO: Should this be integrated into a single dictionary somehow?
-		Dictionary<Type, int> PositionDictionary = new Dictionary<Type, int>();
+		ConcurrentDictionary<Type, int> PositionDictionary = new ConcurrentDictionary<Type, int>();
 
 		// TODO: Might not be able to make these static
 		public static event EventHandler Updated;
@@ -25,8 +26,8 @@ namespace Alloclave
 			Array valuesArray = Enum.GetValues(typeof(PacketTypeRegistrar.PacketTypes));
 			foreach (PacketTypeRegistrar.PacketTypes packetType in valuesArray)
 			{
-				DataDictionary.Add(PacketTypeRegistrar.GetType(packetType), new SortedList<TimeStamp, IPacket>());
-				PositionDictionary.Add(PacketTypeRegistrar.GetType(packetType), 0);
+				DataDictionary.GetOrAdd(PacketTypeRegistrar.GetType(packetType), new SortedList<TimeStamp, IPacket>());
+				PositionDictionary.GetOrAdd(PacketTypeRegistrar.GetType(packetType), 0);
 			}
 		}
 
@@ -35,7 +36,10 @@ namespace Alloclave
 			SortedList<TimeStamp, IPacket> data;
 			if (DataDictionary.TryGetValue(packet.GetType(), out data))
 			{
-				data.Add(new TimeStamp(timeStamp), packet);
+				lock (data)
+				{
+					data.Add(new TimeStamp(timeStamp), packet);
+				}
 			}
 			else
 			{
@@ -62,18 +66,21 @@ namespace Alloclave
 			}
 		}
 
-		public IEnumerable<KeyValuePair<TimeStamp, IPacket>> GetNew(Type type)
+		public List<KeyValuePair<TimeStamp, IPacket>> GetNew(Type type)
 		{
-			SortedList<TimeStamp, IPacket> data;
-			if (DataDictionary.TryGetValue(type, out data))
+			lock (this)
 			{
-				var finalList = data.Skip(PositionDictionary[type]);
-				PositionDictionary[type] = data.Count;
-				return finalList;
-			}
-			else
-			{
-				return new SortedList<TimeStamp, IPacket>();
+				SortedList<TimeStamp, IPacket> data;
+				if (DataDictionary.TryGetValue(type, out data))
+				{
+					var finalList = data.Skip(PositionDictionary[type]).Take(data.Count - PositionDictionary[type]);
+					PositionDictionary[type] = data.Count;
+					return finalList.ToList();
+				}
+				else
+				{
+					return new List<KeyValuePair<TimeStamp, IPacket>>();
+				}
 			}
 		}
 
