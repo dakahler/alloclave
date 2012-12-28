@@ -31,8 +31,6 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.label1 = new System.Windows.Forms.Label();
-			this.licensedToLabel = new System.Windows.Forms.Label();
 			this.logoPictureBox = new System.Windows.Forms.PictureBox();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.dataGrid = new System.Windows.Forms.DataGridView();
@@ -40,11 +38,13 @@
 			this.purchaseButton = new System.Windows.Forms.Button();
 			this.checkForUpdatesButton = new System.Windows.Forms.Button();
 			this.OkButton = new System.Windows.Forms.Button();
+			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
 			this.panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -66,8 +66,7 @@
 			// panel1
 			// 
 			this.panel1.BackColor = System.Drawing.Color.White;
-			this.panel1.Controls.Add(this.label1);
-			this.panel1.Controls.Add(this.licensedToLabel);
+			this.panel1.Controls.Add(this.pictureBox1);
 			this.panel1.Controls.Add(this.logoPictureBox);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -76,31 +75,14 @@
 			this.panel1.Size = new System.Drawing.Size(590, 80);
 			this.panel1.TabIndex = 0;
 			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(353, 31);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(135, 26);
-			this.label1.TabIndex = 2;
-			this.label1.Text = "Placeholder User\r\nplaceholder@example.com";
-			// 
-			// licensedToLabel
-			// 
-			this.licensedToLabel.AutoSize = true;
-			this.licensedToLabel.Location = new System.Drawing.Point(348, 13);
-			this.licensedToLabel.Name = "licensedToLabel";
-			this.licensedToLabel.Size = new System.Drawing.Size(69, 13);
-			this.licensedToLabel.TabIndex = 1;
-			this.licensedToLabel.Text = "Licensed To:";
-			// 
 			// logoPictureBox
 			// 
 			this.logoPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.logoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("logoPictureBox.Image")));
-			this.logoPictureBox.Location = new System.Drawing.Point(23, 12);
+			this.logoPictureBox.Location = new System.Drawing.Point(327, 17);
 			this.logoPictureBox.Name = "logoPictureBox";
-			this.logoPictureBox.Size = new System.Drawing.Size(249, 50);
+			this.logoPictureBox.Size = new System.Drawing.Size(253, 42);
+			this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.logoPictureBox.TabIndex = 0;
 			this.logoPictureBox.TabStop = false;
 			this.logoPictureBox.Click += new System.EventHandler(this.logoPictureBox_Click);
@@ -173,6 +155,16 @@
 			this.OkButton.Text = "OK";
 			this.OkButton.UseVisualStyleBackColor = true;
 			// 
+			// pictureBox1
+			// 
+			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+			this.pictureBox1.Location = new System.Drawing.Point(12, 9);
+			this.pictureBox1.Name = "pictureBox1";
+			this.pictureBox1.Size = new System.Drawing.Size(242, 55);
+			this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.pictureBox1.TabIndex = 1;
+			this.pictureBox1.TabStop = false;
+			// 
 			// AboutForm
 			// 
 			this.AcceptButton = this.OkButton;
@@ -190,10 +182,10 @@
 			this.Text = "About Alloclave";
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
 			this.panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.dataGrid)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -205,11 +197,10 @@
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Button OkButton;
 		private System.Windows.Forms.PictureBox logoPictureBox;
-		private System.Windows.Forms.Label licensedToLabel;
 		private System.Windows.Forms.DataGridView dataGrid;
 		private System.Windows.Forms.Button purchaseButton;
 		private System.Windows.Forms.Button checkForUpdatesButton;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.PictureBox pictureBox1;
 	}
 }

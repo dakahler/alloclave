@@ -78,6 +78,9 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>AlloclaveKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>AlloclaveIcon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -373,6 +376,7 @@
     <None Include="Resources\ScrubberDot.png" />
     <Resource Include="ColorPicker\colorbarIndicators.bmp" />
     <Resource Include="ColorPicker\eyedropper.bmp" />
+    <Content Include="AlloclaveIcon.ico" />
     <Content Include="ColorPicker\popupcontainerbuttons.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
