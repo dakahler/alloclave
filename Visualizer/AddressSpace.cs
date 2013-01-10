@@ -307,14 +307,14 @@ namespace Alloclave
 
 		public void AddressSpace_MouseWheel(object sender, MouseEventArgs e)
 		{
-			// TODO: Figure out this mess
+			Matrix currentViewMatrix = new Matrix();
+			currentViewMatrix.Translate(Renderer.Offset.X, Renderer.Offset.Y);
+			currentViewMatrix.Scale(Renderer.Scale, Renderer.Scale);
+
 			Point[] pointBefore = { CurrentMouseLocation };
-			Matrix InvertedTransform = new Matrix();
-			InvertedTransform.Translate(Renderer.Offset.X, Renderer.Offset.Y);
-			InvertedTransform.Scale(Renderer.Scale, Renderer.Scale);
+			Matrix InvertedTransform = currentViewMatrix.Clone();
 			InvertedTransform.Invert();
 			InvertedTransform.TransformPoints(pointBefore);
-			//Point pointBefore = Renderer.GetLocalMouseLocation(CurrentMouseLocation);
 
 			int amountToMove = e.Delta / WheelDelta;
 
@@ -328,21 +328,37 @@ namespace Alloclave
 				amountToMove = 4;
 			}
 
-			float finalScale = (float)amountToMove / 5.0f;
-			Renderer.Scale += finalScale;
+			float finalScale = 1.0f + (float)amountToMove / 5.0f;
+			Renderer.Scale *= finalScale;
+
+			// TODO: Better correction
+			if (Renderer.Scale < 10.0)
+			{
+				currentViewMatrix.Scale(finalScale, finalScale);
+			}
+			else
+			{
+				Renderer.Scale = 10.0f;
+			}
+
+			// Scale is not allowed to be < 1.0
+			if (Renderer.Scale < 1.0f)
+			{
+				float correctionFactor = 1.0f / Renderer.Scale;
+				Renderer.Scale = 1.0f;
+				currentViewMatrix.Scale(correctionFactor, correctionFactor);
+			}
 
 			Point[] pointAfter = { CurrentMouseLocation };
-			InvertedTransform = new Matrix();
-			InvertedTransform.Translate(Renderer.Offset.X, Renderer.Offset.Y);
-			InvertedTransform.Scale(Renderer.Scale, Renderer.Scale);
+			InvertedTransform = currentViewMatrix.Clone();
 			InvertedTransform.Invert();
-			InvertedTransform.TransformPoints(pointBefore);
-			//Point pointAfter = Renderer.GetLocalMouseLocation(CurrentMouseLocation);
+			InvertedTransform.TransformPoints(pointAfter);
 
 			Point delta = Point.Subtract(pointAfter[0], new Size(pointBefore[0]));
-			//Point delta = new Point(-10, -10);
 
-			Renderer.Offset = Point.Subtract(Renderer.Offset, new Size((int)((float)delta.X / 1.0f), (int)((float)delta.Y / 1.0f)));
+			currentViewMatrix.Translate(delta.X, delta.Y);
+
+			Renderer.Offset = new Point((int)currentViewMatrix.OffsetX, (int)currentViewMatrix.OffsetY);
 
 			Renderer.Update();
 			Refresh();
