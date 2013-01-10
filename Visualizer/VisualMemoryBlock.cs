@@ -74,6 +74,8 @@ namespace Alloclave
 
 		public List<Triangle> Triangles = new List<Triangle>();
 
+		public bool IsNew = true;
+
 		public VisualMemoryBlock()
 		{
 

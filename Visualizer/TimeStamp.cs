@@ -8,6 +8,12 @@ namespace Alloclave
 {
 	public class TimeStamp : IComparable
 	{
+		public TimeStamp()
+		{
+			Time = (UInt64)DateTime.Now.Ticks;
+			UID = UniquenessModifier++;
+		}
+
 		public TimeStamp(UInt64 time)
 		{
 			Time = time;

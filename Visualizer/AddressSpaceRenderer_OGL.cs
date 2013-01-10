@@ -15,6 +15,20 @@ namespace Alloclave
 {
 	class AddressSpaceRenderer_OGL : AddressSpaceRenderer
 	{
+		class BlockMetadata
+		{
+			public BlockMetadata(uint startVertex, uint endVertex)
+			{
+				VertexStartIndex = startVertex;
+				VertexEndIndex = endVertex;
+			}
+
+			public TimeStamp StartTime = new TimeStamp();
+			public uint VertexStartIndex;
+			public uint VertexEndIndex;
+			public const float AliveSeconds = 3.0f;
+		}
+
 		AddressSpace Parent;
 		GLControl glControl;
 		bool GlControlLoaded;
@@ -25,6 +39,8 @@ namespace Alloclave
 		VertexC4ubV3f[] VBO = new VertexC4ubV3f[MaxVertices];
 		uint vboCount;
 		uint VBOHandle;
+
+		Dictionary<VisualMemoryBlock, BlockMetadata> NewBlocks = new Dictionary<VisualMemoryBlock, BlockMetadata>();
 
 		struct VertexC4ubV3f
 		{
@@ -49,6 +65,21 @@ namespace Alloclave
 			glControl.MouseMove += new MouseEventHandler(Parent.AddressSpace_MouseMove);
 			glControl.MouseWheel += new MouseEventHandler(Parent.AddressSpace_MouseWheel);
 			glControl.MouseLeave += new EventHandler(Parent.AddressSpace_MouseLeave);
+		}
+
+		private void ChangeBlockColor(KeyValuePair<VisualMemoryBlock, BlockMetadata> block, Color color, float blend)
+		{
+			byte r = (byte)((block.Key._Color.R * blend) + color.R * (1 - blend));
+			byte g = (byte)((block.Key._Color.G * blend) + color.G * (1 - blend));
+			byte b = (byte)((block.Key._Color.B * blend) + color.B * (1 - blend));
+
+			for (uint j = block.Value.VertexStartIndex; j <= block.Value.VertexEndIndex; j++)
+			{
+				VBO[j].R = r;
+				VBO[j].G = g;
+				VBO[j].B = b;
+				VBO[j].A = 255;
+			}
 		}
 
 		void glControl_Load(object sender, EventArgs e)
@@ -83,6 +114,16 @@ namespace Alloclave
 			GL.ClearColor(255, 255, 255, 0);
 			glControl.VSync = true;
 			SetupViewport();
+
+			Application.Idle += Application_Idle;
+		}
+
+		void Application_Idle(object sender, EventArgs e)
+		{
+			while (glControl.IsIdle)
+			{
+				glControl.Invalidate();
+			}
 		}
 
 		void glControl_Resize(object sender, EventArgs e)
@@ -108,6 +149,11 @@ namespace Alloclave
 
 		void glControl_Paint(object sender, PaintEventArgs e)
 		{
+			Render();
+		}
+
+		protected override void Render()
+		{
 			if (!GlControlLoaded || _Blocks == null || Vertices == null)
 			{
 				return;
@@ -126,13 +172,14 @@ namespace Alloclave
 			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexC4ubV3f.SizeInBytes * MaxVertices), IntPtr.Zero, BufferUsageHint.DynamicDraw);
 			// Fill newly allocated buffer
 			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexC4ubV3f.SizeInBytes * MaxVertices), VBO, BufferUsageHint.DynamicDraw);
-			// Only draw particles that are alive
+			// Draw everything
 			GL.DrawArrays(BeginMode.Triangles, 0, (int)vboCount);
 
+			// TODO: These should modify the VBO instead of using immediate mode
 			if (_SelectedBlock != null)
 			{
-				GL.Color3(Color.Black);
 				GL.Begin(BeginMode.Triangles);
+				GL.Color3(Color.Black);
 				foreach (Triangle triangle in _SelectedBlock.Triangles)
 				{
 					foreach (Point vertex in triangle.Vertices)
@@ -143,11 +190,10 @@ namespace Alloclave
 				GL.End();
 			}
 
-			// TODO: Alpha blending
 			if (_HoverBlock != null)
 			{
-				GL.Color4(0, 0, 0, 128);
 				GL.Begin(BeginMode.Triangles);
+				GL.Color4(Color.FromArgb(128, Color.Black));
 				foreach (Triangle triangle in _HoverBlock.Triangles)
 				{
 					foreach (Point vertex in triangle.Vertices)
@@ -158,14 +204,33 @@ namespace Alloclave
 				GL.End();
 			}
 
+			for (int i = 0; i < NewBlocks.Count; i++)
+			{
+				var block = NewBlocks.ElementAt(i);
+
+				TimeSpan startTime = TimeSpan.FromTicks((long)block.Value.StartTime.Time);
+				TimeSpan currentTime = TimeSpan.FromTicks(DateTime.Now.Ticks);
+				TimeSpan difference = currentTime.Subtract(startTime);
+
+				float percentage = (BlockMetadata.AliveSeconds - (float)difference.TotalSeconds) / BlockMetadata.AliveSeconds;
+				percentage = 1.0f - percentage;
+				percentage = Math.Min(percentage, 1.0f);
+				percentage = Math.Max(percentage, 0.0f);
+
+				ChangeBlockColor(block, Color.LightYellow, percentage);
+
+				// Delete if old
+				if (difference.TotalSeconds > BlockMetadata.AliveSeconds)
+				{
+					ChangeBlockColor(block, Color.LightYellow, 1.0f);
+					NewBlocks.Remove(block.Key);
+					i--;
+				}
+			}
+
 			GL.PopMatrix();
 
 			glControl.SwapBuffers();
-		}
-
-		protected override void Render()
-		{
-			
 		}
 
 		private void RebuildVertices()
@@ -173,8 +238,10 @@ namespace Alloclave
 			// TODO: Vertex incremental rebuilding
 			vboCount = 0;
 			List<Vector3> vertexList = new List<Vector3>();
+			NewBlocks.Clear();
 			foreach (var block in _Blocks)
 			{
+				uint startVertex = vboCount;
 				foreach (Triangle triangle in block.Value.Triangles)
 				{
 					foreach (Point vertex in triangle.Vertices)
@@ -186,6 +253,13 @@ namespace Alloclave
 						VBO[vboCount].Position = new Vector3(vertex.X, vertex.Y, 0);
 						vboCount++;
 					}
+				}
+				uint endVertex = vboCount - 1;
+
+				if (block.Value.IsNew)
+				{
+					block.Value.IsNew = false;
+					NewBlocks.Add(block.Value, new BlockMetadata(startVertex, endVertex));
 				}
 			}
 
