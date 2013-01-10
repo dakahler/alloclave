@@ -118,8 +118,8 @@ namespace Alloclave
 			GL.MatrixMode(MatrixMode.Modelview);
 
 			GL.PushMatrix();
-			GL.Translate(ViewMatrix.OffsetX, ViewMatrix.OffsetY, 0);
-			GL.Scale(Parent.GlobalScale, Parent.GlobalScale, Parent.GlobalScale);
+			GL.Translate(Offset.X, Offset.Y, 0);
+			GL.Scale(Scale, Scale, Scale);
 
 			// Tell OpenGL to discard old VBO when done drawing it and reserve memory _now_ for a new buffer.
 			// without this, GL would wait until draw operations on old VBO are complete before writing to it
@@ -217,14 +217,6 @@ namespace Alloclave
 			}
 		}
 
-		public override Matrix ViewMatrix
-		{
-			set
-			{
-				base.ViewMatrix = value;
-			}
-		}
-
 		public override Size WorldSize
 		{
 			set
@@ -238,6 +230,32 @@ namespace Alloclave
 			set
 			{
 				base.CurrentMouseLocation = value;
+			}
+		}
+
+		public override Point Offset
+		{
+			get
+			{
+				return base.Offset;
+			}
+			set
+			{
+				base.Offset = value;
+				glControl.Invalidate();
+			}
+		}
+
+		public override float Scale
+		{
+			get
+			{
+				return base.Scale;
+			}
+			set
+			{
+				base.Scale = value;
+				glControl.Invalidate();
 			}
 		}
 

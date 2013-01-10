@@ -41,16 +41,29 @@ namespace Alloclave
 			}
 		}
 
-		protected Matrix _ViewMatrix = new Matrix();
-		public virtual Matrix ViewMatrix
+		protected Point _Offset = new Point();
+		public virtual Point Offset
 		{
 			get
 			{
-				return _ViewMatrix;
+				return _Offset;
 			}
 			set
 			{
-				_ViewMatrix = value;
+				_Offset = value;
+			}
+		}
+
+		protected float _Scale = 1.0f;
+		public virtual float Scale
+		{
+			get
+			{
+				return _Scale;
+			}
+			set
+			{
+				_Scale = value;
 			}
 		}
 
@@ -89,13 +102,11 @@ namespace Alloclave
 
 		public Point GetLocalMouseLocation(Point worldLocation)
 		{
-			Point[] points = { worldLocation };
+			Point finalPoint = worldLocation;
+			finalPoint = Point.Subtract(finalPoint, new Size(Offset));
+			finalPoint = new Point((int)((float)finalPoint.X / Scale), (int)((float)finalPoint.Y / Scale));
 
-			Matrix invertedTransform = _ViewMatrix.Clone();
-			invertedTransform.Invert();
-			invertedTransform.TransformPoints(points);
-
-			return points[0];
+			return finalPoint;
 		}
 
 		public abstract Bitmap GetMainBitmap();

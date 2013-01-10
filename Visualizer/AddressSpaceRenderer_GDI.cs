@@ -147,46 +147,46 @@ namespace Alloclave
 
 		private void UpdateOverlay()
 		{
-			if (MainBitmap == null || OverlayBitmap == null)
-			{
-				return;
-			}
+			//if (MainBitmap == null || OverlayBitmap == null)
+			//{
+			//	return;
+			//}
 
-			TaskList[(int)Tasks.UpdateOverlay] = false;
+			//TaskList[(int)Tasks.UpdateOverlay] = false;
 
-			Point[] points = { _CurrentMouseLocation };
-			_ViewMatrix.TransformPoints(points);
+			//Point[] points = { _CurrentMouseLocation };
+			//_ViewMatrix.TransformPoints(points);
 
-			Point transformedPoint = points[0];
+			//Point transformedPoint = points[0];
 
-			Point[] bitmapBounds = { new Point(0, 0), new Point(MainBitmap.Size.Width, MainBitmap.Size.Height) };
+			//Point[] bitmapBounds = { new Point(0, 0), new Point(MainBitmap.Size.Width, MainBitmap.Size.Height) };
 
-			_ViewMatrix.TransformPoints(bitmapBounds);
-			Size scaledSize = new Size(bitmapBounds[1].X - bitmapBounds[0].X, bitmapBounds[1].Y - bitmapBounds[0].Y);
-			Rectangle bitmapRectangle = new Rectangle(bitmapBounds[0], scaledSize);
+			//_ViewMatrix.TransformPoints(bitmapBounds);
+			//Size scaledSize = new Size(bitmapBounds[1].X - bitmapBounds[0].X, bitmapBounds[1].Y - bitmapBounds[0].Y);
+			//Rectangle bitmapRectangle = new Rectangle(bitmapBounds[0], scaledSize);
 
-			// Find the allocation we're hovering over
-			OverlayGraphics.Clear(Color.Transparent);
-			VisualMemoryBlock tempBlock = new VisualMemoryBlock();
-			Point localMouseLocation = GetLocalMouseLocation();
-			tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1,1)));
+			//// Find the allocation we're hovering over
+			//OverlayGraphics.Clear(Color.Transparent);
+			//VisualMemoryBlock tempBlock = new VisualMemoryBlock();
+			//Point localMouseLocation = GetLocalMouseLocation();
+			//tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1,1)));
 
-			int index = _Blocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
-			if (index >= 0)
-			{
-				VisualMemoryBlock targetBlock = _Blocks.Values[index];
+			//int index = _Blocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+			//if (index >= 0)
+			//{
+			//	VisualMemoryBlock targetBlock = _Blocks.Values[index];
 
-				SolidBrush brush = new SolidBrush(Color.FromArgb(128, 0, 0, 0));
-				OverlayGraphics.FillPath(brush, targetBlock.GraphicsPath);
-			}
+			//	SolidBrush brush = new SolidBrush(Color.FromArgb(128, 0, 0, 0));
+			//	OverlayGraphics.FillPath(brush, targetBlock.GraphicsPath);
+			//}
 
-			if (_SelectedBlock != null)
-			{
-				SolidBrush selectedBrush = new SolidBrush(Color.FromArgb(255, 0, 0, 0));
-				OverlayGraphics.FillPath(selectedBrush, _SelectedBlock.GraphicsPath);
-			}
+			//if (_SelectedBlock != null)
+			//{
+			//	SolidBrush selectedBrush = new SolidBrush(Color.FromArgb(255, 0, 0, 0));
+			//	OverlayGraphics.FillPath(selectedBrush, _SelectedBlock.GraphicsPath);
+			//}
 
-			Redraw();
+			//Redraw();
 		}
 
 		public override SortedList<UInt64, VisualMemoryBlock> Blocks
@@ -216,14 +216,14 @@ namespace Alloclave
 			}
 		}
 
-		public override Matrix ViewMatrix
-		{
-			set
-			{
-				base.ViewMatrix = value;
-				TaskList[(int)Tasks.Redraw] = true;
-			}
-		}
+		//public override Matrix ViewMatrix
+		//{
+		//	set
+		//	{
+		//		base.ViewMatrix = value;
+		//		TaskList[(int)Tasks.Redraw] = true;
+		//	}
+		//}
 
 		public override Size WorldSize
 		{
@@ -265,16 +265,16 @@ namespace Alloclave
 
 		protected override void Redraw()
 		{
-			TaskList[(int)Tasks.Redraw] = false;
+			//TaskList[(int)Tasks.Redraw] = false;
 
-			DrawingGraphics.Clear(Color.White);
-			DrawingGraphics.SmoothingMode = SmoothingMode.HighSpeed;
-			DrawingGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-			DrawingGraphics.ResetTransform();
-			DrawingGraphics.MultiplyTransform(_ViewMatrix);
+			//DrawingGraphics.Clear(Color.White);
+			//DrawingGraphics.SmoothingMode = SmoothingMode.HighSpeed;
+			//DrawingGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+			//DrawingGraphics.ResetTransform();
+			//DrawingGraphics.MultiplyTransform(_ViewMatrix);
 
-			DrawingGraphics.DrawImage(MainBitmap, 0, 0);
-			DrawingGraphics.DrawImage(OverlayBitmap, 0, 0);
+			//DrawingGraphics.DrawImage(MainBitmap, 0, 0);
+			//DrawingGraphics.DrawImage(OverlayBitmap, 0, 0);
 		}
 
 		public override void Blit(IntPtr deviceContext)
