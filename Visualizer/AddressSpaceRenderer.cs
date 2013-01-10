@@ -103,12 +103,8 @@ namespace Alloclave
 		public Point GetLocalMouseLocation(Point worldLocation)
 		{
 			Point finalPoint = worldLocation;
-
-			//finalPoint = Point.Add(finalPoint, new Size((int)((float)Offset.X / Scale), (int)((float)Offset.Y / Scale)));
-
 			finalPoint = Point.Subtract(finalPoint, new Size(Offset));
-			finalPoint = new Point((int)((float)finalPoint.X * Scale), (int)((float)finalPoint.Y * Scale));
-			
+			finalPoint = new Point((int)((float)finalPoint.X / Scale), (int)((float)finalPoint.Y / Scale));
 
 			return finalPoint;
 		}

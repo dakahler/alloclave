@@ -375,22 +375,22 @@ namespace Alloclave
 			{
 				RecalculateHoverBlock.WaitOne();
 
-				//Renderer.HoverBlock = null;
-				//VisualMemoryBlock tempBlock = new VisualMemoryBlock();
-				//Point localMouseLocation = Renderer.GetLocalMouseLocation();
-				//tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1, 1)));
+				Renderer.HoverBlock = null;
+				VisualMemoryBlock tempBlock = new VisualMemoryBlock();
+				Point localMouseLocation = Renderer.GetLocalMouseLocation();
+				tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1, 1)));
 
-				//lock (RebuildDataLock)
-				//{
-				//	int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
-				//	if (index >= 0)
-				//	{
-				//		Renderer.HoverBlock = VisualMemoryBlocks.Values[index];
-				//	}
-				//}
+				lock (RebuildDataLock)
+				{
+					int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+					if (index >= 0)
+					{
+						Renderer.HoverBlock = VisualMemoryBlocks.Values[index];
+					}
+				}
 
-				//Renderer.Update();
-				//this.Invoke((MethodInvoker)(() => Refresh()));
+				Renderer.Update();
+				this.Invoke((MethodInvoker)(() => Refresh()));
 			}
 		}
 
@@ -400,25 +400,25 @@ namespace Alloclave
 			{
 				RecalculateSelectedBlock.WaitOne();
 
-				//Renderer.SelectedBlock = null;
-				//VisualMemoryBlock tempBlock = new VisualMemoryBlock();
-				//Point localMouseLocation = Renderer.GetLocalMouseLocation();
-				//tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1, 1)));
+				Renderer.SelectedBlock = null;
+				VisualMemoryBlock tempBlock = new VisualMemoryBlock();
+				Point localMouseLocation = Renderer.GetLocalMouseLocation();
+				tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1, 1)));
 
-				//lock (RebuildDataLock)
-				//{
-				//	int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
-				//	if (index >= 0)
-				//	{
-				//		Renderer.SelectedBlock = VisualMemoryBlocks.Values[index];
-				//		SelectionChangedEventArgs e = new SelectionChangedEventArgs();
-				//		e.SelectedBlock = VisualMemoryBlocks.Values[index];
-				//		this.Invoke((MethodInvoker)(() => SelectionChanged(this, e)));
-				//	}
-				//}
+				lock (RebuildDataLock)
+				{
+					int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+					if (index >= 0)
+					{
+						Renderer.SelectedBlock = VisualMemoryBlocks.Values[index];
+						SelectionChangedEventArgs e = new SelectionChangedEventArgs();
+						e.SelectedBlock = VisualMemoryBlocks.Values[index];
+						this.Invoke((MethodInvoker)(() => SelectionChanged(this, e)));
+					}
+				}
 
-				//Renderer.Update();
-				//this.Invoke((MethodInvoker)(() => Refresh()));
+				Renderer.Update();
+				this.Invoke((MethodInvoker)(() => Refresh()));
 			}
 		}
 
