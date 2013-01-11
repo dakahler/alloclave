@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Alloclave
 {
@@ -210,11 +211,11 @@ namespace Alloclave
 				{
 					var block = NewBlocks.ElementAt(i);
 
-					TimeSpan startTime = TimeSpan.FromTicks((long)block.Value.StartTime.Time);
-					TimeSpan currentTime = TimeSpan.FromTicks(DateTime.Now.Ticks);
-					TimeSpan difference = currentTime.Subtract(startTime);
+					double startTimeSeconds = (double)block.Value.StartTime.Time / (double)Stopwatch.Frequency;
+					double currentTimeSeconds = (double)Stopwatch.GetTimestamp() / (double)Stopwatch.Frequency;
+					float difference = (float)(currentTimeSeconds - startTimeSeconds);
 
-					float percentage = (BlockMetadata.AliveSeconds - (float)difference.TotalSeconds) / BlockMetadata.AliveSeconds;
+					float percentage = (BlockMetadata.AliveSeconds - (float)difference) / BlockMetadata.AliveSeconds;
 					percentage = 1.0f - percentage;
 					percentage = Math.Min(percentage, 1.0f);
 					percentage = Math.Max(percentage, 0.0f);
@@ -222,7 +223,7 @@ namespace Alloclave
 					ChangeBlockColor(block, Color.LightYellow, percentage);
 
 					// Delete if old
-					if (difference.TotalSeconds > BlockMetadata.AliveSeconds)
+					if (difference > BlockMetadata.AliveSeconds)
 					{
 						ChangeBlockColor(block, Color.LightYellow, 1.0f);
 						NewBlocks.Remove(block.Key);

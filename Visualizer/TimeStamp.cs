@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Alloclave
 {
@@ -10,7 +11,7 @@ namespace Alloclave
 	{
 		public TimeStamp()
 		{
-			Time = (UInt64)DateTime.Now.Ticks;
+			Time = (UInt64)Stopwatch.GetTimestamp();
 			UID = UniquenessModifier++;
 		}
 
