@@ -28,8 +28,8 @@ namespace Alloclave
 
 		void AddressSpaceControl_Rebuilt(object sender, EventArgs e)
 		{
-			Bitmap mainBitmap = AddressSpaceControl.GetMainBitmap();
-			addressSpaceScroller.MainBitmap = mainBitmap;
+			//Bitmap mainBitmap = AddressSpaceControl.GetMainBitmap();
+			//addressSpaceScroller.MainBitmap = mainBitmap;
 		}
 	}
 }

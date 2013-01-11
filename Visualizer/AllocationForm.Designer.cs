@@ -31,7 +31,7 @@
 			this.AddressSpaceControl = new Alloclave.AddressSpace();
 			this.scrubber1 = new Alloclave.Scrubber();
 			this.TableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.addressSpaceScroller = new Alloclave.AddressSpaceScroller();
+			this.addressSpaceScroller = new Alloclave.AddressSpaceScroller_OGL();
 			this.TableLayoutPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
