@@ -204,27 +204,30 @@ namespace Alloclave
 				GL.End();
 			}
 
-			for (int i = 0; i < NewBlocks.Count; i++)
+			lock (NewBlocks)
 			{
-				var block = NewBlocks.ElementAt(i);
-
-				TimeSpan startTime = TimeSpan.FromTicks((long)block.Value.StartTime.Time);
-				TimeSpan currentTime = TimeSpan.FromTicks(DateTime.Now.Ticks);
-				TimeSpan difference = currentTime.Subtract(startTime);
-
-				float percentage = (BlockMetadata.AliveSeconds - (float)difference.TotalSeconds) / BlockMetadata.AliveSeconds;
-				percentage = 1.0f - percentage;
-				percentage = Math.Min(percentage, 1.0f);
-				percentage = Math.Max(percentage, 0.0f);
-
-				ChangeBlockColor(block, Color.LightYellow, percentage);
-
-				// Delete if old
-				if (difference.TotalSeconds > BlockMetadata.AliveSeconds)
+				for (int i = 0; i < NewBlocks.Count; i++)
 				{
-					ChangeBlockColor(block, Color.LightYellow, 1.0f);
-					NewBlocks.Remove(block.Key);
-					i--;
+					var block = NewBlocks.ElementAt(i);
+
+					TimeSpan startTime = TimeSpan.FromTicks((long)block.Value.StartTime.Time);
+					TimeSpan currentTime = TimeSpan.FromTicks(DateTime.Now.Ticks);
+					TimeSpan difference = currentTime.Subtract(startTime);
+
+					float percentage = (BlockMetadata.AliveSeconds - (float)difference.TotalSeconds) / BlockMetadata.AliveSeconds;
+					percentage = 1.0f - percentage;
+					percentage = Math.Min(percentage, 1.0f);
+					percentage = Math.Max(percentage, 0.0f);
+
+					ChangeBlockColor(block, Color.LightYellow, percentage);
+
+					// Delete if old
+					if (difference.TotalSeconds > BlockMetadata.AliveSeconds)
+					{
+						ChangeBlockColor(block, Color.LightYellow, 1.0f);
+						NewBlocks.Remove(block.Key);
+						i--;
+					}
 				}
 			}
 
@@ -238,28 +241,33 @@ namespace Alloclave
 			// TODO: Vertex incremental rebuilding
 			vboCount = 0;
 			List<Vector3> vertexList = new List<Vector3>();
-			NewBlocks.Clear();
-			foreach (var block in _Blocks)
-			{
-				uint startVertex = vboCount;
-				foreach (Triangle triangle in block.Value.Triangles)
-				{
-					foreach (Point vertex in triangle.Vertices)
-					{
-						VBO[vboCount].R = block.Value._Color.R;
-						VBO[vboCount].G = block.Value._Color.G;
-						VBO[vboCount].B = block.Value._Color.B;
-						VBO[vboCount].A = block.Value._Color.A;
-						VBO[vboCount].Position = new Vector3(vertex.X, vertex.Y, 0);
-						vboCount++;
-					}
-				}
-				uint endVertex = vboCount - 1;
 
-				if (block.Value.IsNew)
+			lock (NewBlocks)
+			{
+				NewBlocks.Clear();
+
+				foreach (var block in _Blocks)
 				{
-					block.Value.IsNew = false;
-					NewBlocks.Add(block.Value, new BlockMetadata(startVertex, endVertex));
+					uint startVertex = vboCount;
+					foreach (Triangle triangle in block.Value.Triangles)
+					{
+						foreach (Point vertex in triangle.Vertices)
+						{
+							VBO[vboCount].R = block.Value._Color.R;
+							VBO[vboCount].G = block.Value._Color.G;
+							VBO[vboCount].B = block.Value._Color.B;
+							VBO[vboCount].A = block.Value._Color.A;
+							VBO[vboCount].Position = new Vector3(vertex.X, vertex.Y, 0);
+							vboCount++;
+						}
+					}
+					uint endVertex = vboCount - 1;
+
+					if (block.Value.IsNew)
+					{
+						block.Value.IsNew = false;
+						NewBlocks.Add(block.Value, new BlockMetadata(startVertex, endVertex));
+					}
 				}
 			}
 
