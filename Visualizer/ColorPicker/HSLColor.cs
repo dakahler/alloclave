@@ -148,12 +148,24 @@ namespace Alloclave
 		{
 			return !(left == right);
 		}
+
 		public static bool operator == (HSLColor left, HSLColor right)
 		{
 			return (left.Hue == right.Hue && 
 					left.Lightness == right.Lightness && 
 					left.Saturation == right.Saturation);
 		}
+
+		public override bool Equals(object obj)
+		{
+			return this == (HSLColor)obj;
+		}
+
+		public override int GetHashCode()
+		{
+			return (int)(Hue * Saturation * Lightness * (double)this.Color.GetHashCode() * (double)0x315ab2ef);
+		}
+
 		public override string ToString()
 		{
 			string s = string.Format("HSL({0:f2}, {1:f2}, {2:f2})", Hue, Saturation, Lightness);

@@ -39,8 +39,6 @@ namespace Alloclave
 
 		AddressSpaceRenderer Renderer;
 
-		VisualMemoryBlock HoverBlock;
-
 		private Object RebuildDataLock = new Object();
 		private Object RebuildGfxLock = new Object();
 		private AutoResetEvent RecalculateSelectedBlock = new AutoResetEvent(false);
@@ -169,7 +167,6 @@ namespace Alloclave
 						Renderer.SelectedBlock = null;
 					}
 
-					HoverBlock = null;
 					Renderer.HoverBlock = null;
 
 					int finalHeight = (int)numRows * 2;
