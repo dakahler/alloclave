@@ -25,7 +25,7 @@ namespace Alloclave
 		const int WheelDelta = 120;
 
 		// TODO: This should be exposed in the UI
-		UInt64 AddressWidth = 0xFF;
+		public const UInt64 AddressWidth = 0xFF;
 
 		UInt64 AllocationMin = UInt64.MaxValue;
 		UInt64 AllocationMax = UInt64.MinValue;
@@ -33,7 +33,15 @@ namespace Alloclave
 		// TODO: Too inefficient?
 		History LastHistory = new History();
 
-		SortedList<UInt64, VisualMemoryBlock> VisualMemoryBlocks = new SortedList<UInt64, VisualMemoryBlock>();
+		// TODO: Should this be somewhere else?
+		static SortedList<UInt64, VisualMemoryBlock> _VisualMemoryBlocks = new SortedList<UInt64, VisualMemoryBlock>();
+		public static SortedList<UInt64, VisualMemoryBlock> VisualMemoryBlocks
+		{
+			get
+			{
+				return _VisualMemoryBlocks;
+			}
+		}
 
 		RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
 
@@ -121,13 +129,13 @@ namespace Alloclave
 								if (CombinedList.ContainsKey(allocation.Address))
 								{
 									CombinedList.Remove(allocation.Address);
-									VisualMemoryBlocks.Remove(allocation.Address);
+									_VisualMemoryBlocks.Remove(allocation.Address);
 								}
 
 								CombinedList.Add(allocation.Address, pair.Value);
 
 								VisualMemoryBlock block = new VisualMemoryBlock(allocation, AllocationMin, AddressWidth, Width);
-								VisualMemoryBlocks.Add(allocation.Address, block);
+								_VisualMemoryBlocks.Add(allocation.Address, block);
 							}
 							catch (ArgumentException)
 							{
@@ -153,7 +161,7 @@ namespace Alloclave
 								//throw new InvalidConstraintException();
 							}
 
-							VisualMemoryBlocks.Remove(free.Address);
+							_VisualMemoryBlocks.Remove(free.Address);
 						}
 					}
 
@@ -162,7 +170,7 @@ namespace Alloclave
 						return;
 					}
 
-					if (!VisualMemoryBlocks.ContainsValue(Renderer.SelectedBlock))
+					if (!_VisualMemoryBlocks.ContainsValue(Renderer.SelectedBlock))
 					{
 						Renderer.SelectedBlock = null;
 					}
@@ -173,7 +181,7 @@ namespace Alloclave
 					finalHeight = Math.Min(finalHeight, 10000);
 					Renderer.WorldSize = new Size(this.Width, finalHeight);
 					Renderer.Size = this.Size;
-					Renderer.Blocks = VisualMemoryBlocks;
+					Renderer.Blocks = _VisualMemoryBlocks;
 
 					Renderer.Update();
 				}
@@ -379,10 +387,10 @@ namespace Alloclave
 
 				lock (RebuildDataLock)
 				{
-					int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+					int index = _VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
 					if (index >= 0)
 					{
-						Renderer.HoverBlock = VisualMemoryBlocks.Values[index];
+						Renderer.HoverBlock = _VisualMemoryBlocks.Values[index];
 					}
 				}
 
@@ -404,12 +412,12 @@ namespace Alloclave
 
 				lock (RebuildDataLock)
 				{
-					int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+					int index = _VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
 					if (index >= 0)
 					{
-						Renderer.SelectedBlock = VisualMemoryBlocks.Values[index];
+						Renderer.SelectedBlock = _VisualMemoryBlocks.Values[index];
 						SelectionChangedEventArgs e = new SelectionChangedEventArgs();
-						e.SelectedBlock = VisualMemoryBlocks.Values[index];
+						e.SelectedBlock = _VisualMemoryBlocks.Values[index];
 						this.Invoke((MethodInvoker)(() => SelectionChanged(this, e)));
 					}
 				}
@@ -440,6 +448,7 @@ namespace Alloclave
 		{
 			Point topLeft = new Point(location.X - (Width / 2), location.Y - (Height / 2));
 			//Renderer.Scale = GlobalScale; // ?
+			Renderer.Scale = 1.0f;
 			Renderer.Offset = Point.Subtract(new Point(0, 0), new Size(topLeft));
 
 			Renderer.Update();

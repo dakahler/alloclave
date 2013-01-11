@@ -34,16 +34,15 @@ namespace Alloclave
 		GLControl glControl;
 		bool GlControlLoaded;
 
-		private Vector3[] Vertices;
-
-		const int MaxVertices = 1000000;
-		VertexC4ubV3f[] VBO = new VertexC4ubV3f[MaxVertices];
-		uint vboCount;
-		uint VBOHandle;
+		// TODO: Move this out to a common class
+		public const int MaxVertices = 1000000;
+		public static VertexC4ubV3f[] VBO = new VertexC4ubV3f[MaxVertices];
+		public static uint vboCount;
+		public static uint VBOHandle;
 
 		Dictionary<VisualMemoryBlock, BlockMetadata> NewBlocks = new Dictionary<VisualMemoryBlock, BlockMetadata>();
 
-		struct VertexC4ubV3f
+		public struct VertexC4ubV3f
 		{
 			public byte R, G, B, A;
 			public Vector3 Position;
@@ -85,6 +84,8 @@ namespace Alloclave
 
 		void glControl_Load(object sender, EventArgs e)
 		{
+			glControl.MakeCurrent();
+
 			GL.Enable(EnableCap.DepthTest);
 
 			// Setup parameters for Points
@@ -135,6 +136,8 @@ namespace Alloclave
 
 		private void SetupViewport()
 		{
+			glControl.MakeCurrent();
+
 			int w = glControl.Width;
 			int h = glControl.Height;
 			GL.MatrixMode(MatrixMode.Projection);
@@ -155,10 +158,12 @@ namespace Alloclave
 
 		protected override void Render()
 		{
-			if (!GlControlLoaded || _Blocks == null || Vertices == null)
+			if (!GlControlLoaded || _Blocks == null)
 			{
 				return;
 			}
+
+			glControl.MakeCurrent();
 
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
@@ -272,8 +277,6 @@ namespace Alloclave
 					}
 				}
 			}
-
-			Vertices = vertexList.ToArray();
 		}
 
 		public override SortedList<UInt64, VisualMemoryBlock> Blocks

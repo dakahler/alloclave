@@ -39,7 +39,7 @@ namespace Alloclave
 			Refresh();
 		}
 
-		private void AddressSpaceScroller_MouseDown(object sender, MouseEventArgs e)
+		protected void AddressSpaceScroller_MouseDown(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 			{
@@ -51,7 +51,7 @@ namespace Alloclave
 			}
 		}
 
-		private void AddressSpaceScroller_MouseMove(object sender, MouseEventArgs e)
+		protected void AddressSpaceScroller_MouseMove(object sender, MouseEventArgs e)
 		{
 			if (IsLeftMouseDown || IsMiddleMouseDown)
 			{
@@ -60,7 +60,7 @@ namespace Alloclave
 			}
 		}
 
-		private void AddressSpaceScroller_MouseUp(object sender, MouseEventArgs e)
+		protected void AddressSpaceScroller_MouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 			{
@@ -74,19 +74,23 @@ namespace Alloclave
 			}
 		}
 
-		private void SetFocus(Point focus)
+		protected void SetFocus(Point focus)
 		{
-			// TODO
-			//if (FocusChanged != null)
-			//{
-			//	float scaleX = (float)MainBitmap.Width / (float)Width;
-			//	float scaleY = (float)MainBitmap.Height / (float)Height;
+			if (FocusChanged != null)
+			{
+				RectangleF lowerBounds = AddressSpace.VisualMemoryBlocks.Values[AddressSpace.VisualMemoryBlocks.Count - 1].GraphicsPath.GetBounds();
 
-			//	Point finalPoint = new Point((int)((float)focus.X * scaleX), (int)((float)focus.Y * scaleY));
+				UInt64 maxWidth = AddressSpace.AddressWidth;
+				UInt64 maxHeight = (UInt64)lowerBounds.Bottom;
 
-			//	MouseEventArgs eventArgs = new MouseEventArgs(MouseButtons.Left, 1, finalPoint.X, finalPoint.Y, 0);
-			//	FocusChanged(this, eventArgs);
-			//}
+				float scaleX = (float)maxWidth / (float)Width;
+				float scaleY = (float)maxHeight / (float)Height;
+
+				Point finalPoint = new Point((int)((float)focus.X * scaleX), (int)((float)focus.Y * scaleY));
+
+				MouseEventArgs eventArgs = new MouseEventArgs(MouseButtons.Left, 1, finalPoint.X, finalPoint.Y, 0);
+				FocusChanged(this, eventArgs);
+			}
 		}
 	}
 }
