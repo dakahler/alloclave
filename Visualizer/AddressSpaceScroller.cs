@@ -10,13 +10,14 @@ using System.Windows.Forms;
 
 namespace Alloclave
 {
-	public partial class AddressSpaceScroller : UserControl
+	public abstract partial class AddressSpaceScroller : UserControl
 	{
-		public Bitmap MainBitmap;
 		private bool IsLeftMouseDown;
 		private bool IsMiddleMouseDown;
 
 		public event MouseEventHandler FocusChanged;
+
+		protected abstract void Render(PaintEventArgs e);
 
 		public AddressSpaceScroller()
 		{
@@ -30,10 +31,7 @@ namespace Alloclave
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			if (MainBitmap != null)
-			{
-				e.Graphics.DrawImage(MainBitmap, new Rectangle(0, 0, Width, Height));
-			}
+			Render(e);
 		}
 
 		private void AddressSpaceScroller_SizeChanged(object sender, EventArgs e)
@@ -78,16 +76,17 @@ namespace Alloclave
 
 		private void SetFocus(Point focus)
 		{
-			if (FocusChanged != null)
-			{
-				float scaleX = (float)MainBitmap.Width / (float)Width;
-				float scaleY = (float)MainBitmap.Height / (float)Height;
+			// TODO
+			//if (FocusChanged != null)
+			//{
+			//	float scaleX = (float)MainBitmap.Width / (float)Width;
+			//	float scaleY = (float)MainBitmap.Height / (float)Height;
 
-				Point finalPoint = new Point((int)((float)focus.X * scaleX), (int)((float)focus.Y * scaleY));
+			//	Point finalPoint = new Point((int)((float)focus.X * scaleX), (int)((float)focus.Y * scaleY));
 
-				MouseEventArgs eventArgs = new MouseEventArgs(MouseButtons.Left, 1, finalPoint.X, finalPoint.Y, 0);
-				FocusChanged(this, eventArgs);
-			}
+			//	MouseEventArgs eventArgs = new MouseEventArgs(MouseButtons.Left, 1, finalPoint.X, finalPoint.Y, 0);
+			//	FocusChanged(this, eventArgs);
+			//}
 		}
 	}
 }

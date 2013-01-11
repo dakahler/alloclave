@@ -1,6 +1,6 @@
 ﻿namespace Alloclave
 {
-	partial class AddressSpaceScroller
+	abstract partial class AddressSpaceScroller
 	{
 		/// <summary> 
 		/// Required designer variable.
