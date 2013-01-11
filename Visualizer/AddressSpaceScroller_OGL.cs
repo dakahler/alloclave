@@ -15,7 +15,8 @@ namespace Alloclave
 		GLControl glControl;
 		bool GlControlLoaded;
 
-		public AddressSpaceScroller_OGL()
+		public AddressSpaceScroller_OGL(int parentWidth)
+			: base(parentWidth)
 		{
 			glControl = new GLControl();
 			//glControl.Parent = parent;
@@ -111,7 +112,7 @@ namespace Alloclave
 
 			RectangleF lowerBounds = AddressSpace.VisualMemoryBlocks.Values[AddressSpace.VisualMemoryBlocks.Count - 1].GraphicsPath.GetBounds();
 
-			UInt64 maxWidth = AddressSpace.AddressWidth;
+			UInt64 maxWidth = (UInt64)ParentWidth;
 			UInt64 maxHeight = (UInt64)lowerBounds.Bottom;
 
 			float scaleX = (float)Width / (float)maxWidth;

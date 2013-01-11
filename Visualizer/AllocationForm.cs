@@ -19,6 +19,12 @@ namespace Alloclave
 
 			AddressSpaceControl.Rebuilt += AddressSpaceControl_Rebuilt;
 			addressSpaceScroller.FocusChanged += addressSpaceScroller_FocusChanged;
+			this.SizeChanged += AllocationForm_SizeChanged;
+		}
+
+		void AllocationForm_SizeChanged(object sender, EventArgs e)
+		{
+			addressSpaceScroller.ParentWidth = AddressSpaceControl.Width;
 		}
 
 		void addressSpaceScroller_FocusChanged(object sender, MouseEventArgs e)

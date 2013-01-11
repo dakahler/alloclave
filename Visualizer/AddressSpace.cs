@@ -25,7 +25,7 @@ namespace Alloclave
 		const int WheelDelta = 120;
 
 		// TODO: This should be exposed in the UI
-		public const UInt64 AddressWidth = 0xFF;
+		const UInt64 AddressWidth = 0xFF;
 
 		UInt64 AllocationMin = UInt64.MaxValue;
 		UInt64 AllocationMax = UInt64.MinValue;

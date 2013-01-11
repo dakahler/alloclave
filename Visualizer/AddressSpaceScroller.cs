@@ -15,13 +15,17 @@ namespace Alloclave
 		private bool IsLeftMouseDown;
 		private bool IsMiddleMouseDown;
 
+		public int ParentWidth;
+
 		public event MouseEventHandler FocusChanged;
 
 		protected abstract void Render(PaintEventArgs e);
 
-		public AddressSpaceScroller()
+		public AddressSpaceScroller(int parentWidth)
 		{
 			InitializeComponent();
+
+			ParentWidth = parentWidth;
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs e)
@@ -80,7 +84,7 @@ namespace Alloclave
 			{
 				RectangleF lowerBounds = AddressSpace.VisualMemoryBlocks.Values[AddressSpace.VisualMemoryBlocks.Count - 1].GraphicsPath.GetBounds();
 
-				UInt64 maxWidth = AddressSpace.AddressWidth;
+				UInt64 maxWidth = (UInt64)ParentWidth;
 				UInt64 maxHeight = (UInt64)lowerBounds.Bottom;
 
 				float scaleX = (float)maxWidth / (float)Width;

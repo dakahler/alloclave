@@ -12,6 +12,12 @@ namespace Alloclave
 	{
 		public Bitmap MainBitmap;
 
+		public AddressSpaceScroller_GDI(int parentWidth)
+			: base(parentWidth)
+		{
+
+		}
+
 		protected override void Render(PaintEventArgs e)
 		{
 			if (MainBitmap != null)
