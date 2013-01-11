@@ -116,15 +116,15 @@ namespace Alloclave
 			glControl.VSync = true;
 			SetupViewport();
 
-			Application.Idle += Application_Idle;
+			const double interval = 10.0;
+			System.Timers.Timer timer = new System.Timers.Timer(interval);
+			timer.Elapsed += TimerElapsed;
+			timer.Start();
 		}
 
-		void Application_Idle(object sender, EventArgs e)
+		void TimerElapsed(object sender, EventArgs e)
 		{
-			while (glControl.IsIdle)
-			{
-				glControl.Invalidate();
-			}
+			glControl.Invalidate();
 		}
 
 		void glControl_Resize(object sender, EventArgs e)
@@ -205,6 +205,7 @@ namespace Alloclave
 				GL.End();
 			}
 
+			// TODO: This is an update task, not a render task
 			lock (NewBlocks)
 			{
 				for (int i = 0; i < NewBlocks.Count; i++)
