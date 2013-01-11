@@ -119,7 +119,7 @@ namespace Alloclave_Plugin
 			//			byte packetType = (byte)PacketTypeRegistrar.PacketTypes.Allocation;
 			//			binaryWriter.Write(packetType);
 
-			//			UInt64 timeStamp = (UInt64)DateTime.UtcNow.Ticks;
+			//			UInt64 timeStamp = (UInt64)Stopwatch.GetTimestamp();
 			//			binaryWriter.Write(timeStamp);
 
 			//			binaryWriter.Write(allocation.Address);
@@ -149,7 +149,7 @@ namespace Alloclave_Plugin
 			//			byte packetType = (byte)PacketTypeRegistrar.PacketTypes.Free;
 			//			binaryWriter.Write(packetType);
 
-			//			UInt64 timeStamp = (UInt64)DateTime.UtcNow.Ticks;
+			//			UInt64 timeStamp = (UInt64)Stopwatch.GetTimestamp();
 			//			binaryWriter.Write(timeStamp);
 
 			//			binaryWriter.Write(allocation.Address);
