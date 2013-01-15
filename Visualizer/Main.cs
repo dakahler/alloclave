@@ -19,7 +19,7 @@ namespace Alloclave
 		[DllImport("user32.dll")]
 		private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
 
-		const uint WM_MOUSEWHEEL = 0x20a;
+		private const uint WM_MOUSEWHEEL = 0x20a;
 
 		CommandLineOptions options = new CommandLineOptions();
 
@@ -29,7 +29,11 @@ namespace Alloclave
 
 			Application.AddMessageFilter(this);
 
-			ICommandLineParser parser = new CommandLineParser();
+			var settings = new CommandLineParserSettings();
+			settings.CaseSensitive = false;
+			settings.HelpWriter = Console.Error;
+
+			ICommandLineParser parser = new CommandLineParser(settings);
 			String[] args = Environment.GetCommandLineArgs();
 			if (parser.ParseArguments(args, options))
 			{
@@ -44,6 +48,11 @@ namespace Alloclave
 						}
 					}
 				}
+			}
+			else
+			{
+				Close();
+				return;
 			}
 
 			licenseToolStripMenuItem.Text = Licensing.LicenseName;

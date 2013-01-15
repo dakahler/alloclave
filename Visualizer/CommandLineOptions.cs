@@ -19,8 +19,12 @@ namespace Alloclave
 		public string GetUsage()
 		{
 			var usage = new StringBuilder();
-			usage.AppendLine("Alloclave Visualizer");
-			usage.AppendLine("Temp usage instructions...");
+			usage.AppendLine("Alloclave");
+			usage.AppendLine("Launch Alloclave with optional command line arguments.");
+			usage.AppendLine("\tAlloclave [-t:transport_type] [-p:process_name]");
+			usage.AppendLine("\t-t\tTransport type, such as \"Process Spy\"");
+			usage.AppendLine("\t-p\tProcess name, such as \"firefox\"");
+			usage.AppendLine("Press enter to continue...");
 			return usage.ToString();
 		}
 	}

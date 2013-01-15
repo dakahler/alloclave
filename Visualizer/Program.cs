@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Alloclave
 {
@@ -21,6 +22,14 @@ namespace Alloclave
 		
 		[ImportMany]
 		private IEnumerable<ExportFactory<Transport, ITransportName>> InternalTransportAdapters = null;
+
+		[DllImport("kernel32.dll")]
+		static extern bool AttachConsole(int dwProcessId);
+
+		[DllImport("kernel32.dll")]
+		static extern bool FreeConsole();
+
+		private const int ATTACH_PARENT_PROCESS = -1;
 
 		private static void ImportPlugins()
 		{
@@ -97,7 +106,15 @@ namespace Alloclave
 
 			if (Licensing.CurrentLicenseStatus != Licensing.LicenseStatus.Invalid)
 			{
-				Application.Run(new Main());
+				AttachConsole(ATTACH_PARENT_PROCESS);
+
+				Main main = new Main();
+				if (!main.Disposing && !main.IsDisposed)
+				{
+					Application.Run(main);
+				}
+
+				FreeConsole();
 			}
 		}
 	}
