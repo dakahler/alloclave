@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace Alloclave
 {
@@ -30,6 +31,27 @@ namespace Alloclave
 		public byte[] Serialize(TargetSystemInfo targetSystemInfo)
 		{
 			throw new NotImplementedException();
+		}
+
+		public byte[] Serialize<T>(List<T> packets, TargetSystemInfo targetSystemInfo) where T : IPacket
+		{
+			MemoryStream memoryStream = new MemoryStream();
+			BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
+
+			binaryWriter.Write(PacketBundle.Version); // version
+			binaryWriter.Write((UInt16)packets.Count());
+			foreach (IPacket packet in packets)
+			{
+				byte packetType = (byte)PacketTypeRegistrar.GetType(packet.GetType());
+				binaryWriter.Write(packetType);
+
+				UInt64 timeStamp = (UInt64)Stopwatch.GetTimestamp();
+				binaryWriter.Write(timeStamp);
+
+				binaryWriter.Write(packet.Serialize(targetSystemInfo));
+			}
+
+			return memoryStream.ToArray();
 		}
 
 		public void Deserialize(BinaryReader binaryReader, TargetSystemInfo targetSystemInfo)

@@ -46,6 +46,19 @@ namespace Alloclave
 			}
 		}
 
+		public static PacketTypes GetType(Type type)
+		{
+			foreach (var pair in Types)
+			{
+				if (pair.Value == type)
+				{
+					return pair.Key;
+				}
+			}
+
+			throw new NotImplementedException();
+		}
+
 		static Dictionary<PacketTypes, Type> Types = new Dictionary<PacketTypes, Type>();
 	}
 }

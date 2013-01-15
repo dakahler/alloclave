@@ -100,33 +100,23 @@ namespace Alloclave_Plugin
 				IEnumerable<AllocationData> newFrees = oldData.Except(newData, new AllocationDataEqualityComparer());
 				oldData = newData;
 
-				// TODO: Hacky
-				// Need better location for building up a packet from C#
 				if (newAllocations != null && newAllocations.Count() > 0)
 				{
 					History.SuspendRebuilding = true;
 
-					MemoryStream memoryStream = new MemoryStream();
-					BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
-
-					binaryWriter.Write(PacketBundle.Version); // version
-					binaryWriter.Write((UInt16)newAllocations.Count());
+					List<Allocation> allocations = new List<Allocation>();
 					foreach (AllocationData allocation in newAllocations)
 					{
-						byte packetType = (byte)PacketTypeRegistrar.PacketTypes.Allocation;
-						binaryWriter.Write(packetType);
+						Allocation allocationPacket = new Allocation();
+						allocationPacket.Address = allocation.Address;
+						allocationPacket.Size = allocation.Size;
 
-						UInt64 timeStamp = (UInt64)Stopwatch.GetTimestamp();
-						binaryWriter.Write(timeStamp);
-
-						binaryWriter.Write(allocation.Address);
-						binaryWriter.Write(allocation.Size);
-						binaryWriter.Write((UInt64)4); // alignment
-						binaryWriter.Write((byte)Allocation.AllocationType.Allocation);
-						binaryWriter.Write((UInt16)0); // heap id
+						allocations.Add(allocationPacket);
 					}
 
-					Dispatcher.Invoke(new Action(() => ProcessPacket(memoryStream.GetBuffer())));
+					TargetSystemInfo targetSystemInfo = new TargetSystemInfo();
+					targetSystemInfo.Architecture = Common.Architecture._64Bit;
+					Dispatcher.Invoke(new Action(() => ProcessPacket(PacketBundle.Instance.Serialize(allocations, targetSystemInfo))));
 
 					History.SuspendRebuilding = false;
 					Dispatcher.Invoke(new Action(() => History.ForceRebuild()));
@@ -136,27 +126,18 @@ namespace Alloclave_Plugin
 				{
 					History.SuspendRebuilding = true;
 
-					MemoryStream memoryStream = new MemoryStream();
-					BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
-
-					binaryWriter.Write(PacketBundle.Version); // version
-					binaryWriter.Write((UInt16)newFrees.Count());
+					List<Free> frees = new List<Free>();
 					foreach (AllocationData free in newFrees)
 					{
-						byte packetType = (byte)PacketTypeRegistrar.PacketTypes.Free;
-						binaryWriter.Write(packetType);
+						Free freePacket = new Free();
+						freePacket.Address = free.Address;
 
-						UInt64 timeStamp = (UInt64)Stopwatch.GetTimestamp();
-						binaryWriter.Write(timeStamp);
-
-						binaryWriter.Write(free.Address);
-						//binaryWriter.Write(allocation.Size);
-						//binaryWriter.Write((UInt64)4); // alignment
-						//binaryWriter.Write((byte)Allocation.AllocationType.Allocation);
-						binaryWriter.Write((UInt16)0); // heap id
+						frees.Add(freePacket);
 					}
 
-					Dispatcher.Invoke(new Action(() => ProcessPacket(memoryStream.GetBuffer())));
+					TargetSystemInfo targetSystemInfo = new TargetSystemInfo();
+					targetSystemInfo.Architecture = Common.Architecture._64Bit;
+					Dispatcher.Invoke(new Action(() => ProcessPacket(PacketBundle.Instance.Serialize(frees, targetSystemInfo))));
 
 					History.SuspendRebuilding = false;
 					Dispatcher.Invoke(new Action(() => History.ForceRebuild()));

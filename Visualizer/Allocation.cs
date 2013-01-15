@@ -49,7 +49,27 @@ namespace Alloclave
 
 		public byte[] Serialize(TargetSystemInfo targetSystemInfo)
 		{
-			throw new NotImplementedException();
+			MemoryStream memoryStream = new MemoryStream();
+			BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
+
+			if (targetSystemInfo.Architecture == Common.Architecture._32Bit)
+			{
+				binaryWriter.Write((UInt32)Address);
+				binaryWriter.Write((UInt32)Size);
+				binaryWriter.Write((UInt32)4); // alignment
+			}
+			else if (targetSystemInfo.Architecture == Common.Architecture._64Bit)
+			{
+				binaryWriter.Write(Address);
+				binaryWriter.Write(Size);
+				binaryWriter.Write((UInt64)4); // alignment
+			}
+
+			
+			binaryWriter.Write((byte)AllocationType.Allocation);
+			binaryWriter.Write(HeapId);
+
+			return memoryStream.ToArray();
 		}
 
 		public void Deserialize(BinaryReader binaryReader, TargetSystemInfo targetSystemInfo)
