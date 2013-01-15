@@ -102,113 +102,6 @@ extern "C"
 
 namespace
 {
-	List<Alloclave_Plugin::AllocationData^>^ DisplayHeapBlocks(DWORD pid, DWORD nodeAddress);
-
-	List<Alloclave_Plugin::AllocationData^>^ DisplayHeapNodes(DWORD pid)
-	{
-		// Create debug buffer
-		PDEBUG_BUFFER db = RtlCreateQueryDebugBuffer(0, FALSE);
-
-		// Get process heap data
-		RtlQueryProcessDebugInformation( pid, PDI_HEAPS | PDI_HEAP_BLOCKS, db);
-
-
-		ULONG heapNodeCount = db->HeapInformation ? *PULONG(db->HeapInformation):0;
-		List<Alloclave_Plugin::AllocationData^>^ allocationList = nullptr;
-		if (heapNodeCount > 0)
-		{
-
-			PDEBUG_HEAP_INFORMATION heapInfo = PDEBUG_HEAP_INFORMATION(PULONG(db-> HeapInformation) + 1);
-
-			// Go through each of the heap nodes and dispaly the information
-			// heapNodeCount
-			// TODO: Multi-heap support
-			for (unsigned int i = 0; i < 1; i++)
-			{
-				//printf("\n Base Address = 0x%.8x", heapInfo[i].Base);
-				//printf("\n Block count = %d", heapInfo[i].BlockCount);
-				//printf("\n Committed Size= 0x%.8x", heapInfo[i].Committed);
-				//printf("\n Allocated Size = 0x%.8x", heapInfo[i].Allocated);
-				//printf("\n Flags = 0x%.8x", heapInfo[i].Flags);
-
-				allocationList = DisplayHeapBlocks(pid, heapInfo[i].Base);
-			}
-
-		}
-
-		// Clean up the buffer
-		RtlDestroyQueryDebugBuffer( db );
-
-		return allocationList;
-	}
-
-	BOOL GetFirstHeapBlock( PDEBUG_HEAP_INFORMATION curHeapNode, HeapBlock *hb);
-	BOOL GetNextHeapBlock( PDEBUG_HEAP_INFORMATION curHeapNode, HeapBlock *hb);
-
-	List<Alloclave_Plugin::AllocationData^>^ DisplayHeapBlocks(DWORD pid, DWORD nodeAddress)
-	{
-		List<Alloclave_Plugin::AllocationData^>^ allocationList = gcnew List<Alloclave_Plugin::AllocationData^>();
-
-		HeapBlock hb = {0,0,0,0};
-
-		// Create debug buffer
-		PDEBUG_BUFFER db = RtlCreateQueryDebugBuffer(0, FALSE);
-
-		// Get process heap data
-		LONG ret = RtlQueryProcessDebugInformation( pid, PDI_HEAPS | PDI_HEAP_BLOCKS, db);
-
-		HANDLE hCrtHeap = GetProcessHeap();
-
-		ULONG heapNodeCount = db->HeapInformation ? *PULONG(db->HeapInformation) : 0;
-
-		PDEBUG_HEAP_INFORMATION heapInfo = PDEBUG_HEAP_INFORMATION(PULONG(db->HeapInformation) + 1);
-
-		// Go through each of the heap nodes
-		for (unsigned int i = 0; i < heapNodeCount; i++)
-		{
-			if(heapInfo[i].Base == nodeAddress)
-			{
-				// Now enumerate all blocks within this heap node...
-				int c = 0;
-				memset(&hb,0,sizeof(hb));
-
-				if( GetFirstHeapBlock(&heapInfo[i] , &hb) )
-				{
-					do
-					{
-						//printf("\n Block count = %d", c+1);
-						//printf("\n Block address = 0x%.8x", hb.dwAddress);
-						//printf("\n Block Size = 0x%.8x", hb.dwSize);
-
-						if( hb.dwFlags == LF32_FREE )
-						{
-							//printf("\n Status = Free");
-						}
-						else
-						{
-							//printf("\n Status = Allocated");
-
-							Alloclave_Plugin::AllocationData^ newAllocation = gcnew Alloclave_Plugin::AllocationData();
-							newAllocation->Address = (UInt64)hb.dwAddress;
-							newAllocation->Size = (UINT64)hb.dwSize;
-
-							allocationList->Add(newAllocation);
-						}
-
-						c++;
-					}
-					while( GetNextHeapBlock( &heapInfo[i], &hb) );
-				}
-				break;
-			}
-		}
-
-		// Clean up the buffer
-		RtlDestroyQueryDebugBuffer( db );
-
-		return allocationList;
-	}
-
 	BOOL GetFirstHeapBlock( PDEBUG_HEAP_INFORMATION curHeapNode, HeapBlock *hb)
 	{
 		HeapBlockInternal* block;
@@ -296,10 +189,97 @@ namespace
 
 		return TRUE;
 	}
+
+	List<Alloclave_Plugin::AllocationData^>^ GetHeapBlocks(DWORD pid, DWORD nodeAddress)
+	{
+		List<Alloclave_Plugin::AllocationData^>^ allocationList = gcnew List<Alloclave_Plugin::AllocationData^>();
+
+		HeapBlock hb = {0,0,0,0};
+
+		// Create debug buffer
+		PDEBUG_BUFFER db = RtlCreateQueryDebugBuffer(0, FALSE);
+
+		// Get process heap data
+		LONG ret = RtlQueryProcessDebugInformation( pid, PDI_HEAPS | PDI_HEAP_BLOCKS, db);
+
+		HANDLE hCrtHeap = GetProcessHeap();
+
+		ULONG heapNodeCount = db->HeapInformation ? *PULONG(db->HeapInformation) : 0;
+
+		PDEBUG_HEAP_INFORMATION heapInfo = PDEBUG_HEAP_INFORMATION(PULONG(db->HeapInformation) + 1);
+
+		// Go through each of the heap nodes
+		for (unsigned int i = 0; i < heapNodeCount; i++)
+		{
+			if(heapInfo[i].Base == nodeAddress)
+			{
+				// Now enumerate all blocks within this heap node
+				memset(&hb,0,sizeof(hb));
+
+				if( GetFirstHeapBlock(&heapInfo[i] , &hb) )
+				{
+					do
+					{
+						if( hb.dwFlags == LF32_FREE )
+						{
+							// Do nothing for now
+						}
+						else
+						{
+							Alloclave_Plugin::AllocationData^ newAllocation = gcnew Alloclave_Plugin::AllocationData();
+							newAllocation->Address = (UInt64)hb.dwAddress;
+							newAllocation->Size = (UINT64)hb.dwSize;
+
+							allocationList->Add(newAllocation);
+						}
+					}
+					while( GetNextHeapBlock( &heapInfo[i], &hb) );
+				}
+				break;
+			}
+		}
+
+		// Clean up the buffer
+		RtlDestroyQueryDebugBuffer( db );
+
+		return allocationList;
+	}
+
+	List<Alloclave_Plugin::AllocationData^>^ GetHeapNodes(DWORD pid)
+	{
+		// Create debug buffer
+		PDEBUG_BUFFER db = RtlCreateQueryDebugBuffer(0, FALSE);
+
+		// Get process heap data
+		RtlQueryProcessDebugInformation( pid, PDI_HEAPS | PDI_HEAP_BLOCKS, db);
+
+
+		ULONG heapNodeCount = db->HeapInformation ? *PULONG(db->HeapInformation):0;
+		List<Alloclave_Plugin::AllocationData^>^ allocationList = nullptr;
+		if (heapNodeCount > 0)
+		{
+
+			PDEBUG_HEAP_INFORMATION heapInfo = PDEBUG_HEAP_INFORMATION(PULONG(db-> HeapInformation) + 1);
+
+			// Go through each of the heap nodes and dispaly the information
+			// heapNodeCount
+			// TODO: Multi-heap support
+			for (unsigned int i = 0; i < 1; i++)
+			{
+				allocationList = GetHeapBlocks(pid, heapInfo[i].Base);
+			}
+
+		}
+
+		// Clean up the buffer
+		RtlDestroyQueryDebugBuffer( db );
+
+		return allocationList;
+	}
 }
 
 List<Alloclave_Plugin::AllocationData^>^ Alloclave_Plugin::HeapWalker::GetHeapData(System::UInt64 pid)
 {
-	return DisplayHeapNodes((DWORD)pid);
+	return GetHeapNodes((DWORD)pid);
 }
 
