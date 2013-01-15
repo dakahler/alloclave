@@ -16,13 +16,15 @@ namespace Alloclave
 		[DllImport("user32.dll")]
 		static extern bool HideCaret(IntPtr hWnd);
 
+		const String WebsiteUrl = "http://www.alloclave.com/";
+
 		public AboutForm()
 		{
 			InitializeComponent();
 
 			dataGrid.Rows.Clear();
 			dataGrid.Rows.Add("Alloclave");
-			dataGrid.Rows.Add("Version 0.1");
+			dataGrid.Rows.Add("Version " + Common.Version);
 			dataGrid.Rows.Add("© Copyright 2013");
 			dataGrid.Rows.Add("Circular Shift, LLC");
 			dataGrid.Rows.Add("www.circularshift.com");
@@ -33,24 +35,24 @@ namespace Alloclave
 			dataGrid.Rows.Add("Support Ends 1/1/2010");
 
 			ToolTip tt = new ToolTip();
-			tt.SetToolTip(logoPictureBox, "Open http://www.alloclave.com/");
+			tt.SetToolTip(logoPictureBox, "Open " + WebsiteUrl);
 		}
 
 		private void purchaseButton_Click(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start("http://www.alloclave.com/purchase");
+			System.Diagnostics.Process.Start(WebsiteUrl + "purchase");
 		}
 
 		private void checkForUpdatesButton_Click(object sender, EventArgs e)
 		{
 			// TODO: There should be a more intelligent way of checking for updates
 			// than just directing the user to a webpage
-			System.Diagnostics.Process.Start("http://www.alloclave.com/update");
+			System.Diagnostics.Process.Start(WebsiteUrl + "update");
 		}
 
 		private void logoPictureBox_Click(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start("http://www.alloclave.com/");
+			System.Diagnostics.Process.Start(WebsiteUrl);
 		}
 	}
 }

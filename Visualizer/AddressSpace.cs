@@ -77,7 +77,6 @@ namespace Alloclave
 
 		public void Rebuild(History history)
 		{
-			// TODO: Should probably move this to a separate thread and render to a secondary bitmap
 			if (Parent == null)
 			{
 				return;
@@ -227,8 +226,6 @@ namespace Alloclave
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			// TODO: Still get tearing here, possibly due to no vsync
-			// May have to switch to DirectX to fix this
 			IntPtr hdc = e.Graphics.GetHdc();
 			Renderer.Blit(hdc);
 			e.Graphics.ReleaseHdc(hdc);
@@ -249,26 +246,7 @@ namespace Alloclave
 				Point mouseDelta = Point.Subtract(e.Location, new Size(LastMouseLocation));
 				LastMouseLocation = e.Location;
 
-				{
-					//Point[] points = { mouseDelta };
-
-					//Matrix InvertedTransform = Renderer.ViewMatrix.Clone();
-					//InvertedTransform.Invert();
-					//InvertedTransform.TransformVectors(points);
-
-					//Matrix tempViewMatrix = Renderer.ViewMatrix.Clone();
-					//tempViewMatrix.Translate(points[0].X, points[0].Y);
-
-					////Rectangle bitmapRectangle = new Rectangle((int)tempViewMatrix.OffsetX, (int)tempViewMatrix.OffsetY, Renderer.GetMainBitmap().Width, Renderer.GetMainBitmap().Height);
-					////bitmapRectangle.Width = (int)((float)bitmapRectangle.Width * GlobalScale);
-					////bitmapRectangle.Height = (int)((float)bitmapRectangle.Height * GlobalScale);
-					////if (bitmapRectangle.Contains(DisplayRectangle))
-					//{
-					//	Renderer.ViewMatrix = tempViewMatrix.Clone();
-					//}
-
-					Renderer.Offset = Point.Add(Renderer.Offset, new Size(mouseDelta));
-				}
+				Renderer.Offset = Point.Add(Renderer.Offset, new Size(mouseDelta));
 			}
 
 			RecalculateHoverBlock.Set();
@@ -435,7 +413,6 @@ namespace Alloclave
 
 		private void AddressSpace_SizeChanged(object sender, EventArgs e)
 		{
-			// TODO: Might not be viable to do this dynamically for large datasets
 			Rebuild(LastHistory);
 		}
 
@@ -452,14 +429,12 @@ namespace Alloclave
 			Renderer.Offset = Point.Subtract(new Point(0, 0), new Size(topLeft));
 
 			Renderer.Update();
-			Refresh();
 		}
 
 		public void AddressSpace_MouseLeave(object sender, EventArgs e)
 		{
 			Renderer.CurrentMouseLocation = new Point(-1, -1);
 			Renderer.Update();
-			Refresh();
 		}
 	}
 
