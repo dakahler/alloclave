@@ -47,7 +47,6 @@ void Win32Transport::Flush()
 
 void Win32Transport::FindVisualizer()
 {
-	// TODO: Correct names
 	if (VisualizerHandle == NULL)
 	{
 		VisualizerHandle = FindWindow(NULL, ALLOCLAVE_WIN32_GUID);

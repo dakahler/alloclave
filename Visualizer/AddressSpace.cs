@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using OpenTK;
 using System.Threading;
+using Alloclave.Common;
 
 namespace Alloclave
 {
@@ -63,16 +64,6 @@ namespace Alloclave
 		{
 			LastHistory = sender as History;
 			Rebuild(LastHistory);
-		}
-
-		public Bitmap GetMainBitmap()
-		{
-			return Renderer.GetMainBitmap();
-		}
-
-		static int CompareKeyValuePair(KeyValuePair<TimeStamp, IPacket> a, KeyValuePair<TimeStamp, IPacket> b)
-		{
-			return a.Key.CompareTo(b.Key);
 		}
 
 		public void Rebuild(History history)
@@ -181,11 +172,7 @@ namespace Alloclave
 					Renderer.WorldSize = new Size(this.Width, finalHeight);
 					Renderer.Size = this.Size;
 					Renderer.Blocks = _VisualMemoryBlocks;
-
-					Renderer.Update();
 				}
-
-				this.Invoke((MethodInvoker)( () => Refresh()));
 
 				if (Rebuilt != null)
 				{
@@ -208,11 +195,6 @@ namespace Alloclave
 
 			this.MouseWheel += AddressSpace_MouseWheel;
 
-			// Set the control style to double buffer.
-			this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
-			this.SetStyle(ControlStyles.SupportsTransparentBackColor, false);
-			this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-
 			ColorPickerDialog.ColorChanged += ColorPickerDialog_ColorChanged;
 
 			Task.Factory.StartNew(() => HoverTask());
@@ -226,9 +208,7 @@ namespace Alloclave
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			IntPtr hdc = e.Graphics.GetHdc();
-			Renderer.Blit(hdc);
-			e.Graphics.ReleaseHdc(hdc);
+			return;
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs e)
@@ -300,16 +280,7 @@ namespace Alloclave
 			InvertedTransform.TransformPoints(pointBefore);
 
 			int amountToMove = e.Delta / WheelDelta;
-
-			// TODO: Clamp method?
-			if (amountToMove < -4)
-			{
-				amountToMove = -4;
-			}
-			else if (amountToMove > 4)
-			{
-				amountToMove = 4;
-			}
+			amountToMove = amountToMove.Clamp(-4, 4);
 
 			float finalScale = 1.0f + (float)amountToMove / 5.0f;
 			Renderer.Scale *= finalScale;
@@ -342,9 +313,6 @@ namespace Alloclave
 			currentViewMatrix.Translate(delta.X, delta.Y);
 
 			Renderer.Offset = new Point((int)currentViewMatrix.OffsetX, (int)currentViewMatrix.OffsetY);
-
-			Renderer.Update();
-			Refresh();
 		}
 
 		void SelectAt()
@@ -352,6 +320,7 @@ namespace Alloclave
 			RecalculateSelectedBlock.Set();
 		}
 
+		// TODO: HoverTask and SelectTask are very similar. Find a way to consolidate them.
 		void HoverTask()
 		{
 			while (true)
@@ -371,9 +340,6 @@ namespace Alloclave
 						Renderer.HoverBlock = _VisualMemoryBlocks.Values[index];
 					}
 				}
-
-				Renderer.Update();
-				this.Invoke((MethodInvoker)(() => Refresh()));
 			}
 		}
 
@@ -399,16 +365,12 @@ namespace Alloclave
 						this.Invoke((MethodInvoker)(() => SelectionChanged(this, e)));
 					}
 				}
-
-				Renderer.Update();
-				this.Invoke((MethodInvoker)(() => Refresh()));
 			}
 		}
 
 		void HoverAt(Point location)
 		{
-			//printCtrl.Text = "TESSSSST";
-			//Tooltip.Show("", this);
+			
 		}
 
 		private void AddressSpace_SizeChanged(object sender, EventArgs e)
@@ -424,17 +386,13 @@ namespace Alloclave
 		public void CenterAt(Point location)
 		{
 			Point topLeft = new Point(location.X - (Width / 2), location.Y - (Height / 2));
-			//Renderer.Scale = GlobalScale; // ?
 			Renderer.Scale = 1.0f;
 			Renderer.Offset = Point.Subtract(new Point(0, 0), new Size(topLeft));
-
-			Renderer.Update();
 		}
 
 		public void AddressSpace_MouseLeave(object sender, EventArgs e)
 		{
 			Renderer.CurrentMouseLocation = new Point(-1, -1);
-			Renderer.Update();
 		}
 	}
 

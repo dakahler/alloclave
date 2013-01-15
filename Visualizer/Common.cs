@@ -22,6 +22,7 @@ namespace Alloclave
 			BigEndian,
 		}
 
+		#region Endian swap helpers
 		public static void EndianSwap(ref UInt16 value)
 		{
 			value = (UInt16)((value & 0xFFU) << 8 | (value & 0xFF00U) >> 8);
@@ -72,6 +73,24 @@ namespace Alloclave
 			byte[] bytes = BitConverter.GetBytes(value);
 			bytes.Reverse();
 			value = BitConverter.ToDouble(bytes, 0);
+		}
+		#endregion
+
+
+		public static T Clamp<T>(this T val, T min, T max) where T : IComparable<T>
+		{
+			if (val.CompareTo(min) < 0)
+			{
+				return min;
+			}
+			else if (val.CompareTo(max) > 0)
+			{
+				return max;
+			}
+			else
+			{
+				return val;
+			}
 		}
 	}
 }
