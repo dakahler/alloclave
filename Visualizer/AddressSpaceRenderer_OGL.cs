@@ -65,6 +65,13 @@ namespace Alloclave
 			glControl.MouseMove += new MouseEventHandler(Parent.AddressSpace_MouseMove);
 			glControl.MouseWheel += new MouseEventHandler(Parent.AddressSpace_MouseWheel);
 			glControl.MouseLeave += new EventHandler(Parent.AddressSpace_MouseLeave);
+
+			parent.Rebuilt += parent_Rebuilt;
+		}
+
+		void parent_Rebuilt(object sender, EventArgs e)
+		{
+			RebuildVertices();
 		}
 
 		private void ChangeBlockColor(KeyValuePair<VisualMemoryBlock, BlockMetadata> block, Color color, float blend)
@@ -148,7 +155,8 @@ namespace Alloclave
 
 		~AddressSpaceRenderer_OGL()
 		{
-			GL.DeleteBuffers(1, ref VBOHandle);
+			// TODO
+			//GL.DeleteBuffers(1, ref VBOHandle);
 		}
 
 		void glControl_Paint(object sender, PaintEventArgs e)
@@ -158,7 +166,7 @@ namespace Alloclave
 
 		protected override void Render()
 		{
-			if (!GlControlLoaded || _Blocks == null)
+			if (!GlControlLoaded || MemoryBlockManager.Instance.Count == 0)
 			{
 				return;
 			}
@@ -253,38 +261,30 @@ namespace Alloclave
 			{
 				NewBlocks.Clear();
 
-				foreach (var block in _Blocks)
+				// TODO: Implement IEnumerable in MemoryBlockManager
+				foreach (var block in MemoryBlockManager.Instance)
 				{
 					uint startVertex = vboCount;
-					foreach (Triangle triangle in block.Value.Triangles)
+					foreach (Triangle triangle in block.Triangles)
 					{
 						foreach (Point vertex in triangle.Vertices)
 						{
-							VBO[vboCount].R = block.Value._Color.R;
-							VBO[vboCount].G = block.Value._Color.G;
-							VBO[vboCount].B = block.Value._Color.B;
-							VBO[vboCount].A = block.Value._Color.A;
+							VBO[vboCount].R = block._Color.R;
+							VBO[vboCount].G = block._Color.G;
+							VBO[vboCount].B = block._Color.B;
+							VBO[vboCount].A = block._Color.A;
 							VBO[vboCount].Position = new Vector3(vertex.X, vertex.Y, 0);
 							vboCount++;
 						}
 					}
 					uint endVertex = vboCount - 1;
 
-					if (block.Value.IsNew)
+					if (block.IsNew)
 					{
-						block.Value.IsNew = false;
-						NewBlocks.Add(block.Value, new BlockMetadata(startVertex, endVertex));
+						block.IsNew = false;
+						NewBlocks.Add(block, new BlockMetadata(startVertex, endVertex));
 					}
 				}
-			}
-		}
-
-		public override SortedList<UInt64, VisualMemoryBlock> Blocks
-		{
-			set
-			{
-				base.Blocks = value;
-				RebuildVertices();
 			}
 		}
 
@@ -344,26 +344,6 @@ namespace Alloclave
 				base.Scale = value;
 				glControl.Invalidate();
 			}
-		}
-
-		public override void Update()
-		{
-			
-		}
-
-		protected override void Redraw()
-		{
-			
-		}
-
-		public override void Blit(IntPtr deviceContext)
-		{
-			
-		}
-
-		public override Bitmap GetMainBitmap()
-		{
-			return null;
 		}
 	}
 }

@@ -220,6 +220,7 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="MemoryBlockManager.cs" />
     <Compile Include="MessagesForm.cs">
       <SubType>Form</SubType>
     </Compile>

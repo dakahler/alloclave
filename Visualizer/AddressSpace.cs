@@ -12,7 +12,6 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using OpenTK;
 using System.Threading;
-using Alloclave.Common;
 
 namespace Alloclave
 {
@@ -33,16 +32,6 @@ namespace Alloclave
 
 		// TODO: Too inefficient?
 		History LastHistory = new History();
-
-		// TODO: Should this be somewhere else?
-		static SortedList<UInt64, VisualMemoryBlock> _VisualMemoryBlocks = new SortedList<UInt64, VisualMemoryBlock>();
-		public static SortedList<UInt64, VisualMemoryBlock> VisualMemoryBlocks
-		{
-			get
-			{
-				return _VisualMemoryBlocks;
-			}
-		}
 
 		RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
 
@@ -119,13 +108,11 @@ namespace Alloclave
 								if (CombinedList.ContainsKey(allocation.Address))
 								{
 									CombinedList.Remove(allocation.Address);
-									_VisualMemoryBlocks.Remove(allocation.Address);
+									MemoryBlockManager.Instance.Remove(allocation.Address);
 								}
 
 								CombinedList.Add(allocation.Address, pair.Value);
-
-								VisualMemoryBlock block = new VisualMemoryBlock(allocation, AllocationMin, AddressWidth, Width);
-								_VisualMemoryBlocks.Add(allocation.Address, block);
+								MemoryBlockManager.Instance.Add(allocation, AllocationMin, AddressWidth, Width);
 							}
 							catch (ArgumentException)
 							{
@@ -151,7 +138,7 @@ namespace Alloclave
 								//throw new InvalidConstraintException();
 							}
 
-							_VisualMemoryBlocks.Remove(free.Address);
+							MemoryBlockManager.Instance.Remove(free.Address);
 						}
 					}
 
@@ -160,7 +147,7 @@ namespace Alloclave
 						return;
 					}
 
-					if (!_VisualMemoryBlocks.ContainsValue(Renderer.SelectedBlock))
+					if (!MemoryBlockManager.Instance.Contains(Renderer.SelectedBlock))
 					{
 						Renderer.SelectedBlock = null;
 					}
@@ -171,13 +158,12 @@ namespace Alloclave
 					finalHeight = Math.Min(finalHeight, 10000);
 					Renderer.WorldSize = new Size(this.Width, finalHeight);
 					Renderer.Size = this.Size;
-					Renderer.Blocks = _VisualMemoryBlocks;
-				}
 
-				if (Rebuilt != null)
-				{
-					EventArgs e = new EventArgs();
-					Rebuilt.Invoke(this, e);
+					if (Rebuilt != null)
+					{
+						EventArgs e = new EventArgs();
+						Rebuilt.Invoke(this, e);
+					}
 				}
 			});
 
@@ -328,17 +314,9 @@ namespace Alloclave
 				RecalculateHoverBlock.WaitOne();
 
 				Renderer.HoverBlock = null;
-				VisualMemoryBlock tempBlock = new VisualMemoryBlock();
-				Point localMouseLocation = Renderer.GetLocalMouseLocation();
-				tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1, 1)));
-
 				lock (RebuildDataLock)
 				{
-					int index = _VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
-					if (index >= 0)
-					{
-						Renderer.HoverBlock = _VisualMemoryBlocks.Values[index];
-					}
+					Renderer.HoverBlock = MemoryBlockManager.Instance.Find(Renderer.GetLocalMouseLocation());
 				}
 			}
 		}
@@ -350,18 +328,13 @@ namespace Alloclave
 				RecalculateSelectedBlock.WaitOne();
 
 				Renderer.SelectedBlock = null;
-				VisualMemoryBlock tempBlock = new VisualMemoryBlock();
-				Point localMouseLocation = Renderer.GetLocalMouseLocation();
-				tempBlock.GraphicsPath.AddLine(localMouseLocation, Point.Add(localMouseLocation, new Size(1, 1)));
-
 				lock (RebuildDataLock)
 				{
-					int index = _VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
-					if (index >= 0)
+					Renderer.SelectedBlock = MemoryBlockManager.Instance.Find(Renderer.GetLocalMouseLocation());
+					if (Renderer.SelectedBlock != null)
 					{
-						Renderer.SelectedBlock = _VisualMemoryBlocks.Values[index];
 						SelectionChangedEventArgs e = new SelectionChangedEventArgs();
-						e.SelectedBlock = _VisualMemoryBlocks.Values[index];
+						e.SelectedBlock = Renderer.SelectedBlock;
 						this.Invoke((MethodInvoker)(() => SelectionChanged(this, e)));
 					}
 				}

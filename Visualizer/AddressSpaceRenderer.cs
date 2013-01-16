@@ -10,15 +10,6 @@ namespace Alloclave
 {
 	abstract class AddressSpaceRenderer
 	{
-		protected SortedList<UInt64, VisualMemoryBlock> _Blocks;
-		public virtual SortedList<UInt64, VisualMemoryBlock> Blocks
-		{
-			set
-			{
-				_Blocks = value;
-			}
-		}
-
 		protected VisualMemoryBlock _SelectedBlock;
 		public virtual VisualMemoryBlock SelectedBlock
 		{
@@ -109,15 +100,7 @@ namespace Alloclave
 			return finalPoint;
 		}
 
-		public abstract Bitmap GetMainBitmap();
-
 		// TODO: Better name?
 		protected abstract void Render();
-
-		public abstract void Update();
-
-		protected abstract void Redraw();
-
-		public abstract void Blit(IntPtr deviceContext);
 	}
 }

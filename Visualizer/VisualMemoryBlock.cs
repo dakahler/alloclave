@@ -10,37 +10,6 @@ using System.Threading.Tasks;
 
 namespace Alloclave
 {
-	public class VisualMemoryBlockComparer : IComparer<VisualMemoryBlock>
-	{
-		public int Compare(VisualMemoryBlock a, VisualMemoryBlock b)
-		{
-			if (a.GraphicsPath.IsVisible(b.GraphicsPath.PathPoints[0]))
-			{
-				return 0;
-			}
-
-			if (a.GraphicsPath.PathPoints[0].Y + 1 < b.GraphicsPath.PathPoints[0].Y)
-			{
-				return -1;
-			}
-			else if (a.GraphicsPath.PathPoints[0].Y > b.GraphicsPath.PathPoints[0].Y)
-			{
-				return 1;
-			}
-			else
-			{
-				if (a.GraphicsPath.PathPoints[0].X < b.GraphicsPath.PathPoints[0].X)
-				{
-					return -1;
-				}
-				else
-				{
-					return 1;
-				}
-			}
-		}
-	}
-
 	public class Triangle
 	{
 		public Point[] Vertices = new Point[3];
@@ -76,6 +45,8 @@ namespace Alloclave
 
 		public bool IsNew = true;
 
+		public int MaxPixelWidth = 0;
+
 		public VisualMemoryBlock()
 		{
 
@@ -89,6 +60,8 @@ namespace Alloclave
 			}
 
 			Allocation = allocation;
+
+			MaxPixelWidth = width;
 
 			Create(allocation, startAddress, addressWidth, width);
 		}

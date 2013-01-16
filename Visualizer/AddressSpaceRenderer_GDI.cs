@@ -92,7 +92,7 @@ namespace Alloclave
 
 		protected override void Render()
 		{
-			if (_Blocks == null)
+			if (MemoryBlockManager.Instance.Count == 0)
 			{
 				return;
 			}
@@ -121,10 +121,10 @@ namespace Alloclave
 			MainGraphics.SmoothingMode = SmoothingMode.HighSpeed;
 			MainGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
 
-			foreach (var block in _Blocks)
+			foreach (var block in MemoryBlockManager.Instance)
 			{
-				SolidBrush brush = new SolidBrush(block.Value._Color);
-				MainGraphics.FillPath(brush, block.Value.GraphicsPath);
+				SolidBrush brush = new SolidBrush(block._Color);
+				MainGraphics.FillPath(brush, block.GraphicsPath);
 			}
 
 			if (OverlayBitmap != null)
@@ -189,14 +189,14 @@ namespace Alloclave
 			//Redraw();
 		}
 
-		public override SortedList<UInt64, VisualMemoryBlock> Blocks
-		{
-			set
-			{
-				base.Blocks = value;
-				TaskList[(int)Tasks.Render] = true;
-			}
-		}
+		//public override SortedList<UInt64, VisualMemoryBlock> Blocks
+		//{
+		//	set
+		//	{
+		//		base.Blocks = value;
+		//		TaskList[(int)Tasks.Render] = true;
+		//	}
+		//}
 
 		public override VisualMemoryBlock SelectedBlock
 		{
@@ -243,48 +243,48 @@ namespace Alloclave
 			}
 		}
 
-		public override void Update()
-		{
-			if (TaskList[(int)Tasks.RecreateBuffers])
-			{
-				RecreateBuffers();
-			}
-			if (TaskList[(int)Tasks.Render])
-			{
-				Render();
-			}
-			if (TaskList[(int)Tasks.UpdateOverlay])
-			{
-				UpdateOverlay();
-			}
-			if (TaskList[(int)Tasks.Redraw])
-			{
-				Redraw();
-			}
-		}
+		//public override void Update()
+		//{
+		//	if (TaskList[(int)Tasks.RecreateBuffers])
+		//	{
+		//		RecreateBuffers();
+		//	}
+		//	if (TaskList[(int)Tasks.Render])
+		//	{
+		//		Render();
+		//	}
+		//	if (TaskList[(int)Tasks.UpdateOverlay])
+		//	{
+		//		UpdateOverlay();
+		//	}
+		//	if (TaskList[(int)Tasks.Redraw])
+		//	{
+		//		Redraw();
+		//	}
+		//}
 
-		protected override void Redraw()
-		{
-			//TaskList[(int)Tasks.Redraw] = false;
+		//protected override void Redraw()
+		//{
+		//	//TaskList[(int)Tasks.Redraw] = false;
 
-			//DrawingGraphics.Clear(Color.White);
-			//DrawingGraphics.SmoothingMode = SmoothingMode.HighSpeed;
-			//DrawingGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-			//DrawingGraphics.ResetTransform();
-			//DrawingGraphics.MultiplyTransform(_ViewMatrix);
+		//	//DrawingGraphics.Clear(Color.White);
+		//	//DrawingGraphics.SmoothingMode = SmoothingMode.HighSpeed;
+		//	//DrawingGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+		//	//DrawingGraphics.ResetTransform();
+		//	//DrawingGraphics.MultiplyTransform(_ViewMatrix);
 
-			//DrawingGraphics.DrawImage(MainBitmap, 0, 0);
-			//DrawingGraphics.DrawImage(OverlayBitmap, 0, 0);
-		}
+		//	//DrawingGraphics.DrawImage(MainBitmap, 0, 0);
+		//	//DrawingGraphics.DrawImage(OverlayBitmap, 0, 0);
+		//}
 
-		public override void Blit(IntPtr deviceContext)
-		{
-			BackbufferGraphics.Render(deviceContext);
-		}
+		//public override void Blit(IntPtr deviceContext)
+		//{
+		//	BackbufferGraphics.Render(deviceContext);
+		//}
 
-		public override Bitmap GetMainBitmap()
-		{
-			return MainBitmap;
-		}
+		//public override Bitmap GetMainBitmap()
+		//{
+		//	return MainBitmap;
+		//}
 	}
 }

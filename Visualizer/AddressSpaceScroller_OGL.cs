@@ -103,17 +103,17 @@ namespace Alloclave
 
 		protected override void Render(PaintEventArgs e)
 		{
-			if (AddressSpace.VisualMemoryBlocks.Count == 0)
+			if (MemoryBlockManager.Instance.Count == 0)
 			{
 				return;
 			}
 
 			glControl.MakeCurrent();
 
-			RectangleF lowerBounds = AddressSpace.VisualMemoryBlocks.Values[AddressSpace.VisualMemoryBlocks.Count - 1].GraphicsPath.GetBounds();
+			Rectangle bounds = MemoryBlockManager.Instance.Bounds;
 
 			UInt64 maxWidth = (UInt64)ParentWidth;
-			UInt64 maxHeight = (UInt64)lowerBounds.Bottom;
+			UInt64 maxHeight = (UInt64)bounds.Bottom;
 
 			float scaleX = (float)Width / (float)maxWidth;
 			float scaleY = (float)Height / (float)maxHeight;

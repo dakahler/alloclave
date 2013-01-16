@@ -82,10 +82,11 @@ namespace Alloclave
 		{
 			if (FocusChanged != null)
 			{
-				RectangleF lowerBounds = AddressSpace.VisualMemoryBlocks.Values[AddressSpace.VisualMemoryBlocks.Count - 1].GraphicsPath.GetBounds();
+				// TODO: Implement GetBounds in MemoryBlockManager
+				Rectangle bounds = MemoryBlockManager.Instance.Bounds;
 
 				UInt64 maxWidth = (UInt64)ParentWidth;
-				UInt64 maxHeight = (UInt64)lowerBounds.Bottom;
+				UInt64 maxHeight = (UInt64)bounds.Bottom;
 
 				float scaleX = (float)maxWidth / (float)Width;
 				float scaleY = (float)maxHeight / (float)Height;
