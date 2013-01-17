@@ -48,7 +48,7 @@ namespace Alloclave
 			public const float AliveSeconds = 3.0f;
 		}
 
-		private struct VertexC4ubV3f
+		private struct VertexData
 		{
 			public byte R, G, B, A;
 			public Vector3 Position;
@@ -57,15 +57,15 @@ namespace Alloclave
 		}
 
 		private const int MaxVertices = 1000000;
-		private VertexC4ubV3f[] VBO = new VertexC4ubV3f[MaxVertices];
-		private uint vboCount;
-		private uint VBOHandle;
+		private VertexData[] VBO = new VertexData[MaxVertices];
+		private uint NumVertices;
+		private uint VboHandle;
 
 		Dictionary<VisualMemoryBlock, BlockMetadata> NewBlocks = new Dictionary<VisualMemoryBlock, BlockMetadata>();
 
 		private RenderManager_OGL()
 		{
-			GL.GenBuffers(1, out VBOHandle);
+			GL.GenBuffers(1, out VboHandle);
 
 			System.Timers.Timer timer = new System.Timers.Timer(FrameInterval);
 			timer.Elapsed += TimerElapsed;
@@ -75,7 +75,7 @@ namespace Alloclave
 		~RenderManager_OGL()
 		{
 			// TODO
-			//GL.DeleteBuffers(1, ref VBOHandle);
+			//GL.DeleteBuffers(1, ref VboHandle);
 		}
 
 		private void TimerElapsed(object sender, EventArgs e)
@@ -94,9 +94,9 @@ namespace Alloclave
 		/// </summary>
 		public void Bind()
 		{
-			GL.BindBuffer(BufferTarget.ArrayBuffer, VBOHandle);
-			GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4ubV3f.SizeInBytes, (IntPtr)0);
-			GL.VertexPointer(3, VertexPointerType.Float, VertexC4ubV3f.SizeInBytes, (IntPtr)(4 * sizeof(byte)));
+			GL.BindBuffer(BufferTarget.ArrayBuffer, VboHandle);
+			GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexData.SizeInBytes, (IntPtr)0);
+			GL.VertexPointer(3, VertexPointerType.Float, VertexData.SizeInBytes, (IntPtr)(4 * sizeof(byte)));
 		}
 
 		public void Update()
@@ -153,13 +153,13 @@ namespace Alloclave
 
 				// Tell OpenGL to discard old VBO when done drawing it and reserve memory _now_ for a new buffer.
 				// without this, GL would wait until draw operations on old VBO are complete before writing to it
-				GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexC4ubV3f.SizeInBytes * MaxVertices), IntPtr.Zero, BufferUsageHint.DynamicDraw);
+				GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * MaxVertices), IntPtr.Zero, BufferUsageHint.DynamicDraw);
 
 				// Fill newly allocated buffer
-				GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexC4ubV3f.SizeInBytes * MaxVertices), VBO, BufferUsageHint.DynamicDraw);
+				GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * MaxVertices), VBO, BufferUsageHint.DynamicDraw);
 
 				// Draw everything
-				GL.DrawArrays(BeginMode.Triangles, 0, (int)vboCount);
+				GL.DrawArrays(BeginMode.Triangles, 0, (int)NumVertices);
 
 				// Post-render callback
 				e.IsPreRender = false;
@@ -170,7 +170,7 @@ namespace Alloclave
 		public void Rebuild()
 		{
 			// TODO: Vertex incremental rebuilding
-			vboCount = 0;
+			NumVertices = 0;
 			List<Vector3> vertexList = new List<Vector3>();
 
 			lock (NewBlocks)
@@ -179,20 +179,25 @@ namespace Alloclave
 
 				foreach (var block in MemoryBlockManager.Instance)
 				{
-					uint startVertex = vboCount;
+					uint startVertex = NumVertices;
 					foreach (Triangle triangle in block.Triangles)
 					{
 						foreach (Vector vertex in triangle.Vertices)
 						{
-							VBO[vboCount].R = block._Color.R;
-							VBO[vboCount].G = block._Color.G;
-							VBO[vboCount].B = block._Color.B;
-							VBO[vboCount].A = block._Color.A;
-							VBO[vboCount].Position = new Vector3((float)vertex.X, (float)vertex.Y, 0);
-							vboCount++;
+							if (NumVertices >= VBO.Length)
+							{
+								Array.Resize(ref VBO, VBO.Length * 2);
+							}
+
+							VBO[NumVertices].R = block._Color.R;
+							VBO[NumVertices].G = block._Color.G;
+							VBO[NumVertices].B = block._Color.B;
+							VBO[NumVertices].A = block._Color.A;
+							VBO[NumVertices].Position = new Vector3((float)vertex.X, (float)vertex.Y, 0);
+							NumVertices++;
 						}
 					}
-					uint endVertex = vboCount - 1;
+					uint endVertex = NumVertices - 1;
 
 					if (block.IsNew)
 					{
