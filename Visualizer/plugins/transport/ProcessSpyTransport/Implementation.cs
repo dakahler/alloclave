@@ -96,51 +96,54 @@ namespace Alloclave_Plugin
 			while (true)
 			{
 				List<AllocationData> newData = heapWalker.GetHeapData((UInt64)pid);
-				IEnumerable<AllocationData> newAllocations = newData.Except(oldData, new AllocationDataEqualityComparer());
-				IEnumerable<AllocationData> newFrees = oldData.Except(newData, new AllocationDataEqualityComparer());
-				oldData = newData;
-
-				if (newAllocations != null && newAllocations.Count() > 0)
+				if (newData != null)
 				{
-					History.SuspendRebuilding = true;
+					IEnumerable<AllocationData> newAllocations = newData.Except(oldData, new AllocationDataEqualityComparer());
+					IEnumerable<AllocationData> newFrees = oldData.Except(newData, new AllocationDataEqualityComparer());
+					oldData = newData;
 
-					List<Allocation> allocations = new List<Allocation>();
-					foreach (AllocationData allocation in newAllocations)
+					if (newAllocations != null && newAllocations.Count() > 0)
 					{
-						Allocation allocationPacket = new Allocation();
-						allocationPacket.Address = allocation.Address;
-						allocationPacket.Size = allocation.Size;
+						History.SuspendRebuilding = true;
 
-						allocations.Add(allocationPacket);
+						List<Allocation> allocations = new List<Allocation>();
+						foreach (AllocationData allocation in newAllocations)
+						{
+							Allocation allocationPacket = new Allocation();
+							allocationPacket.Address = allocation.Address;
+							allocationPacket.Size = allocation.Size;
+
+							allocations.Add(allocationPacket);
+						}
+
+						TargetSystemInfo targetSystemInfo = new TargetSystemInfo();
+						targetSystemInfo.Architecture = Common.Architecture._64Bit;
+						Dispatcher.Invoke(new Action(() => ProcessPacket(PacketBundle.Instance.Serialize(allocations, targetSystemInfo))));
+
+						History.SuspendRebuilding = false;
+						Dispatcher.Invoke(new Action(() => History.ForceRebuild()));
 					}
 
-					TargetSystemInfo targetSystemInfo = new TargetSystemInfo();
-					targetSystemInfo.Architecture = Common.Architecture._64Bit;
-					Dispatcher.Invoke(new Action(() => ProcessPacket(PacketBundle.Instance.Serialize(allocations, targetSystemInfo))));
-
-					History.SuspendRebuilding = false;
-					Dispatcher.Invoke(new Action(() => History.ForceRebuild()));
-				}
-
-				if (newFrees != null && newFrees.Count() > 0)
-				{
-					History.SuspendRebuilding = true;
-
-					List<Free> frees = new List<Free>();
-					foreach (AllocationData free in newFrees)
+					if (newFrees != null && newFrees.Count() > 0)
 					{
-						Free freePacket = new Free();
-						freePacket.Address = free.Address;
+						History.SuspendRebuilding = true;
 
-						frees.Add(freePacket);
+						List<Free> frees = new List<Free>();
+						foreach (AllocationData free in newFrees)
+						{
+							Free freePacket = new Free();
+							freePacket.Address = free.Address;
+
+							frees.Add(freePacket);
+						}
+
+						TargetSystemInfo targetSystemInfo = new TargetSystemInfo();
+						targetSystemInfo.Architecture = Common.Architecture._64Bit;
+						Dispatcher.Invoke(new Action(() => ProcessPacket(PacketBundle.Instance.Serialize(frees, targetSystemInfo))));
+
+						History.SuspendRebuilding = false;
+						Dispatcher.Invoke(new Action(() => History.ForceRebuild()));
 					}
-
-					TargetSystemInfo targetSystemInfo = new TargetSystemInfo();
-					targetSystemInfo.Architecture = Common.Architecture._64Bit;
-					Dispatcher.Invoke(new Action(() => ProcessPacket(PacketBundle.Instance.Serialize(frees, targetSystemInfo))));
-
-					History.SuspendRebuilding = false;
-					Dispatcher.Invoke(new Action(() => History.ForceRebuild()));
 				}
 
 				Thread.Sleep(1000);
