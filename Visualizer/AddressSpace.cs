@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using OpenTK;
 using System.Threading;
+using System.Windows;
 
 namespace Alloclave
 {
@@ -19,9 +20,9 @@ namespace Alloclave
 	{
 		bool IsLeftMouseDown;
 		bool IsMiddleMouseDown;
-		Point LastMouseLocation;
-		Point MouseDownLocation;
-		Point CurrentMouseLocation;
+		Vector LastMouseLocation;
+		Vector MouseDownLocation;
+		Vector CurrentMouseLocation;
 		const int WheelDelta = 120;
 
 		// TODO: This should be exposed in the UI
@@ -154,11 +155,6 @@ namespace Alloclave
 
 					Renderer.HoverBlock = null;
 
-					int finalHeight = (int)numRows * 2;
-					finalHeight = Math.Min(finalHeight, 10000);
-					Renderer.WorldSize = new Size(this.Width, finalHeight);
-					Renderer.Size = this.Size;
-
 					if (Rebuilt != null)
 					{
 						EventArgs e = new EventArgs();
@@ -204,15 +200,15 @@ namespace Alloclave
 
 		public void AddressSpace_MouseMove(object sender, MouseEventArgs e)
 		{
-			Renderer.CurrentMouseLocation = e.Location;
-			CurrentMouseLocation = e.Location;
+			Renderer.CurrentMouseLocation = e.Location.ToVector();
+			CurrentMouseLocation = e.Location.ToVector();
 
 			if (IsLeftMouseDown || IsMiddleMouseDown)
 			{
-				Point mouseDelta = Point.Subtract(e.Location, new Size(LastMouseLocation));
-				LastMouseLocation = e.Location;
+				Vector mouseDelta = e.Location.ToVector() - LastMouseLocation;
+				LastMouseLocation = e.Location.ToVector();
 
-				Renderer.Offset = Point.Add(Renderer.Offset, new Size(mouseDelta));
+				Renderer.Offset = Renderer.Offset + mouseDelta;
 			}
 
 			RecalculateHoverBlock.Set();
@@ -223,14 +219,14 @@ namespace Alloclave
 			if (e.Button == MouseButtons.Left)
 			{
 				IsLeftMouseDown = true;
-				LastMouseLocation = e.Location;
-				MouseDownLocation = e.Location;
+				LastMouseLocation = e.Location.ToVector();
+				MouseDownLocation = e.Location.ToVector();
 			}
 			else if (e.Button == MouseButtons.Middle)
 			{
 				IsMiddleMouseDown = true;
-				LastMouseLocation = e.Location;
-				MouseDownLocation = e.Location;
+				LastMouseLocation = e.Location.ToVector();
+				MouseDownLocation = e.Location.ToVector();
 			}
 		}
 
@@ -239,7 +235,7 @@ namespace Alloclave
 			if (e.Button == MouseButtons.Left)
 			{
 				IsLeftMouseDown = false;
-				if (MouseDownLocation == e.Location)
+				if (MouseDownLocation == e.Location.ToVector())
 				{
 					SelectAt();
 				}
@@ -247,7 +243,7 @@ namespace Alloclave
 			else if (e.Button == MouseButtons.Middle)
 			{
 				IsMiddleMouseDown = false;
-				if (MouseDownLocation == e.Location)
+				if (MouseDownLocation == e.Location.ToVector())
 				{
 					SelectAt();
 				}
@@ -257,13 +253,13 @@ namespace Alloclave
 		public void AddressSpace_MouseWheel(object sender, MouseEventArgs e)
 		{
 			Matrix currentViewMatrix = new Matrix();
-			currentViewMatrix.Translate(Renderer.Offset.X, Renderer.Offset.Y);
+			currentViewMatrix.Translate((float)Renderer.Offset.X, (float)Renderer.Offset.Y);
 			currentViewMatrix.Scale(Renderer.Scale, Renderer.Scale);
 
-			Point[] pointBefore = { CurrentMouseLocation };
+			Vector pointBefore = CurrentMouseLocation;
 			Matrix InvertedTransform = currentViewMatrix.Clone();
 			InvertedTransform.Invert();
-			InvertedTransform.TransformPoints(pointBefore);
+			InvertedTransform.TransformVector(pointBefore);
 
 			int amountToMove = e.Delta / WheelDelta;
 			amountToMove = amountToMove.Clamp(-4, 4);
@@ -289,16 +285,16 @@ namespace Alloclave
 				currentViewMatrix.Scale(correctionFactor, correctionFactor);
 			}
 
-			Point[] pointAfter = { CurrentMouseLocation };
+			Vector pointAfter = CurrentMouseLocation;
 			InvertedTransform = currentViewMatrix.Clone();
 			InvertedTransform.Invert();
-			InvertedTransform.TransformPoints(pointAfter);
+			InvertedTransform.TransformVector(pointAfter);
 
-			Point delta = Point.Subtract(pointAfter[0], new Size(pointBefore[0]));
+			Vector delta = pointAfter - pointBefore;
 
-			currentViewMatrix.Translate(delta.X, delta.Y);
+			currentViewMatrix.Translate((float)delta.X, (float)delta.Y);
 
-			Renderer.Offset = new Point((int)currentViewMatrix.OffsetX, (int)currentViewMatrix.OffsetY);
+			Renderer.Offset = new Vector(currentViewMatrix.OffsetX, currentViewMatrix.OffsetY);
 		}
 
 		void SelectAt()
@@ -341,7 +337,7 @@ namespace Alloclave
 			}
 		}
 
-		void HoverAt(Point location)
+		void HoverAt(Vector location)
 		{
 			
 		}
@@ -356,16 +352,17 @@ namespace Alloclave
 			HoverAt(CurrentMouseLocation);
 		}
 
-		public void CenterAt(Point location)
+		public void CenterAt(Vector location)
 		{
-			Point topLeft = new Point(location.X - (Width / 2), location.Y - (Height / 2));
+			Vector newOffset = location - new Vector(Width / 2, Height / 2);
+			newOffset.Negate();
+			Renderer.Offset = newOffset;
 			Renderer.Scale = 1.0f;
-			Renderer.Offset = Point.Subtract(new Point(0, 0), new Size(topLeft));
 		}
 
 		public void AddressSpace_MouseLeave(object sender, EventArgs e)
 		{
-			Renderer.CurrentMouseLocation = new Point(-1, -1);
+			Renderer.CurrentMouseLocation = new Vector(-1, -1);
 		}
 	}
 

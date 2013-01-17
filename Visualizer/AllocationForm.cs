@@ -29,7 +29,7 @@ namespace Alloclave
 
 		void addressSpaceScroller_FocusChanged(object sender, MouseEventArgs e)
 		{
-			AddressSpaceControl.CenterAt(e.Location);
+			AddressSpaceControl.CenterAt(e.Location.ToVector());
 		}
 
 		void AddressSpaceControl_Rebuilt(object sender, EventArgs e)

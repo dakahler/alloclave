@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Windows;
+using System.Drawing.Drawing2D;
 
 namespace Alloclave
 {
@@ -76,7 +78,7 @@ namespace Alloclave
 		}
 		#endregion
 
-
+		#region Extension Methods
 		public static T Clamp<T>(this T val, T min, T max) where T : IComparable<T>
 		{
 			if (val.CompareTo(min) < 0)
@@ -92,5 +94,23 @@ namespace Alloclave
 				return val;
 			}
 		}
+
+		public static Vector ToVector(this System.Drawing.Point point)
+		{
+			return new Vector(point.X, point.Y);
+		}
+
+		public static System.Drawing.Point ToPoint(this Vector vector)
+		{
+			return new System.Drawing.Point((int)vector.X, (int)vector.Y);
+		}
+
+		public static void TransformVector(this Matrix matrix, Vector vector)
+		{
+			System.Drawing.Point[] points = { vector.ToPoint() };
+			matrix.TransformPoints(points);
+		}
+
+		#endregion
 	}
 }

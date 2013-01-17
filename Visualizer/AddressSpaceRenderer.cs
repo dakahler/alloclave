@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Alloclave
 {
@@ -32,8 +33,8 @@ namespace Alloclave
 			}
 		}
 
-		protected Point _Offset = new Point();
-		public virtual Point Offset
+		protected Vector _Offset = new Vector();
+		public virtual Vector Offset
 		{
 			get
 			{
@@ -58,26 +59,8 @@ namespace Alloclave
 			}
 		}
 
-		protected Size _Size = new Size(1, 1);
-		public virtual Size Size
-		{
-			set
-			{
-				_Size = value;
-			}
-		}
-
-		protected Size _WorldSize = new Size(1, 1);
-		public virtual Size WorldSize
-		{
-			set
-			{
-				_WorldSize = value;
-			}
-		}
-
-		protected Point _CurrentMouseLocation;
-		public virtual Point CurrentMouseLocation
+		protected Vector _CurrentMouseLocation;
+		public virtual Vector CurrentMouseLocation
 		{
 			set
 			{
@@ -86,16 +69,16 @@ namespace Alloclave
 			}
 		}
 
-		public Point GetLocalMouseLocation()
+		public Vector GetLocalMouseLocation()
 		{
 			return GetLocalMouseLocation(_CurrentMouseLocation);
 		}
 
-		public Point GetLocalMouseLocation(Point worldLocation)
+		public Vector GetLocalMouseLocation(Vector worldLocation)
 		{
-			Point finalPoint = worldLocation;
-			finalPoint = Point.Subtract(finalPoint, new Size(Offset));
-			finalPoint = new Point((int)((float)finalPoint.X / Scale), (int)((float)finalPoint.Y / Scale));
+			Vector finalPoint = worldLocation;
+			finalPoint = finalPoint - Offset;
+			finalPoint /= Scale;
 
 			return finalPoint;
 		}

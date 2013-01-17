@@ -11,6 +11,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Windows;
 
 namespace Alloclave
 {
@@ -184,8 +185,10 @@ namespace Alloclave
 			// Tell OpenGL to discard old VBO when done drawing it and reserve memory _now_ for a new buffer.
 			// without this, GL would wait until draw operations on old VBO are complete before writing to it
 			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexC4ubV3f.SizeInBytes * MaxVertices), IntPtr.Zero, BufferUsageHint.DynamicDraw);
+
 			// Fill newly allocated buffer
 			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexC4ubV3f.SizeInBytes * MaxVertices), VBO, BufferUsageHint.DynamicDraw);
+
 			// Draw everything
 			GL.DrawArrays(BeginMode.Triangles, 0, (int)vboCount);
 
@@ -196,7 +199,7 @@ namespace Alloclave
 				GL.Color3(Color.Black);
 				foreach (Triangle triangle in _SelectedBlock.Triangles)
 				{
-					foreach (Point vertex in triangle.Vertices)
+					foreach (Vector vertex in triangle.Vertices)
 					{
 						GL.Vertex3(vertex.X, vertex.Y, 1);
 					}
@@ -210,7 +213,7 @@ namespace Alloclave
 				GL.Color4(Color.FromArgb(128, Color.Black));
 				foreach (Triangle triangle in _HoverBlock.Triangles)
 				{
-					foreach (Point vertex in triangle.Vertices)
+					foreach (Vector vertex in triangle.Vertices)
 					{
 						GL.Vertex3(vertex.X, vertex.Y, 1);
 					}
@@ -267,13 +270,13 @@ namespace Alloclave
 					uint startVertex = vboCount;
 					foreach (Triangle triangle in block.Triangles)
 					{
-						foreach (Point vertex in triangle.Vertices)
+						foreach (Vector vertex in triangle.Vertices)
 						{
 							VBO[vboCount].R = block._Color.R;
 							VBO[vboCount].G = block._Color.G;
 							VBO[vboCount].B = block._Color.B;
 							VBO[vboCount].A = block._Color.A;
-							VBO[vboCount].Position = new Vector3(vertex.X, vertex.Y, 0);
+							VBO[vboCount].Position = new Vector3((float)vertex.X, (float)vertex.Y, 0);
 							vboCount++;
 						}
 					}
@@ -296,23 +299,7 @@ namespace Alloclave
 			}
 		}
 
-		public override Size Size
-		{
-			set
-			{
-				base.Size = value;
-			}
-		}
-
-		public override Size WorldSize
-		{
-			set
-			{
-				base.WorldSize = value;
-			}
-		}
-
-		public override Point CurrentMouseLocation
+		public override Vector CurrentMouseLocation
 		{
 			set
 			{
@@ -320,7 +307,7 @@ namespace Alloclave
 			}
 		}
 
-		public override Point Offset
+		public override Vector Offset
 		{
 			get
 			{

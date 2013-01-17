@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 
 namespace Alloclave
@@ -207,14 +208,14 @@ namespace Alloclave
 			}
 		}
 
-		public override Size Size
-		{
-			set
-			{
-				base.Size = value;
-				TaskList[(int)Tasks.RecreateBuffers] = true;
-			}
-		}
+		//public override Size Size
+		//{
+		//	set
+		//	{
+		//		base.Size = value;
+		//		TaskList[(int)Tasks.RecreateBuffers] = true;
+		//	}
+		//}
 
 		//public override Matrix ViewMatrix
 		//{
@@ -225,16 +226,16 @@ namespace Alloclave
 		//	}
 		//}
 
-		public override Size WorldSize
-		{
-			set
-			{
-				base.WorldSize = value;
-				TaskList[(int)Tasks.RecreateBuffers] = true;
-			}
-		}
+		//public override Size WorldSize
+		//{
+		//	set
+		//	{
+		//		base.WorldSize = value;
+		//		TaskList[(int)Tasks.RecreateBuffers] = true;
+		//	}
+		//}
 
-		public override Point CurrentMouseLocation
+		public override Vector CurrentMouseLocation
 		{
 			set
 			{

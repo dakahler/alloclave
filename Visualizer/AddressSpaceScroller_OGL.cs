@@ -13,13 +13,11 @@ namespace Alloclave
 	class AddressSpaceScroller_OGL : AddressSpaceScroller
 	{
 		GLControl glControl;
-		bool GlControlLoaded;
 
 		public AddressSpaceScroller_OGL(int parentWidth)
 			: base(parentWidth)
 		{
 			glControl = new GLControl();
-			//glControl.Parent = parent;
 			glControl.Dock = DockStyle.Fill;
 			glControl.Load += glControl_Load;
 			glControl.Paint += glControl_Paint;
@@ -45,15 +43,10 @@ namespace Alloclave
 
 			GL.Enable(EnableCap.AlphaTest);
 			GL.Enable(EnableCap.Blend);
-			//GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.DstAlpha);
-			//GL.AlphaFunc(AlphaFunction.Greater, 0);
-			//GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
-			//// Setup VBO state
+			// Setup VBO state
 			GL.EnableClientState(EnableCap.ColorArray);
 			GL.EnableClientState(EnableCap.VertexArray);
-
-			//GL.GenBuffers(1, out VBOHandle);
 
 			// Since there's only 1 VBO in the app, might aswell setup here.
 			GL.BindBuffer(BufferTarget.ArrayBuffer, AddressSpaceRenderer_OGL.VBOHandle);
@@ -62,7 +55,6 @@ namespace Alloclave
 
 
 			glControl.BringToFront();
-			GlControlLoaded = true;
 			GL.ClearColor(255, 255, 255, 0);
 			glControl.VSync = true;
 			SetupViewport();
@@ -129,8 +121,10 @@ namespace Alloclave
 			// Tell OpenGL to discard old VBO when done drawing it and reserve memory _now_ for a new buffer.
 			// without this, GL would wait until draw operations on old VBO are complete before writing to it
 			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(AddressSpaceRenderer_OGL.VertexC4ubV3f.SizeInBytes * AddressSpaceRenderer_OGL.MaxVertices), IntPtr.Zero, BufferUsageHint.DynamicDraw);
+
 			// Fill newly allocated buffer
 			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(AddressSpaceRenderer_OGL.VertexC4ubV3f.SizeInBytes * AddressSpaceRenderer_OGL.MaxVertices), AddressSpaceRenderer_OGL.VBO, BufferUsageHint.DynamicDraw);
+
 			// Draw everything
 			GL.DrawArrays(BeginMode.Triangles, 0, (int)AddressSpaceRenderer_OGL.vboCount);
 

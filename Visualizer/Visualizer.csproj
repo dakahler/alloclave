@@ -122,7 +122,6 @@
       <DependentUpon>AddressSpace.cs</DependentUpon>
     </Compile>
     <Compile Include="AddressSpaceRenderer.cs" />
-    <Compile Include="AddressSpaceRenderer_GDI.cs" />
     <Compile Include="AddressSpaceRenderer_OGL.cs" />
     <Compile Include="AddressSpaceScroller.cs">
       <SubType>UserControl</SubType>

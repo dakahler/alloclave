@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Alloclave
 {
@@ -91,10 +92,10 @@ namespace Alloclave
 			return result.Value;
 		}
 
-		public VisualMemoryBlock Find(Point localMouseCoordinates)
+		public VisualMemoryBlock Find(Vector localMouseCoordinates)
 		{
 			VisualMemoryBlock tempBlock = new VisualMemoryBlock();
-			tempBlock.GraphicsPath.AddLine(localMouseCoordinates, Point.Add(localMouseCoordinates, new Size(1, 1)));
+			tempBlock.GraphicsPath.AddLine(localMouseCoordinates.ToPoint(), (localMouseCoordinates + new Vector(1, 1)).ToPoint());
 
 			int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
 			if (index >= 0)

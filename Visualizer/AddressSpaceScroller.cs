@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows;
 
 namespace Alloclave
 {
@@ -59,7 +60,7 @@ namespace Alloclave
 		{
 			if (IsLeftMouseDown || IsMiddleMouseDown)
 			{
-				SetFocus(e.Location);
+				SetFocus(e.Location.ToVector());
 				Refresh();
 			}
 		}
@@ -69,16 +70,16 @@ namespace Alloclave
 			if (e.Button == MouseButtons.Left)
 			{
 				IsLeftMouseDown = false;
-				SetFocus(e.Location);
+				SetFocus(e.Location.ToVector());
 			}
 			else if (e.Button == MouseButtons.Middle)
 			{
 				IsMiddleMouseDown = false;
-				SetFocus(e.Location);
+				SetFocus(e.Location.ToVector());
 			}
 		}
 
-		protected void SetFocus(Point focus)
+		protected void SetFocus(Vector focus)
 		{
 			if (FocusChanged != null)
 			{
@@ -88,12 +89,11 @@ namespace Alloclave
 				UInt64 maxWidth = (UInt64)ParentWidth;
 				UInt64 maxHeight = (UInt64)bounds.Bottom;
 
-				float scaleX = (float)maxWidth / (float)Width;
-				float scaleY = (float)maxHeight / (float)Height;
+				Vector scale = new Vector((float)maxWidth / (float)Width, (float)maxHeight / (float)Height);
 
-				Point finalPoint = new Point((int)((float)focus.X * scaleX), (int)((float)focus.Y * scaleY));
+				Vector finalPoint = new Vector(focus.X * scale.X, focus.Y * scale.Y);
 
-				MouseEventArgs eventArgs = new MouseEventArgs(MouseButtons.Left, 1, finalPoint.X, finalPoint.Y, 0);
+				MouseEventArgs eventArgs = new MouseEventArgs(MouseButtons.Left, 1, (int)finalPoint.X, (int)finalPoint.Y, 0);
 				FocusChanged(this, eventArgs);
 			}
 		}

@@ -7,19 +7,20 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Alloclave
 {
 	public class Triangle
 	{
-		public Point[] Vertices = new Point[3];
+		public Vector[] Vertices = new Vector[3];
 
 		public Triangle()
 		{
 
 		}
 
-		public Triangle(Point point1, Point point2, Point point3)
+		public Triangle(Vector point1, Vector point2, Vector point3)
 		{
 			Vertices[0] = point1;
 			Vertices[1] = point2;
@@ -66,7 +67,7 @@ namespace Alloclave
 			Create(allocation, startAddress, addressWidth, width);
 		}
 
-		private Point GetPixelPos(UInt64 address, UInt64 startAddress, UInt64 addressWidth, int width)
+		private Vector GetPixelPos(UInt64 address, UInt64 startAddress, UInt64 addressWidth, int width)
 		{
 			UInt64 workingStartAddress = address - startAddress;
 
@@ -86,7 +87,7 @@ namespace Alloclave
 			UInt64 rowNum = rowStartAddress / addressWidth;
 			UInt64 pixelY = rowNum * RowHeight;
 
-			return new Point((int)pixelX, (int)pixelY);
+			return new Vector((int)pixelX, (int)pixelY);
 		}
 
 		private void Create(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width)
@@ -102,75 +103,39 @@ namespace Alloclave
 
 			GraphicsPath.Reset();
 
-			List<Point> polygonPoints = new List<Point>();
-			HashSet<Point> polygonPointSet = new HashSet<Point>();
+			List<Vector> polygonPoints = new List<Vector>();
 
-			Point rowOneUpperLeft = GetPixelPos(currentStartAddress, startAddress, addressWidth, width);
-			Point rowOneLowerLeft = Point.Add(rowOneUpperLeft, new Size(0, RowHeight));
-			Point rowOneFarLeftLowerLeft = new Point(0, rowOneLowerLeft.Y);
-			Point rowOneFarRightUpperRight = new Point(width, rowOneUpperLeft.Y);
+			Vector rowOneUpperLeft = GetPixelPos(currentStartAddress, startAddress, addressWidth, width);
+			Vector rowOneLowerLeft = rowOneUpperLeft + new Vector(0, RowHeight);
+			Vector rowOneFarLeftLowerLeft = new Vector(0, rowOneLowerLeft.Y);
+			Vector rowOneFarRightUpperRight = new Vector(width, rowOneUpperLeft.Y);
 
-			Point lastRowUpperRight = GetPixelPos(endAddress, startAddress, addressWidth, width);
-			Point lastRowLowerRight = Point.Add(lastRowUpperRight, new Size(0, RowHeight));
-			Point lastRowFarLeftLowerLeft = new Point(0, lastRowLowerRight.Y);
-			Point lastRowFarRightUpperRight = new Point(width, lastRowUpperRight.Y);
-
-			//if (rowStartAddress != rowEndAddress)
-			//{
-			//	GraphicsPath.AddLine(new Point(0, 0), new Point(0, 0));
-			//	return;
-			//}
+			Vector lastRowUpperRight = GetPixelPos(endAddress, startAddress, addressWidth, width);
+			Vector lastRowLowerRight = lastRowUpperRight + new Vector(0, RowHeight);
+			Vector lastRowFarLeftLowerLeft = new Vector(0, lastRowLowerRight.Y);
+			Vector lastRowFarRightUpperRight = new Vector(width, lastRowUpperRight.Y);
 
 			// Create block by specifying polygon points
-			// Use the hash set to make sure the list has unique points
-			// TODO: Clean up
-			//if (polygonPointSet.Add(rowOneUpperLeft))
-			{
-				polygonPoints.Add(rowOneUpperLeft);
-			}
-
-			//if (polygonPointSet.Add(rowOneLowerLeft))
-			{
-				polygonPoints.Add(rowOneLowerLeft);
-			}
+			polygonPoints.Add(rowOneUpperLeft);
+			polygonPoints.Add(rowOneLowerLeft);
 
 			if (rowStartAddress != rowEndAddress)
 			{
-				//if (polygonPointSet.Add(rowOneFarLeftLowerLeft))
-				{
-					polygonPoints.Add(rowOneFarLeftLowerLeft);
-				}
-
-				//if (polygonPointSet.Add(lastRowFarLeftLowerLeft))
-				{
-					polygonPoints.Add(lastRowFarLeftLowerLeft);
-				}
+				polygonPoints.Add(rowOneFarLeftLowerLeft);
+				polygonPoints.Add(lastRowFarLeftLowerLeft);
 			}
 
-			//if (polygonPointSet.Add(lastRowLowerRight))
-			{
-				polygonPoints.Add(lastRowLowerRight);
-			}
-
-			//if (polygonPointSet.Add(lastRowUpperRight))
-			{
-				polygonPoints.Add(lastRowUpperRight);
-			}
+			polygonPoints.Add(lastRowLowerRight);
+			polygonPoints.Add(lastRowUpperRight);
 
 			if (rowStartAddress != rowEndAddress)
 			{
-				//if (polygonPointSet.Add(lastRowFarRightUpperRight))
-				{
-					polygonPoints.Add(lastRowFarRightUpperRight);
-				}
-
-				//if (polygonPointSet.Add(rowOneFarRightUpperRight))
-				{
-					polygonPoints.Add(rowOneFarRightUpperRight);
-				}
+				polygonPoints.Add(lastRowFarRightUpperRight);
+				polygonPoints.Add(rowOneFarRightUpperRight);
 			}
 
-			GraphicsPath.AddPolygon(polygonPoints.ToArray());
+			var newArray = Array.ConvertAll(polygonPoints.ToArray(), item => item.ToPoint());
+			GraphicsPath.AddPolygon(newArray);
 
 			// Create triangles (2 per section)
 			// Counter-clockwise
@@ -179,18 +144,18 @@ namespace Alloclave
 			{
 				// Upper
 				Triangle upper1 = new Triangle(rowOneFarRightUpperRight, rowOneUpperLeft, rowOneLowerLeft);
-				Triangle upper2 = new Triangle(rowOneFarRightUpperRight, rowOneLowerLeft, new Point(rowOneFarRightUpperRight.X, rowOneLowerLeft.Y));
+				Triangle upper2 = new Triangle(rowOneFarRightUpperRight, rowOneLowerLeft, new Vector(rowOneFarRightUpperRight.X, rowOneLowerLeft.Y));
 				Triangles.Add(upper1);
 				Triangles.Add(upper2);
 
 				// Middle
-				Triangle middle1 = new Triangle(new Point(lastRowFarLeftLowerLeft.X, lastRowUpperRight.Y), new Point(rowOneFarRightUpperRight.X, rowOneLowerLeft.Y), rowOneFarLeftLowerLeft);
-				Triangle middle2 = new Triangle(new Point(lastRowFarLeftLowerLeft.X, lastRowUpperRight.Y), new Point(lastRowFarRightUpperRight.X, lastRowUpperRight.Y), new Point(rowOneFarRightUpperRight.X, rowOneLowerLeft.Y));
+				Triangle middle1 = new Triangle(new Vector(lastRowFarLeftLowerLeft.X, lastRowUpperRight.Y), new Vector(rowOneFarRightUpperRight.X, rowOneLowerLeft.Y), rowOneFarLeftLowerLeft);
+				Triangle middle2 = new Triangle(new Vector(lastRowFarLeftLowerLeft.X, lastRowUpperRight.Y), new Vector(lastRowFarRightUpperRight.X, lastRowUpperRight.Y), new Vector(rowOneFarRightUpperRight.X, rowOneLowerLeft.Y));
 				Triangles.Add(middle1);
 				Triangles.Add(middle2);
 
 				// Lower
-				Triangle lower1 = new Triangle(lastRowFarLeftLowerLeft, lastRowUpperRight, new Point(lastRowFarLeftLowerLeft.X, lastRowUpperRight.Y));
+				Triangle lower1 = new Triangle(lastRowFarLeftLowerLeft, lastRowUpperRight, new Vector(lastRowFarLeftLowerLeft.X, lastRowUpperRight.Y));
 				Triangle lower2 = new Triangle(lastRowFarLeftLowerLeft, lastRowLowerRight, lastRowUpperRight);
 				Triangles.Add(lower1);
 				Triangles.Add(lower2);
@@ -217,9 +182,9 @@ namespace Alloclave
 			isSecondaryColor = !isSecondaryColor;
 		}
 
-		public bool Contains(Point point)
+		public bool Contains(Vector v)
 		{
-			return GraphicsPath.IsVisible(point);
+			return GraphicsPath.IsVisible(v.ToPoint());
 		}
 	}
 }
