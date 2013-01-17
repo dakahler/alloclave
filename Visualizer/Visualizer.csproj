@@ -76,10 +76,12 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>AlloclaveKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>AlloclaveIcon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
@@ -109,47 +111,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AboutForm.Designer.cs">
-      <DependentUpon>AboutForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AddressSpace.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="AddressSpace.Designer.cs">
-      <DependentUpon>AddressSpace.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AddressSpaceRenderer.cs" />
-    <Compile Include="AddressSpaceRenderer_OGL.cs" />
-    <Compile Include="AddressSpaceScroller.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="AddressSpaceScroller.Designer.cs">
-      <DependentUpon>AddressSpaceScroller.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AddressSpaceScroller_GDI.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="AddressSpaceScroller_OGL.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Allocation.cs" />
-    <Compile Include="AllocationForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AllocationForm.Designer.cs">
-      <DependentUpon>AllocationForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AxisControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="AxisControl.Designer.cs">
-      <DependentUpon>AxisControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CallStack.cs" />
-    <Compile Include="CallStackParser.cs" />
     <Compile Include="ColorPicker\ColorBar.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -189,102 +150,114 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ColorPicker\Util.cs" />
-    <Compile Include="CommandLineOptions.cs" />
-    <Compile Include="Common.cs" />
-    <Compile Include="CustomBinaryReader.cs" />
-    <Compile Include="Free.cs" />
-    <Compile Include="History.cs" />
-    <Compile Include="ICustomSerializable.cs" />
-    <Compile Include="InfoForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="InfoForm.Designer.cs">
-      <DependentUpon>InfoForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ItemDetailForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ItemDetailForm.Designer.cs">
-      <DependentUpon>ItemDetailForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Licensing.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Licensing.Designer.cs">
-      <DependentUpon>Licensing.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Main.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Main.Designer.cs">
-      <DependentUpon>Main.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MemoryBlockManager.cs" />
-    <Compile Include="MessagesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MessagesForm.Designer.cs">
-      <DependentUpon>MessagesForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="NewForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="NewForm.Designer.cs">
-      <DependentUpon>NewForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Packet.cs" />
-    <Compile Include="PacketBundle.cs" />
-    <Compile Include="PacketTypeRegistrar.cs" />
-    <Compile Include="Profile.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RichTextBoxPrintCtrl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="RichToolTip.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Screenshot.cs" />
-    <Compile Include="Scrubber.cs">
+    <Compile Include="Controls\AddressSpace.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Scrubber.Designer.cs">
+    <Compile Include="Controls\AddressSpace.Designer.cs">
+      <DependentUpon>AddressSpace.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AddressSpaceScroller.Designer.cs" />
+    <Compile Include="Controls\RichTextBoxPrintCtrl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\RichToolTip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Scrubber.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Scrubber.Designer.cs">
       <DependentUpon>Scrubber.cs</DependentUpon>
     </Compile>
-    <Compile Include="TargetSystemInfo.cs" />
-    <Compile Include="TimeSlice.cs" />
-    <Compile Include="TimeStamp.cs" />
-    <Compile Include="ToolForm.cs">
+    <Compile Include="Core\CallStack.cs" />
+    <Compile Include="Core\CommandLineOptions.cs" />
+    <Compile Include="Core\Common.cs" />
+    <Compile Include="Core\History.cs" />
+    <Compile Include="Core\MemoryBlockManager.cs" />
+    <Compile Include="Core\Profile.cs" />
+    <Compile Include="Core\Program.cs" />
+    <Compile Include="Core\TimeStamp.cs" />
+    <Compile Include="Core\VisualMemoryBlock.cs" />
+    <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ToolForm.Designer.cs">
+    <Compile Include="Forms\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AllocationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AllocationForm.Designer.cs">
+      <DependentUpon>AllocationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\InfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\InfoForm.Designer.cs">
+      <DependentUpon>InfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ItemDetailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ItemDetailForm.Designer.cs">
+      <DependentUpon>ItemDetailForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Licensing.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Licensing.Designer.cs">
+      <DependentUpon>Licensing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MessagesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MessagesForm.Designer.cs">
+      <DependentUpon>MessagesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\NewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NewForm.Designer.cs">
+      <DependentUpon>NewForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ToolForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ToolForm.Designer.cs">
       <DependentUpon>ToolForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Transport.cs" />
-    <Compile Include="TransportForm.cs">
+    <Compile Include="Forms\TransportForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TransportForm.Designer.cs">
+    <Compile Include="Forms\TransportForm.Designer.cs">
       <DependentUpon>TransportForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="RenderManager_OGL.cs" />
-    <Compile Include="VisualMemoryBlock.cs" />
-    <Compile Include="Win32CallStackParser.cs" />
-    <EmbeddedResource Include="AboutForm.resx">
-      <DependentUpon>AboutForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AddressSpace.resx">
-      <DependentUpon>AddressSpace.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AddressSpaceScroller.resx">
-      <DependentUpon>AddressSpaceScroller.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AllocationForm.resx">
-      <DependentUpon>AllocationForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AxisControl.resx">
-      <DependentUpon>AxisControl.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Render\AddressSpaceRenderer.cs" />
+    <Compile Include="Render\AddressSpaceScroller.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Render\OGL\AddressSpaceRenderer_OGL.cs" />
+    <Compile Include="Render\OGL\AddressSpaceScroller_OGL.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Render\OGL\RenderManager_OGL.cs" />
+    <Compile Include="Transport\CustomBinaryReader.cs" />
+    <Compile Include="Transport\ICustomSerializable.cs" />
+    <Compile Include="Transport\Packets\Allocation.cs" />
+    <Compile Include="Transport\Packets\Free.cs" />
+    <Compile Include="Transport\Packets\Packet.cs" />
+    <Compile Include="Transport\Packets\PacketBundle.cs" />
+    <Compile Include="Transport\Packets\PacketTypeRegistrar.cs" />
+    <Compile Include="Transport\Packets\Screenshot.cs" />
+    <Compile Include="Transport\TargetSystemInfo.cs" />
+    <Compile Include="Transport\Transport.cs" />
     <EmbeddedResource Include="ColorPicker\ColorPickerCtrl.resx">
       <DependentUpon>ColorPickerCtrl.cs</DependentUpon>
     </EmbeddedResource>
@@ -294,23 +267,39 @@
     <EmbeddedResource Include="ColorPicker\ColorWheelCtrl.resx">
       <DependentUpon>ColorWheelCtrl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InfoForm.resx">
+    <EmbeddedResource Include="Controls\AddressSpace.resx">
+      <DependentUpon>AddressSpace.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\AddressSpaceScroller.resx" />
+    <EmbeddedResource Include="Controls\Scrubber.resx">
+      <DependentUpon>Scrubber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AllocationForm.resx">
+      <DependentUpon>AllocationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ItemDetailForm.resx">
+    <EmbeddedResource Include="Forms\ItemDetailForm.resx">
       <DependentUpon>ItemDetailForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Licensing.resx">
+    <EmbeddedResource Include="Forms\Licensing.resx">
       <DependentUpon>Licensing.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Main.resx">
+    <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MessagesForm.resx">
+    <EmbeddedResource Include="Forms\MessagesForm.resx">
       <DependentUpon>MessagesForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewForm.resx">
+    <EmbeddedResource Include="Forms\NewForm.resx">
       <DependentUpon>NewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TransportForm.resx">
+      <DependentUpon>TransportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -322,16 +311,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Scrubber.resx">
-      <DependentUpon>Scrubber.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TransportForm.resx">
-      <DependentUpon>TransportForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="AlloclaveKey.snk" />
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="Core\app.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\DataSources\Alloclave.Properties.Settings.datasource" />
     <None Include="Properties\Settings.settings">
@@ -380,10 +360,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Core\AlloclaveIcon.ico" />
     <None Include="Resources\ScrubberDot.png" />
     <Resource Include="ColorPicker\colorbarIndicators.bmp" />
     <Resource Include="ColorPicker\eyedropper.bmp" />
-    <Content Include="AlloclaveIcon.ico" />
     <Content Include="ColorPicker\popupcontainerbuttons.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

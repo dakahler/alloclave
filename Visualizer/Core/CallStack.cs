@@ -24,13 +24,14 @@ namespace Alloclave
 
 		public CallStack(String callStack)
 		{
-			Frames = Parser.Parse(callStack);
+			//Frames = Parser.Parse(callStack);
 		}
 
-		static void RegisterParser(ICallStackParser parser)
-		{
-			Parser = parser;
-		}
+		// TODO: Call stack parser plugin system
+		//static void RegisterParser(ICallStackParser parser)
+		//{
+		//	Parser = parser;
+		//}
 
 		public byte[] Serialize(TargetSystemInfo targetSystemInfo)
 		{
@@ -42,6 +43,6 @@ namespace Alloclave
 
 		}
 
-		static ICallStackParser Parser;
+		//static ICallStackParser Parser;
 	}
 }
