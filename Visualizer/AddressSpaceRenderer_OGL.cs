@@ -22,8 +22,6 @@ namespace Alloclave
 		GLControl glControl;
 		bool GlControlLoaded;
 
-		private Mutex mutex = new Mutex();
-
 		public AddressSpaceRenderer_OGL(AddressSpace parent)
 		{
 			Parent = parent;
@@ -81,7 +79,7 @@ namespace Alloclave
 
 			if (e.IsPreRender)
 			{
-				mutex.WaitOne();
+				Monitor.Enter(glControl);
 				glControl.MakeCurrent();
 
 				GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -126,7 +124,7 @@ namespace Alloclave
 				GL.PopMatrix();
 				glControl.SwapBuffers();
 				glControl.Context.MakeCurrent(null);
-				mutex.ReleaseMutex();
+				Monitor.Exit(glControl);
 			}
 		}
 
@@ -137,18 +135,19 @@ namespace Alloclave
 
 		private void SetupViewport()
 		{
-			mutex.WaitOne();
-			glControl.MakeCurrent();
+			lock (glControl)
+			{
+				glControl.MakeCurrent();
 
-			int w = glControl.Width;
-			int h = glControl.Height;
-			GL.MatrixMode(MatrixMode.Projection);
-			GL.LoadIdentity();
-			GL.Ortho(0, w, h, 0, -10, 10); // Bottom-left corner pixel has coordinate (0, 0)
-			GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
+				int w = glControl.Width;
+				int h = glControl.Height;
+				GL.MatrixMode(MatrixMode.Projection);
+				GL.LoadIdentity();
+				GL.Ortho(0, w, h, 0, -10, 10); // Bottom-left corner pixel has coordinate (0, 0)
+				GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
 
-			glControl.Context.MakeCurrent(null);
-			mutex.ReleaseMutex();
+				glControl.Context.MakeCurrent(null);
+			}
 		}
 	}
 }
