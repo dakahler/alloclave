@@ -4,6 +4,8 @@
 
 namespace Alloclave_Plugin {
 
+	// TODO: This duplicates Alloclave::Allocation
+	// Find a way to use that instead
 	public ref class AllocationData : public System::IComparable
 	{
 	public:
