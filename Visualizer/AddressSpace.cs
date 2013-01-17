@@ -262,7 +262,7 @@ namespace Alloclave
 			Vector pointBefore = CurrentMouseLocation;
 			Matrix InvertedTransform = currentViewMatrix.Clone();
 			InvertedTransform.Invert();
-			InvertedTransform.TransformVector(pointBefore);
+			InvertedTransform.TransformVector(ref pointBefore);
 
 			int amountToMove = e.Delta / WheelDelta;
 			amountToMove = amountToMove.Clamp(-4, 4);
@@ -291,7 +291,7 @@ namespace Alloclave
 			Vector pointAfter = CurrentMouseLocation;
 			InvertedTransform = currentViewMatrix.Clone();
 			InvertedTransform.Invert();
-			InvertedTransform.TransformVector(pointAfter);
+			InvertedTransform.TransformVector(ref pointAfter);
 
 			Vector delta = pointAfter - pointBefore;
 

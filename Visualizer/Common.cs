@@ -105,10 +105,11 @@ namespace Alloclave
 			return new System.Drawing.Point((int)vector.X, (int)vector.Y);
 		}
 
-		public static void TransformVector(this Matrix matrix, Vector vector)
+		public static void TransformVector(this Matrix matrix, ref Vector vector)
 		{
 			System.Drawing.Point[] points = { vector.ToPoint() };
 			matrix.TransformPoints(points);
+			vector = points[0].ToVector();
 		}
 
 		#endregion
