@@ -160,6 +160,9 @@ namespace Alloclave
 						EventArgs e = new EventArgs();
 						Rebuilt.Invoke(this, e);
 					}
+
+					// TODO: This should hook into the callback above instead
+					RenderManager_OGL.Instance.Rebuild();
 				}
 			});
 

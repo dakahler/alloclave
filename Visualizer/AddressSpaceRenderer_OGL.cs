@@ -12,44 +12,17 @@ using OpenTK.Graphics;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Windows;
+using System.Threading;
 
 namespace Alloclave
 {
 	class AddressSpaceRenderer_OGL : AddressSpaceRenderer
 	{
-		class BlockMetadata
-		{
-			public BlockMetadata(uint startVertex, uint endVertex)
-			{
-				VertexStartIndex = startVertex;
-				VertexEndIndex = endVertex;
-			}
-
-			public TimeStamp StartTime = new TimeStamp();
-			public uint VertexStartIndex;
-			public uint VertexEndIndex;
-			public const float AliveSeconds = 3.0f;
-		}
-
 		AddressSpace Parent;
 		GLControl glControl;
 		bool GlControlLoaded;
 
-		// TODO: Move this out to a common class
-		public const int MaxVertices = 1000000;
-		public static VertexC4ubV3f[] VBO = new VertexC4ubV3f[MaxVertices];
-		public static uint vboCount;
-		public static uint VBOHandle;
-
-		Dictionary<VisualMemoryBlock, BlockMetadata> NewBlocks = new Dictionary<VisualMemoryBlock, BlockMetadata>();
-
-		public struct VertexC4ubV3f
-		{
-			public byte R, G, B, A;
-			public Vector3 Position;
-
-			public static int SizeInBytes = 16;
-		}
+		private Mutex mutex = new Mutex();
 
 		public AddressSpaceRenderer_OGL(AddressSpace parent)
 		{
@@ -58,7 +31,6 @@ namespace Alloclave
 			glControl.Parent = parent;
 			glControl.Dock = DockStyle.Fill;
 			glControl.Load += glControl_Load;
-			glControl.Paint += glControl_Paint;
 			glControl.Resize += glControl_Resize;
 
 			glControl.MouseDown += new MouseEventHandler(Parent.AddressSpace_MouseDown);
@@ -66,28 +38,6 @@ namespace Alloclave
 			glControl.MouseMove += new MouseEventHandler(Parent.AddressSpace_MouseMove);
 			glControl.MouseWheel += new MouseEventHandler(Parent.AddressSpace_MouseWheel);
 			glControl.MouseLeave += new EventHandler(Parent.AddressSpace_MouseLeave);
-
-			parent.Rebuilt += parent_Rebuilt;
-		}
-
-		void parent_Rebuilt(object sender, EventArgs e)
-		{
-			RebuildVertices();
-		}
-
-		private void ChangeBlockColor(KeyValuePair<VisualMemoryBlock, BlockMetadata> block, Color color, float blend)
-		{
-			byte r = (byte)((block.Key._Color.R * blend) + color.R * (1 - blend));
-			byte g = (byte)((block.Key._Color.G * blend) + color.G * (1 - blend));
-			byte b = (byte)((block.Key._Color.B * blend) + color.B * (1 - blend));
-
-			for (uint j = block.Value.VertexStartIndex; j <= block.Value.VertexEndIndex; j++)
-			{
-				VBO[j].R = r;
-				VBO[j].G = g;
-				VBO[j].B = b;
-				VBO[j].A = 255;
-			}
 		}
 
 		void glControl_Load(object sender, EventArgs e)
@@ -111,13 +61,7 @@ namespace Alloclave
 			GL.EnableClientState(EnableCap.ColorArray);
 			GL.EnableClientState(EnableCap.VertexArray);
 
-			GL.GenBuffers(1, out VBOHandle);
-
-			// Since there's only 1 VBO in the app, might aswell setup here.
-			GL.BindBuffer(BufferTarget.ArrayBuffer, VBOHandle);
-			GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4ubV3f.SizeInBytes, (IntPtr)0);
-			GL.VertexPointer(3, VertexPointerType.Float, VertexC4ubV3f.SizeInBytes, (IntPtr)(4 * sizeof(byte)));
-
+			RenderManager_OGL.Instance.Bind();
 
 			glControl.BringToFront();
 			GlControlLoaded = true;
@@ -125,25 +69,75 @@ namespace Alloclave
 			glControl.VSync = true;
 			SetupViewport();
 
-			const double interval = 10.0;
-			System.Timers.Timer timer = new System.Timers.Timer(interval);
-			timer.Elapsed += TimerElapsed;
-			timer.Start();
+			RenderManager_OGL.Instance.OnRender += OnRender;
 		}
 
-		void TimerElapsed(object sender, EventArgs e)
+		void OnRender(object sender, RenderManager_OGL.RenderEventArgs e)
 		{
-			glControl.Invalidate();
+			if (!GlControlLoaded || MemoryBlockManager.Instance.Count == 0)
+			{
+				return;
+			}
+
+			if (e.IsPreRender)
+			{
+				mutex.WaitOne();
+				glControl.MakeCurrent();
+
+				GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+				GL.MatrixMode(MatrixMode.Modelview);
+
+				GL.PushMatrix();
+				GL.Translate(Offset.X, Offset.Y, 0);
+				GL.Scale(Scale, Scale, Scale);
+			}
+			else
+			{
+				// TODO: These should modify the VBO instead of using immediate mode
+				if (_SelectedBlock != null)
+				{
+					GL.Begin(BeginMode.Triangles);
+					GL.Color3(Color.Black);
+					foreach (Triangle triangle in _SelectedBlock.Triangles)
+					{
+						foreach (Vector vertex in triangle.Vertices)
+						{
+							GL.Vertex3(vertex.X, vertex.Y, 1);
+						}
+					}
+					GL.End();
+				}
+
+				if (_HoverBlock != null)
+				{
+					GL.Begin(BeginMode.Triangles);
+					GL.Color4(Color.FromArgb(128, Color.Black));
+					foreach (Triangle triangle in _HoverBlock.Triangles)
+					{
+						foreach (Vector vertex in triangle.Vertices)
+						{
+							GL.Vertex3(vertex.X, vertex.Y, 1);
+						}
+					}
+					GL.End();
+				}
+
+				GL.PopMatrix();
+				glControl.SwapBuffers();
+				glControl.Context.MakeCurrent(null);
+				mutex.ReleaseMutex();
+			}
 		}
 
 		void glControl_Resize(object sender, EventArgs e)
 		{
 			SetupViewport();
-			glControl.Invalidate();
 		}
 
 		private void SetupViewport()
 		{
+			mutex.WaitOne();
 			glControl.MakeCurrent();
 
 			int w = glControl.Width;
@@ -152,185 +146,9 @@ namespace Alloclave
 			GL.LoadIdentity();
 			GL.Ortho(0, w, h, 0, -10, 10); // Bottom-left corner pixel has coordinate (0, 0)
 			GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
-		}
 
-		~AddressSpaceRenderer_OGL()
-		{
-			// TODO
-			//GL.DeleteBuffers(1, ref VBOHandle);
-		}
-
-		void glControl_Paint(object sender, PaintEventArgs e)
-		{
-			Render();
-		}
-
-		protected override void Render()
-		{
-			if (!GlControlLoaded || MemoryBlockManager.Instance.Count == 0)
-			{
-				return;
-			}
-
-			glControl.MakeCurrent();
-
-			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-			GL.MatrixMode(MatrixMode.Modelview);
-
-			GL.PushMatrix();
-			GL.Translate(Offset.X, Offset.Y, 0);
-			GL.Scale(Scale, Scale, Scale);
-
-			// Tell OpenGL to discard old VBO when done drawing it and reserve memory _now_ for a new buffer.
-			// without this, GL would wait until draw operations on old VBO are complete before writing to it
-			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexC4ubV3f.SizeInBytes * MaxVertices), IntPtr.Zero, BufferUsageHint.DynamicDraw);
-
-			// Fill newly allocated buffer
-			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexC4ubV3f.SizeInBytes * MaxVertices), VBO, BufferUsageHint.DynamicDraw);
-
-			// Draw everything
-			GL.DrawArrays(BeginMode.Triangles, 0, (int)vboCount);
-
-			// TODO: These should modify the VBO instead of using immediate mode
-			if (_SelectedBlock != null)
-			{
-				GL.Begin(BeginMode.Triangles);
-				GL.Color3(Color.Black);
-				foreach (Triangle triangle in _SelectedBlock.Triangles)
-				{
-					foreach (Vector vertex in triangle.Vertices)
-					{
-						GL.Vertex3(vertex.X, vertex.Y, 1);
-					}
-				}
-				GL.End();
-			}
-
-			if (_HoverBlock != null)
-			{
-				GL.Begin(BeginMode.Triangles);
-				GL.Color4(Color.FromArgb(128, Color.Black));
-				foreach (Triangle triangle in _HoverBlock.Triangles)
-				{
-					foreach (Vector vertex in triangle.Vertices)
-					{
-						GL.Vertex3(vertex.X, vertex.Y, 1);
-					}
-				}
-				GL.End();
-			}
-
-			// TODO: This is an update task, not a render task
-			lock (NewBlocks)
-			{
-				for (int i = 0; i < NewBlocks.Count; i++)
-				{
-					var block = NewBlocks.ElementAt(i);
-
-					double startTimeSeconds = (double)block.Value.StartTime.Time / (double)Stopwatch.Frequency;
-					double currentTimeSeconds = (double)Stopwatch.GetTimestamp() / (double)Stopwatch.Frequency;
-					float difference = (float)(currentTimeSeconds - startTimeSeconds);
-
-					float percentage = (BlockMetadata.AliveSeconds - (float)difference) / BlockMetadata.AliveSeconds;
-					percentage = 1.0f - percentage;
-					percentage = Math.Min(percentage, 1.0f);
-					percentage = Math.Max(percentage, 0.0f);
-
-					ChangeBlockColor(block, Color.LightYellow, percentage);
-
-					// Delete if old
-					if (difference > BlockMetadata.AliveSeconds)
-					{
-						ChangeBlockColor(block, Color.LightYellow, 1.0f);
-						NewBlocks.Remove(block.Key);
-						i--;
-					}
-				}
-			}
-
-			GL.PopMatrix();
-
-			glControl.SwapBuffers();
-		}
-
-		private void RebuildVertices()
-		{
-			// TODO: Vertex incremental rebuilding
-			vboCount = 0;
-			List<Vector3> vertexList = new List<Vector3>();
-
-			lock (NewBlocks)
-			{
-				NewBlocks.Clear();
-
-				// TODO: Implement IEnumerable in MemoryBlockManager
-				foreach (var block in MemoryBlockManager.Instance)
-				{
-					uint startVertex = vboCount;
-					foreach (Triangle triangle in block.Triangles)
-					{
-						foreach (Vector vertex in triangle.Vertices)
-						{
-							VBO[vboCount].R = block._Color.R;
-							VBO[vboCount].G = block._Color.G;
-							VBO[vboCount].B = block._Color.B;
-							VBO[vboCount].A = block._Color.A;
-							VBO[vboCount].Position = new Vector3((float)vertex.X, (float)vertex.Y, 0);
-							vboCount++;
-						}
-					}
-					uint endVertex = vboCount - 1;
-
-					if (block.IsNew)
-					{
-						block.IsNew = false;
-						NewBlocks.Add(block, new BlockMetadata(startVertex, endVertex));
-					}
-				}
-			}
-		}
-
-		public override VisualMemoryBlock SelectedBlock
-		{
-			set
-			{
-				base.SelectedBlock = value;
-			}
-		}
-
-		public override Vector CurrentMouseLocation
-		{
-			set
-			{
-				base.CurrentMouseLocation = value;
-			}
-		}
-
-		public override Vector Offset
-		{
-			get
-			{
-				return base.Offset;
-			}
-			set
-			{
-				base.Offset = value;
-				glControl.Invalidate();
-			}
-		}
-
-		public override float Scale
-		{
-			get
-			{
-				return base.Scale;
-			}
-			set
-			{
-				base.Scale = value;
-				glControl.Invalidate();
-			}
+			glControl.Context.MakeCurrent(null);
+			mutex.ReleaseMutex();
 		}
 	}
 }

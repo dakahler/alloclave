@@ -18,12 +18,12 @@ namespace Alloclave
 
 		}
 
-		protected override void Render(PaintEventArgs e)
-		{
-			if (MainBitmap != null)
-			{
-				e.Graphics.DrawImage(MainBitmap, new Rectangle(0, 0, Width, Height));
-			}
-		}
+		//protected override void Render(PaintEventArgs e)
+		//{
+		//	if (MainBitmap != null)
+		//	{
+		//		e.Graphics.DrawImage(MainBitmap, new Rectangle(0, 0, Width, Height));
+		//	}
+		//}
 	}
 }

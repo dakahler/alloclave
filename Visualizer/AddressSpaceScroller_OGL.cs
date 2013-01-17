@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,13 +15,14 @@ namespace Alloclave
 	{
 		GLControl glControl;
 
+		private Mutex mutex = new Mutex();
+
 		public AddressSpaceScroller_OGL(int parentWidth)
 			: base(parentWidth)
 		{
 			glControl = new GLControl();
 			glControl.Dock = DockStyle.Fill;
 			glControl.Load += glControl_Load;
-			glControl.Paint += glControl_Paint;
 			glControl.Resize += glControl_Resize;
 
 			glControl.MouseDown += new MouseEventHandler(AddressSpaceScroller_MouseDown);
@@ -48,10 +50,7 @@ namespace Alloclave
 			GL.EnableClientState(EnableCap.ColorArray);
 			GL.EnableClientState(EnableCap.VertexArray);
 
-			// Since there's only 1 VBO in the app, might aswell setup here.
-			GL.BindBuffer(BufferTarget.ArrayBuffer, AddressSpaceRenderer_OGL.VBOHandle);
-			GL.ColorPointer(4, ColorPointerType.UnsignedByte, AddressSpaceRenderer_OGL.VertexC4ubV3f.SizeInBytes, (IntPtr)0);
-			GL.VertexPointer(3, VertexPointerType.Float, AddressSpaceRenderer_OGL.VertexC4ubV3f.SizeInBytes, (IntPtr)(4 * sizeof(byte)));
+			RenderManager_OGL.Instance.Bind();
 
 
 			glControl.BringToFront();
@@ -59,30 +58,54 @@ namespace Alloclave
 			glControl.VSync = true;
 			SetupViewport();
 
-			const double interval = 10.0;
-			System.Timers.Timer timer = new System.Timers.Timer(interval);
-			timer.Elapsed += TimerElapsed;
-			timer.Start();
+			RenderManager_OGL.Instance.OnRender += OnRender;
 		}
 
-		void TimerElapsed(object sender, EventArgs e)
+		void OnRender(object sender, RenderManager_OGL.RenderEventArgs e)
 		{
-			glControl.Invalidate();
+			if (MemoryBlockManager.Instance.Count == 0)
+			{
+				return;
+			}
+
+			if (e.IsPreRender)
+			{
+				mutex.WaitOne();
+				glControl.MakeCurrent();
+
+				Rectangle bounds = MemoryBlockManager.Instance.Bounds;
+
+				UInt64 maxWidth = (UInt64)ParentWidth;
+				UInt64 maxHeight = (UInt64)bounds.Bottom;
+
+				float scaleX = (float)Width / (float)maxWidth;
+				float scaleY = (float)Height / (float)maxHeight;
+
+
+				GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+				GL.MatrixMode(MatrixMode.Modelview);
+
+				GL.PushMatrix();
+				GL.Scale(scaleX, scaleY, 1);
+			}
+			else
+			{
+				GL.PopMatrix();
+				glControl.SwapBuffers();
+				glControl.Context.MakeCurrent(null);
+				mutex.ReleaseMutex();
+			}
 		}
 
 		void glControl_Resize(object sender, EventArgs e)
 		{
 			SetupViewport();
-			glControl.Invalidate();
-		}
-
-		void glControl_Paint(object sender, PaintEventArgs e)
-		{
-			Render(e);
 		}
 
 		private void SetupViewport()
 		{
+			mutex.WaitOne();
 			glControl.MakeCurrent();
 
 			int w = glControl.Width;
@@ -91,46 +114,9 @@ namespace Alloclave
 			GL.LoadIdentity();
 			GL.Ortho(0, w, h, 0, -10, 10); // Bottom-left corner pixel has coordinate (0, 0)
 			GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
-		}
 
-		protected override void Render(PaintEventArgs e)
-		{
-			if (MemoryBlockManager.Instance.Count == 0)
-			{
-				return;
-			}
-
-			glControl.MakeCurrent();
-
-			Rectangle bounds = MemoryBlockManager.Instance.Bounds;
-
-			UInt64 maxWidth = (UInt64)ParentWidth;
-			UInt64 maxHeight = (UInt64)bounds.Bottom;
-
-			float scaleX = (float)Width / (float)maxWidth;
-			float scaleY = (float)Height / (float)maxHeight;
-
-
-			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-			GL.MatrixMode(MatrixMode.Modelview);
-
-			GL.PushMatrix();
-			GL.Scale(scaleX, scaleY, 1);
-
-			// Tell OpenGL to discard old VBO when done drawing it and reserve memory _now_ for a new buffer.
-			// without this, GL would wait until draw operations on old VBO are complete before writing to it
-			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(AddressSpaceRenderer_OGL.VertexC4ubV3f.SizeInBytes * AddressSpaceRenderer_OGL.MaxVertices), IntPtr.Zero, BufferUsageHint.DynamicDraw);
-
-			// Fill newly allocated buffer
-			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(AddressSpaceRenderer_OGL.VertexC4ubV3f.SizeInBytes * AddressSpaceRenderer_OGL.MaxVertices), AddressSpaceRenderer_OGL.VBO, BufferUsageHint.DynamicDraw);
-
-			// Draw everything
-			GL.DrawArrays(BeginMode.Triangles, 0, (int)AddressSpaceRenderer_OGL.vboCount);
-
-			GL.PopMatrix();
-
-			glControl.SwapBuffers();
+			glControl.Context.MakeCurrent(null);
+			mutex.ReleaseMutex();
 		}
 	}
 }

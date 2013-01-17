@@ -267,6 +267,7 @@
     <Compile Include="TransportForm.Designer.cs">
       <DependentUpon>TransportForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="RenderManager_OGL.cs" />
     <Compile Include="VisualMemoryBlock.cs" />
     <Compile Include="Win32CallStackParser.cs" />
     <EmbeddedResource Include="AboutForm.resx">

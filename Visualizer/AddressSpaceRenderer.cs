@@ -65,7 +65,6 @@ namespace Alloclave
 			set
 			{
 				_CurrentMouseLocation = value;
-
 			}
 		}
 
@@ -82,8 +81,5 @@ namespace Alloclave
 
 			return finalPoint;
 		}
-
-		// TODO: Better name?
-		protected abstract void Render();
 	}
 }

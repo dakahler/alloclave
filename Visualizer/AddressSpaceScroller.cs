@@ -20,8 +20,6 @@ namespace Alloclave
 
 		public event MouseEventHandler FocusChanged;
 
-		protected abstract void Render(PaintEventArgs e);
-
 		public AddressSpaceScroller(int parentWidth)
 		{
 			InitializeComponent();
@@ -32,11 +30,6 @@ namespace Alloclave
 		protected override void OnPaintBackground(PaintEventArgs e)
 		{
 			return;
-		}
-
-		protected override void OnPaint(PaintEventArgs e)
-		{
-			Render(e);
 		}
 
 		private void AddressSpaceScroller_SizeChanged(object sender, EventArgs e)
@@ -83,7 +76,6 @@ namespace Alloclave
 		{
 			if (FocusChanged != null)
 			{
-				// TODO: Implement GetBounds in MemoryBlockManager
 				Rectangle bounds = MemoryBlockManager.Instance.Bounds;
 
 				UInt64 maxWidth = (UInt64)ParentWidth;
