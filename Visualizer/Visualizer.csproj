@@ -109,7 +109,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Installer|x86'">
     <OutputPath>bin\Installer\</OutputPath>
-    <DefineConstants>TRACE;INSTALLER</DefineConstants>
+    <DefineConstants>TRACE;_INSTALLER</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
