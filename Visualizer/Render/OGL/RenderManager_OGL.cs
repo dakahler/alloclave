@@ -61,12 +61,12 @@ namespace Alloclave
 		private uint NumVertices;
 		private uint VboHandle;
 
+		private bool BuffersCreated = false;
+
 		Dictionary<VisualMemoryBlock, BlockMetadata> NewBlocks = new Dictionary<VisualMemoryBlock, BlockMetadata>();
 
 		private RenderManager_OGL()
 		{
-			GL.GenBuffers(1, out VboHandle);
-
 			System.Timers.Timer timer = new System.Timers.Timer(FrameInterval);
 			timer.Elapsed += TimerElapsed;
 			timer.Start();
@@ -94,6 +94,12 @@ namespace Alloclave
 		/// </summary>
 		public void Bind()
 		{
+			if (!BuffersCreated)
+			{
+				GL.GenBuffers(1, out VboHandle);
+				BuffersCreated = true;
+			}
+
 			GL.BindBuffer(BufferTarget.ArrayBuffer, VboHandle);
 			GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexData.SizeInBytes, (IntPtr)0);
 			GL.VertexPointer(3, VertexPointerType.Float, VertexData.SizeInBytes, (IntPtr)(4 * sizeof(byte)));
@@ -137,33 +143,36 @@ namespace Alloclave
 
 		public void Render()
 		{
-			MulticastDelegate m = (MulticastDelegate)OnRender;
-			Delegate[] delegates = m.GetInvocationList();
-			foreach (RenderEventHandler d in delegates)
+			if (OnRender != null)
 			{
-				// Pre-render callback
-				RenderEventArgs e = new RenderEventArgs();
-				d.Invoke(this, e);
-
-				// If pre-render above didn't setup a context, don't try to do anything else
-				if (GraphicsContext.CurrentContext == null)
+				MulticastDelegate m = (MulticastDelegate)OnRender;
+				Delegate[] delegates = m.GetInvocationList();
+				foreach (RenderEventHandler d in delegates)
 				{
-					continue;
+					// Pre-render callback
+					RenderEventArgs e = new RenderEventArgs();
+					d.Invoke(this, e);
+
+					// If pre-render above didn't setup a context, don't try to do anything else
+					if (GraphicsContext.CurrentContext == null)
+					{
+						continue;
+					}
+
+					// Tell OpenGL to discard old VBO when done drawing it and reserve memory _now_ for a new buffer.
+					// without this, GL would wait until draw operations on old VBO are complete before writing to it
+					GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * MaxVertices), IntPtr.Zero, BufferUsageHint.DynamicDraw);
+
+					// Fill newly allocated buffer
+					GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * MaxVertices), VBO, BufferUsageHint.DynamicDraw);
+
+					// Draw everything
+					GL.DrawArrays(BeginMode.Triangles, 0, (int)NumVertices);
+
+					// Post-render callback
+					e.IsPreRender = false;
+					d.Invoke(this, e);
 				}
-
-				// Tell OpenGL to discard old VBO when done drawing it and reserve memory _now_ for a new buffer.
-				// without this, GL would wait until draw operations on old VBO are complete before writing to it
-				GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * MaxVertices), IntPtr.Zero, BufferUsageHint.DynamicDraw);
-
-				// Fill newly allocated buffer
-				GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * MaxVertices), VBO, BufferUsageHint.DynamicDraw);
-
-				// Draw everything
-				GL.DrawArrays(BeginMode.Triangles, 0, (int)NumVertices);
-
-				// Post-render callback
-				e.IsPreRender = false;
-				d.Invoke(this, e);
 			}
 		}
 

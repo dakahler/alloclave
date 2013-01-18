@@ -40,31 +40,35 @@ namespace Alloclave
 
 		void glControl_Load(object sender, EventArgs e)
 		{
-			glControl.MakeCurrent();
+			lock (glControl)
+			{
+				glControl.MakeCurrent();
 
-			GL.Enable(EnableCap.DepthTest);
+				GL.Enable(EnableCap.DepthTest);
 
-			// Setup parameters for Points
-			GL.PointSize(5f);
-			GL.Enable(EnableCap.PointSmooth);
-			GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
+				// Setup parameters for Points
+				GL.PointSize(5f);
+				GL.Enable(EnableCap.PointSmooth);
+				GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
 
-			GL.Enable(EnableCap.AlphaTest);
-			GL.Enable(EnableCap.Blend);
-			//GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.DstAlpha);
-			//GL.AlphaFunc(AlphaFunction.Greater, 0);
-			//GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+				GL.Enable(EnableCap.AlphaTest);
+				GL.Enable(EnableCap.Blend);
+				//GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.DstAlpha);
+				//GL.AlphaFunc(AlphaFunction.Greater, 0);
+				//GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
-			// Setup VBO state
-			GL.EnableClientState(EnableCap.ColorArray);
-			GL.EnableClientState(EnableCap.VertexArray);
+				// Setup VBO state
+				GL.EnableClientState(EnableCap.ColorArray);
+				GL.EnableClientState(EnableCap.VertexArray);
 
-			RenderManager_OGL.Instance.Bind();
+				RenderManager_OGL.Instance.Bind();
 
-			glControl.BringToFront();
-			GlControlLoaded = true;
-			GL.ClearColor(255, 255, 255, 0);
-			glControl.VSync = true;
+				glControl.BringToFront();
+				GlControlLoaded = true;
+				GL.ClearColor(255, 255, 255, 0);
+				glControl.VSync = true;
+			}
+
 			SetupViewport();
 
 			RenderManager_OGL.Instance.OnRender += OnRender;
