@@ -40,7 +40,7 @@ namespace Alloclave
 				}
 
 				VisualMemoryBlock block = VisualMemoryBlocks.Values[VisualMemoryBlocks.Count - 1];
-				RectangleF lowerBounds = block.GraphicsPath.GetBounds();
+				RectangleF lowerBounds = block.Bounds;
 				return new Rectangle(0, 0, block.MaxPixelWidth, (int)lowerBounds.Bottom);
 			}
 		}

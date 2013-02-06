@@ -42,6 +42,15 @@ namespace Alloclave
 
 		public GraphicsPath GraphicsPath = new GraphicsPath();
 
+		private RectangleF _Bounds = new RectangleF();
+		public RectangleF Bounds
+		{
+			get
+			{
+				return _Bounds;
+			}
+		}
+
 		public List<Triangle> Triangles = new List<Triangle>();
 
 		public bool IsNew = true;
@@ -136,6 +145,8 @@ namespace Alloclave
 
 			var newArray = Array.ConvertAll(polygonPoints.ToArray(), item => item.ToPoint());
 			GraphicsPath.AddPolygon(newArray);
+
+			_Bounds = GraphicsPath.GetBounds();
 
 			// Create triangles (2 per section)
 			// Counter-clockwise
