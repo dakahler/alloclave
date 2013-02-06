@@ -155,7 +155,7 @@ namespace
 					hb->dwAddress = (void *) ( (block->address) + curHeapNode->Granularity );
 
 					// If all the blocks have been enumerated....exit
-					if( hb->reserved > curHeapNode->BlockCount)
+					if( hb->reserved >= curHeapNode->BlockCount - 1)
 						return FALSE;
 
 					hb->reserved++;
@@ -255,20 +255,18 @@ namespace
 
 
 		ULONG heapNodeCount = db->HeapInformation ? *PULONG(db->HeapInformation):0;
-		List<Alloclave_Plugin::AllocationData^>^ allocationList = nullptr;
+		List<Alloclave_Plugin::AllocationData^>^ allocationList = gcnew List<Alloclave_Plugin::AllocationData^>();
 		if (heapNodeCount > 0)
 		{
 
 			PDEBUG_HEAP_INFORMATION heapInfo = PDEBUG_HEAP_INFORMATION(PULONG(db-> HeapInformation) + 1);
 
 			// Go through each of the heap nodes and dispaly the information
-			// heapNodeCount
-			// TODO: Multi-heap support
-			for (unsigned int i = 0; i < 1; i++)
+			for (unsigned int i = 0; i < heapNodeCount; i++)
 			{
-				allocationList = GetHeapBlocks(pid, heapInfo[i].Base);
+				List<Alloclave_Plugin::AllocationData^>^ newList = GetHeapBlocks(pid, heapInfo[i].Base);
+				allocationList->AddRange(newList);
 			}
-
 		}
 
 		// Clean up the buffer
