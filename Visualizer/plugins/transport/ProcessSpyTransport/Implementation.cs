@@ -112,6 +112,7 @@ namespace Alloclave_Plugin
 							Allocation allocationPacket = new Allocation();
 							allocationPacket.Address = allocation.Address;
 							allocationPacket.Size = allocation.Size;
+							allocationPacket.HeapId = (ushort)allocation.HeapId;
 
 							allocations.Add(allocationPacket);
 						}
@@ -133,6 +134,7 @@ namespace Alloclave_Plugin
 						{
 							Free freePacket = new Free();
 							freePacket.Address = free.Address;
+							freePacket.HeapId = (ushort)free.HeapId;
 
 							frees.Add(freePacket);
 						}

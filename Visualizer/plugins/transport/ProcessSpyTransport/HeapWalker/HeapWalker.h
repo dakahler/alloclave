@@ -11,6 +11,7 @@ namespace Alloclave_Plugin {
 	public:
 		System::UInt64 Address;
 		System::UInt64 Size;
+		System::Int32 HeapId;
 
 		virtual int CompareTo(System::Object^ other)
 		{

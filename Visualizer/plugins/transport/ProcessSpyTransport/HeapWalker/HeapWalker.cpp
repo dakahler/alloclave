@@ -69,6 +69,13 @@ struct HeapBlockInternal
 	DWORD address;
 };
 
+#define HEAP_FLAG_NOSERIALIZE	0x1
+#define HEAP_FLAG_GROWABLE		0x2
+#define HEAP_FLAG_EXCEPTIONS	0x4
+#define HEAP_FLAG_NONDEFAULT	0x1000
+#define HEAP_FLAG_SHAREABLE		0x8000
+#define HEAP_FLAG_EXECUTABLE	0x40000
+
 #define PDI_MODULES                       0x01
 #define PDI_BACKTRACE                     0x02
 #define PDI_HEAPS                         0x04
@@ -114,7 +121,7 @@ namespace
 
 		block->unknown = 4;
 
-		while( ( (block->flag) & 2 ) == 2 )
+		while (block->flag & HEAP_FLAG_GROWABLE)
 		{
 			hb->reserved++;
 			hb->dwAddress = (void *) ( (block->address) + curHeapNode->Granularity );
@@ -147,7 +154,7 @@ namespace
 
 		__try
 		{
-			if( ( (block->flag) & 2 ) == 2 )
+			if (block->flag & HEAP_FLAG_GROWABLE)
 			{
 				do
 				{
@@ -155,14 +162,14 @@ namespace
 					hb->dwAddress = (void *) ( (block->address) + curHeapNode->Granularity );
 
 					// If all the blocks have been enumerated....exit
-					if( hb->reserved >= curHeapNode->BlockCount - 1)
+					if (hb->reserved >= curHeapNode->BlockCount - 1)
 						return FALSE;
 
 					hb->reserved++;
 					block++; //move to next block
 					hb->dwSize = block->size;
 				}
-				while( ( (block->flag) & 2 ) == 2 );
+				while (block->flag & HEAP_FLAG_GROWABLE);
 			}
 			else
 			{
@@ -172,7 +179,7 @@ namespace
 			}
 
 			// Update the flags...
-			USHORT flags = ( block->flag);
+			USHORT flags = block->flag;
 
 			if( ( flags & 0xF1 ) != 0 || ( flags & 0x0200 ) != 0 )
 				hb->dwFlags = 1;
@@ -229,6 +236,9 @@ namespace
 							Alloclave_Plugin::AllocationData^ newAllocation = gcnew Alloclave_Plugin::AllocationData();
 							newAllocation->Address = (UInt64)hb.dwAddress;
 							newAllocation->Size = (UINT64)hb.dwSize;
+
+							// TODO: Might need to be more intelligent about IDs
+							newAllocation->HeapId = i;
 
 							allocationList->Add(newAllocation);
 						}

@@ -97,11 +97,12 @@ namespace Alloclave
 			else
 			{
 				// TODO: These should modify the VBO instead of using immediate mode
-				if (_SelectedBlock != null)
+				VisualMemoryBlock selectedBlock = _SelectedBlock;
+				if (selectedBlock != null)
 				{
 					GL.Begin(BeginMode.Triangles);
 					GL.Color3(Color.Black);
-					foreach (Triangle triangle in _SelectedBlock.Triangles)
+					foreach (Triangle triangle in selectedBlock.Triangles)
 					{
 						foreach (Vector vertex in triangle.Vertices)
 						{
@@ -111,11 +112,12 @@ namespace Alloclave
 					GL.End();
 				}
 
-				if (_HoverBlock != null)
+				VisualMemoryBlock hoverBlock = _HoverBlock;
+				if (hoverBlock != null)
 				{
 					GL.Begin(BeginMode.Triangles);
 					GL.Color4(Color.FromArgb(128, Color.Black));
-					foreach (Triangle triangle in _HoverBlock.Triangles)
+					foreach (Triangle triangle in hoverBlock.Triangles)
 					{
 						foreach (Vector vertex in triangle.Vertices)
 						{

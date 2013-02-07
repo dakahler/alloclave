@@ -29,7 +29,8 @@ Buffer Transport::BuildFinalBuffer(unsigned short version)
 
 	buffer.Add(&version, sizeof(version));
 
-	unsigned short numItems = PacketQueue.GetNumItems();
+	// TODO: Architecture
+	unsigned int numItems = PacketQueue.GetNumItems();
 	buffer.Add(&numItems, sizeof(numItems));
 
 	for (unsigned int i = 0; i < numItems; i++)

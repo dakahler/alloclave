@@ -91,6 +91,7 @@ namespace Alloclave
 				// Create final list, removing allocations as frees are encountered
 				lock (RebuildDataLock)
 				{
+					// TODO: STILL needs performance improvements for large datasets
 					foreach (var pair in newList)
 					{
 						if (pair.Value is Allocation)

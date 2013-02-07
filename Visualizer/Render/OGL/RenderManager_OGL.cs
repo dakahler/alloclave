@@ -107,6 +107,7 @@ namespace Alloclave
 
 		public void Update()
 		{
+			// TODO: Needs to be much faster
 			lock (NewBlocks)
 			{
 				for (int i = 0; i < NewBlocks.Count; i++)

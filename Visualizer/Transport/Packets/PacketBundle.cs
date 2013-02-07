@@ -39,7 +39,7 @@ namespace Alloclave
 			BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
 
 			binaryWriter.Write(PacketBundle.Version); // version
-			binaryWriter.Write((UInt16)packets.Count());
+			binaryWriter.Write((UInt32)packets.Count());
 			foreach (IPacket packet in packets)
 			{
 				byte packetType = (byte)PacketTypeRegistrar.GetType(packet.GetType());
@@ -62,8 +62,8 @@ namespace Alloclave
 				throw new NotSupportedException();
 			}
 
-			UInt16 numPackets = binaryReader.ReadUInt16();
-			for (UInt16 i = 0; i < numPackets; i++)
+			UInt32 numPackets = binaryReader.ReadUInt32();
+			for (UInt32 i = 0; i < numPackets; i++)
 			{
 				if (!Enum.IsDefined(typeof(PacketTypeRegistrar.PacketTypes), binaryReader.PeekChar()))
 				{
