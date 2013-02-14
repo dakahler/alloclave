@@ -65,11 +65,6 @@ namespace Alloclave
 
 		void OnRender(object sender, RenderManager_OGL.RenderEventArgs e)
 		{
-			if (MemoryBlockManager.Instance.Count == 0)
-			{
-				return;
-			}
-
 			if (e.IsPreRender)
 			{
 				Monitor.Enter(glControl);

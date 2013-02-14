@@ -31,8 +31,6 @@ namespace Alloclave
 	public class VisualMemoryBlock
 	{
 		// TODO: Better encapsulation
-		static bool isSecondaryColor = false;
-
 		const int RowHeight = 2;
 
 		public Color _Color = Color.Red;
@@ -62,7 +60,7 @@ namespace Alloclave
 
 		}
 
-		public VisualMemoryBlock(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width)
+		public VisualMemoryBlock(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width, Color color)
 		{
 			if (allocation.Address < startAddress)
 			{
@@ -73,7 +71,7 @@ namespace Alloclave
 
 			MaxPixelWidth = width;
 
-			Create(allocation, startAddress, addressWidth, width);
+			Create(allocation, startAddress, addressWidth, width, color);
 		}
 
 		private Vector GetPixelPos(UInt64 address, UInt64 startAddress, UInt64 addressWidth, int width)
@@ -99,7 +97,7 @@ namespace Alloclave
 			return new Vector((int)pixelX, (int)pixelY);
 		}
 
-		private void Create(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width)
+		private void Create(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width, Color color)
 		{
 			Triangles.Clear();
 
@@ -180,17 +178,7 @@ namespace Alloclave
 				Triangles.Add(upper2);
 			}
 
-
-			if (!isSecondaryColor)
-			{
-				_Color = Properties.Settings.Default.Allocation1;
-			}
-			else
-			{
-				_Color = Properties.Settings.Default.Allocation2;
-			}
-
-			isSecondaryColor = !isSecondaryColor;
+			_Color = color;
 		}
 
 		public bool Contains(Vector v)

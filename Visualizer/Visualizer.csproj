@@ -284,6 +284,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Render\OGL\RenderManager_OGL.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Transport\CustomBinaryReader.cs" />
     <Compile Include="Transport\ICustomSerializable.cs" />
     <Compile Include="Transport\Packets\Allocation.cs" />
@@ -347,6 +348,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.config" />
     <None Include="Core\app.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\DataSources\Alloclave.Properties.Settings.datasource" />

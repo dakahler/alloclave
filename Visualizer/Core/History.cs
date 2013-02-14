@@ -53,16 +53,16 @@ namespace Alloclave
 			}
 		}
 
-		public SortedList<TimeStamp, IPacket> Get(Type type)
+		public List<KeyValuePair<TimeStamp, IPacket>> Get(Type type)
 		{
 			SortedList<TimeStamp, IPacket> data;
 			if (DataDictionary.TryGetValue(type, out data))
 			{
-				return data;
+				return data.AsEnumerable().ToList();
 			}
 			else
 			{
-				return new SortedList<TimeStamp, IPacket>();
+				return new List<KeyValuePair<TimeStamp, IPacket>>();
 			}
 		}
 

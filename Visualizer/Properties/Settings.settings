@@ -2,11 +2,29 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Alloclave.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Allocation1" Type="System.Drawing.Color" Scope="User">
+    <Setting Name="Heap1_Allocation1" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Teal</Value>
     </Setting>
-    <Setting Name="Allocation2" Type="System.Drawing.Color" Scope="User">
+    <Setting Name="Heap1_Allocation2" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">PaleTurquoise</Value>
+    </Setting>
+    <Setting Name="Heap2_Allocation1" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Red</Value>
+    </Setting>
+    <Setting Name="Heap2_Allocation2" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">255, 128, 128</Value>
+    </Setting>
+    <Setting Name="Heap3_Allocation1" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">255, 128, 255</Value>
+    </Setting>
+    <Setting Name="Heap3_Allocation2" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">192, 0, 192</Value>
+    </Setting>
+    <Setting Name="Heap4_Allocation1" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Green</Value>
+    </Setting>
+    <Setting Name="Heap4_Allocation2" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Lime</Value>
     </Setting>
   </Settings>
 </SettingsFile>

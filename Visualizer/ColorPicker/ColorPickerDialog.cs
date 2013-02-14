@@ -23,8 +23,14 @@ namespace Alloclave
 
 			// Init combo box
 			var dataSource = new List<ColorSetting>();
-			dataSource.Add(new ColorSetting() { name = "Allocation1", color = Properties.Settings.Default.Allocation1 });
-			dataSource.Add(new ColorSetting() { name = "Allocation2", color = Properties.Settings.Default.Allocation2 });
+			dataSource.Add(new ColorSetting() { name = "Allocation1", color = Properties.Settings.Default.Heap1_Allocation1 });
+			dataSource.Add(new ColorSetting() { name = "Allocation2", color = Properties.Settings.Default.Heap1_Allocation2 });
+			dataSource.Add(new ColorSetting() { name = "Allocation3", color = Properties.Settings.Default.Heap2_Allocation1 });
+			dataSource.Add(new ColorSetting() { name = "Allocation4", color = Properties.Settings.Default.Heap2_Allocation2 });
+			dataSource.Add(new ColorSetting() { name = "Allocation5", color = Properties.Settings.Default.Heap3_Allocation1 });
+			dataSource.Add(new ColorSetting() { name = "Allocation6", color = Properties.Settings.Default.Heap3_Allocation2 });
+			dataSource.Add(new ColorSetting() { name = "Allocation7", color = Properties.Settings.Default.Heap4_Allocation1 });
+			dataSource.Add(new ColorSetting() { name = "Allocation8", color = Properties.Settings.Default.Heap4_Allocation2 });
 			colorComboBox.Items.Add(dataSource);
 
 			colorComboBox.DataSource = dataSource;
@@ -48,13 +54,24 @@ namespace Alloclave
 			colorSettings[colorComboBox.SelectedIndex].color = m_colorPicker.SelectedColor;
 
 			// HACK
-			if (colorComboBox.SelectedIndex == 0)
+			switch (colorComboBox.SelectedIndex)
 			{
-				Properties.Settings.Default.Allocation1 = m_colorPicker.SelectedColor;
-			}
-			else
-			{
-				Properties.Settings.Default.Allocation2 = m_colorPicker.SelectedColor;
+				case 0:
+					Properties.Settings.Default.Heap1_Allocation1 = m_colorPicker.SelectedColor; break;
+				case 1:
+					Properties.Settings.Default.Heap1_Allocation2 = m_colorPicker.SelectedColor; break;
+				case 2:
+					Properties.Settings.Default.Heap2_Allocation1 = m_colorPicker.SelectedColor; break;
+				case 3:
+					Properties.Settings.Default.Heap2_Allocation2 = m_colorPicker.SelectedColor; break;
+				case 4:
+					Properties.Settings.Default.Heap3_Allocation1 = m_colorPicker.SelectedColor; break;
+				case 5:
+					Properties.Settings.Default.Heap3_Allocation2 = m_colorPicker.SelectedColor; break;
+				case 6:
+					Properties.Settings.Default.Heap4_Allocation1 = m_colorPicker.SelectedColor; break;
+				case 7:
+					Properties.Settings.Default.Heap4_Allocation2 = m_colorPicker.SelectedColor; break;
 			}
 
 			if (ColorChanged != null)

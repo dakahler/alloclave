@@ -149,6 +149,9 @@ namespace
 		hb->reserved++;
 		block = (HeapBlockInternal*)curHeapNode->Blocks;
 
+		if (hb->reserved >= curHeapNode->BlockCount - 1)
+			return FALSE;
+
 		// Make it point to next block address entry
 		block += hb->reserved;
 

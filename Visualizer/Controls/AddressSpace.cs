@@ -46,6 +46,10 @@ namespace Alloclave
 		// TODO: Better name
 		SortedList<UInt64, IPacket> CombinedList = new SortedList<UInt64, IPacket>();
 
+		// TODO: May want to make the idea of multiple heaps more pervasive
+		// throughout the data flow
+		Dictionary<int, RectangleF> HeapBounds = new Dictionary<int, RectangleF>();
+
 		public event SelectionChangedEventHandler SelectionChanged;
 
 		public event EventHandler Rebuilt;
@@ -56,7 +60,7 @@ namespace Alloclave
 			Rebuild(LastHistory);
 		}
 
-		public void Rebuild(History history)
+		public void Rebuild(History history, bool forceFullRebuild = false)
 		{
 			if (Parent == null)
 			{
@@ -65,34 +69,49 @@ namespace Alloclave
 
 			var task3 = new Task(() => 
 			{
-				List<KeyValuePair<TimeStamp, IPacket>> newAllocations = history.GetNew(typeof(Allocation));
-				List<KeyValuePair<TimeStamp, IPacket>> newFrees = history.GetNew(typeof(Free));
-
-				// Combine allocation and free lists
-				var newList = newAllocations.Union(newFrees);
-				newList.OrderBy(pair => pair.Key);
-
-				// Start by determining the lowest address
-				foreach (var pair in newAllocations)
-				{
-					AllocationMin = Math.Min(AllocationMin, ((Allocation)pair.Value).Address);
-					AllocationMax = Math.Max(AllocationMin, ((Allocation)pair.Value).Address);
-				}
-
-				if (AllocationMax < AllocationMin)
-				{
-					return;
-				}
-
-				// Align to the beginning of the row
-				UInt64 startAddress = AllocationMin & ~AddressWidth;
-				UInt64 numRows = (AllocationMax - startAddress) / AddressWidth;
-
-				// Create final list, removing allocations as frees are encountered
 				lock (RebuildDataLock)
 				{
+					List<KeyValuePair<TimeStamp, IPacket>> newAllocations = null;
+					List<KeyValuePair<TimeStamp, IPacket>> newFrees = null;
+					if (forceFullRebuild)
+					{
+						CombinedList.Clear();
+						MemoryBlockManager.Instance.Reset();
+
+						newAllocations = history.Get(typeof(Allocation));
+						newFrees = history.Get(typeof(Free));
+					}
+					else
+					{
+						newAllocations = history.GetNew(typeof(Allocation));
+						newFrees = history.GetNew(typeof(Free));
+					}
+
+					// Combine allocation and free lists
+					var newList = newAllocations.Union(newFrees);
+					newList.OrderBy(pair => pair.Key);
+
+					// Start by determining the lowest address
+					foreach (var pair in newAllocations)
+					{
+						AllocationMin = Math.Min(AllocationMin, ((Allocation)pair.Value).Address);
+						AllocationMax = Math.Max(AllocationMin, ((Allocation)pair.Value).Address);
+					}
+
+					if (AllocationMax < AllocationMin)
+					{
+						return;
+					}
+
+					// Align to the beginning of the row
+					UInt64 startAddress = AllocationMin & ~AddressWidth;
+					UInt64 numRows = (AllocationMax - startAddress) / AddressWidth;
+
+					// Create final list, removing allocations as frees are encountered
+				
 					// TODO: STILL needs performance improvements for large datasets
 					foreach (var pair in newList)
+					//Parallel.ForEach(newList, pair =>
 					{
 						if (pair.Value is Allocation)
 						{
@@ -107,14 +126,38 @@ namespace Alloclave
 								// Treat it as a free/allocation combo here
 								// This makes it so genuine double allocations cannot be caught/reported,
 								// so it must be fixed in the future!
-								if (CombinedList.ContainsKey(allocation.Address))
+								bool remove = false;
+								lock (CombinedList)
 								{
-									CombinedList.Remove(allocation.Address);
+									if (CombinedList.ContainsKey(allocation.Address))
+									{
+										CombinedList.Remove(allocation.Address);
+										remove = true;
+									}
+
+									CombinedList.Add(allocation.Address, pair.Value);
+								}
+
+								if (remove)
+								{
 									MemoryBlockManager.Instance.Remove(allocation.Address);
 								}
 
-								CombinedList.Add(allocation.Address, pair.Value);
-								MemoryBlockManager.Instance.Add(allocation, AllocationMin, AddressWidth, Width);
+								VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(allocation, AllocationMin, AddressWidth, Width);
+
+								// Update heap bounds
+								// Currently doesn't bother tracking X
+								if (!HeapBounds.ContainsKey(allocation.HeapId))
+								{
+									HeapBounds.Add(allocation.HeapId, new RectangleF(0.0f, float.MaxValue, 0.0f, 0.0f));
+								}
+
+								RectangleF bounds = newBlock.Bounds;
+								bounds.Y = Math.Min(HeapBounds[allocation.HeapId].Y, bounds.Y);
+								bounds.Height = Math.Max(HeapBounds[allocation.HeapId].Bottom - HeapBounds[allocation.HeapId].Top,
+									bounds.Bottom - HeapBounds[allocation.HeapId].Top);
+
+								HeapBounds[allocation.HeapId] = bounds;
 							}
 							catch (ArgumentException)
 							{
@@ -127,22 +170,25 @@ namespace Alloclave
 						{
 							Free free = pair.Value as Free;
 
-							if (CombinedList.ContainsKey(free.Address))
+							lock (CombinedList)
 							{
-								CombinedList.Remove(free.Address);
-							}
-							else
-							{
-								// This indicates a memory problem on the target side
-								// TODO: User-facing error reporting
-								// This is going to hit naturally due to the hack above
-								//Console.WriteLine("Duplicate free!");
-								//throw new InvalidConstraintException();
+								if (CombinedList.ContainsKey(free.Address))
+								{
+									CombinedList.Remove(free.Address);
+								}
+								else
+								{
+									// This indicates a memory problem on the target side
+									// TODO: User-facing error reporting
+									// This is going to hit naturally due to the hack above
+									//Console.WriteLine("Duplicate free!");
+									//throw new InvalidConstraintException();
+								}
 							}
 
 							MemoryBlockManager.Instance.Remove(free.Address);
 						}
-					}
+					} //);
 
 					if (CombinedList.Count == 0)
 					{
@@ -162,8 +208,23 @@ namespace Alloclave
 						Rebuilt.Invoke(this, e);
 					}
 
+					// TODO: Sort spatially
+					var boundsSet = HeapBounds.AsEnumerable().OrderBy(p => p.Value.Bottom);
+
+					// Figure out heap offsets for free space compression
+					float currentOffset = 0;
+					for (int i = 0; i < boundsSet.Count() - 1; i++)
+					{
+						RectangleF topBounds = boundsSet.ElementAt(i).Value;
+						RectangleF bottomBounds = boundsSet.ElementAt(i + 1).Value;
+						float diff = bottomBounds.Top - topBounds.Bottom;
+						currentOffset += (diff - 100);
+
+						MemoryBlockManager.Instance.HeapOffsets[boundsSet.ElementAt(i + 1).Key] = currentOffset;
+					}
+
 					// TODO: This should hook into the callback above instead
-					RenderManager_OGL.Instance.Rebuild();
+					RenderManager_OGL.Instance.Rebuild(MemoryBlockManager.Instance.HeapOffsets);
 				}
 			});
 
@@ -189,7 +250,7 @@ namespace Alloclave
 
 		void ColorPickerDialog_ColorChanged(object sender, EventArgs e)
 		{
-			Rebuild(LastHistory);
+			Rebuild(LastHistory, true);
 		}
 
 		protected override void OnPaint(PaintEventArgs e)

@@ -76,7 +76,7 @@ namespace Alloclave
 
 		void OnRender(object sender, RenderManager_OGL.RenderEventArgs e)
 		{
-			if (!GlControlLoaded || MemoryBlockManager.Instance.Count == 0)
+			if (!GlControlLoaded)
 			{
 				return;
 			}
@@ -106,7 +106,13 @@ namespace Alloclave
 					{
 						foreach (Vector vertex in triangle.Vertices)
 						{
-							GL.Vertex3(vertex.X, vertex.Y, 1);
+							double yVertex = vertex.Y;
+							if (MemoryBlockManager.Instance.HeapOffsets.ContainsKey(selectedBlock.Allocation.HeapId))
+							{
+								yVertex -= (double)MemoryBlockManager.Instance.HeapOffsets[selectedBlock.Allocation.HeapId];
+							}
+
+							GL.Vertex3(vertex.X, yVertex, 1);
 						}
 					}
 					GL.End();
@@ -121,7 +127,13 @@ namespace Alloclave
 					{
 						foreach (Vector vertex in triangle.Vertices)
 						{
-							GL.Vertex3(vertex.X, vertex.Y, 1);
+							double yVertex = vertex.Y;
+							if (MemoryBlockManager.Instance.HeapOffsets.ContainsKey(hoverBlock.Allocation.HeapId))
+							{
+								yVertex -= (double)MemoryBlockManager.Instance.HeapOffsets[hoverBlock.Allocation.HeapId];
+							}
+
+							GL.Vertex3(vertex.X, yVertex, 1);
 						}
 					}
 					GL.End();

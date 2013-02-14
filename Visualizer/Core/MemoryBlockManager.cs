@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,9 @@ namespace Alloclave
 
 		private SortedList<UInt64, VisualMemoryBlock> VisualMemoryBlocks = new SortedList<UInt64, VisualMemoryBlock>();
 
+		// TODO: hack
+		private static bool isSecondaryColor = false;
+
 		public int Count
 		{
 			get
@@ -41,9 +45,34 @@ namespace Alloclave
 
 				VisualMemoryBlock block = VisualMemoryBlocks.Values[VisualMemoryBlocks.Count - 1];
 				RectangleF lowerBounds = block.Bounds;
-				return new Rectangle(0, 0, block.MaxPixelWidth, (int)lowerBounds.Bottom);
+				return new Rectangle(0, 0, block.MaxPixelWidth, (int)(lowerBounds.Bottom - TotalCompression));
 			}
 		}
+
+		public float TotalCompression
+		{
+			get
+			{
+				//float totalOffset = 0.0f;
+				//foreach (var pair in HeapOffsets)
+				//{
+				//	totalOffset += pair.Value;
+				//}
+
+				//return totalOffset;
+
+				if (HeapOffsets.Count > 0)
+				{
+					return HeapOffsets.Last().Value;
+				}
+				else
+				{
+					return 0;
+				}
+			}
+		}
+
+		public Dictionary<int, float> HeapOffsets = new Dictionary<int, float>();
 
 		private MemoryBlockManager()
 		{
@@ -52,33 +81,87 @@ namespace Alloclave
 
 		public void Reset()
 		{
-			VisualMemoryBlocks.Clear();
+			lock (VisualMemoryBlocks)
+			{
+				VisualMemoryBlocks.Clear();
+			}
 		}
 
 		public void Add(VisualMemoryBlock block)
 		{
-			VisualMemoryBlocks.Add(block.Allocation.Address, block);
+			lock (VisualMemoryBlocks)
+			{
+				VisualMemoryBlocks.Add(block.Allocation.Address, block);
+			}
 		}
 
-		public void Add(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width)
+		public VisualMemoryBlock Add(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width)
 		{
-			VisualMemoryBlock block = new VisualMemoryBlock(allocation, startAddress, addressWidth, width);
-			VisualMemoryBlocks.Add(allocation.Address, block);
+			// Determine color set based on heap id
+			// TODO: This can probably be more generic in the future
+			// TODO: This static way of tracking which color to use is too unreliable
+			Color color = Color.Red;
+			switch (allocation.HeapId % 4)
+			{
+				case 0:
+					if (!isSecondaryColor)
+						color = Properties.Settings.Default.Heap1_Allocation1;
+					else
+						color = Properties.Settings.Default.Heap1_Allocation2;
+					break;
+				case 1:
+					if (!isSecondaryColor)
+						color = Properties.Settings.Default.Heap2_Allocation1;
+					else
+						color = Properties.Settings.Default.Heap2_Allocation2;
+					break;
+				case 2:
+					if (!isSecondaryColor)
+						color = Properties.Settings.Default.Heap3_Allocation1;
+					else
+						color = Properties.Settings.Default.Heap3_Allocation2;
+					break;
+				case 3:
+					if (!isSecondaryColor)
+						color = Properties.Settings.Default.Heap4_Allocation1;
+					else
+						color = Properties.Settings.Default.Heap4_Allocation2;
+					break;
+			}
+			isSecondaryColor = !isSecondaryColor;
+
+			VisualMemoryBlock block = new VisualMemoryBlock(allocation, startAddress, addressWidth, width, color);
+
+			lock (VisualMemoryBlocks)
+			{
+				VisualMemoryBlocks.Add(allocation.Address, block);
+			}
+
+			return block;
 		}
 
 		public void Remove(VisualMemoryBlock block)
 		{
-			VisualMemoryBlocks.Remove(block.Allocation.Address);
+			lock (VisualMemoryBlocks)
+			{
+				VisualMemoryBlocks.Remove(block.Allocation.Address);
+			}
 		}
 
 		public void Remove(UInt64 address)
 		{
-			VisualMemoryBlocks.Remove(address);
+			lock (VisualMemoryBlocks)
+			{
+				VisualMemoryBlocks.Remove(address);
+			}
 		}
 
 		public void RemoveAt(int index)
 		{
-			VisualMemoryBlocks.RemoveAt(index);
+			lock (VisualMemoryBlocks)
+			{
+				VisualMemoryBlocks.RemoveAt(index);
+			}
 		}
 
 		public bool Contains(VisualMemoryBlock block)
@@ -110,22 +193,31 @@ namespace Alloclave
 		{
 			public int Compare(VisualMemoryBlock a, VisualMemoryBlock b)
 			{
-				if (a.GraphicsPath.IsVisible(b.GraphicsPath.PathPoints[0]))
+				GraphicsPath tempPath = (GraphicsPath)a.GraphicsPath.Clone();
+				Matrix tempMatrix = new Matrix();
+
+				if (MemoryBlockManager.Instance.HeapOffsets.ContainsKey(a.Allocation.HeapId))
+				{
+					tempMatrix.Translate(0.0f, -MemoryBlockManager.Instance.HeapOffsets[a.Allocation.HeapId]);
+				}
+				tempPath.Transform(tempMatrix);
+
+				if (tempPath.IsVisible(b.GraphicsPath.PathPoints[0]))
 				{
 					return 0;
 				}
 
-				if (a.GraphicsPath.PathPoints[0].Y + 1 < b.GraphicsPath.PathPoints[0].Y)
+				if (tempPath.PathPoints[0].Y + 1 < b.GraphicsPath.PathPoints[0].Y)
 				{
 					return -1;
 				}
-				else if (a.GraphicsPath.PathPoints[0].Y > b.GraphicsPath.PathPoints[0].Y)
+				else if (tempPath.PathPoints[0].Y > b.GraphicsPath.PathPoints[0].Y)
 				{
 					return 1;
 				}
 				else
 				{
-					if (a.GraphicsPath.PathPoints[0].X < b.GraphicsPath.PathPoints[0].X)
+					if (tempPath.PathPoints[0].X < b.GraphicsPath.PathPoints[0].X)
 					{
 						return -1;
 					}

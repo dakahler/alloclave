@@ -108,32 +108,32 @@ namespace Alloclave
 		public void Update()
 		{
 			// TODO: Needs to be much faster
-			lock (NewBlocks)
-			{
-				for (int i = 0; i < NewBlocks.Count; i++)
-				{
-					var block = NewBlocks.ElementAt(i);
+			//lock (NewBlocks)
+			//{
+			//	for (int i = 0; i < NewBlocks.Count; i++)
+			//	{
+			//		var block = NewBlocks.ElementAt(i);
 
-					double startTimeSeconds = (double)block.Value.StartTime.Time / (double)Stopwatch.Frequency;
-					double currentTimeSeconds = (double)Stopwatch.GetTimestamp() / (double)Stopwatch.Frequency;
-					float difference = (float)(currentTimeSeconds - startTimeSeconds);
+			//		double startTimeSeconds = (double)block.Value.StartTime.Time / (double)Stopwatch.Frequency;
+			//		double currentTimeSeconds = (double)Stopwatch.GetTimestamp() / (double)Stopwatch.Frequency;
+			//		float difference = (float)(currentTimeSeconds - startTimeSeconds);
 
-					float percentage = (BlockMetadata.AliveSeconds - (float)difference) / BlockMetadata.AliveSeconds;
-					percentage = 1.0f - percentage;
-					percentage = Math.Min(percentage, 1.0f);
-					percentage = Math.Max(percentage, 0.0f);
+			//		float percentage = (BlockMetadata.AliveSeconds - (float)difference) / BlockMetadata.AliveSeconds;
+			//		percentage = 1.0f - percentage;
+			//		percentage = Math.Min(percentage, 1.0f);
+			//		percentage = Math.Max(percentage, 0.0f);
 
-					ChangeBlockColor(block, Color.LightYellow, percentage);
+			//		ChangeBlockColor(block, Color.LightYellow, percentage);
 
-					// Delete if old
-					if (difference > BlockMetadata.AliveSeconds)
-					{
-						ChangeBlockColor(block, Color.LightYellow, 1.0f);
-						NewBlocks.Remove(block.Key);
-						i--;
-					}
-				}
-			}
+			//		// Delete if old
+			//		if (difference > BlockMetadata.AliveSeconds)
+			//		{
+			//			ChangeBlockColor(block, Color.LightYellow, 1.0f);
+			//			NewBlocks.Remove(block.Key);
+			//			i--;
+			//		}
+			//	}
+			//}
 
 			if (OnUpdate != null)
 			{
@@ -162,10 +162,10 @@ namespace Alloclave
 
 					// Tell OpenGL to discard old VBO when done drawing it and reserve memory _now_ for a new buffer.
 					// without this, GL would wait until draw operations on old VBO are complete before writing to it
-					GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * MaxVertices), IntPtr.Zero, BufferUsageHint.DynamicDraw);
+					GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * MaxVertices), IntPtr.Zero, BufferUsageHint.StreamDraw);
 
 					// Fill newly allocated buffer
-					GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * MaxVertices), VBO, BufferUsageHint.DynamicDraw);
+					GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * MaxVertices), VBO, BufferUsageHint.StreamDraw);
 
 					// Draw everything
 					GL.DrawArrays(BeginMode.Triangles, 0, (int)NumVertices);
@@ -177,11 +177,10 @@ namespace Alloclave
 			}
 		}
 
-		public void Rebuild()
+		public void Rebuild(Dictionary<int, float> offsets)
 		{
 			// TODO: Vertex incremental rebuilding
 			NumVertices = 0;
-			List<Vector3> vertexList = new List<Vector3>();
 
 			lock (NewBlocks)
 			{
@@ -199,11 +198,17 @@ namespace Alloclave
 								Array.Resize(ref VBO, VBO.Length * 2);
 							}
 
+							double yVertex = vertex.Y;
+							if (offsets.ContainsKey(block.Allocation.HeapId))
+							{
+								yVertex -= (double)offsets[block.Allocation.HeapId];
+							}
+
 							VBO[NumVertices].R = block._Color.R;
 							VBO[NumVertices].G = block._Color.G;
 							VBO[NumVertices].B = block._Color.B;
 							VBO[NumVertices].A = block._Color.A;
-							VBO[NumVertices].Position = new Vector3((float)vertex.X, (float)vertex.Y, 0);
+							VBO[NumVertices].Position = new Vector3((float)vertex.X, (float)yVertex, 0);
 							NumVertices++;
 						}
 					}
