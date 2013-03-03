@@ -95,7 +95,7 @@ namespace Alloclave_Plugin
 			List<AllocationData> oldData = new List<AllocationData>();
 			while (true)
 			{
-				List<AllocationData> newData = heapWalker.GetHeapData((UInt64)pid);
+				List<AllocationData> newData = heapWalker.GetHeapData((UInt64)pid, Technique.Standard);
 				if (newData != null)
 				{
 					IEnumerable<AllocationData> newAllocations = newData.Except(oldData, new AllocationDataEqualityComparer());
@@ -112,7 +112,7 @@ namespace Alloclave_Plugin
 							Allocation allocationPacket = new Allocation();
 							allocationPacket.Address = allocation.Address;
 							allocationPacket.Size = allocation.Size;
-							allocationPacket.HeapId = (ushort)allocation.HeapId;
+							allocationPacket.HeapId = allocation.HeapId;
 
 							allocations.Add(allocationPacket);
 						}
@@ -134,7 +134,7 @@ namespace Alloclave_Plugin
 						{
 							Free freePacket = new Free();
 							freePacket.Address = free.Address;
-							freePacket.HeapId = (ushort)free.HeapId;
+							freePacket.HeapId = free.HeapId;
 
 							frees.Add(freePacket);
 						}

@@ -170,12 +170,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeapWalker.h" />
+    <ClInclude Include="HeapWalker_Common.h" />
+    <ClInclude Include="HeapWalker_Fast.h" />
+    <ClInclude Include="HeapWalker_Standard.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="HeapWalker.cpp" />
+    <ClCompile Include="HeapWalker_Common.cpp" />
+    <ClCompile Include="HeapWalker_Fast.cpp" />
+    <ClCompile Include="HeapWalker_Standard.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Collector|Win32'">Create</PrecompiledHeader>
