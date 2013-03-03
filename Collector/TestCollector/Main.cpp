@@ -11,11 +11,16 @@ void main()
 {
 	RegisterTransport(&s_Transport);
 
-	char* testMalloc = (char*)malloc(16);
-	char* testNew = new char;
-	char* testArrayNew = new char[100];
+	//char* testMalloc = (char*)malloc(16);
+	//char* testNew = new char;
 
-	free(testMalloc);
-	delete testNew;
-	delete[] testArrayNew;
+	while (true)
+	{
+		char* testArrayNew = new char[1000];
+		Sleep(1000);
+	}
+
+	//free(testMalloc);
+	//delete testNew;
+	//delete[] testArrayNew;
 }

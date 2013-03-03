@@ -20,7 +20,7 @@ namespace Alloclave
 		public UInt64 Size;
 		public UInt64 Alignment;
 		public AllocationType Type;
-		public UInt16 HeapId;
+		public UInt32 HeapId;
 		public CallStack Stack = new CallStack();
 		public byte[] UserData;
 
@@ -91,7 +91,7 @@ namespace Alloclave
 			Architecture = targetSystemInfo.Architecture;
 
 			Type = (AllocationType)binaryReader.ReadByte();
-			HeapId = binaryReader.ReadUInt16();
+			HeapId = binaryReader.ReadUInt32();
 
 			Stack.Deserialize(binaryReader, targetSystemInfo);
 

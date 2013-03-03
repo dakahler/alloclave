@@ -19,7 +19,7 @@ namespace Alloclave
 		unsigned int Size;
 		unsigned int Alignment;
 		AllocationType Type;
-		unsigned short HeapId;
+		unsigned int HeapId;
 
 		char* Stack;
 

@@ -28,7 +28,11 @@ namespace Alloclave
 		const void* GetData() const;
 		unsigned int GetSize() const;
 
+		Buffer& operator=(const Buffer& rhs);
+
 	private:
+
+		static void Copy(const Buffer& from, Buffer& to);
 
 		static const unsigned int DefaultSize = 64;
 		unsigned int CurrentSize;

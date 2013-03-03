@@ -23,21 +23,38 @@ Buffer::Buffer(unsigned int initialSize)
 
 Buffer::Buffer(const Buffer& other)
 {
-	CurrentSize = other.CurrentSize;
-	Position = other.Position;
-	Data = NULL;
+	Copy(other, *this);
+}
 
-	if (CurrentSize > 0)
+Buffer& Buffer::operator=(const Buffer& rhs)
+{
+	if (this == &rhs)
 	{
-		Data = (char*)real_malloc(CurrentSize);
-		if (Data)
+		return *this;
+	}
+
+	Copy(rhs, *this);
+
+	return *this;
+}
+
+void Buffer::Copy(const Buffer& from, Buffer& to)
+{
+	to.CurrentSize = from.CurrentSize;
+	to.Position = from.Position;
+	to.Data = NULL;
+
+	if (to.CurrentSize > 0)
+	{
+		to.Data = (char*)real_malloc(to.CurrentSize);
+		if (to.Data)
 		{
-			memcpy(Data, other.Data, CurrentSize);
+			memcpy(to.Data, from.Data, to.CurrentSize);
 		}
 		else
 		{
-			CurrentSize = 0;
-			Position = 0;
+			to.CurrentSize = 0;
+			to.Position = 0;
 		}
 	}
 }
@@ -67,6 +84,8 @@ void Buffer::Resize(unsigned int newSize)
 
 void Buffer::Add(void* data, unsigned int dataSize)
 {
+	assert(dataSize > 0);
+
 	// TODO: Error checking
 	while (Position + dataSize >= CurrentSize)
 	{

@@ -31,6 +31,7 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InfoForm));
 			this.SizeLabel = new System.Windows.Forms.Label();
 			this.AddressLabel = new System.Windows.Forms.Label();
+			this.HeapLabel = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// SizeLabel
@@ -51,11 +52,21 @@
 			this.AddressLabel.TabIndex = 0;
 			this.AddressLabel.Text = "Address:";
 			// 
+			// HeapLabel
+			// 
+			this.HeapLabel.AutoSize = true;
+			this.HeapLabel.Location = new System.Drawing.Point(35, 75);
+			this.HeapLabel.Name = "HeapLabel";
+			this.HeapLabel.Size = new System.Drawing.Size(36, 13);
+			this.HeapLabel.TabIndex = 2;
+			this.HeapLabel.Text = "Heap:";
+			// 
 			// InfoForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(767, 228);
+			this.Controls.Add(this.HeapLabel);
 			this.Controls.Add(this.SizeLabel);
 			this.Controls.Add(this.AddressLabel);
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -72,6 +83,7 @@
 
 		public System.Windows.Forms.Label AddressLabel;
 		public System.Windows.Forms.Label SizeLabel;
+		private System.Windows.Forms.Label HeapLabel;
 
 	}
 }

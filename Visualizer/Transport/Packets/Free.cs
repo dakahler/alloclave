@@ -11,7 +11,7 @@ namespace Alloclave
 		// Data passed in from target system
 		// TODO: Better encapsulation
 		public UInt64 Address;
-		public UInt16 HeapId;
+		public UInt32 HeapId;
 		public CallStack Stack = new CallStack();
 		public byte[] UserData;
 
@@ -49,7 +49,7 @@ namespace Alloclave
 				Address = binaryReader.ReadUInt64();
 			}
 
-			HeapId = binaryReader.ReadUInt16();
+			HeapId = binaryReader.ReadUInt32();
 
 			Stack.Deserialize(binaryReader, targetSystemInfo);
 

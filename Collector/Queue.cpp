@@ -54,8 +54,15 @@ Buffer Queue::Dequeue()
 		Buffer buffer = Head->Data;
 		QueueItem* oldHead = Head;
 		Head = Head->Next;
+		oldHead->~QueueItem();
 		real_free(oldHead);
 		NumItems--;
+
+		if (Head == NULL)
+		{
+			Tail = NULL;
+		}
+
 		return buffer;
 	}
 

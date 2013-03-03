@@ -13,7 +13,7 @@ namespace Alloclave
 		s_Transport = transport;
 	}
 
-	void RegisterAllocation(void* address, unsigned int size, unsigned int alignment, unsigned short heapId)
+	void RegisterAllocation(void* address, unsigned int size, unsigned int alignment, unsigned int heapId)
 	{
 		if (s_Transport == NULL)
 		{
@@ -29,7 +29,7 @@ namespace Alloclave
 		s_Transport->Send(allocation);
 	}
 
-	void RegisterHeap(void* address, unsigned int size, unsigned int alignment, unsigned short heapId)
+	void RegisterHeap(void* address, unsigned int size, unsigned int alignment, unsigned int heapId)
 	{
 		Allocation heap;
 		heap.Address = address;

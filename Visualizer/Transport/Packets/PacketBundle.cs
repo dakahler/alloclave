@@ -67,6 +67,7 @@ namespace Alloclave
 			{
 				if (!Enum.IsDefined(typeof(PacketTypeRegistrar.PacketTypes), binaryReader.PeekChar()))
 				{
+					int invalidType = binaryReader.PeekChar();
 					throw new NotSupportedException();
 				}
 

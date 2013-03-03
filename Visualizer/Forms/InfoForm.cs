@@ -31,6 +31,8 @@ namespace Alloclave
 			}
 
 			SizeLabel.Text = String.Format("Size: {0} bytes", allocation.Size);
+
+			HeapLabel.Text = String.Format("Heap ID: {0}", allocation.HeapId);
 		}
 	}
 }
