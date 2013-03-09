@@ -48,7 +48,7 @@ namespace Alloclave
 
 		// TODO: May want to make the idea of multiple heaps more pervasive
 		// throughout the data flow
-		Dictionary<int, RectangleF> HeapBounds = new Dictionary<int, RectangleF>();
+		Dictionary<uint, RectangleF> HeapBounds = new Dictionary<uint, RectangleF>();
 
 		public event SelectionChangedEventHandler SelectionChanged;
 
@@ -110,6 +110,7 @@ namespace Alloclave
 					// Create final list, removing allocations as frees are encountered
 				
 					// TODO: STILL needs performance improvements for large datasets
+					VisualMemoryBlock lastBlock = null;
 					foreach (var pair in newList)
 					//Parallel.ForEach(newList, pair =>
 					{
@@ -153,11 +154,13 @@ namespace Alloclave
 								}
 
 								RectangleF bounds = newBlock.Bounds;
+								float oldHeight = bounds.Height;
 								bounds.Y = Math.Min(HeapBounds[allocation.HeapId].Y, bounds.Y);
-								bounds.Height = Math.Max(HeapBounds[allocation.HeapId].Bottom - HeapBounds[allocation.HeapId].Top,
-									bounds.Bottom - HeapBounds[allocation.HeapId].Top);
+								bounds.Height = Math.Max(HeapBounds[allocation.HeapId].Height,
+									newBlock.Bounds.Bottom - bounds.Y);
 
 								HeapBounds[allocation.HeapId] = bounds;
+								lastBlock = newBlock;
 							}
 							catch (ArgumentException)
 							{
@@ -186,7 +189,15 @@ namespace Alloclave
 								}
 							}
 
-							MemoryBlockManager.Instance.Remove(free.Address);
+							VisualMemoryBlock removedBlock = MemoryBlockManager.Instance.Remove(free.Address);
+							if (removedBlock != null)
+							{
+								removedBlock.Allocation.AssociatedFree = free;
+							}
+							else
+							{
+								throw new DataException();
+							}
 						}
 					} //);
 
@@ -220,7 +231,7 @@ namespace Alloclave
 						float diff = bottomBounds.Top - topBounds.Bottom;
 						currentOffset += (diff - 100);
 
-						MemoryBlockManager.Instance.HeapOffsets[boundsSet.ElementAt(i + 1).Key] = currentOffset;
+						MemoryBlockManager.Instance.HeapOffsets[boundsSet.ElementAt(i + 1).Key] = 0; //currentOffset;
 					}
 
 					// TODO: This should hook into the callback above instead

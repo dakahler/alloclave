@@ -177,7 +177,7 @@ namespace Alloclave
 			}
 		}
 
-		public void Rebuild(Dictionary<int, float> offsets)
+		public void Rebuild(Dictionary<uint, float> offsets)
 		{
 			// TODO: Vertex incremental rebuilding
 			NumVertices = 0;

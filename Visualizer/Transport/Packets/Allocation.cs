@@ -24,6 +24,8 @@ namespace Alloclave
 		public CallStack Stack = new CallStack();
 		public byte[] UserData;
 
+		public Free AssociatedFree;
+
 		public Common.Architecture Architecture;
 
 		// Tool-side-only data

@@ -23,6 +23,9 @@ namespace Alloclave
 
 		private SortedList<UInt64, VisualMemoryBlock> VisualMemoryBlocks = new SortedList<UInt64, VisualMemoryBlock>();
 
+		private Dictionary<uint, int> ColorDictionary = new Dictionary<uint, int>();
+		private int ColorIndex;
+
 		// TODO: hack
 		private static bool isSecondaryColor = false;
 
@@ -72,7 +75,7 @@ namespace Alloclave
 			}
 		}
 
-		public Dictionary<int, float> HeapOffsets = new Dictionary<int, float>();
+		public Dictionary<uint, float> HeapOffsets = new Dictionary<uint, float>();
 
 		private MemoryBlockManager()
 		{
@@ -100,8 +103,21 @@ namespace Alloclave
 			// Determine color set based on heap id
 			// TODO: This can probably be more generic in the future
 			// TODO: This static way of tracking which color to use is too unreliable
+			int index = 0;
+			if (ColorDictionary.ContainsKey(allocation.HeapId))
+			{
+				index = ColorDictionary[allocation.HeapId];
+			}
+			else
+			{
+				index = ColorIndex;
+				ColorDictionary.Add(allocation.HeapId, ColorIndex);
+				ColorIndex++;
+				ColorIndex %= 4;
+			}
+
 			Color color = Color.Red;
-			switch (allocation.HeapId % 4)
+			switch (index)
 			{
 				case 0:
 					if (!isSecondaryColor)
@@ -140,27 +156,35 @@ namespace Alloclave
 			return block;
 		}
 
-		public void Remove(VisualMemoryBlock block)
+		public VisualMemoryBlock Remove(VisualMemoryBlock block)
 		{
 			lock (VisualMemoryBlocks)
 			{
 				VisualMemoryBlocks.Remove(block.Allocation.Address);
+				return block;
 			}
 		}
 
-		public void Remove(UInt64 address)
+		public VisualMemoryBlock Remove(UInt64 address)
 		{
 			lock (VisualMemoryBlocks)
 			{
-				VisualMemoryBlocks.Remove(address);
+				VisualMemoryBlock block;
+				if (VisualMemoryBlocks.TryGetValue(address, out block))
+				{
+					return Remove(block);
+				}
+
+				return null;
 			}
 		}
 
-		public void RemoveAt(int index)
+		public VisualMemoryBlock RemoveAt(int index)
 		{
 			lock (VisualMemoryBlocks)
 			{
-				VisualMemoryBlocks.RemoveAt(index);
+				VisualMemoryBlock block = VisualMemoryBlocks.ElementAt(index).Value;
+				return Remove(block);
 			}
 		}
 
