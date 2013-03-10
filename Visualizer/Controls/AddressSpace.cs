@@ -28,11 +28,8 @@ namespace Alloclave
 		// TODO: This should be exposed in the UI
 		const UInt64 AddressWidth = 0xFF;
 
-		UInt64 AllocationMin = UInt64.MaxValue;
-		UInt64 AllocationMax = UInt64.MinValue;
-
 		// TODO: Too inefficient?
-		History LastHistory = new History();
+		History LastHistory = History.Instance;
 
 		RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
 
@@ -49,6 +46,8 @@ namespace Alloclave
 		// TODO: May want to make the idea of multiple heaps more pervasive
 		// throughout the data flow
 		Dictionary<uint, RectangleF> HeapBounds = new Dictionary<uint, RectangleF>();
+
+		TimeStamp LastTimestamp = new TimeStamp();
 
 		public event SelectionChangedEventHandler SelectionChanged;
 
@@ -71,47 +70,53 @@ namespace Alloclave
 			{
 				lock (RebuildDataLock)
 				{
-					List<KeyValuePair<TimeStamp, IPacket>> newAllocations = null;
-					List<KeyValuePair<TimeStamp, IPacket>> newFrees = null;
+					IEnumerable<KeyValuePair<TimeStamp, IPacket>> packets = null;
+					bool isBackward = false;
 					if (forceFullRebuild)
 					{
 						CombinedList.Clear();
 						MemoryBlockManager.Instance.Reset();
 
-						newAllocations = history.Get(typeof(Allocation));
-						newFrees = history.Get(typeof(Free));
+						packets = history.Get();
 					}
 					else
 					{
-						newAllocations = history.GetNew(typeof(Allocation));
-						newFrees = history.GetNew(typeof(Free));
+						// Determine what entries we need to get based off scrubber position
+						double position = (double)AllocationForm.MainScrubber.Position;
+						UInt64 timeRange = history.TimeRange.Max - history.TimeRange.Min;
+						UInt64 currentTime = history.TimeRange.Min + (UInt64)((double)timeRange * position);
+
+						if (currentTime > LastTimestamp.Time)
+						{
+							packets = history.GetForward(new TimeStamp(currentTime));
+						}
+						else if (currentTime < LastTimestamp.Time)
+						{
+							packets = history.GetBackward(new TimeStamp(currentTime));
+							isBackward = true;
+						}
+						else
+						{
+							return;
+						}
+
+						LastTimestamp = new TimeStamp(currentTime);
 					}
 
-					// Combine allocation and free lists
-					var newList = newAllocations.Union(newFrees);
-					newList.OrderBy(pair => pair.Key);
-
-					// Start by determining the lowest address
-					foreach (var pair in newAllocations)
-					{
-						AllocationMin = Math.Min(AllocationMin, ((Allocation)pair.Value).Address);
-						AllocationMax = Math.Max(AllocationMin, ((Allocation)pair.Value).Address);
-					}
-
-					if (AllocationMax < AllocationMin)
+					if (history.AddressRange.Max < history.AddressRange.Min)
 					{
 						return;
 					}
 
 					// Align to the beginning of the row
-					UInt64 startAddress = AllocationMin & ~AddressWidth;
-					UInt64 numRows = (AllocationMax - startAddress) / AddressWidth;
+					UInt64 startAddress = history.AddressRange.Min & ~AddressWidth;
+					UInt64 numRows = (history.AddressRange.Max - startAddress) / AddressWidth;
 
 					// Create final list, removing allocations as frees are encountered
 				
 					// TODO: STILL needs performance improvements for large datasets
 					VisualMemoryBlock lastBlock = null;
-					foreach (var pair in newList)
+					foreach (var pair in packets)
 					//Parallel.ForEach(newList, pair =>
 					{
 						if (pair.Value is Allocation)
@@ -136,7 +141,10 @@ namespace Alloclave
 										remove = true;
 									}
 
-									CombinedList.Add(allocation.Address, pair.Value);
+									if (!isBackward)
+									{
+										CombinedList.Add(allocation.Address, allocation);
+									}
 								}
 
 								if (remove)
@@ -144,23 +152,27 @@ namespace Alloclave
 									MemoryBlockManager.Instance.Remove(allocation.Address);
 								}
 
-								VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(allocation, AllocationMin, AddressWidth, Width);
+								if (!isBackward)
+								{
+									VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
+										allocation, history.AddressRange.Min, AddressWidth, Width);
+								}
 
 								// Update heap bounds
 								// Currently doesn't bother tracking X
-								if (!HeapBounds.ContainsKey(allocation.HeapId))
-								{
-									HeapBounds.Add(allocation.HeapId, new RectangleF(0.0f, float.MaxValue, 0.0f, 0.0f));
-								}
+								//if (!HeapBounds.ContainsKey(allocation.HeapId))
+								//{
+								//	HeapBounds.Add(allocation.HeapId, new RectangleF(0.0f, float.MaxValue, 0.0f, 0.0f));
+								//}
 
-								RectangleF bounds = newBlock.Bounds;
-								float oldHeight = bounds.Height;
-								bounds.Y = Math.Min(HeapBounds[allocation.HeapId].Y, bounds.Y);
-								bounds.Height = Math.Max(HeapBounds[allocation.HeapId].Height,
-									newBlock.Bounds.Bottom - bounds.Y);
+								//RectangleF bounds = newBlock.Bounds;
+								//float oldHeight = bounds.Height;
+								//bounds.Y = Math.Min(HeapBounds[allocation.HeapId].Y, bounds.Y);
+								//bounds.Height = Math.Max(HeapBounds[allocation.HeapId].Height,
+								//	newBlock.Bounds.Bottom - bounds.Y);
 
-								HeapBounds[allocation.HeapId] = bounds;
-								lastBlock = newBlock;
+								//HeapBounds[allocation.HeapId] = bounds;
+								//lastBlock = newBlock;
 							}
 							catch (ArgumentException)
 							{
@@ -181,6 +193,13 @@ namespace Alloclave
 								}
 								else
 								{
+									if (isBackward)
+									{
+										CombinedList.Add(free.Address, free.AssociatedAllocation);
+										VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
+										free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
+									}
+
 									// This indicates a memory problem on the target side
 									// TODO: User-facing error reporting
 									// This is going to hit naturally due to the hack above
@@ -193,6 +212,7 @@ namespace Alloclave
 							if (removedBlock != null)
 							{
 								removedBlock.Allocation.AssociatedFree = free;
+								free.AssociatedAllocation = removedBlock.Allocation;
 							}
 							else
 							{

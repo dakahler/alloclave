@@ -8,42 +8,101 @@ namespace Alloclave
 {
 	public class History
 	{
-		ConcurrentDictionary<Type, SortedList<TimeStamp, IPacket>> DataDictionary = new ConcurrentDictionary<Type, SortedList<TimeStamp, IPacket>>();
+		SortedList<TimeStamp, IPacket> PacketList = new SortedList<TimeStamp, IPacket>();
 
 		// Position tracker
-		// TODO: Should this be integrated into a single dictionary somehow?
-		ConcurrentDictionary<Type, int> PositionDictionary = new ConcurrentDictionary<Type, int>();
+		int Position;
 
 		// TODO: Might not be able to make these static
 		public static event EventHandler Updated;
 		public static bool SuspendRebuilding = false;
-		private static History Instance = null;
-
-		public History()
+		private static History _Instance;
+		public static History Instance
 		{
-			Instance = this;
-
-			Array valuesArray = Enum.GetValues(typeof(PacketTypeRegistrar.PacketTypes));
-			foreach (PacketTypeRegistrar.PacketTypes packetType in valuesArray)
+			get
 			{
-				DataDictionary.GetOrAdd(PacketTypeRegistrar.GetType(packetType), new SortedList<TimeStamp, IPacket>());
-				PositionDictionary.GetOrAdd(PacketTypeRegistrar.GetType(packetType), 0);
+				if (_Instance == null)
+				{
+					_Instance = new History();
+				}
+
+				return _Instance;
 			}
+		}
+
+		public class Range
+		{
+			public UInt64 Min;
+			public UInt64 Max;
+
+			public Range()
+			{
+				Min = UInt64.MaxValue;
+				Max = UInt64.MinValue;
+			}
+		}
+
+		private Range _AddressRange = new Range();
+		public Range AddressRange
+		{
+			get
+			{
+				return _AddressRange;
+			}
+		}
+
+		public Range TimeRange
+		{
+			get
+			{
+				Range timeRange = new Range();
+
+				if (PacketList.Count > 0)
+				{
+					timeRange.Min = PacketList.FirstOrDefault().Key.Time;
+					timeRange.Max = PacketList.LastOrDefault().Key.Time;
+				}
+				else
+				{
+					timeRange.Min = 0;
+					timeRange.Max = 0;
+				}
+
+				return timeRange;
+			}
+		}
+
+		private History()
+		{
+			//this.Add(new Allocation(), 0);
+			//this.Add(new Allocation(), 1);
+			//this.Add(new Allocation(), 2);
+			//this.Add(new Allocation(), 3);
+			//this.Add(new Allocation(), 4);
+			//this.Add(new Allocation(), 5);
+			//this.Add(new Allocation(), 6);
+			//this.Add(new Allocation(), 7);
+			//this.Add(new Allocation(), 8);
+			//this.Add(new Allocation(), 9);
+			//this.Add(new Allocation(), 10);
+
+			//var result = GetForward(new TimeStamp(5));
+			//result = GetBackward(new TimeStamp(2));
+			//result = GetForward(new TimeStamp(10));
 		}
 
 		public void Add(IPacket packet, UInt64 timeStamp)
 		{
-			SortedList<TimeStamp, IPacket> data;
-			if (DataDictionary.TryGetValue(packet.GetType(), out data))
+			lock (PacketList)
 			{
-				lock (data)
+				PacketList.Add(new TimeStamp(timeStamp), packet);
+
+				Allocation allocation = packet as Allocation;
+				if (allocation != null)
 				{
-					data.Add(new TimeStamp(timeStamp), packet);
+					_AddressRange.Min = Math.Min(_AddressRange.Min, allocation.Address);
+					_AddressRange.Max = Math.Max(_AddressRange.Max, allocation.Address);
 				}
-			}
-			else
-			{
-				throw new NotImplementedException();
 			}
 
 			if (Updated != null && !SuspendRebuilding)
@@ -53,34 +112,30 @@ namespace Alloclave
 			}
 		}
 
-		public List<KeyValuePair<TimeStamp, IPacket>> Get(Type type)
+		public IEnumerable<KeyValuePair<TimeStamp, IPacket>> Get()
 		{
-			SortedList<TimeStamp, IPacket> data;
-			if (DataDictionary.TryGetValue(type, out data))
+			return PacketList.AsEnumerable();
+		}
+
+		public IEnumerable<KeyValuePair<TimeStamp, IPacket>> GetForward(TimeStamp timeStamp)
+		{
+			lock (PacketList)
 			{
-				return data.AsEnumerable().ToList();
-			}
-			else
-			{
-				return new List<KeyValuePair<TimeStamp, IPacket>>();
+				var finalList = PacketList.Skip(Position).TakeWhile(p => p.Key <= timeStamp);
+				Position = PacketList.IndexOfValue(finalList.LastOrDefault().Value);
+
+				return finalList;
 			}
 		}
 
-		public List<KeyValuePair<TimeStamp, IPacket>> GetNew(Type type)
+		public IEnumerable<KeyValuePair<TimeStamp, IPacket>> GetBackward(TimeStamp timeStamp)
 		{
-			lock (this)
+			lock (PacketList)
 			{
-				SortedList<TimeStamp, IPacket> data;
-				if (DataDictionary.TryGetValue(type, out data))
-				{
-					var finalList = data.Skip(PositionDictionary[type]).Take(data.Count - PositionDictionary[type]);
-					PositionDictionary[type] = data.Count;
-					return finalList.ToList();
-				}
-				else
-				{
-					return new List<KeyValuePair<TimeStamp, IPacket>>();
-				}
+				var finalList = PacketList.Take(Position).SkipWhile(p => p.Key < timeStamp).Reverse();
+				Position = PacketList.IndexOfValue(finalList.LastOrDefault().Value);
+
+				return finalList;
 			}
 		}
 

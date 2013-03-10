@@ -16,7 +16,7 @@ namespace Alloclave
 
 		public Profile()
 		{
-			History = new History();
+			History = History.Instance;
 		}
 
 		public Profile(ref Transport transport)

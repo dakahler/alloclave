@@ -23,6 +23,8 @@ namespace Alloclave
 		const float widthPercentage = 0.9f;
 		const float heightPercentage = 0.9f;
 
+		public event EventHandler PositionChanged;
+
 		public Scrubber()
 		{
 			InitializeComponent();
@@ -102,6 +104,11 @@ namespace Alloclave
 		private void Scrubber_MouseUp(object sender, MouseEventArgs e)
 		{
 			LeftMouseDown = false;
+
+			if (PositionChanged != null)
+			{
+				PositionChanged(this, new EventArgs());
+			}
 		}
 
 		private void Scrubber_MouseMove(object sender, MouseEventArgs e)
