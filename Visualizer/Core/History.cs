@@ -121,7 +121,7 @@ namespace Alloclave
 		{
 			lock (PacketList)
 			{
-				var finalList = PacketList.Skip(Position).TakeWhile(p => p.Key <= timeStamp);
+				var finalList = PacketList.Skip(Position + 1).TakeWhile(p => p.Key <= timeStamp);
 				Position = PacketList.IndexOfValue(finalList.LastOrDefault().Value);
 
 				return finalList;
@@ -132,8 +132,8 @@ namespace Alloclave
 		{
 			lock (PacketList)
 			{
-				var finalList = PacketList.Take(Position).SkipWhile(p => p.Key < timeStamp).Reverse();
-				Position = PacketList.IndexOfValue(finalList.LastOrDefault().Value);
+				var finalList = PacketList.Take(Position + 1).SkipWhile(p => p.Key <= timeStamp).Reverse();
+				Position = PacketList.IndexOfValue(finalList.LastOrDefault().Value) - 1;
 
 				return finalList;
 			}
