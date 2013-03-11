@@ -33,7 +33,7 @@ namespace Alloclave
 		// TODO: Better encapsulation
 		const int RowHeight = 2;
 
-		public Color _Color = Color.Red;
+		public int ColorIndex = 0;
 
 		// TODO: Too specific?
 		public Allocation Allocation;
@@ -60,7 +60,7 @@ namespace Alloclave
 
 		}
 
-		public VisualMemoryBlock(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width, Color color)
+		public VisualMemoryBlock(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width, int colorIndex)
 		{
 			if (allocation.Address < startAddress)
 			{
@@ -68,10 +68,10 @@ namespace Alloclave
 			}
 
 			Allocation = allocation;
-
 			MaxPixelWidth = width;
+			ColorIndex = colorIndex;
 
-			Create(allocation, startAddress, addressWidth, width, color);
+			Create(allocation, startAddress, addressWidth, width, colorIndex);
 		}
 
 		private Vector GetPixelPos(UInt64 address, UInt64 startAddress, UInt64 addressWidth, int width)
@@ -97,7 +97,7 @@ namespace Alloclave
 			return new Vector((int)pixelX, (int)pixelY);
 		}
 
-		private void Create(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width, Color color)
+		private void Create(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width, int colorIndex)
 		{
 			Triangles.Clear();
 
@@ -178,7 +178,7 @@ namespace Alloclave
 				Triangles.Add(upper2);
 			}
 
-			_Color = color;
+			ColorIndex = colorIndex;
 		}
 
 		public bool Contains(Vector v)
