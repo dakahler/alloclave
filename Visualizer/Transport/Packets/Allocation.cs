@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.ComponentModel.Composition;
 
 namespace Alloclave
 {
@@ -21,7 +22,7 @@ namespace Alloclave
 		public UInt64 Alignment;
 		public AllocationType Type;
 		public UInt32 HeapId;
-		public CallStack Stack = new CallStack();
+		public CallStack Stack;
 		public byte[] UserData;
 
 		public Free AssociatedFree;
@@ -30,6 +31,19 @@ namespace Alloclave
 
 		// Tool-side-only data
 		String Notes;
+
+		public Allocation()
+		{
+			// TODO: Support arbitrary call stack adapters
+			foreach (ExportFactory<CallStack, ICallStackParserName> callStackAdapter in Program.CallStackParserAdapters)
+			{
+				String transportName = callStackAdapter.Metadata.Name;
+				if (transportName == "Call Stack PDB")
+				{
+					Stack = callStackAdapter.CreateExport().Value;
+				}
+			}
+		}
 
 		public int CompareTo(object obj)
 		{

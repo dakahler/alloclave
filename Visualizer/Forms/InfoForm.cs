@@ -14,14 +14,9 @@ namespace Alloclave
 	{
 		// TODO: Should this support other types of messages?
 
-		PdbParser pdbParser = new PdbParser();
-
 		public InfoForm()
 		{
 			InitializeComponent();
-
-			// TODO: Temp location, needs to be pulled out to plugin
-			pdbParser.Open(@"C:\dev\Alloclave\Debug_Collector\TestCollector.pdb");
 		}
 
 		public void Update(Allocation allocation)
@@ -52,8 +47,9 @@ namespace Alloclave
 					addressText = String.Format("0x{0:X16}: ", frame.Address);
 				}
 
+				// TODO: Is this parser-specific?
 				String functionName = addressText;
-				String rawFunctionName = pdbParser.GetFunctionName(frame.Address);
+				String rawFunctionName = frame.FunctionSignature;
 				if (rawFunctionName.Contains("NULL_THUNK_DATA") || rawFunctionName == String.Empty)
 				{
 					functionName += "Unknown";

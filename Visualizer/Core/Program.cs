@@ -14,14 +14,23 @@ namespace Alloclave
 		String Name { get; }
 	}
 
+	public interface ICallStackParserName
+	{
+		String Name { get; }
+	}
+
 	class Program
 	{
 		private static CompositionContainer _container;
 
 		public static IEnumerable<ExportFactory<Transport, ITransportName>> TransportAdapters;
+		public static IEnumerable<ExportFactory<CallStack, ICallStackParserName>> CallStackParserAdapters;
 		
 		[ImportMany]
 		private IEnumerable<ExportFactory<Transport, ITransportName>> InternalTransportAdapters = null;
+
+		[ImportMany]
+		private IEnumerable<ExportFactory<CallStack, ICallStackParserName>> InternalCallStackParserAdapters = null;
 
 		[DllImport("kernel32.dll")]
 		static extern bool AttachConsole(int dwProcessId);
@@ -59,6 +68,7 @@ namespace Alloclave
 			// Adds all the parts found in the same assembly as the Program class
 			catalog.Catalogs.Add(new AssemblyCatalog(typeof(Program).Assembly));
 			catalog.Catalogs.Add(new DirectoryCatalog(transportPluginsPath));
+			catalog.Catalogs.Add(new DirectoryCatalog(callstackPluginsPath));
 
 
 			// Create the CompositionContainer with the parts in the catalog
@@ -70,6 +80,7 @@ namespace Alloclave
 				Program program = new Program();
 				_container.ComposeParts(program);
 				TransportAdapters = program.InternalTransportAdapters;
+				CallStackParserAdapters = program.InternalCallStackParserAdapters;
 			}
 			catch (CompositionException compositionException)
 			{

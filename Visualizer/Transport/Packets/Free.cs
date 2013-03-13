@@ -12,7 +12,7 @@ namespace Alloclave
 		// TODO: Better encapsulation
 		public UInt64 Address;
 		public UInt32 HeapId;
-		public CallStack Stack = new CallStack();
+		public CallStack Stack; // = new CallStack();
 		public byte[] UserData;
 
 		public Allocation AssociatedAllocation;
