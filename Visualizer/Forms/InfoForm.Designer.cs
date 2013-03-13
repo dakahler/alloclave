@@ -32,6 +32,8 @@
 			this.SizeLabel = new System.Windows.Forms.Label();
 			this.AddressLabel = new System.Windows.Forms.Label();
 			this.HeapLabel = new System.Windows.Forms.Label();
+			this.StackComboBox = new System.Windows.Forms.ComboBox();
+			this.StackLabel = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// SizeLabel
@@ -61,11 +63,31 @@
 			this.HeapLabel.TabIndex = 2;
 			this.HeapLabel.Text = "Heap:";
 			// 
+			// StackComboBox
+			// 
+			this.StackComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.StackComboBox.FormattingEnabled = true;
+			this.StackComboBox.Location = new System.Drawing.Point(91, 100);
+			this.StackComboBox.Name = "StackComboBox";
+			this.StackComboBox.Size = new System.Drawing.Size(249, 21);
+			this.StackComboBox.TabIndex = 3;
+			// 
+			// StackLabel
+			// 
+			this.StackLabel.AutoSize = true;
+			this.StackLabel.Location = new System.Drawing.Point(36, 103);
+			this.StackLabel.Name = "StackLabel";
+			this.StackLabel.Size = new System.Drawing.Size(38, 13);
+			this.StackLabel.TabIndex = 4;
+			this.StackLabel.Text = "Stack:";
+			// 
 			// InfoForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(767, 228);
+			this.Controls.Add(this.StackLabel);
+			this.Controls.Add(this.StackComboBox);
 			this.Controls.Add(this.HeapLabel);
 			this.Controls.Add(this.SizeLabel);
 			this.Controls.Add(this.AddressLabel);
@@ -84,6 +106,8 @@
 		public System.Windows.Forms.Label AddressLabel;
 		public System.Windows.Forms.Label SizeLabel;
 		private System.Windows.Forms.Label HeapLabel;
+		private System.Windows.Forms.ComboBox StackComboBox;
+		private System.Windows.Forms.Label StackLabel;
 
 	}
 }

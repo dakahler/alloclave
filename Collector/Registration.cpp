@@ -3,10 +3,19 @@
 #include "Allocation.h"
 #include "Screenshot.h"
 #include "Transport.h"
+#include "CallStack_Win32.h"
 
 namespace Alloclave
 {
 	static Transport* s_Transport = NULL;
+	
+#ifdef _WIN32
+	static CallStack_Win32 s_PlatformCallStack;
+#else
+	static CallStack s_PlatformCallStack;
+#endif
+
+	static CallStack* s_CallStack = &s_PlatformCallStack;
 
 	void RegisterTransport(Transport* transport)
 	{
@@ -20,7 +29,7 @@ namespace Alloclave
 			return;
 		}
 
-		Allocation allocation;
+		Allocation allocation(*s_CallStack);
 		allocation.Address = address;
 		allocation.Size = size;
 		allocation.Alignment = alignment;
@@ -58,6 +67,11 @@ namespace Alloclave
 		}
 
 		// TODO
+	}
+
+	void RegisterCallStackParser(CallStack* parser)
+	{
+		s_CallStack = parser;
 	}
 
 };

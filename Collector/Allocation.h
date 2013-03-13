@@ -6,6 +6,8 @@
 namespace Alloclave
 {
 
+	class CallStack;
+
 	class Allocation : public Packet
 	{
 	public:
@@ -21,15 +23,17 @@ namespace Alloclave
 		AllocationType Type;
 		unsigned int HeapId;
 
-		char* Stack;
-
 		Allocation();
+		Allocation(CallStack& callStackParser);
 
 		virtual Buffer Serialize() const;
 		virtual void Deserialize(const Buffer& buffer, unsigned int bufferLength);
 
 	protected:
 		PacketType GetPacketType() const;
+
+	private:
+		CallStack& CallStackParser;
 	};
 
 };

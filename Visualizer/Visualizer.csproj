@@ -396,6 +396,10 @@
       <Project>{7809cd92-e80e-4c83-83e3-f98bfc1a142a}</Project>
       <Name>ConstantsBridge</Name>
     </ProjectReference>
+    <ProjectReference Include="PdbParser\PdbParser.vcxproj">
+      <Project>{73e0a3fa-c680-4d41-a40a-fabf2059f5d1}</Project>
+      <Name>PdbParser</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Core\AlloclaveIcon.ico" />

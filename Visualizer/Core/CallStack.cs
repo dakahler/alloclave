@@ -10,12 +10,13 @@ namespace Alloclave
 	{
 		public class Frame
 		{
-			String FunctionSignature;
-			String FilePath;
-			uint LineNumber;
+			public String FunctionSignature;
+			public String FilePath;
+			public uint LineNumber;
+			public UInt64 Address;
 		}
 
-		Stack<Frame> Frames = new Stack<Frame>();
+		public Stack<Frame> Frames = new Stack<Frame>();
 
 		public CallStack()
 		{
@@ -40,7 +41,26 @@ namespace Alloclave
 
 		public void Deserialize(BinaryReader binaryReader, TargetSystemInfo targetSystemInfo)
 		{
-
+			if (targetSystemInfo.Architecture == Common.Architecture._32Bit)
+			{
+				uint stackDepth = binaryReader.ReadUInt32();
+				for (int i = 0; i < stackDepth; i++)
+				{
+					Frame newFrame = new Frame();
+					newFrame.Address = (UInt64)binaryReader.ReadUInt32();
+					Frames.Push(newFrame);
+				}
+			}
+			else
+			{
+				UInt64 stackDepth = binaryReader.ReadUInt64();
+				for (UInt64 i = 0; i < stackDepth; i++)
+				{
+					Frame newFrame = new Frame();
+					newFrame.Address = binaryReader.ReadUInt64();
+					Frames.Push(newFrame);
+				}
+			}
 		}
 
 		//static ICallStackParser Parser;
