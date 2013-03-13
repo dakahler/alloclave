@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.AddressSpaceControl = new Alloclave.AddressSpace();
-			this.scrubber1 = new Alloclave.Scrubber();
+			MainScrubber = new Alloclave.Scrubber();
 			this.TableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.addressSpaceScroller = new Alloclave.AddressSpaceScroller_OGL(AddressSpaceControl.Width);
 			this.TableLayoutPanel.SuspendLayout();
@@ -48,13 +48,13 @@
 			// 
 			// scrubber1
 			// 
-			this.scrubber1.AutoSize = true;
-			this.scrubber1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.scrubber1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.scrubber1.Location = new System.Drawing.Point(6, 448);
-			this.scrubber1.Name = "scrubber1";
-			this.scrubber1.Size = new System.Drawing.Size(667, 24);
-			this.scrubber1.TabIndex = 1;
+			MainScrubber.AutoSize = true;
+			MainScrubber.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			MainScrubber.Dock = System.Windows.Forms.DockStyle.Fill;
+			MainScrubber.Location = new System.Drawing.Point(6, 448);
+			MainScrubber.Name = "scrubber1";
+			MainScrubber.Size = new System.Drawing.Size(667, 24);
+			MainScrubber.TabIndex = 1;
 			// 
 			// TableLayoutPanel
 			// 
@@ -63,7 +63,7 @@
 			this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0F));
 			this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
 			this.TableLayoutPanel.Controls.Add(this.AddressSpaceControl, 0, 0);
-			this.TableLayoutPanel.Controls.Add(this.scrubber1, 0, 1);
+			this.TableLayoutPanel.Controls.Add(MainScrubber, 0, 1);
 			this.TableLayoutPanel.Controls.Add(this.addressSpaceScroller, 2, 0);
 			this.TableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.TableLayoutPanel.Location = new System.Drawing.Point(0, 0);
@@ -102,7 +102,7 @@
 		#endregion
 
 		public AddressSpace AddressSpaceControl;
-		private Scrubber scrubber1;
+		public static Scrubber MainScrubber;
 		private System.Windows.Forms.TableLayoutPanel TableLayoutPanel;
 		private AddressSpaceScroller addressSpaceScroller;
 

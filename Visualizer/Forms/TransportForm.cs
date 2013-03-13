@@ -52,7 +52,7 @@ namespace Alloclave
 			: this()
 		{
 			Profile = new Profile(ref transport);
-			History = new History();
+			History = History.Instance;
 
 			AllocationForm.Show(_DockPanel);
 			MessagesForm.Show(_DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);

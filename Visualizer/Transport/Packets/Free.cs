@@ -15,6 +15,8 @@ namespace Alloclave
 		public CallStack Stack = new CallStack();
 		public byte[] UserData;
 
+		public Allocation AssociatedAllocation;
+
 		// Tool-side-only data
 		String Notes;
 

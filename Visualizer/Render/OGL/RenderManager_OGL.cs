@@ -185,7 +185,7 @@ namespace Alloclave
 			lock (NewBlocks)
 			{
 				NewBlocks.Clear();
-
+				bool isSecondaryColor = false;
 				foreach (var block in MemoryBlockManager.Instance)
 				{
 					uint startVertex = NumVertices;
@@ -204,10 +204,39 @@ namespace Alloclave
 								yVertex -= (double)offsets[block.Allocation.HeapId];
 							}
 
-							VBO[NumVertices].R = block._Color.R;
-							VBO[NumVertices].G = block._Color.G;
-							VBO[NumVertices].B = block._Color.B;
-							VBO[NumVertices].A = block._Color.A;
+							Color color = Color.Red;
+							switch (block.ColorIndex)
+							{
+								case 0:
+									if (!isSecondaryColor)
+										color = Properties.Settings.Default.Heap1_Allocation1;
+									else
+										color = Properties.Settings.Default.Heap1_Allocation2;
+									break;
+								case 1:
+									if (!isSecondaryColor)
+										color = Properties.Settings.Default.Heap2_Allocation1;
+									else
+										color = Properties.Settings.Default.Heap2_Allocation2;
+									break;
+								case 2:
+									if (!isSecondaryColor)
+										color = Properties.Settings.Default.Heap3_Allocation1;
+									else
+										color = Properties.Settings.Default.Heap3_Allocation2;
+									break;
+								case 3:
+									if (!isSecondaryColor)
+										color = Properties.Settings.Default.Heap4_Allocation1;
+									else
+										color = Properties.Settings.Default.Heap4_Allocation2;
+									break;
+							}
+
+							VBO[NumVertices].R = color.R;
+							VBO[NumVertices].G = color.G;
+							VBO[NumVertices].B = color.B;
+							VBO[NumVertices].A = color.A;
 							VBO[NumVertices].Position = new Vector3((float)vertex.X, (float)yVertex, 0);
 							NumVertices++;
 						}
@@ -219,23 +248,25 @@ namespace Alloclave
 						block.IsNew = false;
 						NewBlocks.Add(block, new BlockMetadata(startVertex, endVertex));
 					}
+
+					isSecondaryColor = !isSecondaryColor;
 				}
 			}
 		}
 
 		private void ChangeBlockColor(KeyValuePair<VisualMemoryBlock, BlockMetadata> block, Color color, float blend)
 		{
-			byte r = (byte)((block.Key._Color.R * blend) + color.R * (1 - blend));
-			byte g = (byte)((block.Key._Color.G * blend) + color.G * (1 - blend));
-			byte b = (byte)((block.Key._Color.B * blend) + color.B * (1 - blend));
+			//byte r = (byte)((block.Key._Color.R * blend) + color.R * (1 - blend));
+			//byte g = (byte)((block.Key._Color.G * blend) + color.G * (1 - blend));
+			//byte b = (byte)((block.Key._Color.B * blend) + color.B * (1 - blend));
 
-			for (uint j = block.Value.VertexStartIndex; j <= block.Value.VertexEndIndex; j++)
-			{
-				VBO[j].R = r;
-				VBO[j].G = g;
-				VBO[j].B = b;
-				VBO[j].A = 255;
-			}
+			//for (uint j = block.Value.VertexStartIndex; j <= block.Value.VertexEndIndex; j++)
+			//{
+			//	VBO[j].R = r;
+			//	VBO[j].G = g;
+			//	VBO[j].B = b;
+			//	VBO[j].A = 255;
+			//}
 		}
 	}
 }

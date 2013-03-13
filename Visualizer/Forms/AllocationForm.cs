@@ -20,6 +20,12 @@ namespace Alloclave
 			AddressSpaceControl.Rebuilt += AddressSpaceControl_Rebuilt;
 			addressSpaceScroller.FocusChanged += addressSpaceScroller_FocusChanged;
 			this.SizeChanged += AllocationForm_SizeChanged;
+			MainScrubber.PositionChanged += MainScrubber_PositionChanged;
+		}
+
+		void MainScrubber_PositionChanged(object sender, EventArgs e)
+		{
+			AddressSpaceControl.Rebuild(History.Instance);
 		}
 
 		void AllocationForm_SizeChanged(object sender, EventArgs e)
