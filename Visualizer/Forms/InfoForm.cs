@@ -33,22 +33,22 @@ namespace Alloclave
 			SizeLabel.Text = String.Format("Size: {0} bytes", allocation.Size);
 			HeapLabel.Text = String.Format("Heap ID: {0}", allocation.HeapId);
 
-			StackComboBox.Items.Clear();
-			foreach (CallStack.Frame frame in allocation.Stack.Frames)
+			StackTable.Rows.Clear();
+			foreach (CallStack.Frame frame in allocation.Stack.Frames.Reverse())
 			{
 				// TODO: 64-bit
 				String addressText;
 				if (allocation.Architecture == Common.Architecture._32Bit)
 				{
-					addressText = String.Format("0x{0:X8}: ", frame.Address);
+					addressText = String.Format("0x{0:X8}", frame.Address);
 				}
 				else
 				{
-					addressText = String.Format("0x{0:X16}: ", frame.Address);
+					addressText = String.Format("0x{0:X16}", frame.Address);
 				}
 
 				// TODO: Is this parser-specific?
-				String functionName = addressText;
+				String functionName = ""; //addressText;
 				String rawFunctionName = frame.FunctionSignature;
 				if (rawFunctionName.Contains("NULL_THUNK_DATA") || rawFunctionName == String.Empty)
 				{
@@ -59,12 +59,7 @@ namespace Alloclave
 					functionName += rawFunctionName;
 				}
 
-				StackComboBox.Items.Add(functionName);
-			}
-
-			if (StackComboBox.Items.Count > 0)
-			{
-				StackComboBox.SelectedIndex = 0;
+				StackTable.Rows.Add(addressText, functionName, "", "");
 			}
 		}
 	}
