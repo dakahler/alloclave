@@ -94,7 +94,11 @@ namespace Alloclave
 			FrameTimer.Stop();
 			FrameTimer.Close();
 
-			GL.DeleteBuffers(1, ref VboHandle);
+			if (VboHandle != 0)
+			{
+				GL.DeleteBuffers(1, ref VboHandle);
+			}
+
 			BuffersCreated = false;
 		}
 
