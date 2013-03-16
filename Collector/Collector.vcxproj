@@ -140,6 +140,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -196,6 +197,9 @@ popd</Command>
     <PostBuildEvent>
       <Message>Generating makefiles...</Message>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>dbghelp.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Allocation.h" />

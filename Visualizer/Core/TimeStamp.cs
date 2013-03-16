@@ -80,6 +80,11 @@ namespace Alloclave
 			return this == (TimeStamp)obj;
 		}
 
+		public override int GetHashCode()
+		{
+			return Time.GetHashCode() * (int)UID * (int)UniquenessModifier;
+		}
+
 		public static bool operator <=(TimeStamp emp1, TimeStamp emp2)
 		{
 			return Comparison(emp1, emp2) <= 0;

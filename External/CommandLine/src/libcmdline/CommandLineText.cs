@@ -889,7 +889,7 @@ namespace CommandLine.Text
         
         /// <summary>
         /// Gets or sets the format of options for adding or removing dashes.
-        /// It modifies behavior of <see cref="AddOptions"/> method.
+        /// It modifies behavior of AddOptions method.
         /// </summary>
         public bool AddDashesToOption
         {

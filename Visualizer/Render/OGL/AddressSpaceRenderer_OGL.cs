@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenTK;
-using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Windows;
@@ -38,6 +38,15 @@ namespace Alloclave
 			glControl.MouseLeave += new EventHandler(Parent.AddressSpace_MouseLeave);
 		}
 
+		~AddressSpaceRenderer_OGL()
+		{
+			if (glControl != null && !glControl.Disposing)
+			{
+				glControl.Dispose();
+				glControl = null;
+			}
+		}
+
 		void glControl_Load(object sender, EventArgs e)
 		{
 			lock (glControl)
@@ -58,8 +67,8 @@ namespace Alloclave
 				//GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
 				// Setup VBO state
-				GL.EnableClientState(EnableCap.ColorArray);
-				GL.EnableClientState(EnableCap.VertexArray);
+				GL.EnableClientState(ArrayCap.ColorArray);
+				GL.EnableClientState(ArrayCap.VertexArray);
 
 				RenderManager_OGL.Instance.Bind();
 
@@ -72,6 +81,13 @@ namespace Alloclave
 			SetupViewport();
 
 			RenderManager_OGL.Instance.OnRender += OnRender;
+			RenderManager_OGL.Instance.OnDispose += OnDispose;
+		}
+
+		void OnDispose(object sender, EventArgs e)
+		{
+			glControl.Dispose();
+			glControl = null;
 		}
 
 		void OnRender(object sender, RenderManager_OGL.RenderEventArgs e)

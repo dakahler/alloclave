@@ -127,7 +127,7 @@ namespace
 		}
 
 		// Update the flags...
-		USHORT flags = (block->flag);
+		USHORT flags = (USHORT)(block->flag);
 
 		if( ( flags & 0xF1 ) != 0 || ( flags & 0x0200 ) != 0 )
 			hb->dwFlags = 1;
@@ -179,7 +179,7 @@ namespace
 			}
 
 			// Update the flags...
-			USHORT flags = block->flag;
+			USHORT flags = (USHORT)block->flag;
 
 			if( ( flags & 0xF1 ) != 0 || ( flags & 0x0200 ) != 0 )
 				hb->dwFlags = 1;

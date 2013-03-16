@@ -27,7 +27,7 @@ void PdbParser::Open(String^ pdbPath)
 
 String^ PdbParser::GetFunctionName(UInt64 address)
 {
-	BSTR functionName = DumpSymbolWithRVA(pDiaSession, address, NULL);
+	BSTR functionName = DumpSymbolWithRVA(pDiaSession, (DWORD)address, NULL);
 	if (functionName != NULL)
 	{
 		String^ finalString = gcnew String((wchar_t*)functionName);

@@ -1,5 +1,5 @@
 ﻿using OpenTK;
-using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ using System.Windows;
 
 namespace Alloclave
 {
-	class RenderManager_OGL
+	class RenderManager_OGL : IDisposable
 	{
 		private static readonly RenderManager_OGL _Instance = new RenderManager_OGL();
 		public static RenderManager_OGL Instance
@@ -31,6 +31,7 @@ namespace Alloclave
 
 		public event EventHandler OnUpdate;
 		public event RenderEventHandler OnRender;
+		public event EventHandler OnDispose;
 
 		private const double FrameInterval = 10.0;
 
@@ -65,17 +66,46 @@ namespace Alloclave
 
 		Dictionary<VisualMemoryBlock, BlockMetadata> NewBlocks = new Dictionary<VisualMemoryBlock, BlockMetadata>();
 
+		System.Timers.Timer FrameTimer;
+
 		private RenderManager_OGL()
 		{
-			System.Timers.Timer timer = new System.Timers.Timer(FrameInterval);
-			timer.Elapsed += TimerElapsed;
-			timer.Start();
+			FrameTimer = new System.Timers.Timer(FrameInterval);
+			FrameTimer.Elapsed += TimerElapsed;
+			FrameTimer.Start();
 		}
 
 		~RenderManager_OGL()
 		{
 			// TODO
 			//GL.DeleteBuffers(1, ref VboHandle);
+		}
+
+		public void Dispose()
+		{
+			OnUpdate = null;
+			OnRender = null;
+
+			if (OnDispose != null)
+			{
+				OnDispose(this, new EventArgs());
+			}
+
+			FrameTimer.Stop();
+			FrameTimer.Close();
+
+			GL.DeleteBuffers(1, ref VboHandle);
+			BuffersCreated = false;
+		}
+
+		public void Pause()
+		{
+			FrameTimer.Stop();
+		}
+
+		public void Unpause()
+		{
+			FrameTimer.Start();
 		}
 
 		private void TimerElapsed(object sender, EventArgs e)
@@ -155,7 +185,7 @@ namespace Alloclave
 					d.Invoke(this, e);
 
 					// If pre-render above didn't setup a context, don't try to do anything else
-					if (GraphicsContext.CurrentContext == null)
+					if (OpenTK.Graphics.GraphicsContext.CurrentContext == null)
 					{
 						continue;
 					}

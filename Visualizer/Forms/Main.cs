@@ -62,6 +62,7 @@ namespace Alloclave
 
 		void Main_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			RenderManager_OGL.Instance.Dispose();
 			Properties.Settings.Default.Save();
 		}
 

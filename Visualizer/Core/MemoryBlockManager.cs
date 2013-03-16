@@ -26,9 +26,6 @@ namespace Alloclave
 		private Dictionary<uint, int> ColorDictionary = new Dictionary<uint, int>();
 		private int ColorIndex;
 
-		// TODO: hack
-		private static bool isSecondaryColor = false;
-
 		public int Count
 		{
 			get

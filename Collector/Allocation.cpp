@@ -9,8 +9,10 @@
 namespace Alloclave
 {
 
+static CallStack NullCallStack;
+
 Allocation::Allocation()
-	: CallStackParser(CallStack())
+	: CallStackParser(NullCallStack)
 {
 	Address = NULL;
 	Size = 0;

@@ -17,9 +17,6 @@ namespace Alloclave
 
 		public Allocation AssociatedAllocation;
 
-		// Tool-side-only data
-		String Notes;
-
 		public byte[] Serialize(TargetSystemInfo targetSystemInfo)
 		{
 			MemoryStream memoryStream = new MemoryStream();

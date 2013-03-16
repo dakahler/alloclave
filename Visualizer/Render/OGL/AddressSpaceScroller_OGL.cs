@@ -1,5 +1,5 @@
 ﻿using OpenTK;
-using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -30,6 +30,12 @@ namespace Alloclave
 			this.Controls.Add(glControl);
 		}
 
+		~AddressSpaceScroller_OGL()
+		{
+			glControl.Dispose();
+			glControl = null;
+		}
+
 		void glControl_Load(object sender, EventArgs e)
 		{
 			lock (glControl)
@@ -47,8 +53,8 @@ namespace Alloclave
 				GL.Enable(EnableCap.Blend);
 
 				// Setup VBO state
-				GL.EnableClientState(EnableCap.ColorArray);
-				GL.EnableClientState(EnableCap.VertexArray);
+				GL.EnableClientState(ArrayCap.ColorArray);
+				GL.EnableClientState(ArrayCap.VertexArray);
 
 				RenderManager_OGL.Instance.Bind();
 
@@ -61,6 +67,16 @@ namespace Alloclave
 			SetupViewport();
 
 			RenderManager_OGL.Instance.OnRender += OnRender;
+			RenderManager_OGL.Instance.OnDispose += OnDispose;
+		}
+
+		void OnDispose(object sender, EventArgs e)
+		{
+			if (glControl != null && !glControl.Disposing)
+			{
+				glControl.Dispose();
+				glControl = null;
+			}
 		}
 
 		void OnRender(object sender, RenderManager_OGL.RenderEventArgs e)

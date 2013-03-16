@@ -115,7 +115,6 @@ namespace Alloclave
 					// Create final list, removing allocations as frees are encountered
 				
 					// TODO: STILL needs performance improvements for large datasets
-					VisualMemoryBlock lastBlock = null;
 					foreach (var pair in packets)
 					//Parallel.ForEach(newList, pair =>
 					{

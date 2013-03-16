@@ -9,10 +9,7 @@ namespace Alloclave
 	class Profile
 	{
 		public History History;
-		FileInfo FileInfo;
-		bool Dirty;
 		Transport Transport;
-		TargetSystemInfo TargetSystemInfo;
 
 		public Profile()
 		{

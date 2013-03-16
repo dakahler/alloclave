@@ -50,7 +50,7 @@ namespace Alloclave_Plugin
 			Alloclave_Plugin::AllocationData^ newAllocation = gcnew Alloclave_Plugin::AllocationData();
 			newAllocation->Address = HeapAllocationStruct->Allocation;
 			newAllocation->Size = HeapAllocationStruct->AllocationSize;
-			newAllocation->HeapId = HeapAllocationStruct->HeapHandle;
+			newAllocation->HeapId = (unsigned int)HeapAllocationStruct->HeapHandle;
 
 			HeapWalker_Standard::allocationList->Add(newAllocation);
 		}

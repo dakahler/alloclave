@@ -29,9 +29,6 @@ namespace Alloclave
 
 		public Common.Architecture Architecture;
 
-		// Tool-side-only data
-		String Notes;
-
 		public Allocation()
 		{
 			// TODO: Support arbitrary call stack adapters
