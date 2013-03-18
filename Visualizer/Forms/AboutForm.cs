@@ -25,6 +25,11 @@ namespace Alloclave
 		{
 			InitializeComponent();
 
+			if (Licensing.IsLicensed)
+			{
+				purchaseButton.Hide();
+			}
+
 			dataGrid.Rows.Clear();
 			dataGrid.Rows.Add("Alloclave");
 			dataGrid.Rows.Add("Version " + Common.Version);
@@ -79,8 +84,11 @@ namespace Alloclave
 
 		private void ShowUpdateWindow()
 		{
-			UpdateForm updateForm = new UpdateForm();
-			this.BeginInvoke((Action)(() => { updateForm.ShowDialog(this); }));
+			this.BeginInvoke((Action)(() =>
+			{
+				UpdateForm updateForm = new UpdateForm();
+				updateForm.ShowDialog(this);
+			}));
 		}
 
 		private void logoPictureBox_Click(object sender, EventArgs e)
