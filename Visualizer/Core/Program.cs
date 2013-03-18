@@ -6,6 +6,8 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Runtime.InteropServices;
+using NAppUpdate.Framework;
+using NAppUpdate;
 
 namespace Alloclave
 {
@@ -122,6 +124,10 @@ namespace Alloclave
 				Main main = new Main();
 				if (!main.Disposing && !main.IsDisposed)
 				{
+					UpdateManager.Instance.UpdateFeedReader = new InstallerAwareAppcastReader(Application.ProductVersion);
+					UpdateManager.Instance.UpdateSource = new NAppUpdate.Framework.Sources.SimpleWebSource("http://www.alloclave.com/updatefeed.xml");
+					UpdateManager.Instance.ReinstateIfRestarted();
+
 					Application.Run(main);
 				}
 

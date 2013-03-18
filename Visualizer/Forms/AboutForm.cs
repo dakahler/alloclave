@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NAppUpdate.Framework;
+using NAppUpdate.Framework.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Threading;
 
 namespace Alloclave
 {
@@ -45,9 +48,39 @@ namespace Alloclave
 
 		private void checkForUpdatesButton_Click(object sender, EventArgs e)
 		{
-			// TODO: There should be a more intelligent way of checking for updates
-			// than just directing the user to a webpage
-			System.Diagnostics.Process.Start(WebsiteUrl + "update");
+			UpdateManager.Instance.CleanUp();
+			UpdateManager.Instance.BeginCheckForUpdates(asyncResult =>
+			{
+				Action showUpdateAction = ShowUpdateWindow;
+
+				if (asyncResult.IsCompleted)
+				{
+					// still need to check for caught exceptions if any and rethrow
+					((UpdateProcessAsyncResult)asyncResult).EndInvoke();
+
+					// No updates were found, or an error has occured. We might want to check that...
+					if (UpdateManager.Instance.UpdatesAvailable == 0)
+					{
+						MessageBox.Show("There are no updates available.");
+						return;
+					}
+				}
+
+				if (Dispatcher.CurrentDispatcher.CheckAccess())
+				{
+					showUpdateAction();
+				}
+				else
+				{
+					Dispatcher.CurrentDispatcher.Invoke(showUpdateAction);
+				}
+			}, null);
+		}
+
+		private void ShowUpdateWindow()
+		{
+			UpdateForm updateForm = new UpdateForm();
+			this.BeginInvoke((Action)(() => { updateForm.ShowDialog(this); }));
 		}
 
 		private void logoPictureBox_Click(object sender, EventArgs e)
