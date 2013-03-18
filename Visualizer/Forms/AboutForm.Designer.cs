@@ -31,6 +31,7 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.companyLogoPictureBox = new System.Windows.Forms.PictureBox();
 			this.logoPictureBox = new System.Windows.Forms.PictureBox();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.dataGrid = new System.Windows.Forms.DataGridView();
@@ -38,13 +39,12 @@
 			this.purchaseButton = new System.Windows.Forms.Button();
 			this.checkForUpdatesButton = new System.Windows.Forms.Button();
 			this.OkButton = new System.Windows.Forms.Button();
-			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.panel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.companyLogoPictureBox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
 			this.panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -66,7 +66,7 @@
 			// panel1
 			// 
 			this.panel1.BackColor = System.Drawing.Color.White;
-			this.panel1.Controls.Add(this.pictureBox1);
+			this.panel1.Controls.Add(this.companyLogoPictureBox);
 			this.panel1.Controls.Add(this.logoPictureBox);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -74,6 +74,18 @@
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(590, 80);
 			this.panel1.TabIndex = 0;
+			// 
+			// companyLogoPictureBox
+			// 
+			this.companyLogoPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.companyLogoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("companyLogoPictureBox.Image")));
+			this.companyLogoPictureBox.Location = new System.Drawing.Point(12, 9);
+			this.companyLogoPictureBox.Name = "companyLogoPictureBox";
+			this.companyLogoPictureBox.Size = new System.Drawing.Size(242, 55);
+			this.companyLogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.companyLogoPictureBox.TabIndex = 1;
+			this.companyLogoPictureBox.TabStop = false;
+			this.companyLogoPictureBox.Click += new System.EventHandler(this.companyLogoPictureBox_Click);
 			// 
 			// logoPictureBox
 			// 
@@ -155,16 +167,6 @@
 			this.OkButton.Text = "OK";
 			this.OkButton.UseVisualStyleBackColor = true;
 			// 
-			// pictureBox1
-			// 
-			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-			this.pictureBox1.Location = new System.Drawing.Point(12, 9);
-			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(242, 55);
-			this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.pictureBox1.TabIndex = 1;
-			this.pictureBox1.TabStop = false;
-			// 
 			// AboutForm
 			// 
 			this.AcceptButton = this.OkButton;
@@ -182,10 +184,10 @@
 			this.Text = "About Alloclave";
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.companyLogoPictureBox)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
 			this.panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.dataGrid)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -201,6 +203,6 @@
 		private System.Windows.Forms.Button purchaseButton;
 		private System.Windows.Forms.Button checkForUpdatesButton;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-		private System.Windows.Forms.PictureBox pictureBox1;
+		private System.Windows.Forms.PictureBox companyLogoPictureBox;
 	}
 }

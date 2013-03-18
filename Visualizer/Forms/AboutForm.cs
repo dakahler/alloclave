@@ -19,7 +19,8 @@ namespace Alloclave
 		[DllImport("user32.dll")]
 		static extern bool HideCaret(IntPtr hWnd);
 
-		const String WebsiteUrl = "http://www.alloclave.com/";
+		const String CompanyWebsiteUrl = "http://www.circularshift.com/";
+		const String ProductWebsiteUrl = "http://www.alloclave.com/";
 
 		public AboutForm()
 		{
@@ -34,21 +35,24 @@ namespace Alloclave
 			dataGrid.Rows.Add("Alloclave");
 			dataGrid.Rows.Add("Version " + Common.Version);
 			dataGrid.Rows.Add("© Copyright 2013");
-			dataGrid.Rows.Add("Circular Shift, LLC");
+			dataGrid.Rows.Add("Circular Shift");
 			dataGrid.Rows.Add("www.circularshift.com");
+			dataGrid.Rows.Add("For support, email support@circularshift.com");
 			dataGrid.Rows.Add("");
-			dataGrid.Rows.Add("Licensed To:");
-			dataGrid.Rows.Add("Placeholder Name");
+			dataGrid.Rows.Add(Licensing.LicenseName);
 			dataGrid.Rows.Add("placeholder@example.com");
 			dataGrid.Rows.Add("Support Ends 1/1/2010");
 
-			ToolTip tt = new ToolTip();
-			tt.SetToolTip(logoPictureBox, "Open " + WebsiteUrl);
+			ToolTip tt1 = new ToolTip();
+			tt1.SetToolTip(companyLogoPictureBox, "Open " + CompanyWebsiteUrl);
+
+			ToolTip tt2 = new ToolTip();
+			tt2.SetToolTip(logoPictureBox, "Open " + ProductWebsiteUrl);
 		}
 
 		private void purchaseButton_Click(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start(WebsiteUrl + "purchase");
+			System.Diagnostics.Process.Start(ProductWebsiteUrl + "purchase");
 		}
 
 		private void checkForUpdatesButton_Click(object sender, EventArgs e)
@@ -93,7 +97,12 @@ namespace Alloclave
 
 		private void logoPictureBox_Click(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start(WebsiteUrl);
+			System.Diagnostics.Process.Start(ProductWebsiteUrl);
+		}
+
+		private void companyLogoPictureBox_Click(object sender, EventArgs e)
+		{
+			System.Diagnostics.Process.Start(CompanyWebsiteUrl);
 		}
 	}
 }
