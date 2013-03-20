@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 
 namespace Alloclave
 {
@@ -131,6 +132,13 @@ namespace Alloclave
 			if (!BuffersCreated)
 			{
 				GL.GenBuffers(1, out VboHandle);
+
+				ErrorCode errorCode = GL.GetError();
+				if (errorCode != ErrorCode.NoError)
+				{
+					MessageBox.Show("Error creating vertex buffer object. Please email support@circularshift.com.");
+				}
+
 				BuffersCreated = true;
 			}
 
