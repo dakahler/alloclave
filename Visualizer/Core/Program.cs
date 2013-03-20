@@ -60,7 +60,6 @@ namespace Alloclave
 			if (!Directory.Exists(pluginsPath) || !Directory.Exists(transportPluginsPath) ||
 				!Directory.Exists(callstackPluginsPath) || !Directory.Exists(userdataPluginsPath))
 			{
-				// TODO: Better messaging
 				MessageBox.Show("Plugins not found! Please reinstall Alloclave.");
 				Application.Exit();
 			}

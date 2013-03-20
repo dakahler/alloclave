@@ -21,10 +21,7 @@ namespace Alloclave
 		struct QueueItem
 		{
 			// TODO: Move to cpp
-			QueueItem()
-			{
-				Next = NULL;
-			}
+			QueueItem();
 
 			Buffer Data;
 			QueueItem* Next;

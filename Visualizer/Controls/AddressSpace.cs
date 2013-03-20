@@ -28,7 +28,6 @@ namespace Alloclave
 		// TODO: This should be exposed in the UI
 		const UInt64 AddressWidth = 0xFF;
 
-		// TODO: Too inefficient?
 		History LastHistory = History.Instance;
 
 		RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
@@ -40,8 +39,8 @@ namespace Alloclave
 		private AutoResetEvent RecalculateSelectedBlock = new AutoResetEvent(false);
 		private AutoResetEvent RecalculateHoverBlock = new AutoResetEvent(false);
 
-		// TODO: Better name
-		SortedList<UInt64, IPacket> CombinedList = new SortedList<UInt64, IPacket>();
+		// Represents all packets from the beginning of the profile to the current shifted time
+		SortedList<UInt64, IPacket> AggregatePacketData = new SortedList<UInt64, IPacket>();
 
 		// TODO: May want to make the idea of multiple heaps more pervasive
 		// throughout the data flow
@@ -74,7 +73,7 @@ namespace Alloclave
 					bool isBackward = false;
 					if (forceFullRebuild)
 					{
-						CombinedList.Clear();
+						AggregatePacketData.Clear();
 						MemoryBlockManager.Instance.Reset();
 
 						packets = history.Get();
@@ -132,17 +131,17 @@ namespace Alloclave
 								// This makes it so genuine double allocations cannot be caught/reported,
 								// so it must be fixed in the future!
 								bool remove = false;
-								lock (CombinedList)
+								lock (AggregatePacketData)
 								{
-									if (CombinedList.ContainsKey(allocation.Address))
+									if (AggregatePacketData.ContainsKey(allocation.Address))
 									{
-										CombinedList.Remove(allocation.Address);
+										AggregatePacketData.Remove(allocation.Address);
 										remove = true;
 									}
 
 									if (!isBackward)
 									{
-										CombinedList.Add(allocation.Address, allocation);
+										AggregatePacketData.Add(allocation.Address, allocation);
 									}
 								}
 
@@ -184,17 +183,17 @@ namespace Alloclave
 						{
 							Free free = pair.Value as Free;
 
-							lock (CombinedList)
+							lock (AggregatePacketData)
 							{
-								if (CombinedList.ContainsKey(free.Address))
+								if (AggregatePacketData.ContainsKey(free.Address))
 								{
-									CombinedList.Remove(free.Address);
+									AggregatePacketData.Remove(free.Address);
 								}
 								else
 								{
 									if (isBackward)
 									{
-										CombinedList.Add(free.Address, free.AssociatedAllocation);
+										AggregatePacketData.Add(free.Address, free.AssociatedAllocation);
 										VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
 										free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
 									}
@@ -220,7 +219,7 @@ namespace Alloclave
 						}
 					} //);
 
-					if (CombinedList.Count == 0)
+					if (AggregatePacketData.Count == 0)
 					{
 						return;
 					}

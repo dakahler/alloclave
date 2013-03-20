@@ -19,9 +19,6 @@ namespace Alloclave
 		[DllImport("user32.dll")]
 		static extern bool HideCaret(IntPtr hWnd);
 
-		const String CompanyWebsiteUrl = "http://www.circularshift.com/";
-		const String ProductWebsiteUrl = "http://www.alloclave.com/";
-
 		public AboutForm()
 		{
 			InitializeComponent();
@@ -44,15 +41,15 @@ namespace Alloclave
 			dataGrid.Rows.Add("Support Ends 1/1/2010");
 
 			ToolTip tt1 = new ToolTip();
-			tt1.SetToolTip(companyLogoPictureBox, "Open " + CompanyWebsiteUrl);
+			tt1.SetToolTip(companyLogoPictureBox, "Open " + Common.CompanyWebsiteUrl);
 
 			ToolTip tt2 = new ToolTip();
-			tt2.SetToolTip(logoPictureBox, "Open " + ProductWebsiteUrl);
+			tt2.SetToolTip(logoPictureBox, "Open " + Common.ProductWebsiteUrl);
 		}
 
 		private void purchaseButton_Click(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start(ProductWebsiteUrl + "purchase");
+			System.Diagnostics.Process.Start(Common.ProductWebsiteUrl + "purchase");
 		}
 
 		private void checkForUpdatesButton_Click(object sender, EventArgs e)
@@ -97,12 +94,12 @@ namespace Alloclave
 
 		private void logoPictureBox_Click(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start(ProductWebsiteUrl);
+			System.Diagnostics.Process.Start(Common.ProductWebsiteUrl);
 		}
 
 		private void companyLogoPictureBox_Click(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start(CompanyWebsiteUrl);
+			System.Diagnostics.Process.Start(Common.CompanyWebsiteUrl);
 		}
 	}
 }

@@ -24,6 +24,9 @@ namespace Alloclave
 			BigEndian,
 		}
 
+		public static readonly String CompanyWebsiteUrl = "http://www.circularshift.com/";
+		public static readonly String ProductWebsiteUrl = "http://www.alloclave.com/";
+
 		#region Endian swap helpers
 		public static void EndianSwap(ref UInt16 value)
 		{

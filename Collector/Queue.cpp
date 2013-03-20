@@ -86,4 +86,9 @@ unsigned int Queue::GetNumItems() const
 	return NumItems;
 }
 
+Queue::QueueItem::QueueItem()
+{
+	Next = NULL;
+}
+
 }
