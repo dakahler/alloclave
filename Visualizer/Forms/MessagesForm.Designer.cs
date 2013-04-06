@@ -31,13 +31,18 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MessagesForm));
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
-			this.dataGridView1 = new System.Windows.Forms.DataGridView();
-			this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ErrorsDataGrid = new System.Windows.Forms.DataGridView();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
+			this.WarningsDataGrid = new System.Windows.Forms.DataGridView();
+			this.InfosDataGrid = new System.Windows.Forms.DataGridView();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.ErrorsDataGrid)).BeginInit();
+			this.tabPage2.SuspendLayout();
+			this.tabPage3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.WarningsDataGrid)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.InfosDataGrid)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tabControl1
@@ -55,7 +60,7 @@
 			// 
 			// tabPage1
 			// 
-			this.tabPage1.Controls.Add(this.dataGridView1);
+			this.tabPage1.Controls.Add(this.ErrorsDataGrid);
 			this.tabPage1.Location = new System.Drawing.Point(4, 25);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -64,28 +69,20 @@
 			this.tabPage1.Text = "Errors";
 			this.tabPage1.UseVisualStyleBackColor = true;
 			// 
-			// dataGridView1
+			// ErrorsDataGrid
 			// 
-			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Description});
-			this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dataGridView1.Location = new System.Drawing.Point(3, 3);
-			this.dataGridView1.Name = "dataGridView1";
-			this.dataGridView1.Size = new System.Drawing.Size(929, 223);
-			this.dataGridView1.TabIndex = 0;
-			// 
-			// Description
-			// 
-			this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			this.Description.HeaderText = "Description";
-			this.Description.Name = "Description";
-			this.Description.ReadOnly = true;
-			this.Description.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.Description.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.ErrorsDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+			this.ErrorsDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.ErrorsDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ErrorsDataGrid.Location = new System.Drawing.Point(3, 3);
+			this.ErrorsDataGrid.Name = "ErrorsDataGrid";
+			this.ErrorsDataGrid.RowHeadersVisible = false;
+			this.ErrorsDataGrid.Size = new System.Drawing.Size(929, 223);
+			this.ErrorsDataGrid.TabIndex = 0;
 			// 
 			// tabPage2
 			// 
+			this.tabPage2.Controls.Add(this.WarningsDataGrid);
 			this.tabPage2.Location = new System.Drawing.Point(4, 25);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -96,12 +93,35 @@
 			// 
 			// tabPage3
 			// 
+			this.tabPage3.Controls.Add(this.InfosDataGrid);
 			this.tabPage3.Location = new System.Drawing.Point(4, 25);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Size = new System.Drawing.Size(935, 229);
 			this.tabPage3.TabIndex = 2;
-			this.tabPage3.Text = "Messages";
+			this.tabPage3.Text = "Info";
 			this.tabPage3.UseVisualStyleBackColor = true;
+			// 
+			// WarningsDataGrid
+			// 
+			this.WarningsDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+			this.WarningsDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.WarningsDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.WarningsDataGrid.Location = new System.Drawing.Point(3, 3);
+			this.WarningsDataGrid.Name = "WarningsDataGrid";
+			this.WarningsDataGrid.RowHeadersVisible = false;
+			this.WarningsDataGrid.Size = new System.Drawing.Size(929, 223);
+			this.WarningsDataGrid.TabIndex = 1;
+			// 
+			// InfosDataGrid
+			// 
+			this.InfosDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+			this.InfosDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.InfosDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.InfosDataGrid.Location = new System.Drawing.Point(0, 0);
+			this.InfosDataGrid.Name = "InfosDataGrid";
+			this.InfosDataGrid.RowHeadersVisible = false;
+			this.InfosDataGrid.Size = new System.Drawing.Size(935, 229);
+			this.InfosDataGrid.TabIndex = 1;
 			// 
 			// MessagesForm
 			// 
@@ -116,7 +136,11 @@
 			this.Text = "Error List";
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.ErrorsDataGrid)).EndInit();
+			this.tabPage2.ResumeLayout(false);
+			this.tabPage3.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.WarningsDataGrid)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.InfosDataGrid)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -125,9 +149,10 @@
 
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tabPage1;
-		private System.Windows.Forms.DataGridView dataGridView1;
+		private System.Windows.Forms.DataGridView ErrorsDataGrid;
 		private System.Windows.Forms.TabPage tabPage2;
 		private System.Windows.Forms.TabPage tabPage3;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Description;
+		private System.Windows.Forms.DataGridView WarningsDataGrid;
+		private System.Windows.Forms.DataGridView InfosDataGrid;
 	}
 }

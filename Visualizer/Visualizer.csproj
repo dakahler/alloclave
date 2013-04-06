@@ -213,6 +213,7 @@
     <Compile Include="Core\Common.cs" />
     <Compile Include="Core\History.cs" />
     <Compile Include="Core\MemoryBlockManager.cs" />
+    <Compile Include="Core\MessageBoxHelper.cs" />
     <Compile Include="Core\Profile.cs" />
     <Compile Include="Core\Program.cs" />
     <Compile Include="Core\TimeStamp.cs" />

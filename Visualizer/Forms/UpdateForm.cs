@@ -56,6 +56,21 @@ namespace Alloclave
 
 		private void OkButton_Click(object sender, EventArgs e)
 		{
+			if (Licensing.IsTrial)
+			{
+				MessageBoxHelper.PrepToCenterMessageBoxOnForm(this);
+				DialogResult result = MessageBox.Show(this, "Automatic updating is not available in the trial version." + Environment.NewLine +
+					"Visit Alloclave's website to download manually?", "Not Available",
+					MessageBoxButtons.YesNo);
+
+				if (result == DialogResult.Yes)
+				{
+					System.Diagnostics.Process.Start(Common.ProductWebsiteUrl);
+				}
+
+				return;
+			}
+
 			UpdateManager.Instance.BeginPrepareUpdates(asyncResult =>
 			{
 				if (asyncResult.IsCompleted)

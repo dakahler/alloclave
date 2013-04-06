@@ -8,6 +8,7 @@ using NAppUpdate.Framework.FeedReaders;
 using NAppUpdate.Framework.Sources;
 using NAppUpdate.Framework.Tasks;
 using NAppUpdate.Framework.Utils;
+using System.ComponentModel;
 
 namespace NAppUpdate.Framework
 {
@@ -486,9 +487,16 @@ namespace NAppUpdate.Framework
 						//if (NauIpc.LaunchProcessAndSendDto(dto, info, Config.UpdateProcessName) == null)
 						//	throw new UpdateProcessFailedException("Could not launch cold update process");
 
-						Process.Start(info);
+						try
+						{
+							Process.Start(info);
 
-						Environment.Exit(0);
+							Environment.Exit(0);
+						}
+						catch (Win32Exception)
+						{
+
+						}
 					}
 
 					State = UpdateProcessState.AppliedSuccessfully;
