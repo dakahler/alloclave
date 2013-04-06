@@ -351,7 +351,7 @@
       <DependentUpon>UpdateForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -415,6 +415,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Core\AlloclaveIcon.ico" />
+    <None Include="Resources\publickey.xml" />
     <None Include="Resources\ScrubberDot.png" />
     <Resource Include="ColorPicker\colorbarIndicators.bmp" />
     <Resource Include="ColorPicker\eyedropper.bmp" />

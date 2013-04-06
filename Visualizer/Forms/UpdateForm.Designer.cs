@@ -36,7 +36,7 @@
 			this.label4 = new System.Windows.Forms.Label();
 			this.ChangesTextBox = new System.Windows.Forms.TextBox();
 			this.OkButton = new System.Windows.Forms.Button();
-			this.CancelButton = new System.Windows.Forms.Button();
+			this._CancelButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -122,22 +122,22 @@
 			// 
 			// CancelButton
 			// 
-			this.CancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.CancelButton.Location = new System.Drawing.Point(331, 336);
-			this.CancelButton.Name = "CancelButton";
-			this.CancelButton.Size = new System.Drawing.Size(75, 23);
-			this.CancelButton.TabIndex = 8;
-			this.CancelButton.Text = "Cancel";
-			this.CancelButton.UseVisualStyleBackColor = true;
-			this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+			this._CancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this._CancelButton.Location = new System.Drawing.Point(331, 336);
+			this._CancelButton.Name = "CancelButton";
+			this._CancelButton.Size = new System.Drawing.Size(75, 23);
+			this._CancelButton.TabIndex = 8;
+			this._CancelButton.Text = "Cancel";
+			this._CancelButton.UseVisualStyleBackColor = true;
+			this._CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
 			// 
 			// UpdateForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.CancelButton;
+			this.CancelButton = this._CancelButton;
 			this.ClientSize = new System.Drawing.Size(454, 371);
-			this.Controls.Add(this.CancelButton);
+			this.Controls.Add(this._CancelButton);
 			this.Controls.Add(this.OkButton);
 			this.Controls.Add(this.ChangesTextBox);
 			this.Controls.Add(this.label4);
@@ -166,6 +166,6 @@
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.TextBox ChangesTextBox;
 		private System.Windows.Forms.Button OkButton;
-		private System.Windows.Forms.Button CancelButton;
+		private System.Windows.Forms.Button _CancelButton;
 	}
 }
