@@ -10,6 +10,9 @@ namespace Alloclave
 	{
 		SortedList<TimeStamp, IPacket> PacketList = new SortedList<TimeStamp, IPacket>();
 
+		DateTime TrialStartTime;
+		bool SentTrialWarning;
+
 		// Position tracker
 		int Position;
 
@@ -93,6 +96,26 @@ namespace Alloclave
 
 		public void Add(IPacket packet, UInt64 timeStamp)
 		{
+			// Trial limitation: Only allow 1 minute of data
+			if (PacketList.Count > 0)
+			{
+				TimeSpan span = DateTime.Now.Subtract(TrialStartTime);
+				if (span.TotalSeconds > 60.0)
+				{
+					if (!SentTrialWarning)
+					{
+						SentTrialWarning = true;
+						MessagesForm.Add(MessagesForm.MessageType.Warning, "Trial version can only collect one minute of data.");
+					}
+
+					return;
+				}
+			}
+			else
+			{
+				TrialStartTime = DateTime.Now;
+			}
+
 			lock (PacketList)
 			{
 				PacketList.Add(new TimeStamp(timeStamp), packet);
