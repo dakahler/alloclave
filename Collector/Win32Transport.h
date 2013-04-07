@@ -1,7 +1,7 @@
 #ifndef _ALLOCLAVE_WIN32TRANSPORT_H
 #define _ALLOCLAVE_WIN32TRANSPORT_H
 
-#include <Windows.h>
+#include "PlatformWrapper.h"
 #include "Transport.h"
 
 namespace Alloclave
@@ -25,10 +25,9 @@ namespace Alloclave
 
 		void FindVisualizer();
 
-		HWND VisualizerHandle;
+		void* VisualizerHandle;
 	};
 
 };
-
 
 #endif // _ALLOCLAVE_WIN32TRANSPORT_H

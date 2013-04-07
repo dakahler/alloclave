@@ -21,5 +21,4 @@ namespace Alloclave
 
 };
 
-
 #endif // _ALLOCLAVE_SCREENSHOT_H

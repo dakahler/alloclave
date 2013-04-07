@@ -211,6 +211,7 @@ popd</Command>
     <ClInclude Include="ICustomSerializable.h" />
     <ClInclude Include="IPacket.h" />
     <ClInclude Include="MemoryOverrides.h" />
+    <ClInclude Include="PlatformWrapper.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Registration.h" />
     <ClInclude Include="Screenshot.h" />

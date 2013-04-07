@@ -11,8 +11,6 @@ namespace Alloclave
 	void RegisterFree(void* address);
 	void RegisterScreenshot(); // TODO
 	void RegisterCallStackParser(CallStack* parser);
-
 };
-
 
 #endif // _ALLOCLAVE_REGISTRATION_H

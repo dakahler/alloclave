@@ -1,4 +1,5 @@
 
+#include <windows.h>
 #include "Win32Transport.h"
 #include "MemoryOverrides.h"
 #include "Registration.h"

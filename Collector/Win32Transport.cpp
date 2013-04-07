@@ -1,4 +1,5 @@
 
+#include <windows.h>
 #include "Win32Transport.h"
 
 namespace Alloclave
@@ -39,7 +40,7 @@ void Win32Transport::Flush()
 	cds.dwData = ALLOCLAVE_WIN32_ID;
 	cds.cbData = buffer.GetSize();
 	cds.lpData = (void*)buffer.GetData(); // TODO: constness
-	if (!SendMessage(VisualizerHandle, WM_COPYDATA, (WPARAM)VisualizerHandle, (LPARAM)(LPVOID)&cds))
+	if (!SendMessage((HWND)VisualizerHandle, WM_COPYDATA, (WPARAM)VisualizerHandle, (LPARAM)(LPVOID)&cds))
 	{
 		int error = GetLastError();
 		return;

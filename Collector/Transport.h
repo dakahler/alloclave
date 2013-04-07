@@ -31,5 +31,4 @@ namespace Alloclave
 
 };
 
-
 #endif // _ALLOCLAVE_TRANSPORT_H

@@ -26,5 +26,4 @@ namespace Alloclave
 
 };
 
-
 #endif // _ALLOCLAVE_IPACKET_H

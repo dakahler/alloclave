@@ -1,7 +1,4 @@
 
-#include <windows.h>
-#include <winnt.h>
-#include <dbghelp.h>
 #include "Allocation.h"
 #include "CallStack.h"
 

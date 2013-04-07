@@ -57,6 +57,9 @@
     <ClInclude Include="CallStack_Win32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PlatformWrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Registration.cpp">
