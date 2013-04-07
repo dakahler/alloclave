@@ -1,8 +1,15 @@
 #ifndef _ALLOCLAVE_BUFFER_H
 #define _ALLOCLAVE_BUFFER_H
 
-#include <string.h>
 #include "Common.h"
+
+#ifndef NULL
+#ifdef __cplusplus
+#define NULL    0
+#else
+#define NULL    ((void *)0)
+#endif
+#endif
 
 // TODO: Better implementation of these
 #define MIN(a,b) (((a)<(b))?(a):(b))
@@ -43,6 +50,5 @@ namespace Alloclave
 	};
 
 };
-
 
 #endif // _ALLOCLAVE_BUFFER_H

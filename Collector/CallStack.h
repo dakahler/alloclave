@@ -28,5 +28,4 @@ namespace Alloclave
 
 };
 
-
 #endif // _ALLOCLAVE_CALLSTACK_H

@@ -16,5 +16,4 @@ namespace Alloclave
 
 };
 
-
 #endif // _ALLOCLAVE_CALLSTACK_WIN32_H

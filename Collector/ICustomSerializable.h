@@ -15,5 +15,4 @@ namespace Alloclave
 
 };
 
-
 #endif // _ALLOCLAVE_ICUSTOMSERIALIZABLE_H

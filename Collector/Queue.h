@@ -35,5 +35,4 @@ namespace Alloclave
 
 };
 
-
 #endif // _ALLOCLAVE_QUEUE_H

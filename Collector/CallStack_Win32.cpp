@@ -1,9 +1,9 @@
 
 // TODO: Wrap windows headers
-#include "windows.h"
-#include "winnt.h"
+#include <windows.h>
+#include <winnt.h>
 #include "CallStack_Win32.h"
-#include "dbghelp.h"
+#include <dbghelp.h>
 
 namespace Alloclave
 {

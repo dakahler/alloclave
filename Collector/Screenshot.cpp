@@ -1,3 +1,4 @@
+
 #include "Screenshot.h"
 
 namespace Alloclave

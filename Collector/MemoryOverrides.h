@@ -29,5 +29,3 @@ namespace Alloclave
 
 
 #endif // _ALLOCLAVE_MEMORYOVERRIDES_H
-
-

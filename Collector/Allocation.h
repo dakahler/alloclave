@@ -38,5 +38,4 @@ namespace Alloclave
 
 };
 
-
 #endif // _ALLOCLAVE_ALLOCATION_H
