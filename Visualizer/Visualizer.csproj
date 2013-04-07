@@ -266,6 +266,12 @@
     <Compile Include="Forms\NewForm.Designer.cs">
       <DependentUpon>NewForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\StartScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StartScreen.Designer.cs">
+      <DependentUpon>StartScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ToolForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -345,6 +351,9 @@
     <EmbeddedResource Include="Forms\NewForm.resx">
       <DependentUpon>NewForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StartScreen.resx">
+      <DependentUpon>StartScreen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\TransportForm.resx">
       <DependentUpon>TransportForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -416,6 +425,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Core\AlloclaveIcon.ico" />
+    <None Include="Resources\AlloclaveLogo.png" />
     <None Include="Resources\publickey.xml" />
     <None Include="Resources\ScrubberDot.png" />
     <Resource Include="ColorPicker\colorbarIndicators.bmp" />

@@ -63,6 +63,16 @@ namespace Alloclave.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AlloclaveLogo {
+            get {
+                object obj = ResourceManager.GetObject("AlloclaveLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap colorbarIndicators {
             get {
                 object obj = ResourceManager.GetObject("colorbarIndicators", resourceCulture);

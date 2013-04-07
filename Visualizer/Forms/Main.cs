@@ -14,6 +14,8 @@ namespace Alloclave
 {
 	public partial class Main : Form, IMessageFilter
 	{
+		public static Main Instance;
+
 		[DllImport("user32.dll")]
 		private static extern IntPtr WindowFromPoint(Point pt);
 		[DllImport("user32.dll")]
@@ -25,6 +27,8 @@ namespace Alloclave
 
 		public Main()
 		{
+			Instance = this;
+
 			InitializeComponent();
 
 			Application.AddMessageFilter(this);
@@ -58,6 +62,15 @@ namespace Alloclave
 			licenseToolStripMenuItem.Text = Licensing.LicenseName;
 
 			FormClosing += Main_FormClosing;
+
+			// Show the start screen
+			StartScreen startScreen = new StartScreen();
+
+			startScreen.TopLevel = false;
+			startScreen.FormBorderStyle = FormBorderStyle.None;
+			startScreen.Dock = DockStyle.Fill;
+			startScreen.Visible = true;
+			_DockPanel.Controls.Add(startScreen);
 		}
 
 		void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -82,7 +95,7 @@ namespace Alloclave
 			return false;
 		}
 
-		private void newToolStripMenuItem_Click(object sender, EventArgs e)
+		public void StartNewSession()
 		{
 			NewForm newForm = new NewForm();
 
@@ -100,6 +113,8 @@ namespace Alloclave
 
 			if (newForm.ShowDialog() == DialogResult.OK)
 			{
+				_DockPanel.Controls.Clear();
+
 				foreach (ExportFactory<Transport, ITransportName> transportAdapter in Program.TransportAdapters)
 				{
 					String transportName = transportAdapter.Metadata.Name;
@@ -110,6 +125,11 @@ namespace Alloclave
 					}
 				}
 			}
+		}
+
+		private void newToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			StartNewSession();
 		}
 
 		private void SpawnTransport(ExportFactory<Transport, ITransportName> transportAdapter)
