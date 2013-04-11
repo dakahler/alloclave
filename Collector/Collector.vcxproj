@@ -208,6 +208,7 @@ popd</Command>
     <ClInclude Include="CallStack_Win32.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="Free.h" />
     <ClInclude Include="ICustomSerializable.h" />
     <ClInclude Include="IPacket.h" />
     <ClInclude Include="MemoryOverrides.h" />
@@ -223,6 +224,7 @@ popd</Command>
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="CallStack.cpp" />
     <ClCompile Include="CallStack_Win32.cpp" />
+    <ClCompile Include="Free.cpp" />
     <ClCompile Include="MemoryOverrides.cpp" />
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="Queue.cpp" />

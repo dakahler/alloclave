@@ -1,6 +1,7 @@
 
 #include "Registration.h"
 #include "Allocation.h"
+#include "Free.h"
 #include "Screenshot.h"
 #include "Transport.h"
 #include "CallStack_Win32.h"
@@ -40,6 +41,11 @@ namespace Alloclave
 
 	void RegisterHeap(void* address, unsigned int size, unsigned int alignment, unsigned int heapId)
 	{
+		if (s_Transport == NULL)
+		{
+			return;
+		}
+
 		Allocation heap;
 		heap.Address = address;
 		heap.Size = size;
@@ -49,14 +55,17 @@ namespace Alloclave
 		s_Transport->Send(heap);
 	}
 
-	void RegisterFree(void* address)
+	void RegisterFree(void* address, unsigned int heapId)
 	{
 		if (s_Transport == NULL)
 		{
 			return;
 		}
 
-		// TODO
+		Free _free;
+		_free.Address = address;
+		_free.HeapId = heapId;
+		s_Transport->Send(_free);
 	}
 
 	void RegisterScreenshot()
