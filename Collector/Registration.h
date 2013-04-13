@@ -11,6 +11,7 @@ namespace Alloclave
 	void RegisterFree(void* address, unsigned int heapId = 0);
 	void RegisterScreenshot(); // TODO
 	void RegisterCallStackParser(CallStack* parser);
+	void RegisterSymbolsPath(const char* symbolsPath);
 };
 
 #endif // _ALLOCLAVE_REGISTRATION_H

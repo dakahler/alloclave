@@ -18,6 +18,7 @@ namespace Alloclave
 			Allocation = 0,
 			Free,
 			Screenshot,
+			SetSymbols,
 		};
 
 		static PacketTypeRegistrar()
@@ -25,6 +26,7 @@ namespace Alloclave
 			Types.Add(PacketTypes.Allocation, typeof(Allocation));
 			Types.Add(PacketTypes.Free, typeof(Free));
 			Types.Add(PacketTypes.Screenshot, typeof(Screenshot));
+			Types.Add(PacketTypes.SetSymbols, typeof(SetSymbols));
 		}
 
 

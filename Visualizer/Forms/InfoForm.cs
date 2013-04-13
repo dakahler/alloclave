@@ -26,7 +26,7 @@ namespace Alloclave
 		{
 			CurrentAllocation = allocation;
 
-			if (!File.Exists(CallStack.SymbolPath))
+			if (!File.Exists(CallStack.SymbolsPath))
 			{
 				symbolsNotFoundLabel.Visible = true;
 			}
@@ -78,7 +78,7 @@ namespace Alloclave
 			OpenFileDialog openFileDialog = new OpenFileDialog();
 			if (openFileDialog.ShowDialog() == DialogResult.OK)
 			{
-				CallStack.SymbolPath = openFileDialog.FileName;
+				CallStack.SymbolsPath = openFileDialog.FileName;
 				symbolsNotFoundLabel.Visible = false;
 				Update(CurrentAllocation);
 			}

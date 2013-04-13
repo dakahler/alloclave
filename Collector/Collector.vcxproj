@@ -216,6 +216,7 @@ popd</Command>
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Registration.h" />
     <ClInclude Include="Screenshot.h" />
+    <ClInclude Include="SetSymbols.h" />
     <ClInclude Include="Transport.h" />
     <ClInclude Include="Win32Transport.h" />
   </ItemGroup>
@@ -230,6 +231,7 @@ popd</Command>
     <ClCompile Include="Queue.cpp" />
     <ClCompile Include="Registration.cpp" />
     <ClCompile Include="Screenshot.cpp" />
+    <ClCompile Include="SetSymbols.cpp" />
     <ClCompile Include="Transport.cpp" />
     <ClCompile Include="Win32Transport.cpp" />
   </ItemGroup>

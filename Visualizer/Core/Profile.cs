@@ -35,7 +35,15 @@ namespace Alloclave
 
 		void HandlePacket(object sender, PacketReceivedEventArgs e)
 		{
-			History.Add(e.Packet, e.TimeStamp);
+			if (e.Packet is SetSymbols)
+			{
+				SetSymbols setSymbols = (SetSymbols)e.Packet;
+				CallStack.SymbolsPath = setSymbols.SymbolsPath;
+			}
+			else
+			{
+				History.Add(e.Packet, e.TimeStamp);
+			}
 		}
 
 	}

@@ -8,7 +8,7 @@ namespace Alloclave
 {
 	public abstract class CallStack : ICustomSerializable
 	{
-		public static String SymbolPath;
+		public static String SymbolsPath;
 
 		public class Frame
 		{

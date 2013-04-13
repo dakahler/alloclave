@@ -5,6 +5,7 @@
 #include "Screenshot.h"
 #include "Transport.h"
 #include "CallStack_Win32.h"
+#include "SetSymbols.h"
 
 namespace Alloclave
 {
@@ -25,6 +26,8 @@ namespace Alloclave
 
 	void RegisterAllocation(void* address, unsigned int size, unsigned int alignment, unsigned int heapId)
 	{
+		// TODO: Should be able to collect this data without a valid transport
+		// Needs some refactoring to support that
 		if (s_Transport == NULL)
 		{
 			return;
@@ -81,6 +84,17 @@ namespace Alloclave
 	void RegisterCallStackParser(CallStack* parser)
 	{
 		s_CallStack = parser;
+	}
+
+	void RegisterSymbolsPath(const char* symbolsPath)
+	{
+		if (s_Transport == NULL)
+		{
+			return;
+		}
+
+		SetSymbols setSymbols(symbolsPath);
+		s_Transport->Send(setSymbols);
 	}
 
 };

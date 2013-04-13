@@ -23,9 +23,9 @@ namespace Alloclave_Plugin
 
 		private void LoadSymbols()
 		{
-			if (!IsLoaded && File.Exists(SymbolPath))
+			if (!IsLoaded && File.Exists(SymbolsPath))
 			{
-				IsLoaded = pdbParser.Open(SymbolPath);
+				IsLoaded = pdbParser.Open(SymbolsPath);
 				if (!IsLoaded)
 				{
 					// TODO: Better exception

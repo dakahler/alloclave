@@ -309,6 +309,7 @@
     <Compile Include="Transport\Packets\PacketBundle.cs" />
     <Compile Include="Transport\Packets\PacketTypeRegistrar.cs" />
     <Compile Include="Transport\Packets\Screenshot.cs" />
+    <Compile Include="Transport\Packets\SetSymbols.cs" />
     <Compile Include="Transport\TargetSystemInfo.cs" />
     <Compile Include="Transport\Transport.cs" />
     <EmbeddedResource Include="ColorPicker\ColorPickerCtrl.resx">
