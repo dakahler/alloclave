@@ -56,8 +56,7 @@ namespace Alloclave
 
 			AllocationForm.Show(_DockPanel);
 			MessagesForm.Show(_DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
-			InfoForm.Show(_DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
-			InfoForm.DockTo(MessagesForm.Pane, DockStyle.Right, 0);
+			InfoForm.Show(MessagesForm.Pane, WeifenLuo.WinFormsUI.Docking.DockAlignment.Right, 0.55);
 		}
 	}
 }

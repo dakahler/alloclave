@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace Alloclave
 	{
 		// TODO: Should this support other types of messages?
 
+		private Allocation CurrentAllocation;
+
 		public InfoForm()
 		{
 			InitializeComponent();
@@ -21,6 +24,13 @@ namespace Alloclave
 
 		public void Update(Allocation allocation)
 		{
+			CurrentAllocation = allocation;
+
+			if (!File.Exists(CallStack.SymbolPath))
+			{
+				symbolsNotFoundLabel.Visible = true;
+			}
+
 			if (allocation.Architecture == Common.Architecture._32Bit)
 			{
 				AddressLabel.Text = String.Format("Address: 0x{0:X8}", allocation.Address);
@@ -49,7 +59,7 @@ namespace Alloclave
 
 				// TODO: Is this parser-specific?
 				String functionName = ""; //addressText;
-				String rawFunctionName = frame.FunctionSignature;
+				String rawFunctionName = allocation.Stack.TranslateAddress(frame.Address);
 				if (rawFunctionName.Contains("NULL_THUNK_DATA") || rawFunctionName == String.Empty)
 				{
 					functionName += "Unknown";
@@ -60,6 +70,17 @@ namespace Alloclave
 				}
 
 				StackTable.Rows.Add(addressText, functionName, "", "");
+			}
+		}
+
+		private void symbolsNotFoundLabel_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+			if (openFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				CallStack.SymbolPath = openFileDialog.FileName;
+				symbolsNotFoundLabel.Visible = false;
+				Update(CurrentAllocation);
 			}
 		}
 	}

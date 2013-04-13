@@ -8,6 +8,8 @@ namespace Alloclave
 {
 	public abstract class CallStack : ICustomSerializable
 	{
+		public static String SymbolPath;
+
 		public class Frame
 		{
 			public String FunctionSignature;
@@ -23,7 +25,7 @@ namespace Alloclave
 
 		}
 
-		protected abstract String TranslateAddress(UInt64 address);
+		public abstract String TranslateAddress(UInt64 address);
 
 		public byte[] Serialize(TargetSystemInfo targetSystemInfo)
 		{
@@ -39,7 +41,7 @@ namespace Alloclave
 				{
 					Frame newFrame = new Frame();
 					newFrame.Address = (UInt64)binaryReader.ReadUInt32();
-					newFrame.FunctionSignature = TranslateAddress(newFrame.Address);
+					//newFrame.FunctionSignature = TranslateAddress(newFrame.Address);
 					Frames.Push(newFrame);
 				}
 			}
@@ -50,7 +52,7 @@ namespace Alloclave
 				{
 					Frame newFrame = new Frame();
 					newFrame.Address = binaryReader.ReadUInt64();
-					newFrame.FunctionSignature = TranslateAddress(newFrame.Address);
+					//newFrame.FunctionSignature = TranslateAddress(newFrame.Address);
 					Frames.Push(newFrame);
 				}
 			}

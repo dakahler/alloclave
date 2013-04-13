@@ -19,10 +19,10 @@ namespace
 namespace Alloclave
 {
 
-void PdbParser::Open(String^ pdbPath)
+bool PdbParser::Open(String^ pdbPath)
 {
 	IntPtr ptrToNativeString = Marshal::StringToBSTR(pdbPath);
-	bool result = LoadDataFromPdb((const wchar_t*)ptrToNativeString.ToPointer(), &pDiaDataSource, &pDiaSession, &pGlobalSymbol);
+	return LoadDataFromPdb((const wchar_t*)ptrToNativeString.ToPointer(), &pDiaDataSource, &pDiaSession, &pGlobalSymbol);
 }
 
 String^ PdbParser::GetFunctionName(UInt64 address)

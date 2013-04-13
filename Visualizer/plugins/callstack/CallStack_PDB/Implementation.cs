@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.Composition;
+using System.IO;
 
 
 namespace Alloclave_Plugin
@@ -12,18 +13,39 @@ namespace Alloclave_Plugin
 	[ExportMetadata("Name", "Call Stack PDB")]
 	public class CallStack_PDB : Alloclave.CallStack
 	{
-		Alloclave.PdbParser pdbParser = new Alloclave.PdbParser();
+		static Alloclave.PdbParser pdbParser = new Alloclave.PdbParser();
+		static bool IsLoaded;
 
 		public CallStack_PDB()
 		{
-			// TODO: Temp location
-			// Need to find a way to only read this in once across plugin instances
-			pdbParser.Open(@"C:\dev\Alloclave\Debug_Collector\TestCollector.pdb");
+			LoadSymbols();
 		}
 
-		protected override String TranslateAddress(UInt64 address)
+		private void LoadSymbols()
 		{
-			return pdbParser.GetFunctionName(address);
+			if (!IsLoaded && File.Exists(SymbolPath))
+			{
+				IsLoaded = pdbParser.Open(SymbolPath);
+				if (!IsLoaded)
+				{
+					// TODO: Better exception
+					throw new FileNotFoundException();
+				}
+			}
+		}
+
+		public override String TranslateAddress(UInt64 address)
+		{
+			LoadSymbols();
+
+			if (IsLoaded)
+			{
+				return pdbParser.GetFunctionName(address);
+			}
+			else
+			{
+				return "Unknown";
+			}
 		}
 	}
 

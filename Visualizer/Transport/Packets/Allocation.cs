@@ -82,6 +82,9 @@ namespace Alloclave
 			binaryWriter.Write((byte)AllocationType.Allocation);
 			binaryWriter.Write(HeapId);
 
+			// TODO: Proper callstack
+			binaryWriter.Write((UInt64)0);
+
 			return memoryStream.ToArray();
 		}
 
