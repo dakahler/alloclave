@@ -71,26 +71,16 @@ void operator delete[](void* p, const char *file, int line)
 
 namespace Alloclave
 {
-	void* _malloc(size_t size)
-	{
-		void* p = malloc(size);
-		RegisterAllocation(p, size, 4); // TODO: alignment
-		return p;
-	}
-
-	void _free(void* p)
-	{
-		if (p)
-		{
-			RegisterFree(p);
-			free(p);
-		}
-	}
-
 	void* real_malloc(size_t size)
 	{
 		void* p = malloc(size);
 		return p;
+	}
+
+	void* real_realloc(void* p, size_t size)
+	{
+		void* newP = realloc(p, size);
+		return newP;
 	}
 
 	void real_free(void* p)
@@ -98,6 +88,30 @@ namespace Alloclave
 		if (p)
 		{
 			free(p);
+		}
+	}
+
+	void* _malloc(size_t size)
+	{
+		void* p = real_malloc(size);
+		RegisterAllocation(p, size, 4); // TODO: alignment
+		return p;
+	}
+
+	void* _realloc(void* p, size_t size)
+	{
+		RegisterFree(p);
+		void* newP = real_realloc(p ,size);
+		RegisterAllocation(newP, size, 4);
+		return newP;
+	}
+
+	void _free(void* p)
+	{
+		if (p)
+		{
+			RegisterFree(p);
+			real_free(p);
 		}
 	}
 };

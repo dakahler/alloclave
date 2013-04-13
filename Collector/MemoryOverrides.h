@@ -16,15 +16,18 @@ void operator delete[](void* p, const char *file, int line);
 namespace Alloclave
 {
 	extern void* _malloc(size_t size);
+	extern void* _realloc(void* p, size_t size);
 	extern void _free(void* p);
 
 	extern void* real_malloc(size_t size);
+	extern void* real_realloc(void* p, size_t size);
 	extern void real_free(void* p);
 };
 
 // This redefines everyone else's malloc/free calls to point
 // to the custom ones above, which can then track the calls
 #define malloc Alloclave::_malloc
+#define realloc Alloclave::_realloc
 #define free Alloclave::_free
 
 
