@@ -151,6 +151,7 @@
 			this.StackTable.RowHeadersVisible = false;
 			this.StackTable.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
 			this.StackTable.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.StackTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.StackTable.ShowEditingIcon = false;
 			this.StackTable.Size = new System.Drawing.Size(522, 158);
 			this.StackTable.TabIndex = 4;

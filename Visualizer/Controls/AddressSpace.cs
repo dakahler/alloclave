@@ -117,66 +117,32 @@ namespace Alloclave
 					foreach (var pair in packets)
 					//Parallel.ForEach(newList, pair =>
 					{
+						// TODO: Can allocation and free processing be combined?
+						// They should be exact opposites of each other
 						if (pair.Value is Allocation)
 						{
 							Allocation allocation = pair.Value as Allocation;
 
-							try
+							lock (AggregatePacketData)
 							{
-								// HACK:
-								// There is no good way (that I can find) of making sure an allocation
-								// is new when that allocation is exactly the same address/size as
-								// the old one. When this happens, this block will get hit.
-								// Treat it as a free/allocation combo here
-								// This makes it so genuine double allocations cannot be caught/reported,
-								// so it must be fixed in the future!
-								bool remove = false;
-								lock (AggregatePacketData)
+								if (!isBackward)
 								{
 									if (AggregatePacketData.ContainsKey(allocation.Address))
 									{
 										AggregatePacketData.Remove(allocation.Address);
-										remove = true;
+										MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
 									}
 
-									if (!isBackward)
-									{
-										AggregatePacketData.Add(allocation.Address, allocation);
-									}
-								}
+									AggregatePacketData.Add(allocation.Address, allocation);
 
-								if (remove)
-								{
-									MemoryBlockManager.Instance.Remove(allocation.Address);
-								}
-
-								if (!isBackward)
-								{
 									VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
 										allocation, history.AddressRange.Min, AddressWidth, Width);
 								}
-
-								// Update heap bounds
-								// Currently doesn't bother tracking X
-								//if (!HeapBounds.ContainsKey(allocation.HeapId))
-								//{
-								//	HeapBounds.Add(allocation.HeapId, new RectangleF(0.0f, float.MaxValue, 0.0f, 0.0f));
-								//}
-
-								//RectangleF bounds = newBlock.Bounds;
-								//float oldHeight = bounds.Height;
-								//bounds.Y = Math.Min(HeapBounds[allocation.HeapId].Y, bounds.Y);
-								//bounds.Height = Math.Max(HeapBounds[allocation.HeapId].Height,
-								//	newBlock.Bounds.Bottom - bounds.Y);
-
-								//HeapBounds[allocation.HeapId] = bounds;
-								//lastBlock = newBlock;
-							}
-							catch (ArgumentException)
-							{
-								// TODO: User-facing error reporting
-								//Console.WriteLine("Duplicate allocation!");
-								//throw new InvalidConstraintException();
+								else
+								{
+									AggregatePacketData.Remove(allocation.Address);
+									MemoryBlockManager.Instance.Remove(allocation.Address);
+								}
 							}
 						}
 						else
@@ -197,12 +163,10 @@ namespace Alloclave
 										VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
 										free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
 									}
-
-									// This indicates a memory problem on the target side
-									// TODO: User-facing error reporting
-									// This is going to hit naturally due to the hack above
-									//Console.WriteLine("Duplicate free!");
-									//throw new InvalidConstraintException();
+									else
+									{
+										MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
+									}
 								}
 							}
 
@@ -235,21 +199,6 @@ namespace Alloclave
 					{
 						EventArgs e = new EventArgs();
 						Rebuilt.Invoke(this, e);
-					}
-
-					// TODO: Sort spatially
-					var boundsSet = HeapBounds.AsEnumerable().OrderBy(p => p.Value.Bottom);
-
-					// Figure out heap offsets for free space compression
-					float currentOffset = 0;
-					for (int i = 0; i < boundsSet.Count() - 1; i++)
-					{
-						RectangleF topBounds = boundsSet.ElementAt(i).Value;
-						RectangleF bottomBounds = boundsSet.ElementAt(i + 1).Value;
-						float diff = bottomBounds.Top - topBounds.Bottom;
-						currentOffset += (diff - 100);
-
-						MemoryBlockManager.Instance.HeapOffsets[boundsSet.ElementAt(i + 1).Key] = 0; //currentOffset;
 					}
 
 					// TODO: This should hook into the callback above instead
@@ -396,6 +345,28 @@ namespace Alloclave
 			RecalculateSelectedBlock.Set();
 		}
 
+		public void SelectAt(Allocation targetAllocation)
+		{
+			if (targetAllocation == null)
+			{
+				return;
+			}
+
+			VisualMemoryBlock block = MemoryBlockManager.Instance.Find(targetAllocation.Address);
+			if (block != null)
+			{
+				Renderer.SelectedBlock = block;
+
+				SelectionChangedEventArgs e = new SelectionChangedEventArgs();
+				e.SelectedBlock = Renderer.SelectedBlock;
+				this.Invoke((MethodInvoker)(() => SelectionChanged(this, e)));
+			}
+			else
+			{
+				// TODO: What should be done here? Scroll the timeline to a point where it exists?
+			}
+		}
+
 		// TODO: HoverTask and SelectTask are very similar. Find a way to consolidate them.
 		void HoverTask()
 		{
@@ -433,7 +404,7 @@ namespace Alloclave
 
 		void HoverAt(Vector location)
 		{
-			
+			// TODO: Tooltip?
 		}
 
 		private void AddressSpace_SizeChanged(object sender, EventArgs e)

@@ -30,27 +30,27 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MessagesForm));
 			this.tabControl1 = new System.Windows.Forms.TabControl();
-			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.ErrorsTabPage = new System.Windows.Forms.TabPage();
 			this.ErrorsDataGrid = new System.Windows.Forms.DataGridView();
-			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.tabPage3 = new System.Windows.Forms.TabPage();
+			this.WarningsTabPage = new System.Windows.Forms.TabPage();
 			this.WarningsDataGrid = new System.Windows.Forms.DataGridView();
+			this.InfoTabPage = new System.Windows.Forms.TabPage();
 			this.InfosDataGrid = new System.Windows.Forms.DataGridView();
 			this.tabControl1.SuspendLayout();
-			this.tabPage1.SuspendLayout();
+			this.ErrorsTabPage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ErrorsDataGrid)).BeginInit();
-			this.tabPage2.SuspendLayout();
-			this.tabPage3.SuspendLayout();
+			this.WarningsTabPage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.WarningsDataGrid)).BeginInit();
+			this.InfoTabPage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.InfosDataGrid)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tabControl1
 			// 
 			this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-			this.tabControl1.Controls.Add(this.tabPage1);
-			this.tabControl1.Controls.Add(this.tabPage2);
-			this.tabControl1.Controls.Add(this.tabPage3);
+			this.tabControl1.Controls.Add(this.ErrorsTabPage);
+			this.tabControl1.Controls.Add(this.WarningsTabPage);
+			this.tabControl1.Controls.Add(this.InfoTabPage);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl1.Location = new System.Drawing.Point(0, 0);
 			this.tabControl1.Name = "tabControl1";
@@ -58,16 +58,16 @@
 			this.tabControl1.Size = new System.Drawing.Size(943, 258);
 			this.tabControl1.TabIndex = 0;
 			// 
-			// tabPage1
+			// ErrorsTabPage
 			// 
-			this.tabPage1.Controls.Add(this.ErrorsDataGrid);
-			this.tabPage1.Location = new System.Drawing.Point(4, 25);
-			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(935, 229);
-			this.tabPage1.TabIndex = 0;
-			this.tabPage1.Text = "Errors";
-			this.tabPage1.UseVisualStyleBackColor = true;
+			this.ErrorsTabPage.Controls.Add(this.ErrorsDataGrid);
+			this.ErrorsTabPage.Location = new System.Drawing.Point(4, 25);
+			this.ErrorsTabPage.Name = "ErrorsTabPage";
+			this.ErrorsTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.ErrorsTabPage.Size = new System.Drawing.Size(935, 229);
+			this.ErrorsTabPage.TabIndex = 0;
+			this.ErrorsTabPage.Text = "Errors";
+			this.ErrorsTabPage.UseVisualStyleBackColor = true;
 			// 
 			// ErrorsDataGrid
 			// 
@@ -76,30 +76,23 @@
 			this.ErrorsDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ErrorsDataGrid.Location = new System.Drawing.Point(3, 3);
 			this.ErrorsDataGrid.Name = "ErrorsDataGrid";
+			this.ErrorsDataGrid.ReadOnly = true;
 			this.ErrorsDataGrid.RowHeadersVisible = false;
+			this.ErrorsDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.ErrorsDataGrid.Size = new System.Drawing.Size(929, 223);
 			this.ErrorsDataGrid.TabIndex = 0;
+			this.ErrorsDataGrid.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_CellContentDoubleClick);
 			// 
-			// tabPage2
+			// WarningsTabPage
 			// 
-			this.tabPage2.Controls.Add(this.WarningsDataGrid);
-			this.tabPage2.Location = new System.Drawing.Point(4, 25);
-			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(935, 229);
-			this.tabPage2.TabIndex = 1;
-			this.tabPage2.Text = "Warnings";
-			this.tabPage2.UseVisualStyleBackColor = true;
-			// 
-			// tabPage3
-			// 
-			this.tabPage3.Controls.Add(this.InfosDataGrid);
-			this.tabPage3.Location = new System.Drawing.Point(4, 25);
-			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.Size = new System.Drawing.Size(935, 229);
-			this.tabPage3.TabIndex = 2;
-			this.tabPage3.Text = "Info";
-			this.tabPage3.UseVisualStyleBackColor = true;
+			this.WarningsTabPage.Controls.Add(this.WarningsDataGrid);
+			this.WarningsTabPage.Location = new System.Drawing.Point(4, 25);
+			this.WarningsTabPage.Name = "WarningsTabPage";
+			this.WarningsTabPage.Padding = new System.Windows.Forms.Padding(3);
+			this.WarningsTabPage.Size = new System.Drawing.Size(935, 229);
+			this.WarningsTabPage.TabIndex = 1;
+			this.WarningsTabPage.Text = "Warnings";
+			this.WarningsTabPage.UseVisualStyleBackColor = true;
 			// 
 			// WarningsDataGrid
 			// 
@@ -108,9 +101,22 @@
 			this.WarningsDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.WarningsDataGrid.Location = new System.Drawing.Point(3, 3);
 			this.WarningsDataGrid.Name = "WarningsDataGrid";
+			this.WarningsDataGrid.ReadOnly = true;
 			this.WarningsDataGrid.RowHeadersVisible = false;
+			this.WarningsDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.WarningsDataGrid.Size = new System.Drawing.Size(929, 223);
 			this.WarningsDataGrid.TabIndex = 1;
+			this.WarningsDataGrid.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_CellContentDoubleClick);
+			// 
+			// InfoTabPage
+			// 
+			this.InfoTabPage.Controls.Add(this.InfosDataGrid);
+			this.InfoTabPage.Location = new System.Drawing.Point(4, 25);
+			this.InfoTabPage.Name = "InfoTabPage";
+			this.InfoTabPage.Size = new System.Drawing.Size(935, 229);
+			this.InfoTabPage.TabIndex = 2;
+			this.InfoTabPage.Text = "Info";
+			this.InfoTabPage.UseVisualStyleBackColor = true;
 			// 
 			// InfosDataGrid
 			// 
@@ -119,9 +125,12 @@
 			this.InfosDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.InfosDataGrid.Location = new System.Drawing.Point(0, 0);
 			this.InfosDataGrid.Name = "InfosDataGrid";
+			this.InfosDataGrid.ReadOnly = true;
 			this.InfosDataGrid.RowHeadersVisible = false;
+			this.InfosDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.InfosDataGrid.Size = new System.Drawing.Size(935, 229);
 			this.InfosDataGrid.TabIndex = 1;
+			this.InfosDataGrid.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_CellContentDoubleClick);
 			// 
 			// MessagesForm
 			// 
@@ -135,11 +144,11 @@
 			this.ShowInTaskbar = false;
 			this.Text = "Error List";
 			this.tabControl1.ResumeLayout(false);
-			this.tabPage1.ResumeLayout(false);
+			this.ErrorsTabPage.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.ErrorsDataGrid)).EndInit();
-			this.tabPage2.ResumeLayout(false);
-			this.tabPage3.ResumeLayout(false);
+			this.WarningsTabPage.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.WarningsDataGrid)).EndInit();
+			this.InfoTabPage.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.InfosDataGrid)).EndInit();
 			this.ResumeLayout(false);
 
@@ -148,10 +157,10 @@
 		#endregion
 
 		private System.Windows.Forms.TabControl tabControl1;
-		private System.Windows.Forms.TabPage tabPage1;
+		private System.Windows.Forms.TabPage ErrorsTabPage;
 		private System.Windows.Forms.DataGridView ErrorsDataGrid;
-		private System.Windows.Forms.TabPage tabPage2;
-		private System.Windows.Forms.TabPage tabPage3;
+		private System.Windows.Forms.TabPage WarningsTabPage;
+		private System.Windows.Forms.TabPage InfoTabPage;
 		private System.Windows.Forms.DataGridView WarningsDataGrid;
 		private System.Windows.Forms.DataGridView InfosDataGrid;
 	}

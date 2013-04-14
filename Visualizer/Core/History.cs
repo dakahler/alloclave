@@ -100,12 +100,13 @@ namespace Alloclave
 			if (PacketList.Count > 0)
 			{
 				TimeSpan span = DateTime.Now.Subtract(TrialStartTime);
-				if (span.TotalSeconds > 60.0)
+				const double trialTimeLimit = 60.0;
+				if (span.TotalSeconds > trialTimeLimit)
 				{
 					if (!SentTrialWarning)
 					{
 						SentTrialWarning = true;
-						MessagesForm.Add(MessagesForm.MessageType.Warning, "Trial version can only collect one minute of data.");
+						MessagesForm.Add(MessagesForm.MessageType.Warning, null, "Trial version can only collect one minute of data.");
 					}
 
 					return;
