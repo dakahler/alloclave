@@ -8,10 +8,8 @@ using System.Drawing.Drawing2D;
 
 namespace Alloclave
 {
-	public static class Common
+	public static partial class Common
 	{
-		public const String Version = "0.1";
-
 		public enum Architecture
 		{
 			_32Bit,

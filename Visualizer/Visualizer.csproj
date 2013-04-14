@@ -217,6 +217,7 @@
     <Compile Include="Core\Profile.cs" />
     <Compile Include="Core\Program.cs" />
     <Compile Include="Core\TimeStamp.cs" />
+    <Compile Include="Core\version.cs" />
     <Compile Include="Core\VisualMemoryBlock.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
