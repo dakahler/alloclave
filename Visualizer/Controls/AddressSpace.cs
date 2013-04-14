@@ -365,6 +365,8 @@ namespace Alloclave
 			{
 				// TODO: What should be done here? Scroll the timeline to a point where it exists?
 			}
+
+			// TODO: Automatically bring the new selection into view
 		}
 
 		// TODO: HoverTask and SelectTask are very similar. Find a way to consolidate them.
