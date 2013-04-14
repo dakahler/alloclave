@@ -20,7 +20,7 @@ void main(int argc, char* argv[])
 		char modifiedPath[512];
 		strncpy(modifiedPath, argv[0], sizeof(modifiedPath) - 1);
 
-		int pathLength = strlen(modifiedPath);
+		size_t pathLength = strlen(modifiedPath);
 		modifiedPath[pathLength - 3] = 'p';
 		modifiedPath[pathLength - 2] = 'd';
 		modifiedPath[pathLength - 1] = 'b';

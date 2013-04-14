@@ -30,7 +30,6 @@ Buffer Transport::BuildFinalBuffer(unsigned short version)
 
 	buffer.Add(&version, sizeof(version));
 
-	// TODO: Architecture
 	unsigned int numItems = PacketQueue.GetNumItems();
 	buffer.Add(&numItems, sizeof(numItems));
 

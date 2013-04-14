@@ -24,7 +24,7 @@ namespace Alloclave
 		s_Transport = transport;
 	}
 
-	void RegisterAllocation(void* address, unsigned int size, unsigned int alignment, unsigned int heapId)
+	void RegisterAllocation(void* address, size_t size, unsigned int alignment, unsigned int heapId)
 	{
 		// TODO: Should be able to collect this data without a valid transport
 		// Needs some refactoring to support that

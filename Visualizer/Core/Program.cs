@@ -49,7 +49,7 @@ namespace Alloclave
 			String pluginsPath = Path.Combine(executablePath, "plugins");
 			if (!Directory.Exists(pluginsPath))
 			{
-				pluginsPath = Directory.GetParent(executablePath).Parent.FullName;
+				pluginsPath = Directory.GetParent(executablePath).Parent.Parent.FullName;
 				pluginsPath = Path.Combine(pluginsPath, "plugins");
 			}
 

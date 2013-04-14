@@ -18,7 +18,7 @@ namespace Alloclave
 		};
 
 		void* Address;
-		unsigned int Size;
+		size_t Size;
 		unsigned int Alignment;
 		AllocationType Type;
 		unsigned int HeapId;

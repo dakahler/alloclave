@@ -23,16 +23,28 @@ void CallStack_Win32::Rebuild()
 
 	STACKFRAME64 lFrameStack;
 	ZeroMemory(&lFrameStack, sizeof(STACKFRAME64));
-	lFrameStack.AddrPC.Offset = lContext.Eip;
+
+	DWORD lTypeMachine;
+
+#ifdef _M_IX86
+	lTypeMachine                 = IMAGE_FILE_MACHINE_I386;
+	lFrameStack.AddrPC.Offset    = lContext.Eip;
+	lFrameStack.AddrPC.Mode      = AddrModeFlat;
 	lFrameStack.AddrFrame.Offset = lContext.Ebp;
+	lFrameStack.AddrFrame.Mode   = AddrModeFlat;
 	lFrameStack.AddrStack.Offset = lContext.Esp;
-	lFrameStack.AddrPC.Mode = lFrameStack.AddrFrame.Mode = lFrameStack.AddrStack.Mode = AddrModeFlat;
+	lFrameStack.AddrStack.Mode   = AddrModeFlat;
+#elif _M_X64
+	lTypeMachine                 = IMAGE_FILE_MACHINE_AMD64;
+	lFrameStack.AddrPC.Offset    = lContext.Rip;
+	lFrameStack.AddrPC.Mode      = AddrModeFlat;
+	lFrameStack.AddrFrame.Offset = lContext.Rsp;
+	lFrameStack.AddrFrame.Mode   = AddrModeFlat;
+	lFrameStack.AddrStack.Offset = lContext.Rsp;
+	lFrameStack.AddrStack.Mode   = AddrModeFlat;
+#endif
 
-	// TODO: x64
-	DWORD lTypeMachine = IMAGE_FILE_MACHINE_I386;
-
-	int i;
-	for (i = DWORD(); i < MaxStackDepth; i++)
+	for (int i = DWORD(); i < MaxStackDepth; i++)
 	{
 		if( !StackWalk64( lTypeMachine, GetCurrentProcess(), GetCurrentThread(), &lFrameStack, lTypeMachine == IMAGE_FILE_MACHINE_I386 ? 0 : &lContext,
 			nullptr, &SymFunctionTableAccess64, &SymGetModuleBase64, nullptr ) )

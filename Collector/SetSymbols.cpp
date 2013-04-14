@@ -16,7 +16,7 @@ Buffer SetSymbols::Serialize() const
 {
 	Buffer buffer = Packet::Serialize();
 
-	unsigned short stringLength = strlen(SymbolsPath);
+	unsigned short stringLength = (unsigned short)strlen(SymbolsPath);
 	buffer.Add((void*)&stringLength, sizeof(stringLength));
 	buffer.Add((void*)SymbolsPath, stringLength);
 
