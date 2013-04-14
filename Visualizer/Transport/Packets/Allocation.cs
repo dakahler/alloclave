@@ -75,7 +75,7 @@ namespace Alloclave
 			{
 				binaryWriter.Write(Address);
 				binaryWriter.Write(Size);
-				binaryWriter.Write((UInt64)4); // alignment
+				binaryWriter.Write((UInt32)4); // alignment
 			}
 
 			
@@ -101,7 +101,7 @@ namespace Alloclave
 			{
 				Address = binaryReader.ReadUInt64();
 				Size = binaryReader.ReadUInt64();
-				Alignment = binaryReader.ReadUInt64();
+				Alignment = binaryReader.ReadUInt32();
 			}
 
 			Architecture = targetSystemInfo.Architecture;

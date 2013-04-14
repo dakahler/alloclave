@@ -47,8 +47,8 @@ namespace Alloclave
 			}
 			else
 			{
-				UInt64 stackDepth = binaryReader.ReadUInt64();
-				for (UInt64 i = 0; i < stackDepth; i++)
+				uint stackDepth = binaryReader.ReadUInt32();
+				for (int i = 0; i < stackDepth; i++)
 				{
 					Frame newFrame = new Frame();
 					newFrame.Address = binaryReader.ReadUInt64();

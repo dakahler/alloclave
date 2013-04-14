@@ -23,7 +23,7 @@ namespace Alloclave
 
 	private:
 		void* StackAddresses[MaxStackDepth];
-		int StackDepth;
+		unsigned int StackDepth;
 	};
 
 };
