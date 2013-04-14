@@ -37,8 +37,17 @@ namespace Alloclave
 			dataGrid.Rows.Add("For support, email support@circularshift.com");
 			dataGrid.Rows.Add("");
 			dataGrid.Rows.Add(Licensing.LicenseName);
-			dataGrid.Rows.Add("placeholder@example.com");
-			dataGrid.Rows.Add("Support Ends 1/1/2010");
+
+			if (Licensing.IsLicensed)
+			{
+				dataGrid.Rows.Add(Licensing.LicenseEmail);
+				dataGrid.Rows.Add("Support Ends " + Licensing.LicenseDate.ToShortDateString());
+			}
+			else
+			{
+				dataGrid.Rows.Add("");
+				dataGrid.Rows.Add("");
+			}
 
 			ToolTip tt1 = new ToolTip();
 			tt1.SetToolTip(companyLogoPictureBox, "Open " + Common.CompanyWebsiteUrl);
