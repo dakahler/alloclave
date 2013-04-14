@@ -26,5 +26,8 @@
     <Setting Name="Heap4_Allocation2" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Lime</Value>
     </Setting>
+    <Setting Name="LicenseText" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

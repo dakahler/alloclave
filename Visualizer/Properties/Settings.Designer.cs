@@ -118,5 +118,17 @@ namespace Alloclave.Properties {
                 this["Heap4_Allocation2"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LicenseText {
+            get {
+                return ((string)(this["LicenseText"]));
+            }
+            set {
+                this["LicenseText"] = value;
+            }
+        }
     }
 }
