@@ -20,6 +20,7 @@ namespace Alloclave
 		{
 			var usage = new StringBuilder();
 			usage.AppendLine("Alloclave");
+			usage.AppendLine("Version: " + Common.Version + ", Build Date: " + Licensing.LinkerTimestamp.ToShortDateString());
 			usage.AppendLine("Launch Alloclave with optional command line arguments.");
 			usage.AppendLine("\tAlloclave [-t:transport_type] [-p:process_name]");
 			usage.AppendLine("\t-t\tTransport type, such as \"Process Spy\"");
