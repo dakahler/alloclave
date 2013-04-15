@@ -14,9 +14,6 @@ namespace Alloclave
 
 		virtual ~Win32Transport();
 
-		void Connect();
-		void Disconnect();
-
 		void Flush();
 
 	protected:

@@ -14,9 +14,6 @@ namespace Alloclave
 
 		virtual ~Transport();
 
-		virtual void Connect() = 0;
-		virtual void Disconnect() = 0;
-
 		static void Send(const Packet& packet);
 
 		virtual void Flush() = 0;

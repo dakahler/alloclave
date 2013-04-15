@@ -15,16 +15,6 @@ Win32Transport::~Win32Transport()
 	VisualizerHandle = NULL;
 }
 
-void Win32Transport::Connect()
-{
-	FindVisualizer();
-}
-
-void Win32Transport::Disconnect()
-{
-	VisualizerHandle = NULL;
-}
-
 void Win32Transport::Flush()
 {
 	FindVisualizer();
