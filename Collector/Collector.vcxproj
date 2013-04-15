@@ -108,6 +108,9 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>DbgHelp.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -144,6 +147,9 @@ popd</Command>
     <PostBuildEvent>
       <Message>Generating makefiles...</Message>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>DbgHelp.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -190,6 +196,9 @@ popd</Command>
     <PostBuildEvent>
       <Message>Generating makefiles...</Message>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>DbgHelp.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Installer|x64'">
     <ClCompile>

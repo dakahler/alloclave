@@ -17,6 +17,10 @@ void CallStack_Win32::Rebuild()
 {
 	CallStack::Rebuild();
 
+	void* stackFrames[MaxStackDepth];
+	int stackDepth = 0;
+
+#ifdef _M_IX86
 	CONTEXT lContext;
 	ZeroMemory(&lContext, sizeof(CONTEXT));
 	RtlCaptureContext(&lContext);
@@ -26,7 +30,6 @@ void CallStack_Win32::Rebuild()
 
 	DWORD lTypeMachine;
 
-#ifdef _M_IX86
 	lTypeMachine                 = IMAGE_FILE_MACHINE_I386;
 	lFrameStack.AddrPC.Offset    = lContext.Eip;
 	lFrameStack.AddrPC.Mode      = AddrModeFlat;
@@ -34,46 +37,43 @@ void CallStack_Win32::Rebuild()
 	lFrameStack.AddrFrame.Mode   = AddrModeFlat;
 	lFrameStack.AddrStack.Offset = lContext.Esp;
 	lFrameStack.AddrStack.Mode   = AddrModeFlat;
-#elif _M_X64
-	lTypeMachine                 = IMAGE_FILE_MACHINE_AMD64;
-	lFrameStack.AddrPC.Offset    = lContext.Rip;
-	lFrameStack.AddrPC.Mode      = AddrModeFlat;
-	lFrameStack.AddrFrame.Offset = lContext.Rsp;
-	lFrameStack.AddrFrame.Mode   = AddrModeFlat;
-	lFrameStack.AddrStack.Offset = lContext.Rsp;
-	lFrameStack.AddrStack.Mode   = AddrModeFlat;
-#endif
 
-	for (int i = DWORD(); i < MaxStackDepth; i++)
+	for (; stackDepth < MaxStackDepth; stackDepth++)
 	{
-		if( !StackWalk64( lTypeMachine, GetCurrentProcess(), GetCurrentThread(), &lFrameStack, lTypeMachine == IMAGE_FILE_MACHINE_I386 ? 0 : &lContext,
-			nullptr, &SymFunctionTableAccess64, &SymGetModuleBase64, nullptr ) )
+		if( !StackWalk64( lTypeMachine, GetCurrentProcess(), GetCurrentThread(), &lFrameStack, &lContext,
+			NULL, SymFunctionTableAccess64, SymGetModuleBase64, NULL ) )
 		{
 			break;
 		}
 		if (lFrameStack.AddrPC.Offset != 0)
 		{
-			MEMORY_BASIC_INFORMATION lInfoMemory;
-			VirtualQuery((PVOID)lFrameStack.AddrPC.Offset, &lInfoMemory, sizeof(lInfoMemory));
-			DWORD64 lBaseAllocation = reinterpret_cast<DWORD64>(lInfoMemory.AllocationBase);
-
-			DWORD64 finalAddress = lFrameStack.AddrPC.Offset - lBaseAllocation;
-			Push((void*)finalAddress);
+			stackFrames[stackDepth] = (void*)lFrameStack.AddrPC.Offset;
 		}
 		else
 		{
 			break;
 		}
 	}
+#elif _M_X64
+	// StackWalk64 is finicky on x64, so use CaptureStackBackTrace instead
+	ZeroMemory(stackFrames, sizeof(UINT_PTR) * MaxStackDepth);
+	stackDepth = CaptureStackBackTrace(0, MaxStackDepth, (PVOID*)stackFrames, NULL);
+#endif
 
-	// Alternate implementation
-	//StackDepth = CaptureStackBackTrace(0, MaxStackDepth, StackAddresses, NULL);
+	// De-rebase
+	for (int i = 0; i < stackDepth; i++)
+	{
+		DWORD64 currentAddress = (DWORD64)stackFrames[i];
 
-	//// De-rebase
-	//for (int i = 0; i < StackDepth; i++)
-	//{
-	//	StackAddresses[i] = (void*)((unsigned int)StackAddresses[i] - (unsigned int)&__ImageBase);
-	//}
+		MEMORY_BASIC_INFORMATION lInfoMemory;
+		VirtualQuery((PVOID)currentAddress, &lInfoMemory, sizeof(lInfoMemory));
+		DWORD64 lBaseAllocation = reinterpret_cast<DWORD64>(lInfoMemory.AllocationBase);
+
+		DWORD64 finalAddress = currentAddress - lBaseAllocation;
+		Push((void*)finalAddress);
+	}
+
+	
 }
 
 }

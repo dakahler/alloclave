@@ -19,7 +19,7 @@ Buffer CallStack::Serialize() const
 	Buffer buffer;
 
 	buffer.Add((void*)&StackDepth, sizeof(StackDepth));
-	for (int i = 0; i < StackDepth; i++)
+	for (unsigned int i = 0; i < StackDepth; i++)
 	{
 		buffer.Add((void*)&StackAddresses[i], sizeof(StackAddresses[i]));
 	}
