@@ -16,6 +16,8 @@ namespace Alloclave_Plugin
 		static Alloclave.PdbParser pdbParser = new Alloclave.PdbParser();
 		static bool IsLoaded;
 
+		private String TempPdbPath;
+
 		public CallStack_PDB()
 		{
 			LoadSymbols();
@@ -25,7 +27,11 @@ namespace Alloclave_Plugin
 		{
 			if (!IsLoaded && File.Exists(SymbolsPath))
 			{
-				IsLoaded = pdbParser.Open(SymbolsPath);
+				// Copy file to temp to avoid locking the real file
+				TempPdbPath = Path.Combine(Path.GetTempPath(), Path.GetFileName(SymbolsPath));
+				File.Copy(SymbolsPath, TempPdbPath, true);
+
+				IsLoaded = pdbParser.Open(TempPdbPath);
 				if (!IsLoaded)
 				{
 					// TODO: Better exception
