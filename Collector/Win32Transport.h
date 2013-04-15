@@ -17,9 +17,9 @@ namespace Alloclave
 		void Connect();
 		void Disconnect();
 
-	protected:
-
 		void Flush();
+
+	protected:
 
 	private:
 

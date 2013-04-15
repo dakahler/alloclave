@@ -40,6 +40,12 @@ namespace Alloclave
 				SetSymbols setSymbols = (SetSymbols)e.Packet;
 				CallStack.SymbolsPath = setSymbols.SymbolsPath;
 			}
+			else if (e.Packet is SetArchitecture)
+			{
+				SetArchitecture setArchitecture = (SetArchitecture)e.Packet;
+				Transport.TargetSystemInfo.Architecture = setArchitecture.Architecture;
+				Transport.TargetSystemInfo.Endianness = setArchitecture.Endianness;
+			}
 			else
 			{
 				History.Add(e.Packet, e.TimeStamp);

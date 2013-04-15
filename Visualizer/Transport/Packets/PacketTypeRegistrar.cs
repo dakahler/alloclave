@@ -19,6 +19,7 @@ namespace Alloclave
 			Free,
 			Screenshot,
 			SetSymbols,
+			SetArchitecture,
 		};
 
 		static PacketTypeRegistrar()
@@ -27,6 +28,7 @@ namespace Alloclave
 			Types.Add(PacketTypes.Free, typeof(Free));
 			Types.Add(PacketTypes.Screenshot, typeof(Screenshot));
 			Types.Add(PacketTypes.SetSymbols, typeof(SetSymbols));
+			Types.Add(PacketTypes.SetArchitecture, typeof(SetArchitecture));
 		}
 
 

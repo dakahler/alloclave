@@ -26,58 +26,54 @@ namespace Alloclave
 
 	void RegisterAllocation(void* address, size_t size, unsigned int alignment, unsigned int heapId)
 	{
-		// TODO: Should be able to collect this data without a valid transport
-		// Needs some refactoring to support that
-		if (s_Transport == NULL)
-		{
-			return;
-		}
-
 		Allocation allocation(*s_CallStack);
 		allocation.Address = address;
 		allocation.Size = size;
 		allocation.Alignment = alignment;
 		allocation.Type = Allocation::AllocationType_Allocation;
 		allocation.HeapId = heapId;
-		s_Transport->Send(allocation);
+		Transport::Send(allocation);
+
+		// TODO: Temporary location
+		if (s_Transport != NULL)
+		{
+			s_Transport->Flush();
+		}
 	}
 
 	void RegisterHeap(void* address, unsigned int size, unsigned int alignment, unsigned int heapId)
 	{
-		if (s_Transport == NULL)
-		{
-			return;
-		}
-
 		Allocation heap;
 		heap.Address = address;
 		heap.Size = size;
 		heap.Alignment = alignment;
 		heap.Type = Allocation::AllocationType_Heap;
 		heap.HeapId = heapId;
-		s_Transport->Send(heap);
+		Transport::Send(heap);
+
+		// TODO: Temporary location
+		if (s_Transport != NULL)
+		{
+			s_Transport->Flush();
+		}
 	}
 
 	void RegisterFree(void* address, unsigned int heapId)
 	{
-		if (s_Transport == NULL)
-		{
-			return;
-		}
-
 		Free _free;
 		_free.Address = address;
 		_free.HeapId = heapId;
-		s_Transport->Send(_free);
+		Transport::Send(_free);
+
+		// TODO: Temporary location
+		if (s_Transport != NULL)
+		{
+			s_Transport->Flush();
+		}
 	}
 
 	void RegisterScreenshot()
 	{
-		if (s_Transport == NULL)
-		{
-			return;
-		}
-
 		// TODO
 	}
 
@@ -88,13 +84,14 @@ namespace Alloclave
 
 	void RegisterSymbolsPath(const char* symbolsPath)
 	{
-		if (s_Transport == NULL)
-		{
-			return;
-		}
-
 		SetSymbols setSymbols(symbolsPath);
-		s_Transport->Send(setSymbols);
+		Transport::Send(setSymbols);
+
+		// TODO: Temporary location
+		if (s_Transport != NULL)
+		{
+			s_Transport->Flush();
+		}
 	}
 
 };

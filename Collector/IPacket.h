@@ -20,6 +20,7 @@ namespace Alloclave
 			PacketType_Free,
 			PacketType_Screenshot,
 			PacketType_SetSymbols,
+			PacketType_SetArchitecture,
 		};
 
 		virtual PacketType GetPacketType() const = 0;

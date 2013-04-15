@@ -17,14 +17,15 @@ namespace Alloclave
 		virtual void Connect() = 0;
 		virtual void Disconnect() = 0;
 
-		void Send(const Packet& packet);
+		static void Send(const Packet& packet);
+
+		virtual void Flush() = 0;
 
 	protected:
 
-		virtual void Flush() = 0;
 		virtual Buffer BuildFinalBuffer(unsigned short version);
 
-		Queue PacketQueue;
+		static Queue PacketQueue;
 
 		static const unsigned short Version = 0;
 	};

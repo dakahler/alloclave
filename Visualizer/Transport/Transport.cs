@@ -9,7 +9,7 @@ namespace Alloclave
 {
 	public abstract class Transport
 	{
-		private TargetSystemInfo TargetSystemInfo;
+		public TargetSystemInfo TargetSystemInfo;
 
 		public Transport(TargetSystemInfo targetSystemInfo)
 		{

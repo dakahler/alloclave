@@ -99,7 +99,7 @@ void Buffer::Add(void* data, unsigned int dataSize)
 
 void Buffer::Add(const Buffer& buffer)
 {
-	Add(buffer.Data, buffer.CurrentSize);
+	Add(buffer.Data, buffer.Position);
 }
 
 const void* Buffer::GetData() const

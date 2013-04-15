@@ -1,9 +1,13 @@
 
 #include "Transport.h"
 #include "IPacket.h"
+#include "SetArchitecture.h"
 
 namespace Alloclave
 {
+
+static bool g_SentArchtecturePacket = false;
+Queue Transport::PacketQueue;
 
 Transport::Transport()
 {
@@ -17,11 +21,15 @@ Transport::~Transport()
 
 void Transport::Send(const Packet& packet)
 {
+	if (!g_SentArchtecturePacket)
+	{
+		g_SentArchtecturePacket = true;
+		SetArchitecture architecturePacket;
+		PacketQueue.Enqueue(architecturePacket.Serialize());
+	}
+
 	Buffer buffer = packet.Serialize();
 	PacketQueue.Enqueue(buffer);
-
-	// TODO: Temporary location
-	Flush();
 }
 
 Buffer Transport::BuildFinalBuffer(unsigned short version)
