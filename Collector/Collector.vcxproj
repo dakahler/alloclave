@@ -226,6 +226,7 @@ popd</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Allocation.h" />
+    <ClInclude Include="Alloclave.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="CallStack.h" />
     <ClInclude Include="CallStack_Win32.h" />

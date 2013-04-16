@@ -3,13 +3,22 @@
 #include "Allocation.h"
 #include "Free.h"
 #include "Screenshot.h"
-#include "Transport.h"
-#include "CallStack_Win32.h"
 #include "SetSymbols.h"
+
+// Built-in transports
+#include "Win32Transport.h"
+
+// Built-in stack walkers
+#include "CallStack_Win32.h"
 
 namespace Alloclave
 {
+#if ALLOCLAVE_TRANSPORT_TYPE == TRANSPORT_TYPE_WIN32
+	static Win32Transport s_SpecificTransport;
+	static Transport* s_Transport = &s_SpecificTransport;
+#elif ALLOCLAVE_TRANSPORT_TYPE == TRANSPORT_TYPE_CUSTOM
 	static Transport* s_Transport = NULL;
+#endif
 	
 #ifdef _WIN32
 	static CallStack_Win32 s_PlatformCallStack;
@@ -24,6 +33,7 @@ namespace Alloclave
 		s_Transport = transport;
 	}
 
+#if ALLOCLAVE_ENABLED
 	void RegisterAllocation(void* address, size_t size, unsigned int alignment, unsigned int heapId)
 	{
 		Allocation allocation(*s_CallStack);
@@ -93,5 +103,13 @@ namespace Alloclave
 			s_Transport->Flush();
 		}
 	}
+#else
+	void RegisterAllocation(void* /*address*/, size_t /*size*/, unsigned int /*alignment*/, unsigned int /*heapId*/) {}
+	void RegisterHeap(void* /*address*/, unsigned int /*size*/, unsigned int /*alignment*/, unsigned int /*heapId*/) {}
+	void RegisterFree(void* /*address*/, unsigned int /*heapId*/) {}
+	void RegisterScreenshot() {}
+	void RegisterCallStackParser(CallStack* /*parser*/) {}
+	void RegisterSymbolsPath(const char* /*symbolsPath*/) {}
+#endif // ALLOCLAVE_ENABLED
 
 };

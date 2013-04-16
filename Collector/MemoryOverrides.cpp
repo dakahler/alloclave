@@ -3,6 +3,8 @@
 
 #include "Registration.h"
 
+#if ALLOCLAVE_ENABLED && ALLOCLAVE_OVERRIDE_NEWDELETE
+
 void* operator new(size_t size)
 {
 	void* p = malloc(size);
@@ -61,13 +63,13 @@ void operator delete[](void* p, const char *file, int line)
 	}
 }
 
+#endif // ALLOCLAVE_ENABLED && ALLOCLAVE_OVERRIDE_NEWDELETE
+
 // Since these are above the malloc/free redefines below,
 // they call the original system versions of these functions,
 // serving as wrappers to intercept the allocation data
 // TODO: Better setup to prevent linkage problems if
 // a stdlib gets included before this header
-#define ALLOCLAVE_OVERRIDE_MALLOC
-#ifdef ALLOCLAVE_OVERRIDE_MALLOC
 
 namespace Alloclave
 {
@@ -115,5 +117,3 @@ namespace Alloclave
 		}
 	}
 };
-
-#endif // ALLOCLAVE_OVERRIDE_MALLOC

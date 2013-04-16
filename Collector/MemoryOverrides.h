@@ -2,13 +2,7 @@
 #ifndef _ALLOCLAVE_MEMORYOVERRIDES_H
 #define _ALLOCLAVE_MEMORYOVERRIDES_H
 
-// TODO: new with file, line?
-void* operator new(size_t size);
-void* operator new[](size_t size);
-void operator delete(void* p);
-void operator delete[](void* p);
-void operator delete(void* p, const char *file, int line);
-void operator delete[](void* p, const char *file, int line);
+#include "Alloclave.h"
 
 // Since these are above the malloc/free redefines below,
 // they call the original system versions of these functions,
@@ -24,11 +18,28 @@ namespace Alloclave
 	extern void real_free(void* p);
 };
 
-// This redefines everyone else's malloc/free calls to point
-// to the custom ones above, which can then track the calls
-#define malloc Alloclave::_malloc
-#define realloc Alloclave::_realloc
-#define free Alloclave::_free
+
+#if ALLOCLAVE_ENABLED
+
+	#if ALLOCLAVE_OVERRIDE_NEWDELETE
+		void* operator new(size_t size);
+		void* operator new[](size_t size);
+		void operator delete(void* p);
+		void operator delete[](void* p);
+		void operator delete(void* p, const char *file, int line);
+		void operator delete[](void* p, const char *file, int line);
+
+	#endif // ALLOCLAVE_OVERRIDE_NEWDELETE
+
+	// This redefines everyone else's malloc/free calls to point
+	// to the custom ones above, which can then track the calls
+	#ifdef ALLOCLAVE_OVERRIDE_MALLOC
+		#define malloc Alloclave::_malloc
+		#define realloc Alloclave::_realloc
+		#define free Alloclave::_free
+	#endif
+
+#endif // ALLOCLAVE_ENABLED
 
 
 #endif // _ALLOCLAVE_MEMORYOVERRIDES_H

@@ -6,12 +6,8 @@
 
 using namespace Alloclave;
 
-static Win32Transport s_Transport;
-
 void main(int argc, char* argv[])
 {
-	RegisterTransport(&s_Transport);
-
 	// Send the symbols path to the tool
 	// Assumes the symbols are in a PDB and
 	// it's in the same directory as the executable
