@@ -56,9 +56,8 @@ namespace Alloclave
 			// Plugins path must exist by this point
 			String transportPluginsPath = Path.Combine(pluginsPath, "transport");
 			String callstackPluginsPath = Path.Combine(pluginsPath, "callstack");
-			String userdataPluginsPath = Path.Combine(pluginsPath, "userdata");
 			if (!Directory.Exists(pluginsPath) || !Directory.Exists(transportPluginsPath) ||
-				!Directory.Exists(callstackPluginsPath) || !Directory.Exists(userdataPluginsPath))
+				!Directory.Exists(callstackPluginsPath))
 			{
 				MessageBox.Show("Plugins not found! Please reinstall Alloclave.");
 				Application.Exit();
