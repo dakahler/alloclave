@@ -109,7 +109,7 @@
             // 
             this.ChangesTextBox.BackColor = System.Drawing.SystemColors.Window;
             this.ChangesTextBox.Location = new System.Drawing.Point(55, 176);
-            this.ChangesTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ChangesTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.ChangesTextBox.Multiline = true;
             this.ChangesTextBox.Name = "ChangesTextBox";
             this.ChangesTextBox.ReadOnly = true;
@@ -120,7 +120,7 @@
             // 
             this.OkButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.OkButton.Location = new System.Drawing.Point(289, 414);
-            this.OkButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.OkButton.Margin = new System.Windows.Forms.Padding(4);
             this.OkButton.Name = "OkButton";
             this.OkButton.Size = new System.Drawing.Size(131, 28);
             this.OkButton.TabIndex = 7;
@@ -132,7 +132,7 @@
             // 
             this._CancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this._CancelButton.Location = new System.Drawing.Point(441, 414);
-            this._CancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._CancelButton.Margin = new System.Windows.Forms.Padding(4);
             this._CancelButton.Name = "_CancelButton";
             this._CancelButton.Size = new System.Drawing.Size(100, 28);
             this._CancelButton.TabIndex = 8;
@@ -142,8 +142,7 @@
             // 
             // UpdateForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.CancelButton = this._CancelButton;
             this.ClientSize = new System.Drawing.Size(605, 457);
             this.Controls.Add(this._CancelButton);
@@ -155,7 +154,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "UpdateForm";

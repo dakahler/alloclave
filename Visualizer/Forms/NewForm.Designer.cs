@@ -50,7 +50,7 @@
             this.TransportComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.TransportComboBox.FormattingEnabled = true;
             this.TransportComboBox.Location = new System.Drawing.Point(299, 36);
-            this.TransportComboBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.TransportComboBox.Margin = new System.Windows.Forms.Padding(4);
             this.TransportComboBox.Name = "TransportComboBox";
             this.TransportComboBox.Size = new System.Drawing.Size(328, 24);
             this.TransportComboBox.TabIndex = 1;
@@ -59,7 +59,7 @@
             // 
             this.OkButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.OkButton.Location = new System.Drawing.Point(392, 112);
-            this.OkButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.OkButton.Margin = new System.Windows.Forms.Padding(4);
             this.OkButton.Name = "OkButton";
             this.OkButton.Size = new System.Drawing.Size(100, 28);
             this.OkButton.TabIndex = 2;
@@ -71,7 +71,7 @@
             // 
             this._CancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this._CancelButton.Location = new System.Drawing.Point(515, 112);
-            this._CancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this._CancelButton.Margin = new System.Windows.Forms.Padding(4);
             this._CancelButton.Name = "_CancelButton";
             this._CancelButton.Size = new System.Drawing.Size(100, 28);
             this._CancelButton.TabIndex = 3;
@@ -82,8 +82,7 @@
             // NewForm
             // 
             this.AcceptButton = this.OkButton;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.CancelButton = this._CancelButton;
             this.ClientSize = new System.Drawing.Size(668, 169);
             this.ControlBox = false;
@@ -92,7 +91,7 @@
             this.Controls.Add(this.TransportComboBox);
             this.Controls.Add(this.ChooseTransportTypeLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "NewForm";

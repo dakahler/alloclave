@@ -80,7 +80,7 @@
             this.companyLogoPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
             this.companyLogoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("companyLogoPictureBox.Image")));
             this.companyLogoPictureBox.Location = new System.Drawing.Point(16, 11);
-            this.companyLogoPictureBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.companyLogoPictureBox.Margin = new System.Windows.Forms.Padding(4);
             this.companyLogoPictureBox.Name = "companyLogoPictureBox";
             this.companyLogoPictureBox.Size = new System.Drawing.Size(323, 68);
             this.companyLogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -93,7 +93,7 @@
             this.logoPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
             this.logoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("logoPictureBox.Image")));
             this.logoPictureBox.Location = new System.Drawing.Point(436, 21);
-            this.logoPictureBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.logoPictureBox.Margin = new System.Windows.Forms.Padding(4);
             this.logoPictureBox.Name = "logoPictureBox";
             this.logoPictureBox.Size = new System.Drawing.Size(337, 52);
             this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -125,7 +125,7 @@
             this.dataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1});
             this.dataGrid.Location = new System.Drawing.Point(23, 15);
-            this.dataGrid.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGrid.Margin = new System.Windows.Forms.Padding(4);
             this.dataGrid.Name = "dataGrid";
             this.dataGrid.RowHeadersVisible = false;
             this.dataGrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
@@ -143,7 +143,7 @@
             // 
             this.purchaseButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.purchaseButton.Location = new System.Drawing.Point(200, 308);
-            this.purchaseButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.purchaseButton.Margin = new System.Windows.Forms.Padding(4);
             this.purchaseButton.Name = "purchaseButton";
             this.purchaseButton.Size = new System.Drawing.Size(136, 36);
             this.purchaseButton.TabIndex = 2;
@@ -154,7 +154,7 @@
             // checkForUpdatesButton
             // 
             this.checkForUpdatesButton.Location = new System.Drawing.Point(27, 308);
-            this.checkForUpdatesButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkForUpdatesButton.Margin = new System.Windows.Forms.Padding(4);
             this.checkForUpdatesButton.Name = "checkForUpdatesButton";
             this.checkForUpdatesButton.Size = new System.Drawing.Size(165, 36);
             this.checkForUpdatesButton.TabIndex = 1;
@@ -166,7 +166,7 @@
             // 
             this.OkButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.OkButton.Location = new System.Drawing.Point(643, 308);
-            this.OkButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.OkButton.Margin = new System.Windows.Forms.Padding(4);
             this.OkButton.Name = "OkButton";
             this.OkButton.Size = new System.Drawing.Size(115, 36);
             this.OkButton.TabIndex = 0;
@@ -176,12 +176,11 @@
             // AboutForm
             // 
             this.AcceptButton = this.OkButton;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(787, 457);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AboutForm";
