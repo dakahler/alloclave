@@ -126,6 +126,11 @@ namespace Alloclave
 				Position = Math.Max(Position, 0.0f);
 
 				Redraw();
+
+                if (PositionChanged != null)
+                {
+                    PositionChanged(this, new EventArgs());
+                }
 			}
 		}
 
