@@ -33,7 +33,7 @@ namespace Alloclave
 
 	// This redefines everyone else's malloc/free calls to point
 	// to the custom ones above, which can then track the calls
-	#ifdef ALLOCLAVE_OVERRIDE_MALLOC
+	#if ALLOCLAVE_OVERRIDE_MALLOC
 		#define malloc Alloclave::_malloc
 		#define realloc Alloclave::_realloc
 		#define free Alloclave::_free

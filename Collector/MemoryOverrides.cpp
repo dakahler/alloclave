@@ -1,6 +1,7 @@
 
 #include <new>
 
+#include "Alloclave.h"
 #include "Registration.h"
 
 #if ALLOCLAVE_ENABLED && ALLOCLAVE_OVERRIDE_NEWDELETE
