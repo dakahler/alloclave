@@ -25,7 +25,7 @@ namespace Alloclave.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Teal")]
+        [global::System.Configuration.DefaultSettingValueAttribute("215, 220, 239")]
         public global::System.Drawing.Color Heap1_Allocation1 {
             get {
                 return ((global::System.Drawing.Color)(this["Heap1_Allocation1"]));
@@ -37,7 +37,7 @@ namespace Alloclave.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("PaleTurquoise")]
+        [global::System.Configuration.DefaultSettingValueAttribute("195, 197, 216")]
         public global::System.Drawing.Color Heap1_Allocation2 {
             get {
                 return ((global::System.Drawing.Color)(this["Heap1_Allocation2"]));
@@ -49,7 +49,7 @@ namespace Alloclave.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Red")]
+        [global::System.Configuration.DefaultSettingValueAttribute("220, 237, 216")]
         public global::System.Drawing.Color Heap2_Allocation1 {
             get {
                 return ((global::System.Drawing.Color)(this["Heap2_Allocation1"]));
@@ -61,7 +61,7 @@ namespace Alloclave.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("255, 128, 128")]
+        [global::System.Configuration.DefaultSettingValueAttribute("194, 216, 195")]
         public global::System.Drawing.Color Heap2_Allocation2 {
             get {
                 return ((global::System.Drawing.Color)(this["Heap2_Allocation2"]));
@@ -73,7 +73,7 @@ namespace Alloclave.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("255, 128, 255")]
+        [global::System.Configuration.DefaultSettingValueAttribute("237, 215, 223")]
         public global::System.Drawing.Color Heap3_Allocation1 {
             get {
                 return ((global::System.Drawing.Color)(this["Heap3_Allocation1"]));
@@ -85,7 +85,7 @@ namespace Alloclave.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192, 0, 192")]
+        [global::System.Configuration.DefaultSettingValueAttribute("225, 183, 195")]
         public global::System.Drawing.Color Heap3_Allocation2 {
             get {
                 return ((global::System.Drawing.Color)(this["Heap3_Allocation2"]));
@@ -97,7 +97,7 @@ namespace Alloclave.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Green")]
+        [global::System.Configuration.DefaultSettingValueAttribute("242, 220, 195")]
         public global::System.Drawing.Color Heap4_Allocation1 {
             get {
                 return ((global::System.Drawing.Color)(this["Heap4_Allocation1"]));
@@ -109,7 +109,7 @@ namespace Alloclave.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Lime")]
+        [global::System.Configuration.DefaultSettingValueAttribute("237, 198, 140")]
         public global::System.Drawing.Color Heap4_Allocation2 {
             get {
                 return ((global::System.Drawing.Color)(this["Heap4_Allocation2"]));

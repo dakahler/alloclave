@@ -3,28 +3,28 @@
   <Profiles />
   <Settings>
     <Setting Name="Heap1_Allocation1" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">Teal</Value>
+      <Value Profile="(Default)">215, 220, 239</Value>
     </Setting>
     <Setting Name="Heap1_Allocation2" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">PaleTurquoise</Value>
+      <Value Profile="(Default)">195, 197, 216</Value>
     </Setting>
     <Setting Name="Heap2_Allocation1" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">Red</Value>
+      <Value Profile="(Default)">220, 237, 216</Value>
     </Setting>
     <Setting Name="Heap2_Allocation2" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">255, 128, 128</Value>
+      <Value Profile="(Default)">194, 216, 195</Value>
     </Setting>
     <Setting Name="Heap3_Allocation1" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">255, 128, 255</Value>
+      <Value Profile="(Default)">237, 215, 223</Value>
     </Setting>
     <Setting Name="Heap3_Allocation2" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">192, 0, 192</Value>
+      <Value Profile="(Default)">225, 183, 195</Value>
     </Setting>
     <Setting Name="Heap4_Allocation1" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">Green</Value>
+      <Value Profile="(Default)">242, 220, 195</Value>
     </Setting>
     <Setting Name="Heap4_Allocation2" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">Lime</Value>
+      <Value Profile="(Default)">237, 198, 140</Value>
     </Setting>
     <Setting Name="LicenseText" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
