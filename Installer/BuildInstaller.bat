@@ -1,20 +1,21 @@
 @echo off
 
 del /q /f build.log
-msbuild ../Alloclave.sln /p:Configuration=Installer /t:Clean;Build > build.log
+msbuild ../Collector/Collector.sln /p:Configuration=Debug;Platform=x64 /t:Clean;Build > build.log
+msbuild ../Collector/Collector.sln /p:Configuration=Release;Platform=x64 /t:Clean;Build > build.log
+msbuild ../Alloclave.sln /p:Configuration=Installer;Platform=x64 /t:Clean;Build > build.log
 
 rd /s /q working
 mkdir working
-xcopy ..\Visualizer\bin\Installer\Alloclave.exe working /q /h /r /y /i
-xcopy ..\Visualizer\bin\Installer\*.dll working /q /h /r /y /i
+xcopy ..\Visualizer\bin\x64\Installer\Alloclave.exe working /q /h /r /y /i
+xcopy ..\Visualizer\bin\x64\Installer\*.dll working /q /h /r /y /i
 
 mkdir working\plugins
 mkdir working\plugins\transport
 mkdir working\plugins\callstack
-mkdir working\plugins\userdata
 mkdir working\plugins\transport\win32
 mkdir working\plugins\transport\win32\Properties
-xcopy ..\Visualizer\plugins\transport\*.dll working\plugins\transport /q /h /r /y /i
+xcopy ..\Visualizer\plugins\transport\Win32Transport.dll working\plugins\transport /q /h /r /y /i
 xcopy ..\Visualizer\plugins\transport\Win32Transport\*.cs working\plugins\transport\win32 /q /h /r /y /i
 xcopy ..\Visualizer\plugins\transport\Win32Transport\*.csproj working\plugins\transport\win32 /q /h /r /y /i
 xcopy ..\Visualizer\plugins\transport\Win32Transport\*.csproj working\plugins\transport\win32 /q /h /r /y /i
