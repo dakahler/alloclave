@@ -111,7 +111,7 @@ namespace Alloclave
 				newForm.TransportComboBox.SelectedIndex = 0;
 			}
 
-			if (newForm.ShowDialog() == DialogResult.OK)
+            if (newForm.TransportComboBox.Items.Count == 1 || newForm.ShowDialog() == DialogResult.OK)
 			{
 				_DockPanel.Controls.Clear();
 
@@ -146,6 +146,8 @@ namespace Alloclave
 			transportForm.Dock = DockStyle.Fill;
 			transportForm.Visible = true;
 			_DockPanel.Controls.Add(transportForm);
+
+            this.Focus();
 		}
 
 		private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
