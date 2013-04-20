@@ -64,7 +64,7 @@ namespace Alloclave
 
 			int barWidth = (int)((float)Width * widthPercentage);
 
-			const int barHeight = 4;
+			const int barHeight = 2;
 			int barX = (Width - barWidth) / 2;
 			int barY = (Height / 2) -(barHeight / 2);
 
@@ -76,7 +76,15 @@ namespace Alloclave
 			int circleWidthHeight = (int)(Height * heightPercentage);
 			int circleX = barX + (int)((float)barWidth * Position);
 			int circleY = barY - (circleWidthHeight / 2);
-			MainGraphics.DrawImage(Properties.Resources.ScrubberDot, circleX, circleY, circleWidthHeight, circleWidthHeight);
+
+			if (!LeftMouseDown)
+			{
+				MainGraphics.DrawImage(Properties.Resources.ScrubberDot, circleX, circleY, circleWidthHeight, circleWidthHeight);
+			}
+			else
+			{
+				MainGraphics.DrawImage(Properties.Resources.ScrubberDot_Selected, circleX, circleY, circleWidthHeight, circleWidthHeight);
+			}
 
 			Refresh();
 		}
@@ -99,11 +107,9 @@ namespace Alloclave
 		private void Scrubber_MouseDown(object sender, MouseEventArgs e)
 		{
 			LeftMouseDown = true;
-		}
 
-		private void Scrubber_MouseUp(object sender, MouseEventArgs e)
-		{
-			LeftMouseDown = false;
+			SetPosition(e);
+			Redraw();
 
 			if (PositionChanged != null)
 			{
@@ -111,20 +117,17 @@ namespace Alloclave
 			}
 		}
 
+		private void Scrubber_MouseUp(object sender, MouseEventArgs e)
+		{
+			LeftMouseDown = false;
+			Redraw();
+		}
+
 		private void Scrubber_MouseMove(object sender, MouseEventArgs e)
 		{
 			if (LeftMouseDown)
 			{
-				// Just set position to mouse position for now
-				int barWidth = (int)((float)Width * widthPercentage);
-				int barX = (Width - barWidth) / 2;
-				int circleWidthHeight = (int)(Height * heightPercentage);
-				int adjustedMouseX = e.X - barX - (circleWidthHeight / 2);
-
-				Position = ((float)adjustedMouseX / (float)barWidth);
-				Position = Math.Min(Position, 1.0f);
-				Position = Math.Max(Position, 0.0f);
-
+				SetPosition(e);
 				Redraw();
 
                 if (PositionChanged != null)
@@ -134,6 +137,16 @@ namespace Alloclave
 			}
 		}
 
-		
+		private void SetPosition(MouseEventArgs e)
+		{
+			int barWidth = (int)((float)Width * widthPercentage);
+			int barX = (Width - barWidth) / 2;
+			int circleWidthHeight = (int)(Height * heightPercentage);
+			int adjustedMouseX = e.X - barX - (circleWidthHeight / 2);
+
+			Position = ((float)adjustedMouseX / (float)barWidth);
+			Position = Math.Min(Position, 1.0f);
+			Position = Math.Max(Position, 0.0f);
+		}
 	}
 }
