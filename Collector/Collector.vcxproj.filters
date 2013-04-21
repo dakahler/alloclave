@@ -68,6 +68,12 @@
     <ClInclude Include="Alloclave.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Thread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread_Win32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Registration.cpp">
@@ -110,6 +116,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SetArchitecture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread_Win32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

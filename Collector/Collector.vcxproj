@@ -242,6 +242,8 @@ popd</Command>
     <ClInclude Include="Screenshot.h" />
     <ClInclude Include="SetArchitecture.h" />
     <ClInclude Include="SetSymbols.h" />
+    <ClInclude Include="Thread.h" />
+    <ClInclude Include="Thread_Win32.h" />
     <ClInclude Include="Transport.h" />
     <ClInclude Include="Win32Transport.h" />
   </ItemGroup>
@@ -258,6 +260,7 @@ popd</Command>
     <ClCompile Include="Screenshot.cpp" />
     <ClCompile Include="SetArchitecture.cpp" />
     <ClCompile Include="SetSymbols.cpp" />
+    <ClCompile Include="Thread_Win32.cpp" />
     <ClCompile Include="Transport.cpp" />
     <ClCompile Include="Win32Transport.cpp" />
   </ItemGroup>
