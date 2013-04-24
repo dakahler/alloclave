@@ -17,6 +17,8 @@ namespace Alloclave
 		{
 			InitializeComponent();
 
+			this.AddressSpaceScroller = new AddressSpaceScroller_OGL(AddressSpaceControl.Width);
+
 			TopLevel = false;
 			AddressSpaceControl.Rebuilt += AddressSpaceControl_Rebuilt;
 			AddressSpaceScroller.FocusChanged += addressSpaceScroller_FocusChanged;

@@ -60,9 +60,13 @@ namespace Alloclave
 			Profile = new Profile(ref transport);
 			History = History.Instance;
 
+			WeifenLuo.WinFormsUI.Docking.DockHelper.PreventActivation = true;
+
 			AllocationForm.Show(_DockPanel);
 			MessagesForm.Show(_DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
 			InfoForm.Show(MessagesForm.Pane, WeifenLuo.WinFormsUI.Docking.DockAlignment.Right, 0.55);
+
+			WeifenLuo.WinFormsUI.Docking.DockHelper.PreventActivation = false;
 		}
 	}
 }

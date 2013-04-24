@@ -15,6 +15,13 @@ namespace Alloclave
 	{
 		GLControl glControl;
 
+		// For designer
+		public AddressSpaceScroller_OGL()
+			: base(0)
+		{
+
+		}
+
 		public AddressSpaceScroller_OGL(int parentWidth)
 			: base(parentWidth)
 		{

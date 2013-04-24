@@ -146,8 +146,6 @@ namespace Alloclave
 			transportForm.Dock = DockStyle.Fill;
 			transportForm.Visible = true;
 			_DockPanel.Controls.Add(transportForm);
-
-            this.Focus();
 		}
 
 		private void aboutToolStripMenuItem_Click(object sender, EventArgs e)

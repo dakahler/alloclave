@@ -650,7 +650,7 @@ namespace WeifenLuo.WinFormsUI.Docking
                     }
                 }
 
-                if (!Form.ContainsFocus)
+				if (!Form.ContainsFocus && !DockHelper.PreventActivation)
                     if (!Win32Helper.IsRunningOnMono)
                         DockPanel.ContentFocusManager.Activate(Content);
 			}

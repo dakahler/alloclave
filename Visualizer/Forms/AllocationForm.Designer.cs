@@ -31,7 +31,7 @@
 			this.AddressSpaceControl = new Alloclave.AddressSpace();
 			this.MainScrubber = new Alloclave.Scrubber();
 			this.TableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.AddressSpaceScroller = new Alloclave.AddressSpaceScroller_OGL(AddressSpaceControl.Width);
+			this.AddressSpaceScroller = new AddressSpaceScroller_OGL();
 			this.TableLayoutPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -77,11 +77,11 @@
 			this.TableLayoutPanel.Size = new System.Drawing.Size(729, 478);
 			this.TableLayoutPanel.TabIndex = 2;
 			// 
-			// addressSpaceScroller
+			// AddressSpaceScroller
 			// 
 			this.AddressSpaceScroller.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.AddressSpaceScroller.Location = new System.Drawing.Point(679, 6);
-			this.AddressSpaceScroller.Name = "addressSpaceScroller";
+			this.AddressSpaceScroller.Name = "AddressSpaceScroller";
 			this.AddressSpaceScroller.Size = new System.Drawing.Size(44, 436);
 			this.AddressSpaceScroller.TabIndex = 5;
 			// 
