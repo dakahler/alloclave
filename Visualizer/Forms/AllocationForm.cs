@@ -17,8 +17,9 @@ namespace Alloclave
 		{
 			InitializeComponent();
 
+			TopLevel = false;
 			AddressSpaceControl.Rebuilt += AddressSpaceControl_Rebuilt;
-			addressSpaceScroller.FocusChanged += addressSpaceScroller_FocusChanged;
+			AddressSpaceScroller.FocusChanged += addressSpaceScroller_FocusChanged;
 			this.SizeChanged += AllocationForm_SizeChanged;
 			MainScrubber.PositionChanged += MainScrubber_PositionChanged;
 		}
@@ -30,7 +31,7 @@ namespace Alloclave
 
 		void AllocationForm_SizeChanged(object sender, EventArgs e)
 		{
-			addressSpaceScroller.ParentWidth = AddressSpaceControl.Width;
+			AddressSpaceScroller.ParentWidth = AddressSpaceControl.Width;
 		}
 
 		void addressSpaceScroller_FocusChanged(object sender, MouseEventArgs e)

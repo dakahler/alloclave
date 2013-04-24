@@ -18,10 +18,11 @@ namespace Alloclave
 		Graphics MainGraphics;
 		bool LeftMouseDown;
 
-		public float Position = 1.0f;
+		// TODO: Static hack
+		public static float Position = 1.0f;
 
-		const float widthPercentage = 0.9f;
-		const float heightPercentage = 0.9f;
+		const float widthPercentage = 0.925f;
+		const float heightPercentage = 1.0f;
 
 		public event EventHandler PositionChanged;
 

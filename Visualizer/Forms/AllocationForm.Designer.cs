@@ -29,9 +29,9 @@
 		private void InitializeComponent()
 		{
 			this.AddressSpaceControl = new Alloclave.AddressSpace();
-			MainScrubber = new Alloclave.Scrubber();
+			this.MainScrubber = new Alloclave.Scrubber();
 			this.TableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.addressSpaceScroller = new Alloclave.AddressSpaceScroller_OGL(AddressSpaceControl.Width);
+			this.AddressSpaceScroller = new Alloclave.AddressSpaceScroller_OGL(AddressSpaceControl.Width);
 			this.TableLayoutPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -46,25 +46,26 @@
 			this.AddressSpaceControl.Size = new System.Drawing.Size(667, 436);
 			this.AddressSpaceControl.TabIndex = 0;
 			// 
-			// scrubber1
+			// MainScrubber
 			// 
-			MainScrubber.AutoSize = true;
-			MainScrubber.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			MainScrubber.Dock = System.Windows.Forms.DockStyle.Fill;
-			MainScrubber.Location = new System.Drawing.Point(6, 448);
-			MainScrubber.Name = "scrubber1";
-			MainScrubber.Size = new System.Drawing.Size(667, 24);
-			MainScrubber.TabIndex = 1;
+			this.MainScrubber.AutoSize = true;
+			this.MainScrubber.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.MainScrubber.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.MainScrubber.Location = new System.Drawing.Point(6, 448);
+			this.MainScrubber.Name = "MainScrubber";
+			this.MainScrubber.Size = new System.Drawing.Size(667, 24);
+			this.MainScrubber.TabIndex = 1;
 			// 
 			// TableLayoutPanel
 			// 
+			this.TableLayoutPanel.BackColor = System.Drawing.Color.White;
 			this.TableLayoutPanel.ColumnCount = 3;
 			this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0F));
 			this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
 			this.TableLayoutPanel.Controls.Add(this.AddressSpaceControl, 0, 0);
-			this.TableLayoutPanel.Controls.Add(MainScrubber, 0, 1);
-			this.TableLayoutPanel.Controls.Add(this.addressSpaceScroller, 2, 0);
+			this.TableLayoutPanel.Controls.Add(this.MainScrubber, 0, 1);
+			this.TableLayoutPanel.Controls.Add(this.AddressSpaceScroller, 2, 0);
 			this.TableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.TableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.TableLayoutPanel.Name = "TableLayoutPanel";
@@ -78,11 +79,11 @@
 			// 
 			// addressSpaceScroller
 			// 
-			this.addressSpaceScroller.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.addressSpaceScroller.Location = new System.Drawing.Point(679, 6);
-			this.addressSpaceScroller.Name = "addressSpaceScroller";
-			this.addressSpaceScroller.Size = new System.Drawing.Size(44, 436);
-			this.addressSpaceScroller.TabIndex = 5;
+			this.AddressSpaceScroller.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.AddressSpaceScroller.Location = new System.Drawing.Point(679, 6);
+			this.AddressSpaceScroller.Name = "addressSpaceScroller";
+			this.AddressSpaceScroller.Size = new System.Drawing.Size(44, 436);
+			this.AddressSpaceScroller.TabIndex = 5;
 			// 
 			// AllocationForm
 			// 
@@ -102,9 +103,9 @@
 		#endregion
 
 		public AddressSpace AddressSpaceControl;
-		public static Scrubber MainScrubber;
 		private System.Windows.Forms.TableLayoutPanel TableLayoutPanel;
-		private AddressSpaceScroller addressSpaceScroller;
+		public Scrubber MainScrubber;
+		private AddressSpaceScroller_OGL AddressSpaceScroller;
 
 	}
 }

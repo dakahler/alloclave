@@ -20,6 +20,7 @@ namespace Alloclave
 		public InfoForm()
 		{
 			InitializeComponent();
+			TopLevel = false;
 		}
 
 		public void Update(Allocation allocation)

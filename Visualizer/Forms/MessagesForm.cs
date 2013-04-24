@@ -66,6 +66,8 @@ namespace Alloclave
 			Instance = this;
 			InitializeComponent();
 
+			TopLevel = false;
+
 			if (Licensing.IsTrial)
 			{
 				AddInternal(MessageType.Warning, null, "You are running a trial version of alloclave.");

@@ -81,7 +81,7 @@ namespace Alloclave
 					else
 					{
 						// Determine what entries we need to get based off scrubber position
-						double position = (double)AllocationForm.MainScrubber.Position;
+						double position = (double)Scrubber.Position;
 						UInt64 timeRange = history.TimeRange.Max - history.TimeRange.Min;
 						UInt64 currentTime = history.TimeRange.Min + (UInt64)((double)timeRange * position);
 
