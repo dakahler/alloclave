@@ -1,3 +1,4 @@
+// Copyright Circular Shift. For license information, see license.txt.
 
 #ifndef _ALLOCLAVE_CONSTANTS_H
 #define _ALLOCLAVE_CONSTANTS_H

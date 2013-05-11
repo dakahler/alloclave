@@ -5,7 +5,7 @@ The full version of the software requires payment of a license fee, as described
 You may:
 - Use the trial version on an unlimited number of computers;
 - Use the full version on any single computer;
-- Copy the software for archival purposes, provided any copy contains all of the original software's proprietary notices.
+- Copy the software, provided any copy contains all of the original software's proprietary notices.
  
 You may not:  
 - Permit other individuals to use the software except under the terms listed above;

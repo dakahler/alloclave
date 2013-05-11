@@ -1,3 +1,5 @@
+// Copyright Circular Shift. For license information, see license.txt.
+
 #ifndef _ALLOCLAVE_QUEUE_H
 #define _ALLOCLAVE_QUEUE_H
 

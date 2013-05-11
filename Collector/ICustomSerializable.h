@@ -1,3 +1,5 @@
+// Copyright Circular Shift. For license information, see license.txt.
+
 #ifndef _ALLOCLAVE_ICUSTOMSERIALIZABLE_H
 #define _ALLOCLAVE_ICUSTOMSERIALIZABLE_H
 

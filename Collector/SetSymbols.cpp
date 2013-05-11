@@ -1,3 +1,4 @@
+// Copyright Circular Shift. For license information, see license.txt.
 
 #include "SetSymbols.h"
 #include <string.h>

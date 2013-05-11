@@ -1,3 +1,4 @@
+// Copyright Circular Shift. For license information, see license.txt.
 
 #include "Registration.h"
 #include "Allocation.h"
