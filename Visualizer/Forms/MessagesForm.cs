@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace Alloclave
 {
@@ -66,12 +67,45 @@ namespace Alloclave
 			Instance = this;
 			InitializeComponent();
 
+			WeifenLuo.WinFormsUI.Docking.DockHelper.PreventActivation = true;
+
 			TopLevel = false;
+
+			dockPanel1.Theme = new VS2012LightTheme();
+
+			ToolForm errorsForm = new ToolForm();
+			errorsForm.CloseButton = false;
+			errorsForm.CloseButtonVisible = false;
+			errorsForm.TopLevel = false;
+			errorsForm.Text = "Errors";
+			errorsForm.Controls.Add(ErrorsDataGrid);
+			this.Controls.Add(errorsForm);
+			errorsForm.Show(dockPanel1);
+
+			ToolForm warningsForm = new ToolForm();
+			warningsForm.CloseButton = false;
+			warningsForm.CloseButtonVisible = false;
+			warningsForm.TopLevel = false;
+			warningsForm.Text = "Warnings";
+			warningsForm.Controls.Add(WarningsDataGrid);
+			this.Controls.Add(warningsForm);
+			warningsForm.Show(dockPanel1);
+
+			ToolForm infosForm = new ToolForm();
+			infosForm.CloseButton = false;
+			infosForm.CloseButtonVisible = false;
+			infosForm.TopLevel = false;
+			infosForm.Text = "Info";
+			infosForm.Controls.Add(InfosDataGrid);
+			this.Controls.Add(infosForm);
+			infosForm.Show(dockPanel1);
+
+			WeifenLuo.WinFormsUI.Docking.DockHelper.PreventActivation = false;
 
 			if (Licensing.IsTrial)
 			{
 				AddInternal(MessageType.Warning, null, "You are running a trial version of alloclave.");
-				tabControl1.SelectedTab = WarningsTabPage;
+				//tabControl1.SelectedTab = WarningsTabPage;
 			}
 		}
 

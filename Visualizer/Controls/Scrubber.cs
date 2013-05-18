@@ -61,7 +61,7 @@ namespace Alloclave
 				return;
 			}
 
-			MainGraphics.Clear(Color.White);
+			MainGraphics.Clear(Color.FromArgb(128, 128, 128));
 
 			int barWidth = (int)((float)Width * widthPercentage);
 

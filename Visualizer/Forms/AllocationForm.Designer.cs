@@ -31,7 +31,7 @@
 			this.AddressSpaceControl = new Alloclave.AddressSpace();
 			this.MainScrubber = new Alloclave.Scrubber();
 			this.TableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.AddressSpaceScroller = new AddressSpaceScroller_OGL();
+			this.AddressSpaceScroller = new Alloclave.AddressSpaceScroller_OGL();
 			this.TableLayoutPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -58,7 +58,7 @@
 			// 
 			// TableLayoutPanel
 			// 
-			this.TableLayoutPanel.BackColor = System.Drawing.Color.White;
+			this.TableLayoutPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.TableLayoutPanel.ColumnCount = 3;
 			this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0F));
@@ -89,10 +89,16 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.ClientSize = new System.Drawing.Size(729, 478);
+			this.CloseButton = false;
+			this.CloseButtonVisible = false;
+			this.ControlBox = false;
 			this.Controls.Add(this.TableLayoutPanel);
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "AllocationForm";
+			this.ShowIcon = false;
+			this.ShowInTaskbar = false;
 			this.Text = "Allocations";
 			this.TableLayoutPanel.ResumeLayout(false);
 			this.TableLayoutPanel.PerformLayout();

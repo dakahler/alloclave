@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace Alloclave
 {
@@ -40,6 +41,8 @@ namespace Alloclave
 		{
 			InitializeComponent();
 
+			_DockPanel.SkinStyle = WeifenLuo.WinFormsUI.Docking.Skins.Style.VisualStudio2012Light;
+
 			AllocationForm.AddressSpaceControl.SelectionChanged += AddressSpaceControl_SelectionChanged;
 			MessagesForm.AllocationSelected += MessagesForm_AllocationSelected;
 		}
@@ -61,6 +64,7 @@ namespace Alloclave
 			History = History.Instance;
 
 			WeifenLuo.WinFormsUI.Docking.DockHelper.PreventActivation = true;
+			_DockPanel.Theme = new VS2012LightTheme();
 
 			AllocationForm.Show(_DockPanel);
 			MessagesForm.Show(_DockPanel, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);

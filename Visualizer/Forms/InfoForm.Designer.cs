@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InfoForm));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.panel1 = new System.Windows.Forms.Panel();
@@ -75,9 +76,10 @@
 			// 
 			// symbolsNotFoundLabel
 			// 
+			this.symbolsNotFoundLabel.ActiveLinkColor = System.Drawing.Color.Tomato;
 			this.symbolsNotFoundLabel.AutoSize = true;
 			this.symbolsNotFoundLabel.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.symbolsNotFoundLabel.LinkColor = System.Drawing.Color.DarkRed;
+			this.symbolsNotFoundLabel.LinkColor = System.Drawing.Color.Red;
 			this.symbolsNotFoundLabel.Location = new System.Drawing.Point(396, 4);
 			this.symbolsNotFoundLabel.Name = "symbolsNotFoundLabel";
 			this.symbolsNotFoundLabel.Size = new System.Drawing.Size(116, 14);
@@ -90,6 +92,7 @@
 			// AddressLabel
 			// 
 			this.AddressLabel.AutoSize = true;
+			this.AddressLabel.ForeColor = System.Drawing.Color.White;
 			this.AddressLabel.Location = new System.Drawing.Point(7, 5);
 			this.AddressLabel.Name = "AddressLabel";
 			this.AddressLabel.Size = new System.Drawing.Size(48, 13);
@@ -99,6 +102,7 @@
 			// HeapLabel
 			// 
 			this.HeapLabel.AutoSize = true;
+			this.HeapLabel.ForeColor = System.Drawing.Color.White;
 			this.HeapLabel.Location = new System.Drawing.Point(280, 5);
 			this.HeapLabel.Name = "HeapLabel";
 			this.HeapLabel.Size = new System.Drawing.Size(36, 13);
@@ -108,6 +112,7 @@
 			// SizeLabel
 			// 
 			this.SizeLabel.AutoSize = true;
+			this.SizeLabel.ForeColor = System.Drawing.Color.White;
 			this.SizeLabel.Location = new System.Drawing.Point(178, 5);
 			this.SizeLabel.Name = "SizeLabel";
 			this.SizeLabel.Size = new System.Drawing.Size(30, 13);
@@ -131,20 +136,32 @@
 			this.StackTable.AllowUserToResizeRows = false;
 			this.StackTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 			this.StackTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+			this.StackTable.BackgroundColor = System.Drawing.Color.Gray;
 			this.StackTable.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+			this.StackTable.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.StackTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this.StackTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.StackTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Address,
             this.Symbol});
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Courier New", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.StackTable.DefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Courier New", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.StackTable.DefaultCellStyle = dataGridViewCellStyle2;
 			this.StackTable.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.StackTable.EnableHeadersVisualStyles = false;
+			this.StackTable.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.StackTable.Location = new System.Drawing.Point(0, 0);
 			this.StackTable.Name = "StackTable";
 			this.StackTable.ReadOnly = true;
@@ -176,11 +193,18 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.ClientSize = new System.Drawing.Size(528, 194);
+			this.CloseButton = false;
+			this.CloseButtonVisible = false;
+			this.ControlBox = false;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "InfoForm";
+			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.Text = "Info";
 			this.tableLayoutPanel1.ResumeLayout(false);

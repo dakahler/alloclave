@@ -48,7 +48,7 @@ namespace WeifenLuo.WinFormsUI.Docking
 
             SuspendLayout();
 
-			m_autoHideWindow = new AutoHideWindowControl(this);
+			m_autoHideWindow = Extender.AutoHideWindowFactory.CreateAutoHideWindow(this);
 			m_autoHideWindow.Visible = false;
             SetAutoHideWindowParent();
 
@@ -56,14 +56,7 @@ namespace WeifenLuo.WinFormsUI.Docking
 			m_dummyControl.Bounds = new Rectangle(0, 0, 1, 1);
 			Controls.Add(m_dummyControl);
 
-			m_dockWindows = new DockWindowCollection(this);
-			Controls.AddRange(new Control[]	{
-				DockWindows[DockState.Document],
-				DockWindows[DockState.DockLeft],
-				DockWindows[DockState.DockRight],
-				DockWindows[DockState.DockTop],
-				DockWindows[DockState.DockBottom]
-				});
+			LoadDockWindows();
 
 			m_dummyContent = new DockContent();
             ResumeLayout();
@@ -308,6 +301,12 @@ namespace WeifenLuo.WinFormsUI.Docking
 		{
 			get	{	return Extender.FloatWindowFactory;	}
 		}
+
+        [Browsable(false)]
+        public DockPanelExtender.IDockWindowFactory DockWindowFactory
+        {
+            get { return Extender.DockWindowFactory; }
+        }
 
 		internal DockPanelExtender.IDockPaneCaptionFactory DockPaneCaptionFactory
 		{
@@ -1076,5 +1075,35 @@ namespace WeifenLuo.WinFormsUI.Docking
 			if (handler != null)
 				handler(this, e);
 		}
-    }
+
+        internal void ReloadDockWindows()
+        {
+			var old = m_dockWindows;
+			LoadDockWindows();
+            foreach (var dockWindow in old)
+            {
+                Controls.Remove(dockWindow);
+                dockWindow.Dispose();
+            }
+        }
+
+        internal void LoadDockWindows()
+        {
+            m_dockWindows = new DockWindowCollection(this);
+            foreach (var dockWindow in DockWindows)
+            {
+                Controls.Add(dockWindow);
+            }
+        }
+
+        public void ResetAutoHideStripWindow()
+        {
+            m_autoHideWindow.Visible = false;
+            m_autoHideWindow.Parent = null;
+            m_autoHideWindow.Dispose();
+            m_autoHideWindow = Extender.AutoHideWindowFactory.CreateAutoHideWindow(this);
+            m_autoHideWindow.Visible = false;
+            SetAutoHideWindowParent();
+        }
+	}
 }

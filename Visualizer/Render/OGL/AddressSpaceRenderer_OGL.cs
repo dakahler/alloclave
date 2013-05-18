@@ -74,7 +74,7 @@ namespace Alloclave
 
 				glControl.BringToFront();
 				GlControlLoaded = true;
-				GL.ClearColor(255, 255, 255, 0);
+				GL.ClearColor(0.4f, 0.4f, 0.4f, 0);
 				glControl.VSync = true;
 			}
 

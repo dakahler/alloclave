@@ -81,8 +81,7 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>AlloclaveIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Installer|x86'">
     <OutputPath>bin\Installer\</OutputPath>
@@ -440,6 +439,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AlloclaveIcon.ico" />
     <Content Include="Core\AlloclaveIcon.ico" />
     <None Include="Resources\Dot_Selected.png" />
     <None Include="Resources\Dot_Unselected.png" />

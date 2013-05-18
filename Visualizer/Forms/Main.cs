@@ -59,7 +59,7 @@ namespace Alloclave
 				return;
 			}
 
-			licenseToolStripMenuItem.Text = Licensing.LicenseName;
+			//licenseToolStripMenuItem.Text = Licensing.LicenseName;
 
 			FormClosing += Main_FormClosing;
 
