@@ -118,25 +118,49 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="popupcontainerbuttons" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\ColorPicker\popupcontainerbuttons.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="quickstart" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\quickstart2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="colorbarIndicators" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\ColorPicker\colorbarIndicators.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="publickey" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\publickey.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="eyedropper" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\ColorPicker\eyedropper.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="AlloclaveLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AlloclaveLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CircularShiftLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CircularShiftLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ScrubberDot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Dot_Unselected.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="quickstart_hover" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\quickstart_hover1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="newprofile_hover" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\newprofile_hover.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tour" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tour.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="popupcontainerbuttons" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ColorPicker\popupcontainerbuttons.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="publickey" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\publickey.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="newprofile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\newprofile1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="eyedropper" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ColorPicker\eyedropper.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ScrubberDot_Selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Dot_Selected.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CircularShiftLogo_hover" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CircularShiftLogo_hover.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AlloclaveLogo_medium" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AlloclaveLogo_medium.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="colorbarIndicators" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ColorPicker\colorbarIndicators.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tour_hover" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tour_hover.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
