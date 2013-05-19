@@ -117,7 +117,7 @@ namespace Alloclave
 				if (selectedBlock != null)
 				{
 					GL.Begin(BeginMode.Triangles);
-					GL.Color3(Color.Black);
+					GL.Color3(Color.FromArgb(40, 40, 40));
 					foreach (Triangle triangle in selectedBlock.Triangles)
 					{
 						foreach (Vector vertex in triangle.Vertices)
@@ -138,7 +138,7 @@ namespace Alloclave
 				if (hoverBlock != null)
 				{
 					GL.Begin(BeginMode.Triangles);
-					GL.Color4(Color.FromArgb(128, Color.Black));
+					GL.Color3(Color.FromArgb(40, 40, 40));
 					foreach (Triangle triangle in hoverBlock.Triangles)
 					{
 						foreach (Vector vertex in triangle.Vertices)
