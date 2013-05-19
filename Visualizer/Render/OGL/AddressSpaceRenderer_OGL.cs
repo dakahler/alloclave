@@ -22,6 +22,8 @@ namespace Alloclave
 		GLControl glControl;
 		bool GlControlLoaded;
 
+		OpenTK.Graphics.TextPrinter textPrinter = new OpenTK.Graphics.TextPrinter(OpenTK.Graphics.TextQuality.High);
+
 		public AddressSpaceRenderer_OGL(AddressSpace parent)
 		{
 			Parent = parent;
@@ -156,6 +158,21 @@ namespace Alloclave
 				}
 
 				GL.PopMatrix();
+
+				if (MemoryBlockManager.Instance.Count == 0)
+				{
+					GL.PushMatrix();
+					String waitingText = "Waiting For Data...";
+					Font font = new Font("Arial", 30);
+					OpenTK.Graphics.TextExtents extents = textPrinter.Measure(waitingText, font);
+
+					GL.Translate((glControl.Width / 2) - (extents.BoundingBox.Width / 2),
+						(glControl.Height / 2) - (extents.BoundingBox.Height / 2), 0);
+
+					textPrinter.Print(waitingText, font, Color.FromArgb(200, 200, 200));
+					GL.PopMatrix();
+				}
+
 				glControl.SwapBuffers();
 				glControl.Context.MakeCurrent(null);
 				Monitor.Exit(glControl);
