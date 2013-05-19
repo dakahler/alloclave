@@ -13,34 +13,16 @@ namespace Alloclave
 {
 	public partial class StartScreen : Form
 	{
+		Tour Tour;
+
 		public StartScreen()
 		{
 			InitializeComponent();
 		}
 
-		private void linkLabel1_Click(object sender, EventArgs e)
-		{
-			Main.Instance.StartNewSession();
-		}
-
-		private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
-			System.Diagnostics.Process.Start(Common.ProductWebsiteUrl + "quickstart");
-		}
-
 		private void QuickStartPanel_Click(object sender, EventArgs e)
 		{
 			System.Diagnostics.Process.Start(Common.ProductWebsiteUrl + "quickstart");
-		}
-
-		private void NewPanel_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void DemoPanel_Click(object sender, EventArgs e)
-		{
-
 		}
 
 		private void QuickStartPictureBox_MouseEnter(object sender, EventArgs e)
@@ -110,6 +92,11 @@ namespace Alloclave
 
 		private void NewProfilePictureBox_Click(object sender, EventArgs e)
 		{
+			if (Tour != null)
+			{
+				Tour.Close();
+			}
+
 			Main.Instance.StartNewSession();
 		}
 
@@ -147,10 +134,10 @@ namespace Alloclave
 
 			if (existingForm == null)
 			{
-				Tour tour = new Tour();
-				tour.Height = Main.Instance.Height;
-				tour.Show(Main.Instance);
-				tour.SetDesktopLocation(Main.Instance.Location.X + Main.Instance.Size.Width, Main.Instance.Location.Y);
+				Tour = new Tour();
+				Tour.Height = Main.Instance.Height;
+				Tour.Show(Main.Instance);
+				Tour.SetDesktopLocation(Main.Instance.Location.X + Main.Instance.Size.Width, Main.Instance.Location.Y);
 			}
 			else
 			{

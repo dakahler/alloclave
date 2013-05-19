@@ -38,8 +38,6 @@
 			this.TourPictureBox = new System.Windows.Forms.PictureBox();
 			this.LogoPanel = new System.Windows.Forms.Panel();
 			this.LogoPictureBox = new System.Windows.Forms.PictureBox();
-			this.linkLabel2 = new System.Windows.Forms.LinkLabel();
-			this.linkLabel1 = new System.Windows.Forms.LinkLabel();
 			this.panel1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.NewPanel.SuspendLayout();
@@ -56,8 +54,6 @@
 			// 
 			this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.panel1.Controls.Add(this.tableLayoutPanel1);
-			this.panel1.Controls.Add(this.linkLabel2);
-			this.panel1.Controls.Add(this.linkLabel1);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Name = "panel1";
@@ -94,7 +90,6 @@
 			this.NewPanel.Name = "NewPanel";
 			this.NewPanel.Size = new System.Drawing.Size(407, 229);
 			this.NewPanel.TabIndex = 0;
-			this.NewPanel.Click += new System.EventHandler(this.NewPanel_Click);
 			// 
 			// NewProfilePictureBox
 			// 
@@ -153,7 +148,6 @@
 			this.DemoPanel.Name = "DemoPanel";
 			this.DemoPanel.Size = new System.Drawing.Size(693, 117);
 			this.DemoPanel.TabIndex = 2;
-			this.DemoPanel.Click += new System.EventHandler(this.DemoPanel_Click);
 			// 
 			// TourPictureBox
 			// 
@@ -201,32 +195,6 @@
 			this.LogoPictureBox.MouseLeave += new System.EventHandler(this.LogoPictureBox_MouseLeave);
 			this.LogoPictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.LogoPictureBox_MouseUp);
 			// 
-			// linkLabel2
-			// 
-			this.linkLabel2.AutoSize = true;
-			this.linkLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.linkLabel2.LinkColor = System.Drawing.Color.Black;
-			this.linkLabel2.Location = new System.Drawing.Point(41, 211);
-			this.linkLabel2.Name = "linkLabel2";
-			this.linkLabel2.Size = new System.Drawing.Size(352, 26);
-			this.linkLabel2.TabIndex = 2;
-			this.linkLabel2.TabStop = true;
-			this.linkLabel2.Text = "Not sure where to start? Click here!";
-			this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
-			// 
-			// linkLabel1
-			// 
-			this.linkLabel1.AutoSize = true;
-			this.linkLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.linkLabel1.LinkColor = System.Drawing.Color.Black;
-			this.linkLabel1.Location = new System.Drawing.Point(41, 158);
-			this.linkLabel1.Name = "linkLabel1";
-			this.linkLabel1.Size = new System.Drawing.Size(357, 29);
-			this.linkLabel1.TabIndex = 1;
-			this.linkLabel1.TabStop = true;
-			this.linkLabel1.Text = "Click here to start a new session";
-			this.linkLabel1.Click += new System.EventHandler(this.linkLabel1_Click);
-			// 
 			// StartScreen
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -242,7 +210,6 @@
 			this.ShowInTaskbar = false;
 			this.Text = "StartScreen";
 			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.NewPanel.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.NewProfilePictureBox)).EndInit();
@@ -259,8 +226,6 @@
 		#endregion
 
 		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.LinkLabel linkLabel1;
-		private System.Windows.Forms.LinkLabel linkLabel2;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Panel NewPanel;
 		private System.Windows.Forms.Panel QuickStartPanel;
