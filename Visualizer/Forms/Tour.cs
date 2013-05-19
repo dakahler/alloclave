@@ -33,6 +33,17 @@ namespace Alloclave
 		public Tour()
 		{
 			InitializeComponent();
+
+			this.FormClosed += Tour_FormClosed;
+		}
+
+		void Tour_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			if (TestProcess != null && !TestProcess.HasExited)
+			{
+				TestProcess.Exited -= TestProcess_Exited;
+				TestProcess.Kill();
+			}
 		}
 
 		void QuickStartLabel_Click(object sender, EventArgs e)
