@@ -42,8 +42,7 @@ namespace Alloclave
 			}
 		}
 
-		const float widthPercentage = 0.925f;
-		const float heightPercentage = 1.0f;
+		const float WidthPercentage = 0.02f;
 
 		public event EventHandler PositionChanged;
 
@@ -103,31 +102,21 @@ namespace Alloclave
 
 			lock (LockObject)
 			{
-				MainGraphics.Clear(Color.FromArgb(128, 128, 128));
+				MainGraphics.Clear(Color.FromArgb(100, 100, 100));
 
-				int barWidth = (int)((float)Width * widthPercentage);
+				int barWidth = (int)((float)Width * WidthPercentage);
+				//long tickRange = OfficialTimer.ElapsedTicks;
+				//double percentage = 1.0;
 
-				const int barHeight = 2;
-				int barX = (Width - barWidth) / 2;
-				int barY = (Height / 2) - (barHeight / 2);
+				//if (tickRange > 0 && FrontOffset > 0)
+				{
+					//percentage = (double)FrontOffset / (double)tickRange;
+				}
+				int barX = (int)((Width - barWidth) * _Position);
+				Rectangle barRectangle = new Rectangle(barX, 0, barWidth, Height);
 
-				Rectangle barRectangle = new Rectangle(barX, barY, barWidth, barHeight);
-
-				SolidBrush brush = new SolidBrush(Color.FromArgb(255, 0, 0, 0));
+				SolidBrush brush = new SolidBrush(Color.FromArgb(196, 196, 196));
 				MainGraphics.FillRectangle(brush, barRectangle);
-
-				int circleWidthHeight = (int)(Height * heightPercentage);
-				int circleX = barX + (int)((float)barWidth * Position);
-				int circleY = barY - (circleWidthHeight / 2);
-
-				if (!LeftMouseDown)
-				{
-					MainGraphics.DrawImage(Properties.Resources.ScrubberDot, circleX, circleY, circleWidthHeight, circleWidthHeight);
-				}
-				else
-				{
-					MainGraphics.DrawImage(Properties.Resources.ScrubberDot_Selected, circleX, circleY, circleWidthHeight, circleWidthHeight);
-				}
 
 				if (HandleExists && IsHandleCreated)
 				{
@@ -178,12 +167,15 @@ namespace Alloclave
 
 		private void SetPosition(MouseEventArgs e)
 		{
-			int barWidth = (int)((float)Instance.Width * widthPercentage);
-			int barX = (Instance.Width - barWidth) / 2;
-			int circleWidthHeight = (int)(Instance.Height * heightPercentage);
-			int adjustedMouseX = e.X - barX - (circleWidthHeight / 2);
+			// This all calculates the fudge factor needed to make sure
+			// the scrubber is centered horizontally on the mouse location
+			_Position = ((float)e.X / (float)Width).Clamp(0.0f, 1.0f);
+			float percentage = _Position - 0.5f;
+			int barWidth = (int)((float)Width * WidthPercentage);
+			int fudgeWidth = (int)((float)barWidth * percentage);
+			float fudgePercentage = (float)fudgeWidth / (float)Width;
 
-			Position = ((float)adjustedMouseX / (float)barWidth);
+			Position = _Position + fudgePercentage;
 		}
 	}
 }
