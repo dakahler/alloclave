@@ -192,26 +192,6 @@ namespace Alloclave.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ScrubberDot {
-            get {
-                object obj = ResourceManager.GetObject("ScrubberDot", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap ScrubberDot_Selected {
-            get {
-                object obj = ResourceManager.GetObject("ScrubberDot_Selected", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap tour {
             get {
                 object obj = ResourceManager.GetObject("tour", resourceCulture);
