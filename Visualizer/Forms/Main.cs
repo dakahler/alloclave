@@ -25,11 +25,30 @@ namespace Alloclave
 
 		CommandLineOptions options = new CommandLineOptions();
 
+		
+
 		public Main()
 		{
 			Instance = this;
 
 			InitializeComponent();
+
+			menuStrip1.Hide();
+
+			menuStrip1.Renderer = new MyRenderer();
+
+			ToolStripSystemTextBox licenseItem = new ToolStripSystemTextBox();
+			licenseItem.TextBox.BackColor = Color.FromArgb(64, 64, 64);
+			licenseItem.TextBox.ForeColor = Color.FromArgb(200, 200, 200);
+			licenseItem.TextBox.Text = Licensing.LicenseName + "  ";
+			licenseItem.TextBox.Font = new System.Drawing.Font("Arial", 8, FontStyle.Regular);
+			licenseItem.TextBox.Cursor = System.Windows.Forms.Cursors.Arrow;
+			licenseItem.TextBox.BorderStyle = BorderStyle.None;
+			licenseItem.Width = 300;
+			licenseItem.TextBox.ReadOnly = true;
+			licenseItem.TextBox.TabStop = false;
+			licenseItem.Alignment = ToolStripItemAlignment.Right;
+			this.menuStrip1.Items.Add(licenseItem);
 
 			Application.AddMessageFilter(this);
 
@@ -155,6 +174,7 @@ namespace Alloclave
 			transportForm.FormBorderStyle = FormBorderStyle.None;
 			transportForm.Dock = DockStyle.Fill;
 			transportForm.Visible = true;
+			menuStrip1.Show();
 			_DockPanel.Controls.Add(transportForm);
 		}
 
@@ -193,6 +213,60 @@ namespace Alloclave
 		private void exitToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Application.Exit();
+		}
+
+		private void fileToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+		{
+			fileToolStripMenuItem.ForeColor = Color.Black;
+		}
+
+		private void fileToolStripMenuItem_DropDownClosed(object sender, EventArgs e)
+		{
+			fileToolStripMenuItem.ForeColor = Color.White;
+		}
+
+		private void helpToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+		{
+			helpToolStripMenuItem.ForeColor = Color.Black;
+		}
+
+		private void helpToolStripMenuItem_DropDownClosed(object sender, EventArgs e)
+		{
+			helpToolStripMenuItem.ForeColor = Color.White;
+		}
+	}
+
+	public class ToolStripSystemTextBox : System.Windows.Forms.ToolStripControlHost
+	{
+		public ToolStripSystemTextBox() : base(new TextBox()) { }
+
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+		[TypeConverter(typeof(ExpandableObjectConverter))]
+		public TextBox TextBox { get { return Control as TextBox; } }
+	}
+
+	public class MyRenderer : ToolStripProfessionalRenderer
+	{
+		public MyRenderer() : base(new MyColors()) { }
+	}
+
+	public class MyColors : ProfessionalColorTable
+	{
+		public override Color MenuItemSelected
+		{
+			get { return Color.FromArgb(128, 128, 128); }
+		}
+		public override Color MenuItemSelectedGradientBegin
+		{
+			get { return Color.FromArgb(100, 100, 100); }
+		}
+		public override Color MenuItemSelectedGradientEnd
+		{
+			get { return Color.FromArgb(100, 100, 100); }
+		}
+		public override Color MenuItemBorder
+		{
+			get { return Color.FromArgb(100, 100, 100); }
 		}
 	}
 }

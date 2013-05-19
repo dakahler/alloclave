@@ -91,12 +91,11 @@
 			// logoPictureBox
 			// 
 			this.logoPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.logoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("logoPictureBox.Image")));
-			this.logoPictureBox.Location = new System.Drawing.Point(436, 21);
+			this.logoPictureBox.Image = global::Alloclave.Properties.Resources.AlloclaveLogo_medium;
+			this.logoPictureBox.Location = new System.Drawing.Point(461, 21);
 			this.logoPictureBox.Margin = new System.Windows.Forms.Padding(4);
 			this.logoPictureBox.Name = "logoPictureBox";
-			this.logoPictureBox.Size = new System.Drawing.Size(337, 52);
-			this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.logoPictureBox.Size = new System.Drawing.Size(304, 52);
 			this.logoPictureBox.TabIndex = 0;
 			this.logoPictureBox.TabStop = false;
 			this.logoPictureBox.Click += new System.EventHandler(this.logoPictureBox_Click);
