@@ -31,8 +31,9 @@
 			this.AddressSpaceControl = new Alloclave.AddressSpace();
 			this.MainScrubber = new Alloclave.Scrubber();
 			this.TableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.AddressSpaceScroller = new Alloclave.AddressSpaceScroller_OGL(AddressSpaceControl.Width);
+			this.PlayPausePictureBox = new System.Windows.Forms.PictureBox();
 			this.TableLayoutPanel.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.PlayPausePictureBox)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// AddressSpaceControl
@@ -65,7 +66,7 @@
 			this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
 			this.TableLayoutPanel.Controls.Add(this.AddressSpaceControl, 0, 0);
 			this.TableLayoutPanel.Controls.Add(this.MainScrubber, 0, 1);
-			this.TableLayoutPanel.Controls.Add(this.AddressSpaceScroller, 2, 0);
+			this.TableLayoutPanel.Controls.Add(this.PlayPausePictureBox, 2, 1);
 			this.TableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.TableLayoutPanel.Location = new System.Drawing.Point(0, 0);
 			this.TableLayoutPanel.Name = "TableLayoutPanel";
@@ -77,13 +78,19 @@
 			this.TableLayoutPanel.Size = new System.Drawing.Size(729, 478);
 			this.TableLayoutPanel.TabIndex = 2;
 			// 
-			// AddressSpaceScroller
+			// pictureBox1
 			// 
-			this.AddressSpaceScroller.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.AddressSpaceScroller.Location = new System.Drawing.Point(679, 6);
-			this.AddressSpaceScroller.Name = "AddressSpaceScroller";
-			this.AddressSpaceScroller.Size = new System.Drawing.Size(44, 436);
-			this.AddressSpaceScroller.TabIndex = 5;
+			this.PlayPausePictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.PlayPausePictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.PlayPausePictureBox.Image = global::Alloclave.Properties.Resources.pause;
+			this.PlayPausePictureBox.Location = new System.Drawing.Point(679, 448);
+			this.PlayPausePictureBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.PlayPausePictureBox.Name = "pictureBox1";
+			this.PlayPausePictureBox.Size = new System.Drawing.Size(47, 27);
+			this.PlayPausePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.PlayPausePictureBox.TabIndex = 6;
+			this.PlayPausePictureBox.TabStop = false;
+			this.PlayPausePictureBox.Click += PlayPausePictureBox_Click;
 			// 
 			// AllocationForm
 			// 
@@ -102,6 +109,7 @@
 			this.Text = "Allocations";
 			this.TableLayoutPanel.ResumeLayout(false);
 			this.TableLayoutPanel.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.PlayPausePictureBox)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -111,7 +119,7 @@
 		public AddressSpace AddressSpaceControl;
 		private System.Windows.Forms.TableLayoutPanel TableLayoutPanel;
 		public Scrubber MainScrubber;
-		private AddressSpaceScroller_OGL AddressSpaceScroller;
+		private System.Windows.Forms.PictureBox PlayPausePictureBox;
 
 	}
 }

@@ -13,15 +13,27 @@ namespace Alloclave
 {
 	public partial class AllocationForm : ToolForm
 	{
+		private AddressSpaceScroller_OGL AddressSpaceScroller;
+
 		public AllocationForm()
 		{
 			InitializeComponent();
 
+			this.AddressSpaceScroller = new Alloclave.AddressSpaceScroller_OGL(AddressSpaceControl.Width);
+			this.AddressSpaceScroller.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.AddressSpaceScroller.Location = new System.Drawing.Point(679, 6);
+			this.AddressSpaceScroller.Name = "AddressSpaceScroller";
+			this.AddressSpaceScroller.Size = new System.Drawing.Size(44, 436);
+			this.AddressSpaceScroller.TabIndex = 5;
+			this.TableLayoutPanel.Controls.Add(this.AddressSpaceScroller, 2, 0);
+
 			TopLevel = false;
-			AddressSpaceControl.Rebuilt += AddressSpaceControl_Rebuilt;
 			AddressSpaceScroller.FocusChanged += addressSpaceScroller_FocusChanged;
 			this.SizeChanged += AllocationForm_SizeChanged;
 			MainScrubber.PositionChanged += MainScrubber_PositionChanged;
+
+			// Disabled by default - gets enabled when data comes in
+			this.Enabled = false;
 		}
 
 		void MainScrubber_PositionChanged(object sender, EventArgs e)
@@ -39,10 +51,18 @@ namespace Alloclave
 			AddressSpaceControl.CenterAt(e.Location.ToVector());
 		}
 
-		void AddressSpaceControl_Rebuilt(object sender, EventArgs e)
+		void PlayPausePictureBox_Click(object sender, System.EventArgs e)
 		{
-			//Bitmap mainBitmap = AddressSpaceControl.GetMainBitmap();
-			//addressSpaceScroller.MainBitmap = mainBitmap;
+			AddressSpaceControl.IsPaused = !AddressSpaceControl.IsPaused;
+
+			if (AddressSpaceControl.IsPaused)
+			{
+				PlayPausePictureBox.Image = Properties.Resources.play;
+			}
+			else
+			{
+				PlayPausePictureBox.Image = Properties.Resources.pause;
+			}
 		}
 	}
 }

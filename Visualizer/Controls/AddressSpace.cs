@@ -55,6 +55,8 @@ namespace Alloclave
 
 		public event EventHandler Rebuilt;
 
+		public bool IsPaused;
+
 		public void History_Updated(object sender, EventArgs e)
 		{
 			LastHistory = sender as History;

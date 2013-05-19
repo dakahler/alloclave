@@ -84,7 +84,7 @@ namespace Alloclave
 				}
 
 				MainGraphics = Graphics.FromImage(MainBitmap);
-				MainGraphics.Clear(Color.White);
+				MainGraphics.Clear(Color.FromArgb(100, 100, 100));
 				MainGraphics.CompositingQuality = CompositingQuality.HighSpeed;
 				MainGraphics.SmoothingMode = SmoothingMode.HighSpeed;
 				MainGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
@@ -105,17 +105,10 @@ namespace Alloclave
 				MainGraphics.Clear(Color.FromArgb(100, 100, 100));
 
 				int barWidth = (int)((float)Width * WidthPercentage);
-				//long tickRange = OfficialTimer.ElapsedTicks;
-				//double percentage = 1.0;
-
-				//if (tickRange > 0 && FrontOffset > 0)
-				{
-					//percentage = (double)FrontOffset / (double)tickRange;
-				}
 				int barX = (int)((Width - barWidth) * _Position);
 				Rectangle barRectangle = new Rectangle(barX, 0, barWidth, Height);
 
-				SolidBrush brush = new SolidBrush(Color.FromArgb(196, 196, 196));
+				SolidBrush brush = new SolidBrush(Color.FromArgb(148, 168, 172));
 				MainGraphics.FillRectangle(brush, barRectangle);
 
 				if (HandleExists && IsHandleCreated)
@@ -147,8 +140,12 @@ namespace Alloclave
 		private void Scrubber_MouseDown(object sender, MouseEventArgs e)
 		{
 			LeftMouseDown = true;
-
 			SetPosition(e);
+
+			if (Cursor.Current != Cursors.Hand)
+			{
+				Cursor.Current = Cursors.Hand;
+			}
 		}
 
 		private void Scrubber_MouseUp(object sender, MouseEventArgs e)
@@ -162,6 +159,25 @@ namespace Alloclave
 			if (LeftMouseDown)
 			{
 				SetPosition(e);
+			}
+
+			// Setup cursor
+			int barWidth = (int)((float)Width * WidthPercentage);
+			int barX = (int)((Width - barWidth) * _Position);
+
+			if (e.X >= barX && e.X <= barX + barWidth)
+			{
+				if (Cursor.Current != Cursors.Hand)
+				{
+					Cursor.Current = Cursors.Hand;
+				}
+			}
+			else
+			{
+				if (Cursor.Current != Cursors.Default)
+				{
+					Cursor.Current = Cursors.Default;
+				}
 			}
 		}
 

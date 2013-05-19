@@ -32,16 +32,21 @@ namespace Alloclave
 				if (Profile.History != null)
 				{
 					History.Updated += new EventHandler(AllocationForm.AddressSpaceControl.History_Updated);
+					History.Updated += History_Updated;
 					AllocationForm.AddressSpaceControl.Rebuild(Profile.History);
 				}
 			}
 		}
 
+		void History_Updated(object sender, EventArgs e)
+		{
+			AllocationForm.Enabled = true;
+			History.Updated -= History_Updated;
+		}
+
 		public TransportForm()
 		{
 			InitializeComponent();
-
-			_DockPanel.SkinStyle = WeifenLuo.WinFormsUI.Docking.Skins.Style.VisualStudio2012Light;
 
 			AddressSpace.SelectionChanged += AddressSpaceControl_SelectionChanged;
 			MessagesForm.AllocationSelected += MessagesForm_AllocationSelected;
