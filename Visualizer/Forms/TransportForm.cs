@@ -43,8 +43,13 @@ namespace Alloclave
 
 			_DockPanel.SkinStyle = WeifenLuo.WinFormsUI.Docking.Skins.Style.VisualStudio2012Light;
 
-			AllocationForm.AddressSpaceControl.SelectionChanged += AddressSpaceControl_SelectionChanged;
+			AddressSpace.SelectionChanged += AddressSpaceControl_SelectionChanged;
 			MessagesForm.AllocationSelected += MessagesForm_AllocationSelected;
+		}
+
+		~TransportForm()
+		{
+
 		}
 
 		void AddressSpaceControl_SelectionChanged(object sender, SelectionChangedEventArgs e)

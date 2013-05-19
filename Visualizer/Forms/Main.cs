@@ -63,14 +63,7 @@ namespace Alloclave
 
 			FormClosing += Main_FormClosing;
 
-			// Show the start screen
-			StartScreen startScreen = new StartScreen();
-
-			startScreen.TopLevel = false;
-			startScreen.FormBorderStyle = FormBorderStyle.None;
-			startScreen.Dock = DockStyle.Fill;
-			startScreen.Visible = true;
-			_DockPanel.Controls.Add(startScreen);
+			ReturnToStartScreen();
 		}
 
 		void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -95,7 +88,17 @@ namespace Alloclave
 			return false;
 		}
 
-		public void StartNewSession()
+		void ClearDockControls()
+		{
+			_DockPanel.Controls.Clear();
+
+			//foreach (Control control in _DockPanel.Controls)
+			//{
+			//	control.Dispose();
+			//}
+		}
+
+		public void StartNewSession(String autoTransportSelect = null)
 		{
 			NewForm newForm = new NewForm();
 
@@ -104,6 +107,13 @@ namespace Alloclave
 			{
 				String transportName = transportAdapter.Metadata.Name;
 				newForm.TransportComboBox.Items.Add(transportName);
+
+				// If a string was passed in for transport, force it here
+				if (transportName == autoTransportSelect)
+				{
+					newForm.TransportComboBox.Items.Clear();
+					newForm.TransportComboBox.Items.Add(transportName);
+				}
 			}
 
 			if (newForm.TransportComboBox.Items.Count > 0)
@@ -113,7 +123,7 @@ namespace Alloclave
 
             if (newForm.TransportComboBox.Items.Count == 1 || newForm.ShowDialog() == DialogResult.OK)
 			{
-				_DockPanel.Controls.Clear();
+				ClearDockControls();
 
 				foreach (ExportFactory<Transport, ITransportName> transportAdapter in Program.TransportAdapters)
 				{
@@ -146,6 +156,26 @@ namespace Alloclave
 			transportForm.Dock = DockStyle.Fill;
 			transportForm.Visible = true;
 			_DockPanel.Controls.Add(transportForm);
+		}
+
+		public void ReturnToStartScreen()
+		{
+			// Too many issues with disposing controls
+
+			ClearDockControls();
+			//History.Instance.Reset();
+			//MemoryBlockManager.Instance.Reset();
+			//RenderManager_OGL.Instance.Rebuild();
+			//Scrubber.Position = 1.0f;
+
+			// Show the start screen
+			StartScreen startScreen = new StartScreen();
+
+			startScreen.TopLevel = false;
+			startScreen.FormBorderStyle = FormBorderStyle.None;
+			startScreen.Dock = DockStyle.Fill;
+			startScreen.Visible = true;
+			_DockPanel.Controls.Add(startScreen);
 		}
 
 		private void aboutToolStripMenuItem_Click(object sender, EventArgs e)

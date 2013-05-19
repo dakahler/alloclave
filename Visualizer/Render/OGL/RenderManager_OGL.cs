@@ -219,7 +219,7 @@ namespace Alloclave
 			}
 		}
 
-		public void Rebuild(Dictionary<uint, float> offsets)
+		public void Rebuild(Dictionary<uint, float> offsets = null)
 		{
 			// TODO: Vertex incremental rebuilding
 			NumVertices = 0;
@@ -241,7 +241,7 @@ namespace Alloclave
 							}
 
 							double yVertex = vertex.Y;
-							if (offsets.ContainsKey(block.Allocation.HeapId))
+							if (offsets != null && offsets.ContainsKey(block.Allocation.HeapId))
 							{
 								yVertex -= (double)offsets[block.Allocation.HeapId];
 							}

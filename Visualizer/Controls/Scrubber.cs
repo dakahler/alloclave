@@ -19,18 +19,54 @@ namespace Alloclave
 		bool LeftMouseDown;
 
 		// TODO: Static hack
-		public static float Position = 1.0f;
+		public static float _Position = 1.0f;
+		public static float Position
+		{
+			get
+			{
+				return _Position;
+			}
+			set
+			{
+				_Position = value.Clamp(0.0f, 1.0f);
+
+				if (Instance != null)
+				{
+					Instance.Redraw();
+
+					if (Instance.PositionChanged != null)
+					{
+						Instance.PositionChanged(Instance, new EventArgs());
+					}
+				}
+			}
+		}
 
 		const float widthPercentage = 0.925f;
 		const float heightPercentage = 1.0f;
 
 		public event EventHandler PositionChanged;
 
+		public static Scrubber Instance;
+
+		bool HandleExists;
+
+		Object LockObject = new Object();
+
 		public Scrubber()
 		{
 			InitializeComponent();
 
 			Rebuild();
+
+			Instance = this;
+
+			HandleCreated += Scrubber_HandleCreated;
+		}
+
+		void Scrubber_HandleCreated(object sender, EventArgs e)
+		{
+			HandleExists = true;
 		}
 
 		void Rebuild()
@@ -40,16 +76,20 @@ namespace Alloclave
 				return;
 			}
 
-			MainBitmap = new Bitmap(Width, Height, PixelFormat.Format32bppPArgb);
-			if (MainGraphics != null)
+			lock (LockObject)
 			{
-				MainGraphics.Dispose();
+				MainBitmap = new Bitmap(Width, Height, PixelFormat.Format32bppPArgb);
+				if (MainGraphics != null)
+				{
+					MainGraphics.Dispose();
+				}
+
+				MainGraphics = Graphics.FromImage(MainBitmap);
+				MainGraphics.Clear(Color.White);
+				MainGraphics.CompositingQuality = CompositingQuality.HighSpeed;
+				MainGraphics.SmoothingMode = SmoothingMode.HighSpeed;
+				MainGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
 			}
-			MainGraphics = Graphics.FromImage(MainBitmap);
-			MainGraphics.Clear(Color.White);
-			MainGraphics.CompositingQuality = CompositingQuality.HighSpeed;
-			MainGraphics.SmoothingMode = SmoothingMode.HighSpeed;
-			MainGraphics.InterpolationMode = InterpolationMode.NearestNeighbor;
 
 			Redraw();
 		}
@@ -61,33 +101,43 @@ namespace Alloclave
 				return;
 			}
 
-			MainGraphics.Clear(Color.FromArgb(128, 128, 128));
-
-			int barWidth = (int)((float)Width * widthPercentage);
-
-			const int barHeight = 2;
-			int barX = (Width - barWidth) / 2;
-			int barY = (Height / 2) -(barHeight / 2);
-
-			Rectangle barRectangle = new Rectangle(barX, barY, barWidth, barHeight);
-
-			SolidBrush brush = new SolidBrush(Color.FromArgb(255, 0, 0, 0));
-			MainGraphics.FillRectangle(brush, barRectangle);
-
-			int circleWidthHeight = (int)(Height * heightPercentage);
-			int circleX = barX + (int)((float)barWidth * Position);
-			int circleY = barY - (circleWidthHeight / 2);
-
-			if (!LeftMouseDown)
+			lock (LockObject)
 			{
-				MainGraphics.DrawImage(Properties.Resources.ScrubberDot, circleX, circleY, circleWidthHeight, circleWidthHeight);
-			}
-			else
-			{
-				MainGraphics.DrawImage(Properties.Resources.ScrubberDot_Selected, circleX, circleY, circleWidthHeight, circleWidthHeight);
-			}
+				MainGraphics.Clear(Color.FromArgb(128, 128, 128));
 
-			Refresh();
+				int barWidth = (int)((float)Width * widthPercentage);
+
+				const int barHeight = 2;
+				int barX = (Width - barWidth) / 2;
+				int barY = (Height / 2) - (barHeight / 2);
+
+				Rectangle barRectangle = new Rectangle(barX, barY, barWidth, barHeight);
+
+				SolidBrush brush = new SolidBrush(Color.FromArgb(255, 0, 0, 0));
+				MainGraphics.FillRectangle(brush, barRectangle);
+
+				int circleWidthHeight = (int)(Height * heightPercentage);
+				int circleX = barX + (int)((float)barWidth * Position);
+				int circleY = barY - (circleWidthHeight / 2);
+
+				if (!LeftMouseDown)
+				{
+					MainGraphics.DrawImage(Properties.Resources.ScrubberDot, circleX, circleY, circleWidthHeight, circleWidthHeight);
+				}
+				else
+				{
+					MainGraphics.DrawImage(Properties.Resources.ScrubberDot_Selected, circleX, circleY, circleWidthHeight, circleWidthHeight);
+				}
+
+				if (HandleExists && IsHandleCreated)
+				{
+					this.Invoke((MethodInvoker)(() =>
+						{
+							Refresh();
+						}
+					));
+				}
+			}
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -110,12 +160,6 @@ namespace Alloclave
 			LeftMouseDown = true;
 
 			SetPosition(e);
-			Redraw();
-
-			if (PositionChanged != null)
-			{
-				PositionChanged(this, new EventArgs());
-			}
 		}
 
 		private void Scrubber_MouseUp(object sender, MouseEventArgs e)
@@ -129,25 +173,17 @@ namespace Alloclave
 			if (LeftMouseDown)
 			{
 				SetPosition(e);
-				Redraw();
-
-                if (PositionChanged != null)
-                {
-                    PositionChanged(this, new EventArgs());
-                }
 			}
 		}
 
 		private void SetPosition(MouseEventArgs e)
 		{
-			int barWidth = (int)((float)Width * widthPercentage);
-			int barX = (Width - barWidth) / 2;
-			int circleWidthHeight = (int)(Height * heightPercentage);
+			int barWidth = (int)((float)Instance.Width * widthPercentage);
+			int barX = (Instance.Width - barWidth) / 2;
+			int circleWidthHeight = (int)(Instance.Height * heightPercentage);
 			int adjustedMouseX = e.X - barX - (circleWidthHeight / 2);
 
 			Position = ((float)adjustedMouseX / (float)barWidth);
-			Position = Math.Min(Position, 1.0f);
-			Position = Math.Max(Position, 0.0f);
 		}
 	}
 }

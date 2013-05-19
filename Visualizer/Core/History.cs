@@ -94,6 +94,14 @@ namespace Alloclave
 			//result = GetForward(new TimeStamp(10));
 		}
 
+		public void Reset()
+		{
+			PacketList.Clear();
+			Position = 0;
+			_AddressRange = new Range();
+			Updated = null;
+		}
+
 		public void Add(IPacket packet, UInt64 timeStamp)
 		{
 			// Trial limitation: Only allow 1 minute of data

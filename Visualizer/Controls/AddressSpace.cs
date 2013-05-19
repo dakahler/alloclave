@@ -48,7 +48,10 @@ namespace Alloclave
 
 		TimeStamp LastTimestamp = new TimeStamp();
 
-		public event SelectionChangedEventHandler SelectionChanged;
+		CancellationTokenSource TokenSource;
+
+		// TODO: Probably shouldn't static
+		public static event SelectionChangedEventHandler SelectionChanged;
 
 		public event EventHandler Rebuilt;
 
@@ -222,8 +225,18 @@ namespace Alloclave
 
 			ColorPickerDialog.ColorChanged += ColorPickerDialog_ColorChanged;
 
-			Task.Factory.StartNew(() => HoverTask());
-			Task.Factory.StartNew(() => SelectTask());
+			TokenSource = new CancellationTokenSource();
+			var cancellationToken = TokenSource.Token;
+
+			Task.Factory.StartNew(() => HoverTask(cancellationToken), cancellationToken);
+			Task.Factory.StartNew(() => SelectTask(cancellationToken), cancellationToken);
+		}
+
+		~AddressSpace()
+		{
+			TokenSource.Cancel();
+			RecalculateHoverBlock.Set();
+			RecalculateSelectedBlock.Set();
 		}
 
 		void ColorPickerDialog_ColorChanged(object sender, EventArgs e)
@@ -370,11 +383,16 @@ namespace Alloclave
 		}
 
 		// TODO: HoverTask and SelectTask are very similar. Find a way to consolidate them.
-		void HoverTask()
+		void HoverTask(CancellationToken ct)
 		{
 			while (true)
 			{
 				RecalculateHoverBlock.WaitOne();
+
+				if (ct.IsCancellationRequested)
+				{
+					return;
+				}
 
 				Renderer.HoverBlock = null;
 				lock (RebuildDataLock)
@@ -384,11 +402,16 @@ namespace Alloclave
 			}
 		}
 
-		void SelectTask()
+		void SelectTask(CancellationToken ct)
 		{
 			while (true)
 			{
 				RecalculateSelectedBlock.WaitOne();
+
+				if (ct.IsCancellationRequested)
+				{
+					return;
+				}
 
 				Renderer.SelectedBlock = null;
 				lock (RebuildDataLock)

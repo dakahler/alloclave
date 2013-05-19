@@ -135,7 +135,27 @@ namespace Alloclave
 
 		private void TourPictureBox_Click(object sender, EventArgs e)
 		{
+			Form existingForm = null;
+			foreach (Form form in Application.OpenForms)
+			{
+				if (form is Tour)
+				{
+					existingForm = form;
+					break;
+				}
+			}
 
+			if (existingForm == null)
+			{
+				Tour tour = new Tour();
+				tour.Height = Main.Instance.Height;
+				tour.Show();
+				tour.SetDesktopLocation(Main.Instance.Location.X + Main.Instance.Size.Width, Main.Instance.Location.Y);
+			}
+			else
+			{
+				existingForm.Activate();
+			}
 		}
 	}
 }

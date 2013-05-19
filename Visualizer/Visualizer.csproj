@@ -295,6 +295,12 @@
     <Compile Include="Forms\ToolForm.Designer.cs">
       <DependentUpon>ToolForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Tour.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Tour.Designer.cs">
+      <DependentUpon>Tour.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\TransportForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -372,6 +378,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\StartScreen.resx">
       <DependentUpon>StartScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Tour.resx">
+      <DependentUpon>Tour.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TransportForm.resx">
       <DependentUpon>TransportForm.cs</DependentUpon>
