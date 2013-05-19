@@ -79,7 +79,7 @@
 			// 
 			this.companyLogoPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.companyLogoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("companyLogoPictureBox.Image")));
-			this.companyLogoPictureBox.Location = new System.Drawing.Point(16, 11);
+			this.companyLogoPictureBox.Location = new System.Drawing.Point(30, 11);
 			this.companyLogoPictureBox.Margin = new System.Windows.Forms.Padding(4);
 			this.companyLogoPictureBox.Name = "companyLogoPictureBox";
 			this.companyLogoPictureBox.Size = new System.Drawing.Size(323, 68);
@@ -92,7 +92,7 @@
 			// 
 			this.logoPictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.logoPictureBox.Image = global::Alloclave.Properties.Resources.AlloclaveLogo_medium;
-			this.logoPictureBox.Location = new System.Drawing.Point(461, 21);
+			this.logoPictureBox.Location = new System.Drawing.Point(459, 21);
 			this.logoPictureBox.Margin = new System.Windows.Forms.Padding(4);
 			this.logoPictureBox.Name = "logoPictureBox";
 			this.logoPictureBox.Size = new System.Drawing.Size(304, 52);
