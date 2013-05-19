@@ -104,8 +104,7 @@ namespace Alloclave
 
 			if (Licensing.IsTrial)
 			{
-				AddInternal(MessageType.Warning, null, "You are running a trial version of alloclave.");
-				//tabControl1.SelectedTab = WarningsTabPage;
+				AddInternal(MessageType.Info, null, "You are running a trial version of alloclave.");
 			}
 		}
 

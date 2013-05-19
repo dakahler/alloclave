@@ -999,7 +999,7 @@ namespace WeifenLuo.WinFormsUI.Docking
             else
             {
                 Color tabUnderLineColor;
-                if (tabActive != null && ((DockContent)tabActive.Content).IsActivated)
+				if (tabActive != null && (((DockContent)tabActive.Content).IsActivated || DockPane.DockPanel.ActiveContent == tabActive.Content))
                     tabUnderLineColor = DockPane.DockPanel.Skin.DockPaneStripSkin.DocumentGradient.ActiveTabGradient.StartColor;
                 else
                     tabUnderLineColor = DockPane.DockPanel.Skin.DockPaneStripSkin.DocumentGradient.InactiveTabGradient.EndColor;
@@ -1183,7 +1183,7 @@ namespace WeifenLuo.WinFormsUI.Docking
             {
                 Color startColor = DockPane.DockPanel.Skin.DockPaneStripSkin.DocumentGradient.ActiveTabGradient.StartColor;
                 Color endColor = DockPane.DockPanel.Skin.DockPaneStripSkin.DocumentGradient.ActiveTabGradient.EndColor;
-                Color inactiveColor = DockPane.DockPanel.Skin.DockPaneStripSkin.DocumentGradient.InactiveTabGradient.EndColor;
+				Color inactiveColor = DockPane.DockPanel.Skin.DockPaneStripSkin.DocumentGradient.ActiveTabGradient.EndColor;
 
                 LinearGradientMode gradientMode = DockPane.DockPanel.Skin.DockPaneStripSkin.DocumentGradient.ActiveTabGradient.LinearGradientMode;
 

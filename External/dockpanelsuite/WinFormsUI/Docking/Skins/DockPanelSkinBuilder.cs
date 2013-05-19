@@ -110,9 +110,9 @@ namespace WeifenLuo.WinFormsUI.Docking.Skins
 			skin.DockPaneStripSkin.DocumentGradient.ActiveTabGradient.StartColor = Color.White;
 			skin.DockPaneStripSkin.DocumentGradient.ActiveTabGradient.EndColor = Color.White;
 			skin.DockPaneStripSkin.DocumentGradient.ActiveTabGradient.TextColor = Color.Black;
-			skin.DockPaneStripSkin.DocumentGradient.InactiveTabGradient.StartColor = SystemColors.Control;
-			skin.DockPaneStripSkin.DocumentGradient.InactiveTabGradient.EndColor = Color.FromArgb(220, 220, 220);
-			skin.DockPaneStripSkin.DocumentGradient.InactiveTabGradient.TextColor = Color.Black;
+			skin.DockPaneStripSkin.DocumentGradient.InactiveTabGradient.StartColor = Color.FromArgb(100, 100, 100);
+			skin.DockPaneStripSkin.DocumentGradient.InactiveTabGradient.EndColor = Color.FromArgb(100, 100, 100);
+			skin.DockPaneStripSkin.DocumentGradient.InactiveTabGradient.TextColor = Color.White;
 
 			skin.DockPaneStripSkin.ToolWindowGradient.DockStripGradient.StartColor = SystemColors.Control;
 			skin.DockPaneStripSkin.ToolWindowGradient.DockStripGradient.EndColor = SystemColors.Control;
@@ -125,15 +125,15 @@ namespace WeifenLuo.WinFormsUI.Docking.Skins
 			skin.DockPaneStripSkin.ToolWindowGradient.InactiveTabGradient.EndColor = SystemColors.Control;
 			skin.DockPaneStripSkin.ToolWindowGradient.InactiveTabGradient.TextColor = SystemColors.GrayText;
 
-			skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.StartColor = Color.FromArgb(128, 128, 128);
-			skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.EndColor = Color.FromArgb(128, 128, 128);
+			skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.StartColor = Color.FromArgb(148, 168, 172);
+			skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.EndColor = Color.FromArgb(148, 168, 172);
 			skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.LinearGradientMode = LinearGradientMode.Vertical;
 			skin.DockPaneStripSkin.ToolWindowGradient.ActiveCaptionGradient.TextColor = Color.White;
 
 			skin.DockPaneStripSkin.ToolWindowGradient.InactiveCaptionGradient.StartColor = SystemColors.Control;
 			skin.DockPaneStripSkin.ToolWindowGradient.InactiveCaptionGradient.EndColor = SystemColors.ControlDark;
 			skin.DockPaneStripSkin.ToolWindowGradient.InactiveCaptionGradient.LinearGradientMode = LinearGradientMode.Vertical;
-			skin.DockPaneStripSkin.ToolWindowGradient.InactiveCaptionGradient.TextColor = SystemColors.GrayText;
+			skin.DockPaneStripSkin.ToolWindowGradient.InactiveCaptionGradient.TextColor = Color.Black;
 
 			return skin;
 		}

@@ -82,6 +82,7 @@
 			// WarningsDataGrid
 			// 
 			this.WarningsDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+			this.WarningsDataGrid.BackgroundColor = System.Drawing.Color.Gray;
 			this.WarningsDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.WarningsDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.WarningsDataGrid.Location = new System.Drawing.Point(3, 3);
@@ -106,6 +107,7 @@
 			// InfosDataGrid
 			// 
 			this.InfosDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+			this.InfosDataGrid.BackgroundColor = System.Drawing.Color.Gray;
 			this.InfosDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.InfosDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.InfosDataGrid.Location = new System.Drawing.Point(0, 0);
@@ -120,7 +122,7 @@
 			// ErrorsDataGrid
 			// 
 			this.ErrorsDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-			this.ErrorsDataGrid.BackgroundColor = System.Drawing.Color.DimGray;
+			this.ErrorsDataGrid.BackgroundColor = System.Drawing.Color.Gray;
 			this.ErrorsDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.ErrorsDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ErrorsDataGrid.Location = new System.Drawing.Point(0, 0);
@@ -152,8 +154,8 @@
 			tabGradient2.StartColor = System.Drawing.Color.White;
 			tabGradient2.TextColor = System.Drawing.Color.Black;
 			dockPaneStripGradient1.ActiveTabGradient = tabGradient2;
-			dockPanelGradient2.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			dockPanelGradient2.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			dockPanelGradient2.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+			dockPanelGradient2.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
 			dockPaneStripGradient1.DockStripGradient = dockPanelGradient2;
 			tabGradient3.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
 			tabGradient3.StartColor = System.Drawing.SystemColors.Control;
@@ -192,7 +194,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
 			this.ClientSize = new System.Drawing.Size(943, 258);
 			this.CloseButton = false;
 			this.CloseButtonVisible = false;

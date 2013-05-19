@@ -378,7 +378,7 @@ namespace WeifenLuo.WinFormsUI.Docking
             else
                 dotsColor = DockPane.DockPanel.Skin.DockPaneStripSkin.ToolWindowGradient.InactiveCaptionGradient.EndColor;
 
-            DrawDotsStrip(g, rectDotsStrip, dotsColor);
+            //DrawDotsStrip(g, rectDotsStrip, dotsColor);
         }
 
         protected void DrawDotsStrip(Graphics g, Rectangle rectStrip, Color colorDots)
