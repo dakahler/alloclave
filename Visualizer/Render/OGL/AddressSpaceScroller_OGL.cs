@@ -15,17 +15,11 @@ namespace Alloclave
 	{
 		GLControl glControl;
 
-		// For designer
-		public AddressSpaceScroller_OGL()
-			: base(0)
-		{
-
-		}
-
 		public AddressSpaceScroller_OGL(int parentWidth)
 			: base(parentWidth)
 		{
 			glControl = new GLControl();
+			glControl.Parent = this;
 			glControl.Dock = DockStyle.Fill;
 			glControl.Load += glControl_Load;
 			glControl.Resize += glControl_Resize;
