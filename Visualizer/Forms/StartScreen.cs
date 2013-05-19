@@ -149,7 +149,7 @@ namespace Alloclave
 			{
 				Tour tour = new Tour();
 				tour.Height = Main.Instance.Height;
-				tour.Show();
+				tour.Show(Main.Instance);
 				tour.SetDesktopLocation(Main.Instance.Location.X + Main.Instance.Size.Width, Main.Instance.Location.Y);
 			}
 			else
