@@ -94,7 +94,7 @@ namespace Alloclave
 
 	void RegisterFree(void* address, unsigned int heapId)
 	{
-		Free _free;
+		Free _free(*s_CallStack);
 		_free.Address = address;
 		_free.HeapId = heapId;
 		Transport::Send(_free);
