@@ -72,119 +72,123 @@ namespace Alloclave
 			{
 				lock (RebuildDataLock)
 				{
-					IEnumerable<KeyValuePair<TimeStamp, IPacket>> packets = null;
-					bool isBackward = false;
-					if (forceFullRebuild)
+					lock (history.AddLock)
 					{
-						AggregatePacketData.Clear();
-						MemoryBlockManager.Instance.Reset();
 
-						packets = history.Get();
-					}
-					else
-					{
-						// Determine what entries we need to get based off scrubber position
-						double position = (double)Scrubber.Position;
-						UInt64 timeRange = history.TimeRange.Max - history.TimeRange.Min;
-						UInt64 currentTime = history.TimeRange.Min + (UInt64)((double)timeRange * position);
+						IEnumerable<KeyValuePair<TimeStamp, IPacket>> packets = null;
+						bool isBackward = false;
+						if (forceFullRebuild)
+						{
+							AggregatePacketData.Clear();
+							MemoryBlockManager.Instance.Reset();
 
-						if (currentTime > LastTimestamp.Time)
-						{
-							packets = history.GetForward(new TimeStamp(currentTime));
-						}
-						else if (currentTime < LastTimestamp.Time)
-						{
-							packets = history.GetBackward(new TimeStamp(currentTime));
-							isBackward = true;
+							packets = history.Get();
 						}
 						else
+						{
+							// Determine what entries we need to get based off scrubber position
+							double position = (double)Scrubber.Position;
+							UInt64 timeRange = history.TimeRange.Max - history.TimeRange.Min;
+							UInt64 currentTime = history.TimeRange.Min + (UInt64)((double)timeRange * position);
+
+							if (currentTime > LastTimestamp.Time)
+							{
+								packets = history.GetForward(new TimeStamp(currentTime));
+							}
+							else if (currentTime < LastTimestamp.Time)
+							{
+								packets = history.GetBackward(new TimeStamp(currentTime));
+								isBackward = true;
+							}
+							else
+							{
+								return;
+							}
+
+							LastTimestamp = new TimeStamp(currentTime);
+						}
+
+						if (history.AddressRange.Max < history.AddressRange.Min)
 						{
 							return;
 						}
 
-						LastTimestamp = new TimeStamp(currentTime);
-					}
+						// Align to the beginning of the row
+						UInt64 startAddress = history.AddressRange.Min & ~AddressWidth;
+						UInt64 numRows = (history.AddressRange.Max - startAddress) / AddressWidth;
 
-					if (history.AddressRange.Max < history.AddressRange.Min)
-					{
-						return;
-					}
+						// Create final list, removing allocations as frees are encountered
 
-					// Align to the beginning of the row
-					UInt64 startAddress = history.AddressRange.Min & ~AddressWidth;
-					UInt64 numRows = (history.AddressRange.Max - startAddress) / AddressWidth;
-
-					// Create final list, removing allocations as frees are encountered
-				
-					// TODO: STILL needs performance improvements for large datasets
-					foreach (var pair in packets)
-					//Parallel.ForEach(newList, pair =>
-					{
-						// TODO: Can allocation and free processing be combined?
-						// They should be exact opposites of each other
-						if (pair.Value is Allocation)
+						// TODO: STILL needs performance improvements for large datasets
+						foreach (var pair in packets)
+						//Parallel.ForEach(newList, pair =>
 						{
-							Allocation allocation = pair.Value as Allocation;
-
-							lock (AggregatePacketData)
+							// TODO: Can allocation and free processing be combined?
+							// They should be exact opposites of each other
+							if (pair.Value is Allocation)
 							{
-								if (!isBackward)
+								Allocation allocation = pair.Value as Allocation;
+
+								lock (AggregatePacketData)
 								{
-									if (AggregatePacketData.ContainsKey(allocation.Address))
+									if (!isBackward)
 									{
-										AggregatePacketData.Remove(allocation.Address);
-										MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
-									}
+										if (AggregatePacketData.ContainsKey(allocation.Address))
+										{
+											AggregatePacketData.Remove(allocation.Address);
+											MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
+										}
 
-									AggregatePacketData.Add(allocation.Address, allocation);
+										AggregatePacketData.Add(allocation.Address, allocation);
 
-									VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
-										allocation, history.AddressRange.Min, AddressWidth, Width);
-								}
-								else
-								{
-									AggregatePacketData.Remove(allocation.Address);
-									MemoryBlockManager.Instance.Remove(allocation.Address);
-								}
-							}
-						}
-						else
-						{
-							Free free = pair.Value as Free;
-
-							lock (AggregatePacketData)
-							{
-								if (AggregatePacketData.ContainsKey(free.Address))
-								{
-									AggregatePacketData.Remove(free.Address);
-								}
-								else
-								{
-									if (isBackward)
-									{
-										AggregatePacketData.Add(free.Address, free.AssociatedAllocation);
 										VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
-										free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
+											allocation, history.AddressRange.Min, AddressWidth, Width);
 									}
 									else
 									{
-										MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
+										AggregatePacketData.Remove(allocation.Address);
+										MemoryBlockManager.Instance.Remove(allocation.Address);
 									}
 								}
 							}
-
-							VisualMemoryBlock removedBlock = MemoryBlockManager.Instance.Remove(free.Address);
-							if (removedBlock != null)
-							{
-								removedBlock.Allocation.AssociatedFree = free;
-								free.AssociatedAllocation = removedBlock.Allocation;
-							}
 							else
 							{
-								throw new DataException();
+								Free free = pair.Value as Free;
+
+								lock (AggregatePacketData)
+								{
+									if (AggregatePacketData.ContainsKey(free.Address))
+									{
+										AggregatePacketData.Remove(free.Address);
+									}
+									else
+									{
+										if (isBackward)
+										{
+											AggregatePacketData.Add(free.Address, free.AssociatedAllocation);
+											VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
+											free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
+										}
+										else
+										{
+											MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
+										}
+									}
+								}
+
+								VisualMemoryBlock removedBlock = MemoryBlockManager.Instance.Remove(free.Address);
+								if (removedBlock != null)
+								{
+									removedBlock.Allocation.AssociatedFree = free;
+									free.AssociatedAllocation = removedBlock.Allocation;
+								}
+								else
+								{
+									throw new DataException();
+								}
 							}
-						}
-					} //);
+						} //);
+					}
 
 					if (AggregatePacketData.Count == 0)
 					{

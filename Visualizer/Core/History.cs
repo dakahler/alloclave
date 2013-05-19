@@ -16,6 +16,9 @@ namespace Alloclave
 		// Position tracker
 		int Position;
 
+		// TODO: Need to find a better way to synchronize this
+		public Object AddLock = new Object();
+
 		// TODO: Might not be able to make these static
 		public static event EventHandler Updated;
 		public static bool SuspendRebuilding = false;
@@ -104,43 +107,46 @@ namespace Alloclave
 
 		public void Add(IPacket packet, UInt64 timeStamp)
 		{
-			// Trial limitation: Only allow 1 minute of data
-			if (PacketList.Count > 0)
+			lock (AddLock)
 			{
-				TimeSpan span = DateTime.Now.Subtract(TrialStartTime);
-				const double trialTimeLimit = 60.0;
-				if (span.TotalSeconds > trialTimeLimit)
+				// Trial limitation: Only allow 1 minute of data
+				if (PacketList.Count > 0)
 				{
-					if (!SentTrialWarning)
+					TimeSpan span = DateTime.Now.Subtract(TrialStartTime);
+					const double trialTimeLimit = 60.0;
+					if (span.TotalSeconds > trialTimeLimit)
 					{
-						SentTrialWarning = true;
-						MessagesForm.Add(MessagesForm.MessageType.Warning, null, "Trial version can only collect one minute of data.");
+						if (!SentTrialWarning)
+						{
+							SentTrialWarning = true;
+							MessagesForm.Add(MessagesForm.MessageType.Warning, null, "Trial version can only collect one minute of data.");
+						}
+
+						return;
 					}
-
-					return;
 				}
-			}
-			else
-			{
-				TrialStartTime = DateTime.Now;
-			}
-
-			lock (PacketList)
-			{
-				PacketList.Add(new TimeStamp(timeStamp), packet);
-
-				Allocation allocation = packet as Allocation;
-				if (allocation != null)
+				else
 				{
-					_AddressRange.Min = Math.Min(_AddressRange.Min, allocation.Address);
-					_AddressRange.Max = Math.Max(_AddressRange.Max, allocation.Address);
+					TrialStartTime = DateTime.Now;
 				}
-			}
 
-			if (Updated != null && !SuspendRebuilding)
-			{
-				EventArgs e = new EventArgs();
-				Updated.Invoke(this, e);
+				lock (PacketList)
+				{
+					PacketList.Add(new TimeStamp(timeStamp), packet);
+
+					Allocation allocation = packet as Allocation;
+					if (allocation != null)
+					{
+						_AddressRange.Min = Math.Min(_AddressRange.Min, allocation.Address);
+						_AddressRange.Max = Math.Max(_AddressRange.Max, allocation.Address);
+					}
+				}
+
+				if (Updated != null && !SuspendRebuilding)
+				{
+					EventArgs e = new EventArgs();
+					Updated.Invoke(this, e);
+				}
 			}
 		}
 
