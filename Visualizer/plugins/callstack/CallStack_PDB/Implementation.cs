@@ -29,6 +29,8 @@ namespace Alloclave_Plugin
 			{
 				// Copy file to temp to avoid locking the real file
 				TempPdbPath = Path.Combine(Path.GetTempPath(), Path.GetFileName(SymbolsPath));
+
+				// TODO: Exception handling
 				File.Copy(SymbolsPath, TempPdbPath, true);
 
 				IsLoaded = pdbParser.Open(TempPdbPath);

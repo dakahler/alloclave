@@ -52,6 +52,7 @@ namespace NBug.Core.UI.WinForms
 			
 			// ToDo: Fill in the 'Report Contents' tab);
 
+			this.BringToFront();
 			this.ShowDialog();
 
 			// Write back the user description (as we passed 'report' as a reference since it is a refence object anyway)

@@ -72,147 +72,150 @@ namespace Alloclave
 
 			var task3 = new Task(() => 
 			{
-				lock (RebuildDataLock)
+				NBug.Exceptions.Handle(false, () =>
 				{
-					lock (history.AddLock)
+					lock (RebuildDataLock)
 					{
-
-						IEnumerable<KeyValuePair<TimeStamp, IPacket>> packets = null;
-						bool isBackward = false;
-						if (forceFullRebuild)
+						lock (history.AddLock)
 						{
-							AggregatePacketData.Clear();
-							MemoryBlockManager.Instance.Reset();
 
-							packets = history.Get();
-						}
-						else
-						{
-							// Determine what entries we need to get based off scrubber position
-							double position = (double)Scrubber.Position;
-							UInt64 timeRange = history.TimeRange.Max - history.TimeRange.Min;
-							UInt64 currentTime = history.TimeRange.Min + (UInt64)((double)timeRange * position);
+							IEnumerable<KeyValuePair<TimeStamp, IPacket>> packets = null;
+							bool isBackward = false;
+							if (forceFullRebuild)
+							{
+								AggregatePacketData.Clear();
+								MemoryBlockManager.Instance.Reset();
 
-							if (currentTime > LastTimestamp.Time)
-							{
-								packets = history.GetForward(new TimeStamp(currentTime));
-							}
-							else if (currentTime < LastTimestamp.Time)
-							{
-								packets = history.GetBackward(new TimeStamp(currentTime));
-								isBackward = true;
+								packets = history.Get();
 							}
 							else
+							{
+								// Determine what entries we need to get based off scrubber position
+								double position = (double)Scrubber.Position;
+								UInt64 timeRange = history.TimeRange.Max - history.TimeRange.Min;
+								UInt64 currentTime = history.TimeRange.Min + (UInt64)((double)timeRange * position);
+
+								if (currentTime > LastTimestamp.Time)
+								{
+									packets = history.GetForward(new TimeStamp(currentTime));
+								}
+								else if (currentTime < LastTimestamp.Time)
+								{
+									packets = history.GetBackward(new TimeStamp(currentTime));
+									isBackward = true;
+								}
+								else
+								{
+									return;
+								}
+
+								LastTimestamp = new TimeStamp(currentTime);
+							}
+
+							if (history.AddressRange.Max < history.AddressRange.Min)
 							{
 								return;
 							}
 
-							LastTimestamp = new TimeStamp(currentTime);
+							// Align to the beginning of the row
+							UInt64 startAddress = history.AddressRange.Min & ~AddressWidth;
+							UInt64 numRows = (history.AddressRange.Max - startAddress) / AddressWidth;
+
+							// Create final list, removing allocations as frees are encountered
+
+							// TODO: STILL needs performance improvements for large datasets
+							foreach (var pair in packets)
+							//Parallel.ForEach(newList, pair =>
+							{
+								// TODO: Can allocation and free processing be combined?
+								// They should be exact opposites of each other
+								if (pair.Value is Allocation)
+								{
+									Allocation allocation = pair.Value as Allocation;
+
+									lock (AggregatePacketData)
+									{
+										if (!isBackward)
+										{
+											if (AggregatePacketData.ContainsKey(allocation.Address))
+											{
+												AggregatePacketData.Remove(allocation.Address);
+												MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
+											}
+
+											AggregatePacketData.Add(allocation.Address, allocation);
+
+											VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
+												allocation, history.AddressRange.Min, AddressWidth, Width);
+										}
+										else
+										{
+											AggregatePacketData.Remove(allocation.Address);
+											MemoryBlockManager.Instance.Remove(allocation.Address);
+										}
+									}
+								}
+								else
+								{
+									Free free = pair.Value as Free;
+
+									lock (AggregatePacketData)
+									{
+										if (AggregatePacketData.ContainsKey(free.Address))
+										{
+											AggregatePacketData.Remove(free.Address);
+										}
+										else
+										{
+											if (isBackward)
+											{
+												AggregatePacketData.Add(free.Address, free.AssociatedAllocation);
+												VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
+												free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
+											}
+											else
+											{
+												MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
+											}
+										}
+									}
+
+									VisualMemoryBlock removedBlock = MemoryBlockManager.Instance.Remove(free.Address);
+									if (removedBlock != null)
+									{
+										removedBlock.Allocation.AssociatedFree = free;
+										free.AssociatedAllocation = removedBlock.Allocation;
+									}
+									else
+									{
+										throw new DataException();
+									}
+								}
+							} //);
 						}
 
-						if (history.AddressRange.Max < history.AddressRange.Min)
+						if (AggregatePacketData.Count == 0)
 						{
 							return;
 						}
 
-						// Align to the beginning of the row
-						UInt64 startAddress = history.AddressRange.Min & ~AddressWidth;
-						UInt64 numRows = (history.AddressRange.Max - startAddress) / AddressWidth;
-
-						// Create final list, removing allocations as frees are encountered
-
-						// TODO: STILL needs performance improvements for large datasets
-						foreach (var pair in packets)
-						//Parallel.ForEach(newList, pair =>
+						if (!MemoryBlockManager.Instance.Contains(Renderer.SelectedBlock))
 						{
-							// TODO: Can allocation and free processing be combined?
-							// They should be exact opposites of each other
-							if (pair.Value is Allocation)
-							{
-								Allocation allocation = pair.Value as Allocation;
+							Renderer.SelectedBlock = null;
+						}
 
-								lock (AggregatePacketData)
-								{
-									if (!isBackward)
-									{
-										if (AggregatePacketData.ContainsKey(allocation.Address))
-										{
-											AggregatePacketData.Remove(allocation.Address);
-											MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
-										}
+						Renderer.HoverBlock = null;
 
-										AggregatePacketData.Add(allocation.Address, allocation);
+						if (Rebuilt != null)
+						{
+							EventArgs e = new EventArgs();
+							Rebuilt.Invoke(this, e);
+						}
 
-										VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
-											allocation, history.AddressRange.Min, AddressWidth, Width);
-									}
-									else
-									{
-										AggregatePacketData.Remove(allocation.Address);
-										MemoryBlockManager.Instance.Remove(allocation.Address);
-									}
-								}
-							}
-							else
-							{
-								Free free = pair.Value as Free;
-
-								lock (AggregatePacketData)
-								{
-									if (AggregatePacketData.ContainsKey(free.Address))
-									{
-										AggregatePacketData.Remove(free.Address);
-									}
-									else
-									{
-										if (isBackward)
-										{
-											AggregatePacketData.Add(free.Address, free.AssociatedAllocation);
-											VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
-											free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
-										}
-										else
-										{
-											MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
-										}
-									}
-								}
-
-								VisualMemoryBlock removedBlock = MemoryBlockManager.Instance.Remove(free.Address);
-								if (removedBlock != null)
-								{
-									removedBlock.Allocation.AssociatedFree = free;
-									free.AssociatedAllocation = removedBlock.Allocation;
-								}
-								else
-								{
-									throw new DataException();
-								}
-							}
-						} //);
+						// TODO: This should hook into the callback above instead
+						RenderManager_OGL.Instance.Rebuild(MemoryBlockManager.Instance.HeapOffsets);
 					}
-
-					if (AggregatePacketData.Count == 0)
-					{
-						return;
-					}
-
-					if (!MemoryBlockManager.Instance.Contains(Renderer.SelectedBlock))
-					{
-						Renderer.SelectedBlock = null;
-					}
-
-					Renderer.HoverBlock = null;
-
-					if (Rebuilt != null)
-					{
-						EventArgs e = new EventArgs();
-						Rebuilt.Invoke(this, e);
-					}
-
-					// TODO: This should hook into the callback above instead
-					RenderManager_OGL.Instance.Rebuild(MemoryBlockManager.Instance.HeapOffsets);
-				}
+				});
 			});
 
 			task3.Start();

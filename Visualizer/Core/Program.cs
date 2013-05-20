@@ -8,6 +8,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using NAppUpdate.Framework;
 using NAppUpdate;
+using System.Threading.Tasks;
 
 namespace Alloclave
 {
@@ -94,14 +95,17 @@ namespace Alloclave
 		[STAThread]
 		static void Main()
 		{
-			if (!System.Diagnostics.Debugger.IsAttached)
+			//if (!System.Diagnostics.Debugger.IsAttached)
 			{
 				AppDomain.CurrentDomain.UnhandledException += NBug.Handler.UnhandledException;
 				Application.ThreadException += NBug.Handler.ThreadException;
+				TaskScheduler.UnobservedTaskException += NBug.Handler.UnobservedTaskException;
 
 				NBug.Settings.StoragePath = NBug.Enums.StoragePath.CurrentDirectory;
 				NBug.Settings.UIMode = NBug.Enums.UIMode.Full;
-				//NBug.Settings.Destination1 = "Type=Mail;From=me@mycompany.com;To=bugtracker@mycompany.com;SmtpServer=smtp.mycompany.com;";
+				//NBug.Settings.ReleaseMode = true;
+				NBug.Settings.Destination1 =
+					"Type=Mail;From=support@circularshift.com;To=support@circularshift.com;SmtpServer=smtp.circularshift.com;";
 			}
 
 			ImportPlugins();
