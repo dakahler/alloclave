@@ -246,39 +246,39 @@ namespace Alloclave
 								yVertex -= (double)offsets[block.Allocation.HeapId];
 							}
 
-							Color color = Color.Red;
-							switch (block.ColorIndex)
-							{
-								case 0:
-									if (!isSecondaryColor)
-										color = Properties.Settings.Default.Heap1_Allocation1;
-									else
-										color = Properties.Settings.Default.Heap1_Allocation2;
-									break;
-								case 1:
-									if (!isSecondaryColor)
-										color = Properties.Settings.Default.Heap2_Allocation1;
-									else
-										color = Properties.Settings.Default.Heap2_Allocation2;
-									break;
-								case 2:
-									if (!isSecondaryColor)
-										color = Properties.Settings.Default.Heap3_Allocation1;
-									else
-										color = Properties.Settings.Default.Heap3_Allocation2;
-									break;
-								case 3:
-									if (!isSecondaryColor)
-										color = Properties.Settings.Default.Heap4_Allocation1;
-									else
-										color = Properties.Settings.Default.Heap4_Allocation2;
-									break;
-							}
+							//Color color = Color.Red;
+							//switch (block.ColorIndex)
+							//{
+							//	case 0:
+							//		if (!isSecondaryColor)
+							//			color = Properties.Settings.Default.Heap1_Allocation1;
+							//		else
+							//			color = Properties.Settings.Default.Heap1_Allocation2;
+							//		break;
+							//	case 1:
+							//		if (!isSecondaryColor)
+							//			color = Properties.Settings.Default.Heap2_Allocation1;
+							//		else
+							//			color = Properties.Settings.Default.Heap2_Allocation2;
+							//		break;
+							//	case 2:
+							//		if (!isSecondaryColor)
+							//			color = Properties.Settings.Default.Heap3_Allocation1;
+							//		else
+							//			color = Properties.Settings.Default.Heap3_Allocation2;
+							//		break;
+							//	case 3:
+							//		if (!isSecondaryColor)
+							//			color = Properties.Settings.Default.Heap4_Allocation1;
+							//		else
+							//			color = Properties.Settings.Default.Heap4_Allocation2;
+							//		break;
+							//}
 
-							VBO[NumVertices].R = color.R;
-							VBO[NumVertices].G = color.G;
-							VBO[NumVertices].B = color.B;
-							VBO[NumVertices].A = color.A;
+							VBO[NumVertices].R = block._Color.R;
+							VBO[NumVertices].G = block._Color.G;
+							VBO[NumVertices].B = block._Color.B;
+							VBO[NumVertices].A = block._Color.A;
 							VBO[NumVertices].Position = new Vector3((float)vertex.X, (float)yVertex, 0);
 							NumVertices++;
 						}

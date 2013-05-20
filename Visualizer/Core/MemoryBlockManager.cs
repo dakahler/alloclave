@@ -74,6 +74,8 @@ namespace Alloclave
 
 		public Dictionary<uint, float> HeapOffsets = new Dictionary<uint, float>();
 
+		private static bool isSecondaryColor = false;
+
 		private MemoryBlockManager()
 		{
 
@@ -113,7 +115,37 @@ namespace Alloclave
 				ColorIndex %= 4;
 			}
 
-			VisualMemoryBlock block = new VisualMemoryBlock(allocation, startAddress, addressWidth, width, index);
+			Color color = Color.Red;
+			switch (index)
+			{
+				case 0:
+					if (!isSecondaryColor)
+						color = Properties.Settings.Default.Heap1_Allocation1;
+					else
+						color = Properties.Settings.Default.Heap1_Allocation2;
+					break;
+				case 1:
+					if (!isSecondaryColor)
+						color = Properties.Settings.Default.Heap2_Allocation1;
+					else
+						color = Properties.Settings.Default.Heap2_Allocation2;
+					break;
+				case 2:
+					if (!isSecondaryColor)
+						color = Properties.Settings.Default.Heap3_Allocation1;
+					else
+						color = Properties.Settings.Default.Heap3_Allocation2;
+					break;
+				case 3:
+					if (!isSecondaryColor)
+						color = Properties.Settings.Default.Heap4_Allocation1;
+					else
+						color = Properties.Settings.Default.Heap4_Allocation2;
+					break;
+			}
+			isSecondaryColor = !isSecondaryColor;
+
+			VisualMemoryBlock block = new VisualMemoryBlock(allocation, startAddress, addressWidth, width, color);
 
 			lock (VisualMemoryBlocks)
 			{
