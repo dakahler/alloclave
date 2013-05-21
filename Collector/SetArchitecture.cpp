@@ -15,6 +15,8 @@ Buffer SetArchitecture::Serialize() const
 {
 	Buffer buffer = Packet::Serialize();
 
+	// This sends along the number of bytes in a pointer
+	// so the visualizer can auto-detect 32- or 64-bit
 	unsigned short pointerSize = (unsigned short)sizeof(void*);
 	buffer.Add((void*)&pointerSize, sizeof(pointerSize));
 

@@ -9,6 +9,7 @@
 namespace Alloclave
 {
 
+	// Base implementation for implementing platform-specific stack walking
 	class CallStack : public ICustomSerializable
 	{
 	public:

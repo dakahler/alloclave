@@ -69,18 +69,6 @@ Buffer Queue::Dequeue()
 	return Buffer();
 }
 
-const Buffer& Queue::Peek() const
-{
-	if (Head)
-	{
-		return Head->Data;
-	}
-
-	// TODO: Make this better
-	static Buffer s_buffer;
-	return s_buffer;
-}
-
 unsigned int Queue::GetNumItems() const
 {
 	return NumItems;

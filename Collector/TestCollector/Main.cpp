@@ -30,16 +30,15 @@ void main(int argc, char* argv[])
 	}
 
 	//char* testMalloc = (char*)malloc(16);
-	//char* testNew = new char;
 
 	srand(time(NULL));
 
-	const int numAllocations = 30;
+	const int numAllocations = 500;
 	char* allocationArray[numAllocations];
 
 	for (int i = 0; i < numAllocations; i++)
 	{
-		int numBytes = 100 + (rand() % 2500);
+		int numBytes = 100 + (rand() % 1000);
 		allocationArray[i] = new char[numBytes];
 		printf("Allocated %d bytes at address 0x%p\n", numBytes, allocationArray[i]);
 
@@ -52,6 +51,13 @@ void main(int argc, char* argv[])
 			allocationArray[index] = NULL;
 		}
 
-		Sleep(100 + (rand() % 1000));
+		Sleep(100 + (rand() % 100));
 	}
+
+	//for (int i = 30; i < 100; i++)
+	//{
+	//	printf("Freeing address 0x%p\n", allocationArray[i]);
+	//	delete[] allocationArray[i];
+	//	allocationArray[i] = NULL;
+	//}
 }

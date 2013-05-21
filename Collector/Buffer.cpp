@@ -73,6 +73,7 @@ void Buffer::Resize(unsigned int newSize)
 	}
 	else
 	{
+		// Allocate the new size, copy the data, and free the old memory
 		char* newData = (char*)real_malloc(newSize);
 		unsigned int numBytesToCopy = MIN(newSize, CurrentSize);
 		memcpy(newData, Data, numBytesToCopy);
@@ -87,10 +88,9 @@ void Buffer::Add(void* data, unsigned int dataSize)
 {
 	assert(dataSize > 0);
 
-	// TODO: Error checking
 	while (Position + dataSize >= CurrentSize)
 	{
-		// TODO: Better resizing approach?
+		// Grow exponentially to accomodate new data
 		Resize(CurrentSize * 2);
 	}
 

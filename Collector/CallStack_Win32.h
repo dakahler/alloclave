@@ -8,6 +8,7 @@
 namespace Alloclave
 {
 
+	// Win32-specific specialization of stack walking
 	class CallStack_Win32 : public CallStack
 	{
 	public:

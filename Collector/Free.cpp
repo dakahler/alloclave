@@ -29,6 +29,7 @@ Buffer Free::Serialize() const
 {
 	Buffer buffer = Packet::Serialize();
 
+	// Push the free data into the buffer
 	buffer.Add((void*)&Address, sizeof(Address));
 	buffer.Add((void*)&HeapId, sizeof(HeapId));
 	buffer.Add(CallStackParser.Serialize());

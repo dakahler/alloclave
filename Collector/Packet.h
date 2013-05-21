@@ -9,7 +9,8 @@
 namespace Alloclave
 {
 
-	// TODO: Rename file
+	// Base packet implementation that should be specialized
+	// to provide specific information
 	class Packet : public ICustomSerializable
 	{
 	public:

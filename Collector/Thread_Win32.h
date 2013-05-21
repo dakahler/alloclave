@@ -7,6 +7,8 @@
 
 namespace Alloclave
 {
+
+	// Win32 specialized threading implementation
 	class Thread_Win32 : public Thread
 	{
 	public:

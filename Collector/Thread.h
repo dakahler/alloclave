@@ -5,6 +5,8 @@
 
 namespace Alloclave
 {
+
+	// Base class for platform-specifc threading
 	class Thread
 	{
 	public:

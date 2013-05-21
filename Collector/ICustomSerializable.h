@@ -8,6 +8,7 @@
 namespace Alloclave
 {
 
+	// Base interface for anything that needs to serialize data
 	class ICustomSerializable
 	{
 	public:

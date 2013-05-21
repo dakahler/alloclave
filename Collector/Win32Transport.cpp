@@ -26,7 +26,7 @@ void Win32Transport::Flush()
 
 	Buffer buffer = BuildFinalBuffer(Version);
 
-	// Send win32 WM_COPYDATA message to visualizer
+	// Send Win32 WM_COPYDATA message to visualizer
 	COPYDATASTRUCT cds;
 	cds.dwData = ALLOCLAVE_WIN32_ID;
 	cds.cbData = buffer.GetSize();

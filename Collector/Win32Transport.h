@@ -3,12 +3,12 @@
 #ifndef _ALLOCLAVE_WIN32TRANSPORT_H
 #define _ALLOCLAVE_WIN32TRANSPORT_H
 
-#include "PlatformWrapper.h"
 #include "Transport.h"
 
 namespace Alloclave
 {
 
+	// Win32-specific transport that uses WM_COPYDATA messages
 	class Win32Transport : public Transport
 	{
 	public:

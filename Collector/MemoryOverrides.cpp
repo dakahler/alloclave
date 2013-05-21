@@ -13,7 +13,7 @@ void* operator new(size_t size)
 	if (p == NULL)
 		throw std::bad_alloc();
 
-	Alloclave::RegisterAllocation(p, size, 4); // TODO: alignment
+	Alloclave::RegisterAllocation(p, size);
 
 	return p;
 }
@@ -24,7 +24,7 @@ void* operator new[](size_t size)
 	if (p == NULL)
 		throw std::bad_alloc();
 
-	Alloclave::RegisterAllocation(p, size, 4); // TODO: alignment
+	Alloclave::RegisterAllocation(p, size);
 
 	return p;
 }
@@ -98,7 +98,7 @@ namespace Alloclave
 	void* _malloc(size_t size)
 	{
 		void* p = real_malloc(size);
-		RegisterAllocation(p, size, 4); // TODO: alignment
+		RegisterAllocation(p, size);
 		return p;
 	}
 
@@ -106,7 +106,7 @@ namespace Alloclave
 	{
 		RegisterFree(p);
 		void* newP = real_realloc(p ,size);
-		RegisterAllocation(newP, size, 4);
+		RegisterAllocation(newP, size);
 		return newP;
 	}
 

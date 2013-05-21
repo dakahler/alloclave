@@ -3,13 +3,15 @@
 #ifndef _ALLOCLAVE_ALLOCATION_H
 #define _ALLOCLAVE_ALLOCATION_H
 
-#include "IPacket.h"
+#include "Packet.h"
 
 namespace Alloclave
 {
 
 	class CallStack;
 
+	// Represents an allocation-type packet, containing information such as
+	// the memory address and the size
 	class Allocation : public Packet
 	{
 	public:

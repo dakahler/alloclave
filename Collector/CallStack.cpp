@@ -19,6 +19,7 @@ Buffer CallStack::Serialize() const
 {
 	Buffer buffer;
 
+	// Run through each stack frame and add its address to the buffer
 	buffer.Add((void*)&StackDepth, sizeof(StackDepth));
 	for (unsigned int i = 0; i < StackDepth; i++)
 	{

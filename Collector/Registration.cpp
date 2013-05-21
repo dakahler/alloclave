@@ -18,6 +18,8 @@
 namespace Alloclave
 {
 
+	// TODO: Kind of messy with the ifdefs here
+
 #if ALLOCLAVE_TRANSPORT_TYPE == TRANSPORT_TYPE_WIN32
 	static Win32Transport s_SpecificTransport;
 	static Transport* s_Transport = &s_SpecificTransport;
@@ -29,6 +31,8 @@ namespace Alloclave
 	{
 		Thread* thread = (Thread*)param;
 
+		const int FlushInterval = 1000; // ms
+
 		assert(thread);
 
 		while (thread)
@@ -37,7 +41,7 @@ namespace Alloclave
 			{
 				s_Transport->Flush();
 
-				thread->Sleep(1000);
+				thread->Sleep(FlushInterval);
 			}
 		}
 
@@ -70,23 +74,23 @@ namespace Alloclave
 	}
 
 #if ALLOCLAVE_ENABLED
-	void RegisterAllocation(void* address, size_t size, unsigned int alignment, unsigned int heapId)
+	void RegisterAllocation(void* address, size_t size, unsigned int heapId)
 	{
 		Allocation allocation(*s_CallStack);
 		allocation.Address = address;
 		allocation.Size = size;
-		allocation.Alignment = alignment;
+		allocation.Alignment = 4; // Placeholder
 		allocation.Type = Allocation::AllocationType_Allocation;
 		allocation.HeapId = heapId;
 		Transport::Send(allocation);
 	}
 
-	void RegisterHeap(void* address, unsigned int size, unsigned int alignment, unsigned int heapId)
+	void RegisterHeap(void* address, unsigned int size, unsigned int heapId)
 	{
 		Allocation heap;
 		heap.Address = address;
 		heap.Size = size;
-		heap.Alignment = alignment;
+		heap.Alignment = 4; // Placeholder
 		heap.Type = Allocation::AllocationType_Heap;
 		heap.HeapId = heapId;
 		Transport::Send(heap);

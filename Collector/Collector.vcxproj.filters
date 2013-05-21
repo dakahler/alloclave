@@ -14,9 +14,6 @@
     <ClInclude Include="Transport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IPacket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ICustomSerializable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -53,9 +50,6 @@
     <ClInclude Include="CallStack_Win32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlatformWrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Free.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -72,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Thread_Win32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

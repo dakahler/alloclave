@@ -8,6 +8,7 @@
 namespace Alloclave
 {
 
+	// A generic queue for storing a FIFO collection of buffers
 	class Queue
 	{
 	public:
@@ -16,13 +17,11 @@ namespace Alloclave
 
 		void Enqueue(const Buffer& buffer);
 		Buffer Dequeue();
-		const Buffer& Peek() const;
 		unsigned int GetNumItems() const;
 
 	private:
 		struct QueueItem
 		{
-			// TODO: Move to cpp
 			QueueItem();
 
 			Buffer Data;

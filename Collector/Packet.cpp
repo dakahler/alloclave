@@ -1,7 +1,7 @@
 // Copyright Circular Shift. For license information, see license.txt.
 
 #include <time.h>
-#include "IPacket.h"
+#include "Packet.h"
 
 namespace Alloclave
 {

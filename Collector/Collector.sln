@@ -9,8 +9,6 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Debug|x64 = Debug|x64
-		Installer|Win32 = Installer|Win32
-		Installer|x64 = Installer|x64
 		Release|Win32 = Release|Win32
 		Release|x64 = Release|x64
 	EndGlobalSection
@@ -19,10 +17,6 @@ Global
 		{5E835BE4-39E6-406D-8536-9EF3238E6D40}.Debug|Win32.Build.0 = Debug|Win32
 		{5E835BE4-39E6-406D-8536-9EF3238E6D40}.Debug|x64.ActiveCfg = Debug|x64
 		{5E835BE4-39E6-406D-8536-9EF3238E6D40}.Debug|x64.Build.0 = Debug|x64
-		{5E835BE4-39E6-406D-8536-9EF3238E6D40}.Installer|Win32.ActiveCfg = Installer|Win32
-		{5E835BE4-39E6-406D-8536-9EF3238E6D40}.Installer|Win32.Build.0 = Installer|Win32
-		{5E835BE4-39E6-406D-8536-9EF3238E6D40}.Installer|x64.ActiveCfg = Installer|x64
-		{5E835BE4-39E6-406D-8536-9EF3238E6D40}.Installer|x64.Build.0 = Installer|x64
 		{5E835BE4-39E6-406D-8536-9EF3238E6D40}.Release|Win32.ActiveCfg = Release|Win32
 		{5E835BE4-39E6-406D-8536-9EF3238E6D40}.Release|Win32.Build.0 = Release|Win32
 		{5E835BE4-39E6-406D-8536-9EF3238E6D40}.Release|x64.ActiveCfg = Release|x64
@@ -31,10 +25,6 @@ Global
 		{1B044CCB-0105-4507-BF30-A0E058914ECF}.Debug|Win32.Build.0 = Debug|Win32
 		{1B044CCB-0105-4507-BF30-A0E058914ECF}.Debug|x64.ActiveCfg = Debug|x64
 		{1B044CCB-0105-4507-BF30-A0E058914ECF}.Debug|x64.Build.0 = Debug|x64
-		{1B044CCB-0105-4507-BF30-A0E058914ECF}.Installer|Win32.ActiveCfg = Installer|Win32
-		{1B044CCB-0105-4507-BF30-A0E058914ECF}.Installer|Win32.Build.0 = Installer|Win32
-		{1B044CCB-0105-4507-BF30-A0E058914ECF}.Installer|x64.ActiveCfg = Installer|x64
-		{1B044CCB-0105-4507-BF30-A0E058914ECF}.Installer|x64.Build.0 = Installer|x64
 		{1B044CCB-0105-4507-BF30-A0E058914ECF}.Release|Win32.ActiveCfg = Release|Win32
 		{1B044CCB-0105-4507-BF30-A0E058914ECF}.Release|Win32.Build.0 = Release|Win32
 		{1B044CCB-0105-4507-BF30-A0E058914ECF}.Release|x64.ActiveCfg = Release|x64

@@ -3,11 +3,13 @@
 #ifndef _ALLOCLAVE_SETARCHITECTURE_H
 #define _ALLOCLAVE_SETARCHITECTURE_H
 
-#include "IPacket.h"
+#include "Packet.h"
 
 namespace Alloclave
 {
 
+	// Sends across information that allows the visualizer
+	// to deduce architecture details of this platform
 	class SetArchitecture : public Packet
 	{
 	public:

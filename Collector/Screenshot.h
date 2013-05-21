@@ -3,11 +3,13 @@
 #ifndef _ALLOCLAVE_SCREENSHOT_H
 #define _ALLOCLAVE_SCREENSHOT_H
 
-#include "IPacket.h"
+#include "Packet.h"
 
 namespace Alloclave
 {
 
+	// Base class for generating and serializing screenshots
+	// Not yet implemented
 	class Screenshot : public Packet
 	{
 	public:

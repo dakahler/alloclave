@@ -3,13 +3,14 @@
 #ifndef _ALLOCLAVE_FREE_H
 #define _ALLOCLAVE_FREE_H
 
-#include "IPacket.h"
+#include "Packet.h"
 
 namespace Alloclave
 {
 
 	class CallStack;
 
+	// Represents a free-type packet, mostly for recording the address of the free
 	class Free : public Packet
 	{
 	public:

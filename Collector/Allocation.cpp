@@ -28,6 +28,7 @@ Allocation::Allocation(CallStack& callStackParser)
 	Type = AllocationType_Allocation;
 	HeapId = 0;
 
+	// Generate the call stack here
 	CallStackParser.Rebuild();
 }
 
@@ -35,6 +36,7 @@ Buffer Allocation::Serialize() const
 {
 	Buffer buffer = Packet::Serialize();
 
+	// Push the allocation data into the buffer
 	buffer.Add((void*)&Address, sizeof(Address));
 	buffer.Add((void*)&Size, sizeof(Size));
 	buffer.Add((void*)&Alignment, sizeof(Alignment));

@@ -17,6 +17,7 @@ Buffer SetSymbols::Serialize() const
 {
 	Buffer buffer = Packet::Serialize();
 
+	// This sends the path of the symbols file to the visualizer
 	unsigned short stringLength = (unsigned short)strlen(SymbolsPath);
 	buffer.Add((void*)&stringLength, sizeof(stringLength));
 	buffer.Add((void*)SymbolsPath, stringLength);

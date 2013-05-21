@@ -5,6 +5,7 @@
 
 #include "Common.h"
 
+// Define NULL if necessary
 #ifndef NULL
 #ifdef __cplusplus
 #define NULL    0
@@ -13,13 +14,13 @@
 #endif
 #endif
 
-// TODO: Better implementation of these
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
 namespace Alloclave
 {
 
+	// A generic buffer class that collects streams of raw binary data
 	class Buffer
 	{
 	public:

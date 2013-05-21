@@ -3,11 +3,12 @@
 #ifndef _ALLOCLAVE_SETSYMBOLS_H
 #define _ALLOCLAVE_SETSYMBOLS_H
 
-#include "IPacket.h"
+#include "Packet.h"
 
 namespace Alloclave
 {
 
+	// Sends a symbol path
 	class SetSymbols : public Packet
 	{
 	public:

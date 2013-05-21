@@ -9,6 +9,7 @@ namespace Alloclave
 {
 	class Packet;
 
+	// Base class for transport mechanism used to send data to the visualizer
 	class Transport
 	{
 	public:

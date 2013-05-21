@@ -1,7 +1,7 @@
 // Copyright Circular Shift. For license information, see license.txt.
 
 #include "Transport.h"
-#include "IPacket.h"
+#include "Packet.h"
 #include "SetArchitecture.h"
 
 namespace Alloclave
@@ -35,8 +35,9 @@ void Transport::Send(const Packet& packet)
 
 Buffer Transport::BuildFinalBuffer(unsigned short version)
 {
-	Buffer buffer;
+	// This builds up the final packet bundle
 
+	Buffer buffer;
 	buffer.Add(&version, sizeof(version));
 
 	unsigned int numItems = PacketQueue.GetNumItems();
