@@ -99,7 +99,7 @@ namespace Alloclave
 			NBug.Settings.UIMode = NBug.Enums.UIMode.Full;
 			NBug.Settings.ReleaseMode = true;
 			NBug.Settings.Destination1 =
-				"Type=Mail;From=bugs@circularshift.com;To=bugs@circularshift.com;" +
+				"Type=Mail;From=bugs@circularshift.com;To=support@circularshift.com;" +
 				"SmtpServer=server1.circularshift.com;UseAuthentication=true;UseAttachment=true;" +
 				"Username=bugs@circularshift.com;Password=d0ntspammebro;";
 
