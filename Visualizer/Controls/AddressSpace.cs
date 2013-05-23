@@ -164,6 +164,17 @@ namespace Alloclave
 										if (AggregatePacketData.ContainsKey(free.Address))
 										{
 											AggregatePacketData.Remove(free.Address);
+
+											VisualMemoryBlock removedBlock = MemoryBlockManager.Instance.Remove(free.Address);
+											if (removedBlock != null)
+											{
+												removedBlock.Allocation.AssociatedFree = free;
+												free.AssociatedAllocation = removedBlock.Allocation;
+											}
+											else
+											{
+												throw new DataException();
+											}
 										}
 										else
 										{
@@ -178,17 +189,6 @@ namespace Alloclave
 												MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
 											}
 										}
-									}
-
-									VisualMemoryBlock removedBlock = MemoryBlockManager.Instance.Remove(free.Address);
-									if (removedBlock != null)
-									{
-										removedBlock.Allocation.AssociatedFree = free;
-										free.AssociatedAllocation = removedBlock.Allocation;
-									}
-									else
-									{
-										throw new DataException();
 									}
 								}
 							} //);
