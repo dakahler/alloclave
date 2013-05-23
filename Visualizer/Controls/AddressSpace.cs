@@ -70,7 +70,7 @@ namespace Alloclave
 				return;
 			}
 
-			var task3 = new Task(() => 
+			new Task(() => 
 			{
 				NBug.Exceptions.Handle(false, () =>
 				{
@@ -117,12 +117,7 @@ namespace Alloclave
 								return;
 							}
 
-							// Align to the beginning of the row
-							UInt64 startAddress = history.AddressRange.Min & ~AddressWidth;
-							UInt64 numRows = (history.AddressRange.Max - startAddress) / AddressWidth;
-
 							// Create final list, removing allocations as frees are encountered
-
 							// TODO: STILL needs performance improvements for large datasets
 							foreach (var pair in packets)
 							//Parallel.ForEach(newList, pair =>
@@ -216,9 +211,7 @@ namespace Alloclave
 						RenderManager_OGL.Instance.Rebuild(MemoryBlockManager.Instance.HeapOffsets);
 					}
 				});
-			});
-
-			task3.Start();
+			}).Start();
 		}
 
 		public AddressSpace()
