@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Alloclave
 {
@@ -65,8 +66,8 @@ namespace Alloclave
 
 				if (PacketList.Count > 0)
 				{
-					timeRange.Min = PacketList.FirstOrDefault().Key.Time;
-					timeRange.Max = PacketList.LastOrDefault().Key.Time;
+					timeRange.Min = PacketList.Keys[0].Time;
+					timeRange.Max = PacketList.Keys[PacketList.Count - 1].Time;
 				}
 				else
 				{
@@ -107,47 +108,53 @@ namespace Alloclave
 
 		public void Add(IPacket packet, UInt64 timeStamp)
 		{
-			lock (AddLock)
+			//Task task = new Task(() =>
 			{
-				// Trial limitation: Only allow 1 minute of data
-				if (PacketList.Count > 0)
+				lock (AddLock)
 				{
-					TimeSpan span = DateTime.Now.Subtract(TrialStartTime);
-					const double trialTimeLimit = 60.0;
-					if (span.TotalSeconds > trialTimeLimit)
+					// Trial limitation: Only allow 1 minute of data
+					if (PacketList.Count > 0)
 					{
-						if (!SentTrialWarning)
+						TimeSpan span = DateTime.Now.Subtract(TrialStartTime);
+						const double trialTimeLimit = 60.0;
+						if (span.TotalSeconds > trialTimeLimit)
 						{
-							SentTrialWarning = true;
-							MessagesForm.Add(MessagesForm.MessageType.Warning, null, "Trial version can only collect one minute of data.");
+							if (!SentTrialWarning)
+							{
+								SentTrialWarning = true;
+								MessagesForm.Add(MessagesForm.MessageType.Warning, null, "Trial version can only collect one minute of data.");
+							}
+
+							return;
 						}
-
-						return;
 					}
-				}
-				else
-				{
-					TrialStartTime = DateTime.Now;
-				}
-
-				lock (PacketList)
-				{
-					PacketList.Add(new TimeStamp(timeStamp), packet);
-
-					Allocation allocation = packet as Allocation;
-					if (allocation != null)
+					else
 					{
-						_AddressRange.Min = Math.Min(_AddressRange.Min, allocation.Address);
-						_AddressRange.Max = Math.Max(_AddressRange.Max, allocation.Address);
+						TrialStartTime = DateTime.Now;
 					}
-				}
 
-				if (Updated != null && !SuspendRebuilding)
-				{
-					EventArgs e = new EventArgs();
-					Updated.Invoke(this, e);
+					lock (PacketList)
+					{
+						PacketList.Add(new TimeStamp(timeStamp), packet);
+
+						Allocation allocation = packet as Allocation;
+						if (allocation != null)
+						{
+							_AddressRange.Min = Math.Min(_AddressRange.Min, allocation.Address);
+							_AddressRange.Max = Math.Max(_AddressRange.Max, allocation.Address);
+						}
+					}
+
+					if (Updated != null && !SuspendRebuilding)
+					{
+						EventArgs e = new EventArgs();
+						Updated.Invoke(this, e);
+					}
 				}
 			}
+			//});
+
+			//task.Start();
 		}
 
 		public IEnumerable<KeyValuePair<TimeStamp, IPacket>> Get()

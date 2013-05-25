@@ -180,9 +180,9 @@ namespace Alloclave
 
 		void scrubBackTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			if (Scrubber.Position > 0.0f)
+			if (Scrubber.Position > 0.0)
 			{
-				Scrubber.Position -= 0.005f;
+				Scrubber.Position -= 0.005;
 			}
 			else
 			{
@@ -199,9 +199,9 @@ namespace Alloclave
 
 		void scrubForwardTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			if (Scrubber.Position < 1.0f)
+			if (Scrubber.Position < 1.0)
 			{
-				Scrubber.Position += 0.005f;
+				Scrubber.Position += 0.005;
 			}
 			else
 			{

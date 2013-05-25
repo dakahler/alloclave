@@ -47,6 +47,7 @@ namespace Alloclave
 		Dictionary<uint, RectangleF> HeapBounds = new Dictionary<uint, RectangleF>();
 
 		TimeStamp LastTimestamp = new TimeStamp();
+		UInt64 LastRange = 0;
 
 		CancellationTokenSource TokenSource;
 
@@ -55,7 +56,30 @@ namespace Alloclave
 
 		public event EventHandler Rebuilt;
 
-		public bool IsPaused;
+		UInt64 ArtificialMaxTime = 0;
+
+		private bool _IsPaused = false;
+		public bool IsPaused
+		{
+			get
+			{
+				return _IsPaused;
+			}
+			set
+			{
+				_IsPaused = value;
+
+				if (PauseChanged != null)
+				{
+					PauseChanged(this, new EventArgs());
+				}
+			}
+		}
+
+		public event EventHandler PauseChanged;
+
+		System.Timers.Timer FrameTimer;
+		private const double FrameInterval = 30.0;
 
 		public void History_Updated(object sender, EventArgs e)
 		{
@@ -63,14 +87,14 @@ namespace Alloclave
 			Rebuild(LastHistory);
 		}
 
-		public void Rebuild(History history, bool forceFullRebuild = false)
+		public void Rebuild(History history, bool forceFullRebuild = false, bool synchronous = false)
 		{
 			if (Parent == null)
 			{
 				return;
 			}
 
-			new Task(() => 
+			Task task = new Task(() => 
 			{
 				NBug.Exceptions.Handle(false, () =>
 				{
@@ -78,6 +102,11 @@ namespace Alloclave
 					{
 						lock (history.AddLock)
 						{
+							UInt64 maxTime = ArtificialMaxTime;
+							if (maxTime == 0)
+							{
+								maxTime = history.TimeRange.Max;
+							}
 
 							IEnumerable<KeyValuePair<TimeStamp, IPacket>> packets = null;
 							bool isBackward = false;
@@ -91,10 +120,28 @@ namespace Alloclave
 							else
 							{
 								// Determine what entries we need to get based off scrubber position
-								double position = (double)Scrubber.Position;
-								UInt64 timeRange = history.TimeRange.Max - history.TimeRange.Min;
+								UInt64 timeRange = maxTime - history.TimeRange.Min;
+
+								// Readjust the position if needed
+								if (ArtificialMaxTime == 0 && timeRange > 0)
+								{
+									double rangeScale = (double)LastRange / (double)timeRange;
+
+									if (rangeScale > 0 && Scrubber._Position < 1.0)
+									{
+										// Hacky
+										Scrubber._Position *= rangeScale;
+										Scrubber._Position = Scrubber._Position.Clamp(0.0, 1.0);
+										Scrubber.Instance.FlagRedraw();
+									}
+								}
+
+								LastRange = timeRange;
+
+								double position = Scrubber.Position;
 								UInt64 currentTime = history.TimeRange.Min + (UInt64)((double)timeRange * position);
 
+								bool nothingToProcess = false;
 								if (currentTime > LastTimestamp.Time)
 								{
 									packets = history.GetForward(new TimeStamp(currentTime));
@@ -106,10 +153,15 @@ namespace Alloclave
 								}
 								else
 								{
-									return;
+									nothingToProcess = true;
 								}
 
 								LastTimestamp = new TimeStamp(currentTime);
+
+								if (nothingToProcess)
+								{
+									return;
+								}
 							}
 
 							if (history.AddressRange.Max < history.AddressRange.Min)
@@ -211,7 +263,14 @@ namespace Alloclave
 						RenderManager_OGL.Instance.Rebuild(MemoryBlockManager.Instance.HeapOffsets);
 					}
 				});
-			}).Start();
+			});
+
+			task.Start();
+
+			if (synchronous)
+			{
+				task.Wait();
+			}
 		}
 
 		public AddressSpace()
@@ -232,6 +291,56 @@ namespace Alloclave
 
 			Task.Factory.StartNew(() => HoverTask(cancellationToken), cancellationToken);
 			Task.Factory.StartNew(() => SelectTask(cancellationToken), cancellationToken);
+
+			this.Load += AddressSpace_Load;
+		}
+
+		void AddressSpace_Load(object sender, EventArgs e)
+		{
+			Scrubber.Instance.MousePressed += Scrubber_MouseDown;
+			Scrubber.Instance.MouseReleased += Scrubber_MouseUp;
+
+			FrameTimer = new System.Timers.Timer(FrameInterval);
+			FrameTimer.Elapsed += TimerElapsed;
+			FrameTimer.Start();
+		}
+
+		void Scrubber_MouseDown(object sender, MouseEventArgs e)
+		{
+			ArtificialMaxTime = History.Instance.TimeRange.Max;
+			IsPaused = true;
+		}
+
+		void Scrubber_MouseUp(object sender, MouseEventArgs e)
+		{
+			ArtificialMaxTime = 0;
+			Rebuild(History.Instance);
+		}
+
+		private void TimerElapsed(object sender, EventArgs e)
+		{
+			System.Timers.Timer timer = (System.Timers.Timer)sender;
+			timer.Stop();
+
+			if (ArtificialMaxTime == 0)
+			{
+				// Recalculate the percentage
+				UInt64 timeRange = History.Instance.TimeRange.Max - History.Instance.TimeRange.Min;
+
+				if (LastTimestamp.Time > 0)
+				{
+					// Slowly move forward
+					// TODO: This should be target-time based, but the tool doesn't really
+					// know what units the target time is in right now
+					if (!IsPaused && Scrubber.Position < 1.0)
+					{
+						Scrubber.Position += 0.0005;
+						Rebuild(History.Instance, false, true);
+					}
+				}
+			}
+
+			timer.Start();
 		}
 
 		~AddressSpace()

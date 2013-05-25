@@ -19,8 +19,8 @@ namespace Alloclave
 		bool LeftMouseDown;
 
 		// TODO: Static hack
-		public static float _Position = 1.0f;
-		public static float Position
+		public static double _Position = 1.0;
+		public static double Position
 		{
 			get
 			{
@@ -28,7 +28,7 @@ namespace Alloclave
 			}
 			set
 			{
-				_Position = value.Clamp(0.0f, 1.0f);
+				_Position = value.Clamp(0.0, 1.0);
 
 				if (Instance != null)
 				{
@@ -42,9 +42,12 @@ namespace Alloclave
 			}
 		}
 
-		const float WidthPercentage = 0.02f;
+		const double WidthPercentage = 0.02;
 
 		public event EventHandler PositionChanged;
+
+		public event MouseEventHandler MousePressed;
+		public event MouseEventHandler MouseReleased;
 
 		public static Scrubber Instance;
 
@@ -93,6 +96,16 @@ namespace Alloclave
 			Redraw();
 		}
 
+		public void FlagRedraw()
+		{
+			Task task = new Task(() =>
+			{
+				Redraw();
+			});
+
+			task.Start();
+		}
+
 		void Redraw()
 		{
 			if (MainGraphics == null)
@@ -104,7 +117,7 @@ namespace Alloclave
 			{
 				MainGraphics.Clear(Color.FromArgb(100, 100, 100));
 
-				int barWidth = (int)((float)Width * WidthPercentage);
+				int barWidth = (int)((double)Width * WidthPercentage);
 				int barX = (int)((Width - barWidth) * _Position);
 				Rectangle barRectangle = new Rectangle(barX, 0, barWidth, Height);
 
@@ -146,12 +159,22 @@ namespace Alloclave
 			{
 				Cursor.Current = Cursors.Hand;
 			}
+
+			if (MousePressed != null)
+			{
+				MousePressed(this, e);
+			}
 		}
 
 		private void Scrubber_MouseUp(object sender, MouseEventArgs e)
 		{
 			LeftMouseDown = false;
 			Redraw();
+
+			if (MouseReleased != null)
+			{
+				MouseReleased(this, e);
+			}
 		}
 
 		private void Scrubber_MouseMove(object sender, MouseEventArgs e)
@@ -162,7 +185,7 @@ namespace Alloclave
 			}
 
 			// Setup cursor
-			int barWidth = (int)((float)Width * WidthPercentage);
+			int barWidth = (int)((double)Width * WidthPercentage);
 			int barX = (int)((Width - barWidth) * _Position);
 
 			if (e.X >= barX && e.X <= barX + barWidth)
@@ -185,11 +208,11 @@ namespace Alloclave
 		{
 			// This all calculates the fudge factor needed to make sure
 			// the scrubber is centered horizontally on the mouse location
-			_Position = ((float)e.X / (float)Width).Clamp(0.0f, 1.0f);
-			float percentage = _Position - 0.5f;
-			int barWidth = (int)((float)Width * WidthPercentage);
-			int fudgeWidth = (int)((float)barWidth * percentage);
-			float fudgePercentage = (float)fudgeWidth / (float)Width;
+			_Position = ((double)e.X / (double)Width).Clamp(0.0, 1.0);
+			double percentage = _Position - 0.5;
+			int barWidth = (int)((double)Width * WidthPercentage);
+			int fudgeWidth = (int)((double)barWidth * percentage);
+			double fudgePercentage = (double)fudgeWidth / (double)Width;
 
 			Position = _Position + fudgePercentage;
 		}

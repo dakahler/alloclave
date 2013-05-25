@@ -115,33 +115,36 @@ namespace Alloclave
 
 		private void AddInternal(MessageType type, Allocation referenceAllocation, String text)
 		{
-			switch (type)
+			this.Invoke((MethodInvoker)(() =>
 			{
-				case MessageType.Error:
+				switch (type)
 				{
-					Errors.Add(new StringSource(text, referenceAllocation));
-					var bindingList = new BindingList<StringSource>(Errors);
-					ErrorsDataGrid.DataSource = bindingList;
-					ErrorsTabPage.Text = "Errors (" + Errors.Count + ")";
-					break;
+					case MessageType.Error:
+						{
+							Errors.Add(new StringSource(text, referenceAllocation));
+							var bindingList = new BindingList<StringSource>(Errors);
+							ErrorsDataGrid.DataSource = bindingList;
+							ErrorsTabPage.Text = "Errors (" + Errors.Count + ")";
+							break;
+						}
+					case MessageType.Warning:
+						{
+							Warnings.Add(new StringSource(text, referenceAllocation));
+							var bindingList = new BindingList<StringSource>(Warnings);
+							WarningsDataGrid.DataSource = bindingList;
+							WarningsTabPage.Text = "Warnings (" + Warnings.Count + ")";
+							break;
+						}
+					case MessageType.Info:
+						{
+							Infos.Add(new StringSource(text, referenceAllocation));
+							var bindingList = new BindingList<StringSource>(Infos);
+							InfosDataGrid.DataSource = bindingList;
+							InfoTabPage.Text = "Info (" + Infos.Count + ")";
+							break;
+						}
 				}
-				case MessageType.Warning:
-				{
-					Warnings.Add(new StringSource(text, referenceAllocation));
-					var bindingList = new BindingList<StringSource>(Warnings);
-					WarningsDataGrid.DataSource = bindingList;
-					WarningsTabPage.Text = "Warnings (" + Warnings.Count + ")";
-					break;
-				}
-				case MessageType.Info:
-				{
-					Infos.Add(new StringSource(text, referenceAllocation));
-					var bindingList = new BindingList<StringSource>(Infos);
-					InfosDataGrid.DataSource = bindingList;
-					InfoTabPage.Text = "Info (" + Infos.Count + ")";
-					break;
-				}
-			}
+			}));
 		}
 
 		private void DataGrid_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)

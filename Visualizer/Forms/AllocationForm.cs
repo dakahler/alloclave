@@ -34,6 +34,8 @@ namespace Alloclave
 
 			// Disabled by default - gets enabled when data comes in
 			this.Enabled = false;
+
+			AddressSpaceControl.PauseChanged += AddressSpaceControl_PauseChanged;
 		}
 
 		void MainScrubber_PositionChanged(object sender, EventArgs e)
@@ -55,6 +57,18 @@ namespace Alloclave
 		{
 			AddressSpaceControl.IsPaused = !AddressSpaceControl.IsPaused;
 
+			if (AddressSpaceControl.IsPaused)
+			{
+				PlayPausePictureBox.Image = Properties.Resources.play;
+			}
+			else
+			{
+				PlayPausePictureBox.Image = Properties.Resources.pause;
+			}
+		}
+
+		void AddressSpaceControl_PauseChanged(object sender, EventArgs e)
+		{
 			if (AddressSpaceControl.IsPaused)
 			{
 				PlayPausePictureBox.Image = Properties.Resources.play;

@@ -40,8 +40,11 @@ namespace Alloclave
 
 		void History_Updated(object sender, EventArgs e)
 		{
-			AllocationForm.Enabled = true;
-			History.Updated -= History_Updated;
+			this.Invoke((MethodInvoker)(() =>
+			{
+				AllocationForm.Enabled = true;
+				History.Updated -= History_Updated;
+			}));
 		}
 
 		public TransportForm()
