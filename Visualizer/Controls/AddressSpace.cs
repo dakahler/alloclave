@@ -251,7 +251,10 @@ namespace Alloclave
 							Renderer.SelectedBlock = null;
 						}
 
-						Renderer.HoverBlock = null;
+						if (!MemoryBlockManager.Instance.Contains(Renderer.HoverBlock))
+						{
+							Renderer.HoverBlock = null;
+						}
 
 						if (Rebuilt != null)
 						{

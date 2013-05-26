@@ -27,6 +27,10 @@ namespace Alloclave
 		protected VisualMemoryBlock _HoverBlock;
 		public virtual VisualMemoryBlock HoverBlock
 		{
+			get
+			{
+				return _HoverBlock;
+			}
 			set
 			{
 				_HoverBlock = value;
