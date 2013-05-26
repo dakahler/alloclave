@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.ComponentModel.Composition;
+using System.Drawing;
 
 namespace Alloclave
 {
@@ -28,6 +29,30 @@ namespace Alloclave
 		public Free AssociatedFree;
 
 		public Common.Architecture Architecture;
+
+		// HACK
+		bool _HasColor;
+		Color _Color = Color.Black;
+		public Color Color
+		{
+			get
+			{
+				return _Color;
+			}
+			set
+			{
+				_Color = value;
+				_HasColor = true;
+			}
+		}
+
+		public bool HasColor
+		{
+			get
+			{
+				return _HasColor;
+			}
+		}
 
 		public Allocation()
 		{
