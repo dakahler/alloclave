@@ -15,17 +15,19 @@
 // Built-in threads
 #include "Thread_Win32.h"
 
+// Needed to find symbols in win32
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 namespace Alloclave
 {
 
-	// TODO: Kind of messy with the ifdefs here
-
-#if ALLOCLAVE_TRANSPORT_TYPE == TRANSPORT_TYPE_WIN32
-	static Win32Transport s_SpecificTransport;
-	static Transport* s_Transport = &s_SpecificTransport;
-#elif ALLOCLAVE_TRANSPORT_TYPE == TRANSPORT_TYPE_CUSTOM
-	static Transport* s_Transport = NULL;
-#endif
+	static Transport& GetTransport()
+	{
+		static ALLOCLAVE_TRANSPORT_TYPE s_Transport;
+		return s_Transport;
+	}
 
 	static unsigned long __stdcall FlushThread(void* param)
 	{
@@ -33,50 +35,40 @@ namespace Alloclave
 
 		const int FlushInterval = 1000; // ms
 
-		assert(thread);
+		#ifdef _WIN32
+			// Attempt to find the symbols automatically in win32
+			char path[MAX_PATH];
+			GetModuleFileName(NULL, path, sizeof(path));
+			int pathLength = strlen(path);
+			if (pathLength > 3)
+			{
+				strcpy(path + (pathLength - 3), "pdb");
+			}
+			RegisterSymbolsPath(path);
+		#endif
 
+		assert(thread);
 		while (thread)
 		{
-			if (s_Transport != NULL)
-			{
-				s_Transport->Flush();
-
-				thread->Sleep(FlushInterval);
-			}
+			GetTransport().Flush();
+			thread->Sleep(FlushInterval);
 		}
 
 		return 1;
 	}
-	
-#ifdef _WIN32
-	static CallStack_Win32 s_PlatformCallStack;
 
-	#if ALLOCLAVE_ENABLED && ALLOCLAVE_USE_THREADS
-		static Thread_Win32 s_PlatformThread(FlushThread);
-	#else
-		static Thread s_PlatformThread(FlushThread);
-	#endif
-#else
-	static CallStack s_PlatformCallStack;
-	static Thread s_PlatformThread(FlushThread);
-
-	#if ALLOCLAVE_USE_THREADS
-		#error Threads not implemented for this platform
-	#endif
-#endif
-
-	static CallStack* s_CallStack = &s_PlatformCallStack;
-	static Thread* s_Thread = &s_PlatformThread;
-
-	void RegisterTransport(Transport* transport)
+	static CallStack& GetCallstack()
 	{
-		s_Transport = transport;
+		static CALLSTACK_TYPE_WIN32 s_PlatformCallStack;
+		return s_PlatformCallStack;
 	}
+
+	static ALLOCLAVE_THREAD_TYPE s_ThreadModel(FlushThread);
 
 #if ALLOCLAVE_ENABLED
 	void RegisterAllocation(void* address, size_t size, unsigned int heapId)
 	{
-		Allocation allocation(*s_CallStack);
+		Allocation allocation(GetCallstack());
 		allocation.Address = address;
 		allocation.Size = size;
 		allocation.Alignment = 4; // Placeholder
@@ -98,7 +90,7 @@ namespace Alloclave
 
 	void RegisterFree(void* address, unsigned int heapId)
 	{
-		Free _free(*s_CallStack);
+		Free _free(GetCallstack());
 		_free.Address = address;
 		_free.HeapId = heapId;
 		Transport::Send(_free);
@@ -109,22 +101,16 @@ namespace Alloclave
 		// TODO
 	}
 
-	void RegisterCallStackParser(CallStack* parser)
-	{
-		s_CallStack = parser;
-	}
-
 	void RegisterSymbolsPath(const char* symbolsPath)
 	{
 		SetSymbols setSymbols(symbolsPath);
 		Transport::Send(setSymbols);
 	}
 #else
-	void RegisterAllocation(void* /*address*/, size_t /*size*/, unsigned int /*alignment*/, unsigned int /*heapId*/) {}
-	void RegisterHeap(void* /*address*/, unsigned int /*size*/, unsigned int /*alignment*/, unsigned int /*heapId*/) {}
+	void RegisterAllocation(void* /*address*/, size_t /*size*/, unsigned int /*heapId*/) {}
+	void RegisterHeap(void* /*address*/, unsigned int /*size*/, unsigned int /*heapId*/) {}
 	void RegisterFree(void* /*address*/, unsigned int /*heapId*/) {}
 	void RegisterScreenshot() {}
-	void RegisterCallStackParser(CallStack* /*parser*/) {}
 	void RegisterSymbolsPath(const char* /*symbolsPath*/) {}
 #endif // ALLOCLAVE_ENABLED
 

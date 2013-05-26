@@ -8,9 +8,6 @@ namespace Alloclave
 	class Transport;
 	class CallStack;
 
-	// Registers a custom transport implementation
-	void RegisterTransport(Transport* transport);
-
 	// Registers a specific memory allocation
 	void RegisterAllocation(void* address, size_t size, unsigned int heapId = 0);
 
