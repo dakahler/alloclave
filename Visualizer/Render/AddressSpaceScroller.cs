@@ -42,10 +42,14 @@ namespace Alloclave
 			if (e.Button == MouseButtons.Left)
 			{
 				IsLeftMouseDown = true;
+				SetFocus(e.Location.ToVector());
+				Refresh();
 			}
 			else if (e.Button == MouseButtons.Middle)
 			{
 				IsMiddleMouseDown = true;
+				SetFocus(e.Location.ToVector());
+				Refresh();
 			}
 		}
 
@@ -81,9 +85,15 @@ namespace Alloclave
 				UInt64 maxWidth = (UInt64)ParentWidth;
 				UInt64 maxHeight = (UInt64)bounds.Bottom;
 
+				// Focusing width-wise is jarring
+				focus.X = Width / 2;
+
 				Vector scale = new Vector((float)maxWidth / (float)Width, (float)maxHeight / (float)Height);
 
 				Vector finalPoint = new Vector(focus.X * scale.X, focus.Y * scale.Y);
+
+				// Offset focus to top of main display area
+				finalPoint.Y += Height / 2;
 
 				MouseEventArgs eventArgs = new MouseEventArgs(MouseButtons.Left, 1, (int)finalPoint.X, (int)finalPoint.Y, 0);
 				FocusChanged(this, eventArgs);
