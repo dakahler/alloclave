@@ -24,6 +24,9 @@ namespace Alloclave
 
 		void Sleep(int milliseconds);
 
+		void StartCriticalSection();
+		void EndCriticalSection();
+
 	private:
 
 		void* ThreadHandle;

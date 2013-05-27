@@ -25,6 +25,9 @@ namespace Alloclave
 
 		virtual void Sleep(int milliseconds) {}
 
+		virtual void StartCriticalSection() {}
+		virtual void EndCriticalSection() {}
+
 	protected:
 
 		unsigned long (__stdcall *UserFunction)(void*);

@@ -6,9 +6,12 @@
 namespace Alloclave
 {
 
+	static CRITICAL_SECTION CriticalSection;
+
 	Thread_Win32::Thread_Win32(unsigned long (__stdcall *func)(void*))
 		: Thread(func)
 	{
+		InitializeCriticalSection(&CriticalSection);
 		ThreadHandle = CreateThread(NULL, 0, func, this, 0, 0);
 	}
 
@@ -40,6 +43,16 @@ namespace Alloclave
 	void Thread_Win32::Sleep(int milliseconds)
 	{
 		SleepEx(milliseconds, false);
+	}
+
+	void Thread_Win32::StartCriticalSection()
+	{
+		EnterCriticalSection(&CriticalSection);
+	}
+
+	void Thread_Win32::EndCriticalSection()
+	{
+		LeaveCriticalSection(&CriticalSection);
 	}
 
 }

@@ -43,9 +43,12 @@ namespace Alloclave
 					return new Rectangle();
 				}
 
-				VisualMemoryBlock block = VisualMemoryBlocks.Values[VisualMemoryBlocks.Count - 1];
-				RectangleF lowerBounds = block.Bounds;
-				return new Rectangle(0, 0, block.MaxPixelWidth, (int)(lowerBounds.Bottom - TotalCompression));
+				lock (VisualMemoryBlocks)
+				{
+					VisualMemoryBlock block = VisualMemoryBlocks.Values[VisualMemoryBlocks.Count - 1];
+					RectangleF lowerBounds = block.Bounds;
+					return new Rectangle(0, 0, block.MaxPixelWidth, (int)(lowerBounds.Bottom - TotalCompression));
+				}
 			}
 		}
 
@@ -197,13 +200,19 @@ namespace Alloclave
 
 		public bool Contains(VisualMemoryBlock block)
 		{
-			return VisualMemoryBlocks.ContainsValue(block);
+			lock (VisualMemoryBlocks)
+			{
+				return VisualMemoryBlocks.ContainsValue(block);
+			}
 		}
 
 		public VisualMemoryBlock Find(UInt64 address)
 		{
-			var result = VisualMemoryBlocks.FirstOrDefault(block => block.Value.Allocation.Address <= address);
-			return result.Value;
+			lock (VisualMemoryBlocks)
+			{
+				var result = VisualMemoryBlocks.FirstOrDefault(block => block.Value.Allocation.Address <= address);
+				return result.Value;
+			}
 		}
 
 		public VisualMemoryBlock Find(Vector localMouseCoordinates)
@@ -211,10 +220,13 @@ namespace Alloclave
 			VisualMemoryBlock tempBlock = new VisualMemoryBlock();
 			tempBlock.GraphicsPath.AddLine(localMouseCoordinates.ToPoint(), (localMouseCoordinates + new Vector(1, 1)).ToPoint());
 
-			int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
-			if (index >= 0)
+			lock (VisualMemoryBlocks)
 			{
-				return VisualMemoryBlocks.Values[index];
+				int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+				if (index >= 0)
+				{
+					return VisualMemoryBlocks.Values[index];
+				}
 			}
 
 			return null;

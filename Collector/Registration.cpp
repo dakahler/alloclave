@@ -59,15 +59,22 @@ namespace Alloclave
 
 	static CallStack& GetCallstack()
 	{
-		static CALLSTACK_TYPE_WIN32 s_PlatformCallStack;
+		static ALLOCLAVE_CALLSTACK_TYPE s_PlatformCallStack;
 		return s_PlatformCallStack;
 	}
 
-	static ALLOCLAVE_THREAD_TYPE s_ThreadModel(FlushThread);
+	static Thread& GetThreadModel()
+	{
+		static ALLOCLAVE_THREAD_TYPE s_ThreadModel(FlushThread);
+		return s_ThreadModel;
+	}
 
 #if ALLOCLAVE_ENABLED
 	void RegisterAllocation(void* address, size_t size, unsigned int heapId)
 	{
+		// Callstack and Transport are not thread safe
+		GetThreadModel().StartCriticalSection();
+
 		Allocation allocation(GetCallstack());
 		allocation.Address = address;
 		allocation.Size = size;
@@ -75,10 +82,14 @@ namespace Alloclave
 		allocation.Type = Allocation::AllocationType_Allocation;
 		allocation.HeapId = heapId;
 		Transport::Send(allocation);
+
+		GetThreadModel().EndCriticalSection();
 	}
 
 	void RegisterHeap(void* address, unsigned int size, unsigned int heapId)
 	{
+		GetThreadModel().StartCriticalSection();
+
 		Allocation heap;
 		heap.Address = address;
 		heap.Size = size;
@@ -86,14 +97,20 @@ namespace Alloclave
 		heap.Type = Allocation::AllocationType_Heap;
 		heap.HeapId = heapId;
 		Transport::Send(heap);
+
+		GetThreadModel().EndCriticalSection();
 	}
 
 	void RegisterFree(void* address, unsigned int heapId)
 	{
+		GetThreadModel().StartCriticalSection();
+
 		Free _free(GetCallstack());
 		_free.Address = address;
 		_free.HeapId = heapId;
 		Transport::Send(_free);
+
+		GetThreadModel().EndCriticalSection();
 	}
 
 	void RegisterScreenshot()
@@ -103,8 +120,12 @@ namespace Alloclave
 
 	void RegisterSymbolsPath(const char* symbolsPath)
 	{
+		GetThreadModel().StartCriticalSection();
+
 		SetSymbols setSymbols(symbolsPath);
 		Transport::Send(setSymbols);
+
+		GetThreadModel().EndCriticalSection();
 	}
 #else
 	void RegisterAllocation(void* /*address*/, size_t /*size*/, unsigned int /*heapId*/) {}

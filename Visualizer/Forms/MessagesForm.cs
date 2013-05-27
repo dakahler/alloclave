@@ -115,36 +115,41 @@ namespace Alloclave
 
 		private void AddInternal(MessageType type, Allocation referenceAllocation, String text)
 		{
-			this.Invoke((MethodInvoker)(() =>
+			Task task = new Task(() =>
 			{
-				switch (type)
+				this.Invoke((MethodInvoker)(() =>
 				{
-					case MessageType.Error:
-						{
-							Errors.Add(new StringSource(text, referenceAllocation));
-							var bindingList = new BindingList<StringSource>(Errors);
-							ErrorsDataGrid.DataSource = bindingList;
-							ErrorsTabPage.Text = "Errors (" + Errors.Count + ")";
-							break;
-						}
-					case MessageType.Warning:
-						{
-							Warnings.Add(new StringSource(text, referenceAllocation));
-							var bindingList = new BindingList<StringSource>(Warnings);
-							WarningsDataGrid.DataSource = bindingList;
-							WarningsTabPage.Text = "Warnings (" + Warnings.Count + ")";
-							break;
-						}
-					case MessageType.Info:
-						{
-							Infos.Add(new StringSource(text, referenceAllocation));
-							var bindingList = new BindingList<StringSource>(Infos);
-							InfosDataGrid.DataSource = bindingList;
-							InfoTabPage.Text = "Info (" + Infos.Count + ")";
-							break;
-						}
-				}
-			}));
+					switch (type)
+					{
+						case MessageType.Error:
+							{
+								Errors.Add(new StringSource(text, referenceAllocation));
+								var bindingList = new BindingList<StringSource>(Errors);
+								ErrorsDataGrid.DataSource = bindingList;
+								ErrorsTabPage.Text = "Errors (" + Errors.Count + ")";
+								break;
+							}
+						case MessageType.Warning:
+							{
+								Warnings.Add(new StringSource(text, referenceAllocation));
+								var bindingList = new BindingList<StringSource>(Warnings);
+								WarningsDataGrid.DataSource = bindingList;
+								WarningsTabPage.Text = "Warnings (" + Warnings.Count + ")";
+								break;
+							}
+						case MessageType.Info:
+							{
+								Infos.Add(new StringSource(text, referenceAllocation));
+								var bindingList = new BindingList<StringSource>(Infos);
+								InfosDataGrid.DataSource = bindingList;
+								InfoTabPage.Text = "Info (" + Infos.Count + ")";
+								break;
+							}
+					}
+				}));
+			});
+
+			task.Start();
 		}
 
 		private void DataGrid_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)

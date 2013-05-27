@@ -45,9 +45,11 @@ void Buffer::Copy(const Buffer& from, Buffer& to)
 	to.Position = from.Position;
 	to.Data = NULL;
 
+	assert(to.CurrentSize);
 	if (to.CurrentSize > 0)
 	{
 		to.Data = (char*)real_malloc(to.CurrentSize);
+		assert(to.Data);
 		if (to.Data)
 		{
 			memcpy(to.Data, from.Data, to.CurrentSize);
@@ -63,6 +65,7 @@ void Buffer::Copy(const Buffer& from, Buffer& to)
 Buffer::~Buffer()
 {
 	real_free(Data);
+	Data = NULL;
 }
 
 void Buffer::Resize(unsigned int newSize)
@@ -70,11 +73,13 @@ void Buffer::Resize(unsigned int newSize)
 	if (Data == NULL)
 	{
 		Data = (char*)real_malloc(newSize);
+		assert(Data);
 	}
 	else
 	{
 		// Allocate the new size, copy the data, and free the old memory
 		char* newData = (char*)real_malloc(newSize);
+		assert(newData);
 		unsigned int numBytesToCopy = MIN(newSize, CurrentSize);
 		memcpy(newData, Data, numBytesToCopy);
 		real_free(Data);
