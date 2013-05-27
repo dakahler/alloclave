@@ -27,7 +27,7 @@ namespace Alloclave
 		{
 			CurrentAllocation = allocation;
 
-			if (!File.Exists(CallStack.SymbolsPath))
+			if (!File.Exists(SymbolLookup.SymbolsPath))
 			{
 				symbolsNotFoundLabel.Visible = true;
 			}
@@ -47,7 +47,6 @@ namespace Alloclave
 			StackTable.Rows.Clear();
 			foreach (CallStack.Frame frame in allocation.Stack.Frames.Reverse())
 			{
-				// TODO: 64-bit
 				String addressText;
 				if (allocation.Architecture == Common.Architecture._32Bit)
 				{
@@ -59,8 +58,8 @@ namespace Alloclave
 				}
 
 				// TODO: Is this parser-specific?
-				String functionName = ""; //addressText;
-				String rawFunctionName = allocation.Stack.TranslateAddress(frame.Address);
+				String functionName = "";
+				String rawFunctionName = SymbolLookup.Instance.GetName(frame.Address);
 				if (rawFunctionName.Contains("NULL_THUNK_DATA") || rawFunctionName == String.Empty)
 				{
 					functionName += "Unknown";
@@ -79,7 +78,7 @@ namespace Alloclave
 			OpenFileDialog openFileDialog = new OpenFileDialog();
 			if (openFileDialog.ShowDialog() == DialogResult.OK)
 			{
-				CallStack.SymbolsPath = openFileDialog.FileName;
+				SymbolLookup.SymbolsPath = openFileDialog.FileName;
 				symbolsNotFoundLabel.Visible = false;
 				Update(CurrentAllocation);
 			}

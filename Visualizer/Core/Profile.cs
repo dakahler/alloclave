@@ -38,7 +38,7 @@ namespace Alloclave
 			if (e.Packet is SetSymbols)
 			{
 				SetSymbols setSymbols = (SetSymbols)e.Packet;
-				CallStack.SymbolsPath = setSymbols.SymbolsPath;
+				SymbolLookup.SymbolsPath = setSymbols.SymbolsPath;
 			}
 			else if (e.Packet is SetArchitecture)
 			{

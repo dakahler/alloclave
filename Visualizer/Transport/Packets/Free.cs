@@ -13,22 +13,14 @@ namespace Alloclave
 		// TODO: Better encapsulation
 		public UInt64 Address;
 		public UInt32 HeapId;
-		public CallStack Stack; // = new CallStack();
+		public CallStack Stack = new CallStack();
 		public byte[] UserData;
 
 		public Allocation AssociatedAllocation;
 
 		public Free()
 		{
-			// TODO: Support arbitrary call stack adapters
-			foreach (ExportFactory<CallStack, ICallStackParserName> callStackAdapter in Program.CallStackParserAdapters)
-			{
-				String transportName = callStackAdapter.Metadata.Name;
-				if (transportName == "Call Stack PDB")
-				{
-					Stack = callStackAdapter.CreateExport().Value;
-				}
-			}
+			
 		}
 
 		public byte[] Serialize(TargetSystemInfo targetSystemInfo)

@@ -6,10 +6,8 @@ using System.IO;
 
 namespace Alloclave
 {
-	public abstract class CallStack : ICustomSerializable
+	public class CallStack : ICustomSerializable
 	{
-		public static String SymbolsPath;
-
 		public class Frame
 		{
 			public String FunctionSignature;
@@ -25,8 +23,6 @@ namespace Alloclave
 
 		}
 
-		public abstract String TranslateAddress(UInt64 address);
-
 		public byte[] Serialize(TargetSystemInfo targetSystemInfo)
 		{
 			throw new NotImplementedException();
@@ -41,7 +37,6 @@ namespace Alloclave
 				{
 					Frame newFrame = new Frame();
 					newFrame.Address = (UInt64)binaryReader.ReadUInt32();
-					//newFrame.FunctionSignature = TranslateAddress(newFrame.Address);
 					Frames.Push(newFrame);
 				}
 			}
@@ -52,12 +47,9 @@ namespace Alloclave
 				{
 					Frame newFrame = new Frame();
 					newFrame.Address = binaryReader.ReadUInt64();
-					//newFrame.FunctionSignature = TranslateAddress(newFrame.Address);
 					Frames.Push(newFrame);
 				}
 			}
 		}
-
-		//static ICallStackParser Parser;
 	}
 }

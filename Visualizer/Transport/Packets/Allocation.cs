@@ -23,7 +23,7 @@ namespace Alloclave
 		public UInt64 Alignment;
 		public AllocationType Type;
 		public UInt32 HeapId;
-		public CallStack Stack;
+		public CallStack Stack = new CallStack();
 		public byte[] UserData;
 
 		public Free AssociatedFree;
@@ -56,15 +56,7 @@ namespace Alloclave
 
 		public Allocation()
 		{
-			// TODO: Support arbitrary call stack adapters
-			foreach (ExportFactory<CallStack, ICallStackParserName> callStackAdapter in Program.CallStackParserAdapters)
-			{
-				String transportName = callStackAdapter.Metadata.Name;
-				if (transportName == "Call Stack PDB")
-				{
-					Stack = callStackAdapter.CreateExport().Value;
-				}
-			}
+			
 		}
 
 		public int CompareTo(object obj)

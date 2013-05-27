@@ -14,7 +14,7 @@ xcopy ..\Visualizer\bin\x64\Installer\*.dll working /q /h /r /y /i
 
 mkdir working\plugins
 mkdir working\plugins\transport
-mkdir working\plugins\callstack
+mkdir working\plugins\symbollookup
 mkdir working\plugins\transport\win32
 mkdir working\plugins\transport\win32\Properties
 xcopy ..\Visualizer\plugins\transport\Win32Transport.dll working\plugins\transport /q /h /r /y /i
@@ -50,3 +50,5 @@ xcopy ..\Collector\TestCollector\*.filters working\collector\test /q /h /r /y /i
 rummage -o -p -s -i -j ".\ObfuscationMap.xml" --no-evaluation working\Alloclave.exe working\Alloclave.exe
 
 makensis /Oinstaller.log InstallerScript.nsi
+
+kSignCMD /d "Alloclave Installer" /du http://www.alloclave.com /f %~dp0\key.pfx %~dp0\InstallAlloclave.exe

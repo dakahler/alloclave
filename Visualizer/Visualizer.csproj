@@ -233,6 +233,7 @@
     <Compile Include="Core\MessageBoxHelper.cs" />
     <Compile Include="Core\Profile.cs" />
     <Compile Include="Core\Program.cs" />
+    <Compile Include="Core\SymbolLookup.cs" />
     <Compile Include="Core\TimeStamp.cs" />
     <Compile Include="Core\VisualMemoryBlock.cs" />
     <Compile Include="Forms\AboutForm.cs">

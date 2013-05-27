@@ -17,9 +17,9 @@ namespace Alloclave
 		String Name { get; }
 	}
 
-	public interface ICallStackParserName
+	public interface ISymbolLookupExtension
 	{
-		String Name { get; }
+		String Extension { get; }
 	}
 
 	class Program
@@ -27,13 +27,13 @@ namespace Alloclave
 		private static CompositionContainer _container;
 
 		public static IEnumerable<ExportFactory<Transport, ITransportName>> TransportAdapters;
-		public static IEnumerable<ExportFactory<CallStack, ICallStackParserName>> CallStackParserAdapters;
+		public static IEnumerable<ExportFactory<SymbolLookup, ISymbolLookupExtension>> SymbolLookupAdapters;
 		
 		[ImportMany]
 		private IEnumerable<ExportFactory<Transport, ITransportName>> InternalTransportAdapters = null;
 
 		[ImportMany]
-		private IEnumerable<ExportFactory<CallStack, ICallStackParserName>> InternalCallStackParserAdapters = null;
+		private IEnumerable<ExportFactory<SymbolLookup, ISymbolLookupExtension>> InternalSymbolLookupAdapters = null;
 
 		[DllImport("kernel32.dll")]
 		static extern bool AttachConsole(int dwProcessId);
@@ -56,9 +56,9 @@ namespace Alloclave
 
 			// Plugins path must exist by this point
 			String transportPluginsPath = Path.Combine(pluginsPath, "transport");
-			String callstackPluginsPath = Path.Combine(pluginsPath, "callstack");
+			String symbolLookupPluginsPath = Path.Combine(pluginsPath, "symbollookup");
 			if (!Directory.Exists(pluginsPath) || !Directory.Exists(transportPluginsPath) ||
-				!Directory.Exists(callstackPluginsPath))
+				!Directory.Exists(symbolLookupPluginsPath))
 			{
 				MessageBox.Show("Plugins not found! Please reinstall Alloclave.");
 				Application.Exit();
@@ -69,7 +69,7 @@ namespace Alloclave
 			// Adds all the parts found in the same assembly as the Program class
 			catalog.Catalogs.Add(new AssemblyCatalog(typeof(Program).Assembly));
 			catalog.Catalogs.Add(new DirectoryCatalog(transportPluginsPath));
-			catalog.Catalogs.Add(new DirectoryCatalog(callstackPluginsPath));
+			catalog.Catalogs.Add(new DirectoryCatalog(symbolLookupPluginsPath));
 
 
 			// Create the CompositionContainer with the parts in the catalog
@@ -81,7 +81,7 @@ namespace Alloclave
 				Program program = new Program();
 				_container.ComposeParts(program);
 				TransportAdapters = program.InternalTransportAdapters;
-				CallStackParserAdapters = program.InternalCallStackParserAdapters;
+				SymbolLookupAdapters = program.InternalSymbolLookupAdapters;
 			}
 			catch (CompositionException compositionException)
 			{

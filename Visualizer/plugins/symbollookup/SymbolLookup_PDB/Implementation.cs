@@ -9,16 +9,16 @@ using System.IO;
 
 namespace Alloclave_Plugin
 {
-	[Export(typeof(Alloclave.CallStack))]
-	[ExportMetadata("Name", "Call Stack PDB")]
-	public class CallStack_PDB : Alloclave.CallStack
+	[Export(typeof(Alloclave.SymbolLookup))]
+	[ExportMetadata("Extension", "PDB")]
+	public class SymbolLookup_PDB : Alloclave.SymbolLookup
 	{
 		static Alloclave.PdbParser pdbParser = new Alloclave.PdbParser();
 		static bool IsLoaded;
 
 		private String TempPdbPath;
 
-		public CallStack_PDB()
+		public SymbolLookup_PDB()
 		{
 			LoadSymbols();
 		}
@@ -42,7 +42,7 @@ namespace Alloclave_Plugin
 			}
 		}
 
-		public override String TranslateAddress(UInt64 address)
+		public override String GetName(UInt64 address)
 		{
 			LoadSymbols();
 
