@@ -6,6 +6,8 @@ using System.IO;
 using System.Diagnostics;
 using System.Windows.Threading;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.ComponentModel;
 
 namespace Alloclave
 {
@@ -21,6 +23,10 @@ namespace Alloclave
 		public static readonly UInt16 Version = 0;
 
 		public event PacketReceivedEventHandler PacketReceived;
+
+		// Enforces in-order bundle processing
+		BlockingCollection<Tuple<BinaryReader, TargetSystemInfo>> BundleQueue =
+			new BlockingCollection<Tuple<BinaryReader, TargetSystemInfo>>();
 
 		public static PacketBundle Instance
 		{
@@ -64,12 +70,27 @@ namespace Alloclave
 				throw new NotSupportedException();
 			}
 
-			
+			BundleQueue.Add(new Tuple<BinaryReader, TargetSystemInfo>(binaryReader, targetSystemInfo));
+		}
 
-			Task task = new Task(() =>
+		private static readonly PacketBundle _Instance = new PacketBundle();
+
+		private PacketBundle()
+		{
+			BackgroundWorker worker = new BackgroundWorker();
+			worker.DoWork += worker_DoWork;
+			worker.RunWorkerAsync();
+		}
+
+		void worker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			while (true)
 			{
+				Tuple<BinaryReader, TargetSystemInfo> pair = BundleQueue.Take();
+				BinaryReader binaryReader = pair.Item1;
+				TargetSystemInfo targetSystemInfo = pair.Item2;
+
 				UInt32 numPackets = binaryReader.ReadUInt32();
-				//Console.WriteLine("Got a bundle: " + numPackets);
 				for (UInt32 i = 0; i < numPackets; i++)
 				{
 					if (!Enum.IsDefined(typeof(PacketTypeRegistrar.PacketTypes), binaryReader.PeekChar()))
@@ -86,24 +107,17 @@ namespace Alloclave
 					// Deserialize everything else
 					specificPacket.Deserialize(binaryReader, targetSystemInfo);
 
-					PacketReceivedEventArgs e = new PacketReceivedEventArgs();
-					e.Packet = specificPacket;
-					e.TimeStamp = timeStamp;
+					PacketReceivedEventArgs eventArgs = new PacketReceivedEventArgs();
+					eventArgs.Packet = specificPacket;
+					eventArgs.TimeStamp = timeStamp;
 
 					History.SuspendRebuilding = true;
-					PacketReceived.Invoke(this, e);
+					PacketReceived.Invoke(this, eventArgs);
 					History.SuspendRebuilding = false;
 				}
-				//Console.WriteLine("Finished bundle.");
 
 				Dispatcher.CurrentDispatcher.Invoke(new Action(() => History.ForceRebuild()));
-			});
-
-			task.Start();
+			}
 		}
-
-		private static readonly PacketBundle _Instance = new PacketBundle();
-
-		private PacketBundle() { }
 	}
 }
