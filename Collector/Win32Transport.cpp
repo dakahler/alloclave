@@ -18,6 +18,11 @@ Win32Transport::~Win32Transport()
 
 void Win32Transport::Flush(Thread& callingThread)
 {
+	if (NumItems == 0)
+	{
+		return;
+	}
+
 	FindVisualizer();
 	if (VisualizerHandle == NULL)
 	{
