@@ -110,32 +110,32 @@ namespace Alloclave
 		{
 			//Task task = new Task(() =>
 			{
-				lock (AddLock)
+				// Trial limitation: Only allow 1 minute of data
+				if (Licensing.IsTrial)
 				{
-					// Trial limitation: Only allow 1 minute of data
-					if (Licensing.IsTrial)
+					if (PacketList.Count > 0)
 					{
-						if (PacketList.Count > 0)
+						TimeSpan span = DateTime.Now.Subtract(TrialStartTime);
+						const double trialTimeLimit = 60.0;
+						if (span.TotalSeconds > trialTimeLimit)
 						{
-							TimeSpan span = DateTime.Now.Subtract(TrialStartTime);
-							const double trialTimeLimit = 60.0;
-							if (span.TotalSeconds > trialTimeLimit)
+							if (!SentTrialWarning)
 							{
-								if (!SentTrialWarning)
-								{
-									SentTrialWarning = true;
-									MessagesForm.Add(MessagesForm.MessageType.Warning, null, "Trial version can only collect one minute of data.");
-								}
-
-								return;
+								SentTrialWarning = true;
+								MessagesForm.Add(MessagesForm.MessageType.Warning, null, "Trial version can only collect one minute of data.");
 							}
-						}
-						else
-						{
-							TrialStartTime = DateTime.Now;
+
+							return;
 						}
 					}
+					else
+					{
+						TrialStartTime = DateTime.Now;
+					}
+				}
 
+				lock (AddLock)
+				{
 					lock (PacketList)
 					{
 						PacketList.Add(new TimeStamp(timeStamp), packet);
