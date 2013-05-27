@@ -21,7 +21,7 @@ namespace Alloclave
 			}
 		}
 
-		private SortedList<UInt64, VisualMemoryBlock> VisualMemoryBlocks = new SortedList<UInt64, VisualMemoryBlock>();
+		private SortedDictionary<UInt64, VisualMemoryBlock> VisualMemoryBlocks = new SortedDictionary<UInt64, VisualMemoryBlock>();
 
 		private Dictionary<uint, int> ColorDictionary = new Dictionary<uint, int>();
 		private int ColorIndex;
@@ -45,7 +45,7 @@ namespace Alloclave
 
 				lock (VisualMemoryBlocks)
 				{
-					VisualMemoryBlock block = VisualMemoryBlocks.Values[VisualMemoryBlocks.Count - 1];
+					VisualMemoryBlock block = VisualMemoryBlocks.Last().Value;
 					RectangleF lowerBounds = block.Bounds;
 					return new Rectangle(0, 0, block.MaxPixelWidth, (int)(lowerBounds.Bottom - TotalCompression));
 				}
@@ -56,14 +56,6 @@ namespace Alloclave
 		{
 			get
 			{
-				//float totalOffset = 0.0f;
-				//foreach (var pair in HeapOffsets)
-				//{
-				//	totalOffset += pair.Value;
-				//}
-
-				//return totalOffset;
-
 				if (HeapOffsets.Count > 0)
 				{
 					return HeapOffsets.Last().Value;
@@ -92,16 +84,22 @@ namespace Alloclave
 			}
 		}
 
-		public void Add(VisualMemoryBlock block)
+		public bool Add(VisualMemoryBlock block)
 		{
 			lock (VisualMemoryBlocks)
 			{
 				VisualMemoryBlocks.Add(block.Allocation.Address, block);
+				return true;
 			}
 		}
 
 		public VisualMemoryBlock Add(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width)
 		{
+			if (VisualMemoryBlocks.ContainsKey(allocation.Address))
+			{
+				return null;
+			}
+
 			// Determine color set based on heap id
 			// TODO: This can probably be more generic in the future
 			// TODO: This static way of tracking which color to use is too unreliable
@@ -160,7 +158,7 @@ namespace Alloclave
 
 			lock (VisualMemoryBlocks)
 			{
-				VisualMemoryBlocks.Add(allocation.Address, block);
+				VisualMemoryBlocks.Add(block.Allocation.Address, block);
 			}
 
 			return block;
@@ -189,15 +187,6 @@ namespace Alloclave
 			}
 		}
 
-		public VisualMemoryBlock RemoveAt(int index)
-		{
-			lock (VisualMemoryBlocks)
-			{
-				VisualMemoryBlock block = VisualMemoryBlocks.ElementAt(index).Value;
-				return Remove(block);
-			}
-		}
-
 		public bool Contains(VisualMemoryBlock block)
 		{
 			lock (VisualMemoryBlocks)
@@ -210,24 +199,30 @@ namespace Alloclave
 		{
 			lock (VisualMemoryBlocks)
 			{
-				var result = VisualMemoryBlocks.FirstOrDefault(block => block.Value.Allocation.Address <= address);
-				return result.Value;
+				VisualMemoryBlock outBlock;
+				if (VisualMemoryBlocks.TryGetValue(address, out outBlock))
+				{
+					return outBlock;
+				}
+
+				return null;
 			}
 		}
 
 		public VisualMemoryBlock Find(Vector localMouseCoordinates)
 		{
-			VisualMemoryBlock tempBlock = new VisualMemoryBlock();
-			tempBlock.GraphicsPath.AddLine(localMouseCoordinates.ToPoint(), (localMouseCoordinates + new Vector(1, 1)).ToPoint());
+			//VisualMemoryBlock tempBlock = new VisualMemoryBlock();
+			//tempBlock.GraphicsPath.AddLine(localMouseCoordinates.ToPoint(), (localMouseCoordinates + new Vector(1, 1)).ToPoint());
 
-			lock (VisualMemoryBlocks)
-			{
-				int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
-				if (index >= 0)
-				{
-					return VisualMemoryBlocks.Values[index];
-				}
-			}
+			//lock (VisualMemoryBlocks)
+			//{
+			//	VisualMemoryBlocks.Where(
+			//	int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+			//	if (index >= 0)
+			//	{
+			//		return VisualMemoryBlocks.Values[index];
+			//	}
+			//}
 
 			return null;
 		}

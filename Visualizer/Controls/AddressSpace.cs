@@ -39,9 +39,6 @@ namespace Alloclave
 		private AutoResetEvent RecalculateSelectedBlock = new AutoResetEvent(false);
 		private AutoResetEvent RecalculateHoverBlock = new AutoResetEvent(false);
 
-		// Represents all packets from the beginning of the profile to the current shifted time
-		SortedList<UInt64, IPacket> AggregatePacketData = new SortedList<UInt64, IPacket>();
-
 		// TODO: May want to make the idea of multiple heaps more pervasive
 		// throughout the data flow
 		Dictionary<uint, RectangleF> HeapBounds = new Dictionary<uint, RectangleF>();
@@ -51,7 +48,7 @@ namespace Alloclave
 
 		CancellationTokenSource TokenSource;
 
-		// TODO: Probably shouldn't static
+		// TODO: Probably shouldn't be static
 		public static event SelectionChangedEventHandler SelectionChanged;
 
 		public event EventHandler Rebuilt;
@@ -112,9 +109,7 @@ namespace Alloclave
 							bool isBackward = false;
 							if (forceFullRebuild)
 							{
-								AggregatePacketData.Clear();
 								MemoryBlockManager.Instance.Reset();
-
 								packets = history.Get();
 							}
 							else
@@ -180,71 +175,52 @@ namespace Alloclave
 								{
 									Allocation allocation = pair.Value as Allocation;
 
-									lock (AggregatePacketData)
+									if (!isBackward)
 									{
-										if (!isBackward)
-										{
-											if (AggregatePacketData.ContainsKey(allocation.Address))
-											{
-												MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
-											}
-											else
-											{
-												AggregatePacketData.Add(allocation.Address, allocation);
+										VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
+											allocation, history.AddressRange.Min, AddressWidth, Width);
 
-												VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
-													allocation, history.AddressRange.Min, AddressWidth, Width);
-											}
-										}
-										else
+										if (newBlock == null)
 										{
-											AggregatePacketData.Remove(allocation.Address);
-											MemoryBlockManager.Instance.Remove(allocation.Address);
+											MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
 										}
+									}
+									else
+									{
+										MemoryBlockManager.Instance.Remove(allocation.Address);
 									}
 								}
 								else
 								{
 									Free free = pair.Value as Free;
 
-									lock (AggregatePacketData)
+									if (MemoryBlockManager.Instance.Find(free.Address) != null)
 									{
-										if (AggregatePacketData.ContainsKey(free.Address))
+										VisualMemoryBlock removedBlock = MemoryBlockManager.Instance.Remove(free.Address);
+										if (removedBlock != null)
 										{
-											AggregatePacketData.Remove(free.Address);
-
-											VisualMemoryBlock removedBlock = MemoryBlockManager.Instance.Remove(free.Address);
-											if (removedBlock != null)
-											{
-												removedBlock.Allocation.AssociatedFree = free;
-												free.AssociatedAllocation = removedBlock.Allocation;
-											}
-											else
-											{
-												throw new DataException();
-											}
+											removedBlock.Allocation.AssociatedFree = free;
+											free.AssociatedAllocation = removedBlock.Allocation;
 										}
 										else
 										{
-											if (isBackward)
-											{
-												AggregatePacketData.Add(free.Address, free.AssociatedAllocation);
-												VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
-													free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
-											}
-											else
-											{
-												MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
-											}
+											throw new DataException();
+										}
+									}
+									else
+									{
+										if (isBackward)
+										{
+											VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
+												free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
+										}
+										else
+										{
+											MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
 										}
 									}
 								}
 							} //);
-						}
-
-						if (AggregatePacketData.Count == 0)
-						{
-							return;
 						}
 
 						if (!MemoryBlockManager.Instance.Contains(Renderer.SelectedBlock))
@@ -512,7 +488,7 @@ namespace Alloclave
 				Renderer.HoverBlock = null;
 				//lock (RebuildDataLock)
 				{
-					Renderer.HoverBlock = MemoryBlockManager.Instance.Find(Renderer.GetLocalMouseLocation());
+					//Renderer.HoverBlock = MemoryBlockManager.Instance.Find(Renderer.GetLocalMouseLocation());
 				}
 			}
 		}
