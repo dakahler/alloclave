@@ -64,12 +64,12 @@ namespace Alloclave
 				throw new NotSupportedException();
 			}
 
-			History.SuspendRebuilding = true;
+			
 
 			Task task = new Task(() =>
 			{
 				UInt32 numPackets = binaryReader.ReadUInt32();
-				Console.WriteLine("Got a bundle: " + numPackets);
+				//Console.WriteLine("Got a bundle: " + numPackets);
 				for (UInt32 i = 0; i < numPackets; i++)
 				{
 					if (!Enum.IsDefined(typeof(PacketTypeRegistrar.PacketTypes), binaryReader.PeekChar()))
@@ -90,14 +90,16 @@ namespace Alloclave
 					e.Packet = specificPacket;
 					e.TimeStamp = timeStamp;
 
+					History.SuspendRebuilding = true;
 					PacketReceived.Invoke(this, e);
+					History.SuspendRebuilding = false;
 				}
+				//Console.WriteLine("Finished bundle.");
+
+				Dispatcher.CurrentDispatcher.Invoke(new Action(() => History.ForceRebuild()));
 			});
 
 			task.Start();
-
-			History.SuspendRebuilding = false;
-			Dispatcher.CurrentDispatcher.Invoke(new Action(() => History.ForceRebuild()));
 		}
 
 		private static readonly PacketBundle _Instance = new PacketBundle();
