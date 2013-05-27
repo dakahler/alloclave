@@ -29,6 +29,8 @@ namespace Alloclave
 		return s_Transport;
 	}
 
+	Thread& GetThreadModel();
+
 	static unsigned long __stdcall FlushThread(void* param)
 	{
 		Thread* thread = (Thread*)param;
@@ -50,7 +52,7 @@ namespace Alloclave
 		assert(thread);
 		while (thread)
 		{
-			GetTransport().Flush();
+			GetTransport().Flush(GetThreadModel());
 			thread->Sleep(FlushInterval);
 		}
 

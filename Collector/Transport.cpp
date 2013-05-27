@@ -3,6 +3,7 @@
 #include "Transport.h"
 #include "Packet.h"
 #include "SetArchitecture.h"
+#include "Thread.h"
 
 namespace Alloclave
 {
@@ -44,26 +45,21 @@ void Transport::Send(const Packet& packet)
 	//PacketQueue.Enqueue(buffer);
 }
 
-Buffer& Transport::BuildFinalBuffer(unsigned short version)
+Buffer& Transport::BuildFinalBuffer(Thread& callingThread)
 {
 	// This builds up the final packet bundle
 	static Buffer buffer;
 	buffer.Clear();
 
-	buffer.Add(&version, sizeof(version));
+	buffer.Add((void*)&Version, sizeof(Version));
 
-	//unsigned int numItems = PacketQueue.GetNumItems();
-	buffer.Add(&NumItems, sizeof(NumItems));
-
-	//for (unsigned int i = 0; i < numItems; i++)
-	//{
-	//	buffer.Add(PacketQueue.Dequeue());
-	//}
-
+	callingThread.StartCriticalSection();
+	buffer.Add((void*)&NumItems, sizeof(NumItems));
 	buffer.Add((void*)GetGlobalBuffer().GetData(), GetGlobalBuffer().GetSize());
 
 	NumItems = 0;
 	GetGlobalBuffer().Clear();
+	callingThread.EndCriticalSection();
 
 	return buffer;
 }

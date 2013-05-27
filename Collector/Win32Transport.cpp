@@ -16,7 +16,7 @@ Win32Transport::~Win32Transport()
 	VisualizerHandle = NULL;
 }
 
-void Win32Transport::Flush()
+void Win32Transport::Flush(Thread& callingThread)
 {
 	FindVisualizer();
 	if (VisualizerHandle == NULL)
@@ -24,7 +24,7 @@ void Win32Transport::Flush()
 		return;
 	}
 
-	Buffer& buffer = BuildFinalBuffer(Version);
+	Buffer& buffer = BuildFinalBuffer(callingThread);
 
 	// Send Win32 WM_COPYDATA message to visualizer
 	COPYDATASTRUCT cds;

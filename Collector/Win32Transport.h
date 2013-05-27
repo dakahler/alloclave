@@ -16,7 +16,7 @@ namespace Alloclave
 
 		virtual ~Win32Transport();
 
-		void Flush();
+		void Flush(Thread& callingThread);
 
 	protected:
 

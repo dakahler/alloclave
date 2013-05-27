@@ -8,6 +8,7 @@
 namespace Alloclave
 {
 	class Packet;
+	class Thread;
 
 	// Base class for transport mechanism used to send data to the visualizer
 	class Transport
@@ -19,11 +20,11 @@ namespace Alloclave
 
 		static void Send(const Packet& packet);
 
-		virtual void Flush() = 0;
+		virtual void Flush(Thread& callingThread) = 0;
 
 	protected:
 
-		virtual Buffer& BuildFinalBuffer(unsigned short version);
+		virtual Buffer& BuildFinalBuffer(Thread& callingThread);
 
 		//static Queue PacketQueue;
 
