@@ -55,6 +55,10 @@ namespace Alloclave
 		private List<StringSource> Warnings = new List<StringSource>();
 		private List<StringSource> Infos = new List<StringSource>();
 
+		ToolForm ErrorsForm;
+		ToolForm WarningsForm;
+		ToolForm InfosForm;
+
 		public enum MessageType
 		{
 			Error,
@@ -73,38 +77,44 @@ namespace Alloclave
 
 			dockPanel1.Theme = new VS2012LightTheme();
 
-			ToolForm errorsForm = new ToolForm();
-			errorsForm.CloseButton = false;
-			errorsForm.CloseButtonVisible = false;
-			errorsForm.TopLevel = false;
-			errorsForm.Text = "Errors";
-			errorsForm.Controls.Add(ErrorsDataGrid);
-			this.Controls.Add(errorsForm);
-			errorsForm.Show(dockPanel1);
+			ErrorsForm = new ToolForm();
+			ErrorsForm.CloseButton = false;
+			ErrorsForm.CloseButtonVisible = false;
+			ErrorsForm.TopLevel = false;
+			ErrorsForm.Text = "Errors";
+			ErrorsForm.Controls.Add(ErrorsDataGrid);
+			this.Controls.Add(ErrorsForm);
+			ErrorsForm.Show(dockPanel1);
 
-			ToolForm warningsForm = new ToolForm();
-			warningsForm.CloseButton = false;
-			warningsForm.CloseButtonVisible = false;
-			warningsForm.TopLevel = false;
-			warningsForm.Text = "Warnings";
-			warningsForm.Controls.Add(WarningsDataGrid);
-			this.Controls.Add(warningsForm);
-			warningsForm.Show(dockPanel1);
+			WarningsForm = new ToolForm();
+			WarningsForm.CloseButton = false;
+			WarningsForm.CloseButtonVisible = false;
+			WarningsForm.TopLevel = false;
+			WarningsForm.Text = "Warnings";
+			WarningsForm.Controls.Add(WarningsDataGrid);
+			this.Controls.Add(WarningsForm);
+			WarningsForm.Show(dockPanel1);
 
-			ToolForm infosForm = new ToolForm();
-			infosForm.CloseButton = false;
-			infosForm.CloseButtonVisible = false;
-			infosForm.TopLevel = false;
-			infosForm.Text = "Info";
-			infosForm.Controls.Add(InfosDataGrid);
-			this.Controls.Add(infosForm);
-			infosForm.Show(dockPanel1);
+			InfosForm = new ToolForm();
+			InfosForm.CloseButton = false;
+			InfosForm.CloseButtonVisible = false;
+			InfosForm.TopLevel = false;
+			InfosForm.Text = "Info";
+			InfosForm.Controls.Add(InfosDataGrid);
+			this.Controls.Add(InfosForm);
+			InfosForm.Show(dockPanel1);
 
 			WeifenLuo.WinFormsUI.Docking.DockHelper.PreventActivation = false;
 
+			this.Load += MessagesForm_Load;
+		}
+
+		void MessagesForm_Load(object sender, EventArgs e)
+		{
 			if (Licensing.IsTrial)
 			{
-				AddInternal(MessageType.Info, null, "You are running a trial version of alloclave.");
+				AddInternal(MessageType.Info, null, "You are running a trial version of Alloclave.");
+				InfosForm.Activate();
 			}
 		}
 
@@ -126,7 +136,7 @@ namespace Alloclave
 								Errors.Add(new StringSource(text, referenceAllocation));
 								var bindingList = new BindingList<StringSource>(Errors);
 								ErrorsDataGrid.DataSource = bindingList;
-								ErrorsTabPage.Text = "Errors (" + Errors.Count + ")";
+								ErrorsForm.Text = "Errors (" + Errors.Count + ")";
 								break;
 							}
 						case MessageType.Warning:
@@ -134,7 +144,7 @@ namespace Alloclave
 								Warnings.Add(new StringSource(text, referenceAllocation));
 								var bindingList = new BindingList<StringSource>(Warnings);
 								WarningsDataGrid.DataSource = bindingList;
-								WarningsTabPage.Text = "Warnings (" + Warnings.Count + ")";
+								WarningsForm.Text = "Warnings (" + Warnings.Count + ")";
 								break;
 							}
 						case MessageType.Info:
@@ -142,7 +152,7 @@ namespace Alloclave
 								Infos.Add(new StringSource(text, referenceAllocation));
 								var bindingList = new BindingList<StringSource>(Infos);
 								InfosDataGrid.DataSource = bindingList;
-								InfoTabPage.Text = "Info (" + Infos.Count + ")";
+								InfosForm.Text = "Info (" + Infos.Count + ")";
 								break;
 							}
 					}

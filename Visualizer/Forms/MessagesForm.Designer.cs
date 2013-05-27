@@ -44,40 +44,14 @@
 			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient6 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
 			WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient7 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MessagesForm));
-			this.ErrorsTabPage = new System.Windows.Forms.TabPage();
-			this.WarningsTabPage = new System.Windows.Forms.TabPage();
 			this.WarningsDataGrid = new System.Windows.Forms.DataGridView();
-			this.InfoTabPage = new System.Windows.Forms.TabPage();
 			this.InfosDataGrid = new System.Windows.Forms.DataGridView();
 			this.ErrorsDataGrid = new System.Windows.Forms.DataGridView();
 			this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-			this.WarningsTabPage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.WarningsDataGrid)).BeginInit();
-			this.InfoTabPage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.InfosDataGrid)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ErrorsDataGrid)).BeginInit();
 			this.SuspendLayout();
-			// 
-			// ErrorsTabPage
-			// 
-			this.ErrorsTabPage.Location = new System.Drawing.Point(4, 22);
-			this.ErrorsTabPage.Name = "ErrorsTabPage";
-			this.ErrorsTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.ErrorsTabPage.Size = new System.Drawing.Size(935, 232);
-			this.ErrorsTabPage.TabIndex = 0;
-			this.ErrorsTabPage.Text = "Errors";
-			this.ErrorsTabPage.UseVisualStyleBackColor = true;
-			// 
-			// WarningsTabPage
-			// 
-			this.WarningsTabPage.Controls.Add(this.WarningsDataGrid);
-			this.WarningsTabPage.Location = new System.Drawing.Point(4, 22);
-			this.WarningsTabPage.Name = "WarningsTabPage";
-			this.WarningsTabPage.Padding = new System.Windows.Forms.Padding(3);
-			this.WarningsTabPage.Size = new System.Drawing.Size(935, 232);
-			this.WarningsTabPage.TabIndex = 1;
-			this.WarningsTabPage.Text = "Warnings";
-			this.WarningsTabPage.UseVisualStyleBackColor = true;
 			// 
 			// WarningsDataGrid
 			// 
@@ -92,17 +66,9 @@
 			this.WarningsDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.WarningsDataGrid.Size = new System.Drawing.Size(929, 226);
 			this.WarningsDataGrid.TabIndex = 1;
+			this.WarningsDataGrid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+			this.WarningsDataGrid.ColumnHeadersVisible = false;
 			this.WarningsDataGrid.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_CellContentDoubleClick);
-			// 
-			// InfoTabPage
-			// 
-			this.InfoTabPage.Controls.Add(this.InfosDataGrid);
-			this.InfoTabPage.Location = new System.Drawing.Point(4, 22);
-			this.InfoTabPage.Name = "InfoTabPage";
-			this.InfoTabPage.Size = new System.Drawing.Size(935, 232);
-			this.InfoTabPage.TabIndex = 2;
-			this.InfoTabPage.Text = "Info";
-			this.InfoTabPage.UseVisualStyleBackColor = true;
 			// 
 			// InfosDataGrid
 			// 
@@ -117,6 +83,8 @@
 			this.InfosDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.InfosDataGrid.Size = new System.Drawing.Size(935, 232);
 			this.InfosDataGrid.TabIndex = 1;
+			this.InfosDataGrid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+			this.InfosDataGrid.ColumnHeadersVisible = false;
 			this.InfosDataGrid.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_CellContentDoubleClick);
 			// 
 			// ErrorsDataGrid
@@ -132,6 +100,8 @@
 			this.ErrorsDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.ErrorsDataGrid.Size = new System.Drawing.Size(943, 258);
 			this.ErrorsDataGrid.TabIndex = 0;
+			this.ErrorsDataGrid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+			this.ErrorsDataGrid.ColumnHeadersVisible = false;
 			this.ErrorsDataGrid.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_CellContentDoubleClick);
 			// 
 			// dockPanel1
@@ -209,9 +179,7 @@
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.Text = "Message Area";
-			this.WarningsTabPage.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.WarningsDataGrid)).EndInit();
-			this.InfoTabPage.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.InfosDataGrid)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.ErrorsDataGrid)).EndInit();
 			this.ResumeLayout(false);
@@ -220,11 +188,7 @@
 
 		#endregion
 
-		//private System.Windows.Forms.TabControl tabControl1;
-		private System.Windows.Forms.TabPage ErrorsTabPage;
 		private System.Windows.Forms.DataGridView ErrorsDataGrid;
-		private System.Windows.Forms.TabPage WarningsTabPage;
-		private System.Windows.Forms.TabPage InfoTabPage;
 		private System.Windows.Forms.DataGridView WarningsDataGrid;
 		private System.Windows.Forms.DataGridView InfosDataGrid;
 		private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel1;
