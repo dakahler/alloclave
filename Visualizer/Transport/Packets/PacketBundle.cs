@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Windows.Threading;
+using System.Threading.Tasks;
 
 namespace Alloclave
 {
@@ -65,29 +66,35 @@ namespace Alloclave
 
 			History.SuspendRebuilding = true;
 
-			UInt32 numPackets = binaryReader.ReadUInt32();
-			for (UInt32 i = 0; i < numPackets; i++)
+			Task task = new Task(() =>
 			{
-				if (!Enum.IsDefined(typeof(PacketTypeRegistrar.PacketTypes), binaryReader.PeekChar()))
+				UInt32 numPackets = binaryReader.ReadUInt32();
+				Console.WriteLine("Got a bundle: " + numPackets);
+				for (UInt32 i = 0; i < numPackets; i++)
 				{
-					int invalidType = binaryReader.PeekChar();
-					throw new NotSupportedException();
+					if (!Enum.IsDefined(typeof(PacketTypeRegistrar.PacketTypes), binaryReader.PeekChar()))
+					{
+						int invalidType = binaryReader.PeekChar();
+						throw new NotSupportedException();
+					}
+
+					PacketTypeRegistrar.PacketTypes packetType = (PacketTypeRegistrar.PacketTypes)binaryReader.ReadByte();
+					UInt64 timeStamp = binaryReader.ReadUInt64();
+
+					IPacket specificPacket = PacketTypeRegistrar.Generate(packetType);
+
+					// Deserialize everything else
+					specificPacket.Deserialize(binaryReader, targetSystemInfo);
+
+					PacketReceivedEventArgs e = new PacketReceivedEventArgs();
+					e.Packet = specificPacket;
+					e.TimeStamp = timeStamp;
+
+					PacketReceived.Invoke(this, e);
 				}
+			});
 
-				PacketTypeRegistrar.PacketTypes packetType = (PacketTypeRegistrar.PacketTypes)binaryReader.ReadByte();
-				UInt64 timeStamp = binaryReader.ReadUInt64();
-
-				IPacket specificPacket = PacketTypeRegistrar.Generate(packetType);
-
-				// Deserialize everything else
-				specificPacket.Deserialize(binaryReader, targetSystemInfo);
-
-				PacketReceivedEventArgs e = new PacketReceivedEventArgs();
-				e.Packet = specificPacket;
-				e.TimeStamp = timeStamp;
-
-				PacketReceived.Invoke(this, e);
-			}
+			task.Start();
 
 			History.SuspendRebuilding = false;
 			Dispatcher.CurrentDispatcher.Invoke(new Action(() => History.ForceRebuild()));
