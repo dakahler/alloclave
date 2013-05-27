@@ -12,7 +12,8 @@ Screenshot::Screenshot()
 
 Buffer& Screenshot::Serialize() const
 {
-	return Buffer();
+	static Buffer buffer;
+	return buffer;
 }
 
 void Screenshot::Deserialize(const Buffer& buffer, unsigned int bufferLength)
