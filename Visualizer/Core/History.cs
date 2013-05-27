@@ -113,24 +113,27 @@ namespace Alloclave
 				lock (AddLock)
 				{
 					// Trial limitation: Only allow 1 minute of data
-					if (PacketList.Count > 0)
+					if (Licensing.IsTrial)
 					{
-						TimeSpan span = DateTime.Now.Subtract(TrialStartTime);
-						const double trialTimeLimit = 60.0;
-						if (span.TotalSeconds > trialTimeLimit)
+						if (PacketList.Count > 0)
 						{
-							if (!SentTrialWarning)
+							TimeSpan span = DateTime.Now.Subtract(TrialStartTime);
+							const double trialTimeLimit = 60.0;
+							if (span.TotalSeconds > trialTimeLimit)
 							{
-								SentTrialWarning = true;
-								MessagesForm.Add(MessagesForm.MessageType.Warning, null, "Trial version can only collect one minute of data.");
-							}
+								if (!SentTrialWarning)
+								{
+									SentTrialWarning = true;
+									MessagesForm.Add(MessagesForm.MessageType.Warning, null, "Trial version can only collect one minute of data.");
+								}
 
-							return;
+								return;
+							}
 						}
-					}
-					else
-					{
-						TrialStartTime = DateTime.Now;
+						else
+						{
+							TrialStartTime = DateTime.Now;
+						}
 					}
 
 					lock (PacketList)
