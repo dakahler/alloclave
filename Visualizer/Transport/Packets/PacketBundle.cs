@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Windows.Threading;
 
 namespace Alloclave
 {
@@ -62,6 +63,8 @@ namespace Alloclave
 				throw new NotSupportedException();
 			}
 
+			History.SuspendRebuilding = true;
+
 			UInt32 numPackets = binaryReader.ReadUInt32();
 			for (UInt32 i = 0; i < numPackets; i++)
 			{
@@ -85,6 +88,9 @@ namespace Alloclave
 
 				PacketReceived.Invoke(this, e);
 			}
+
+			History.SuspendRebuilding = false;
+			Dispatcher.CurrentDispatcher.Invoke(new Action(() => History.ForceRebuild()));
 		}
 
 		private static readonly PacketBundle _Instance = new PacketBundle();
