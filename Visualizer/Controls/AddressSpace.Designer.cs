@@ -28,13 +28,13 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.Tooltip = new Alloclave.RichToolTip();
+			//this.Tooltip = new Alloclave.RichToolTip();
 			this.SuspendLayout();
 			// 
 			// Tooltip
 			// 
-			this.Tooltip.OwnerDraw = true;
-			this.Tooltip.ShowAlways = true;
+			//this.Tooltip.OwnerDraw = true;
+			//this.Tooltip.ShowAlways = true;
 			// 
 			// AddressSpace
 			// 
@@ -55,7 +55,7 @@
 
 		#endregion
 
-		private RichToolTip Tooltip;
+		//private RichToolTip Tooltip;
 
 
 	}

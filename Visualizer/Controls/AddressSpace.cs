@@ -186,14 +186,15 @@ namespace Alloclave
 										{
 											if (AggregatePacketData.ContainsKey(allocation.Address))
 											{
-												AggregatePacketData.Remove(allocation.Address);
 												MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
 											}
+											else
+											{
+												AggregatePacketData.Add(allocation.Address, allocation);
 
-											AggregatePacketData.Add(allocation.Address, allocation);
-
-											VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
-												allocation, history.AddressRange.Min, AddressWidth, Width);
+												VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
+													allocation, history.AddressRange.Min, AddressWidth, Width);
+											}
 										}
 										else
 										{
@@ -229,7 +230,7 @@ namespace Alloclave
 											{
 												AggregatePacketData.Add(free.Address, free.AssociatedAllocation);
 												VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
-												free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
+													free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
 											}
 											else
 											{
@@ -283,7 +284,7 @@ namespace Alloclave
 
 			Renderer = new AddressSpaceRenderer_OGL(this);
 
-			Tooltip.RtbPCtrl = printCtrl;
+			//Tooltip.RtbPCtrl = printCtrl;
 
 			this.MouseWheel += AddressSpace_MouseWheel;
 
@@ -509,7 +510,7 @@ namespace Alloclave
 				}
 
 				Renderer.HoverBlock = null;
-				lock (RebuildDataLock)
+				//lock (RebuildDataLock)
 				{
 					Renderer.HoverBlock = MemoryBlockManager.Instance.Find(Renderer.GetLocalMouseLocation());
 				}
