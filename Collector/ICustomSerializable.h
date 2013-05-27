@@ -12,7 +12,7 @@ namespace Alloclave
 	class ICustomSerializable
 	{
 	public:
-		virtual Buffer Serialize() const = 0;
+		virtual Buffer& Serialize() const = 0;
 		virtual void Deserialize(const Buffer& buffer, unsigned int bufferLength) = 0;
 	};
 

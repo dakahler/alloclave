@@ -24,7 +24,7 @@ void Win32Transport::Flush()
 		return;
 	}
 
-	Buffer buffer = BuildFinalBuffer(Version);
+	Buffer& buffer = BuildFinalBuffer(Version);
 
 	// Send Win32 WM_COPYDATA message to visualizer
 	COPYDATASTRUCT cds;

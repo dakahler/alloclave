@@ -108,6 +108,11 @@ void Buffer::Add(const Buffer& buffer)
 	Add(buffer.Data, buffer.Position);
 }
 
+void Buffer::Clear()
+{
+	Position = 0;
+}
+
 const void* Buffer::GetData() const
 {
 	return Data;

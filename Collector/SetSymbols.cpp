@@ -13,12 +13,15 @@ SetSymbols::SetSymbols(const char* symbolsPath)
 	
 }
 
-Buffer SetSymbols::Serialize() const
+Buffer& SetSymbols::Serialize() const
 {
-	Buffer buffer = Packet::Serialize();
+	Buffer& baseBuffer = Packet::Serialize();
+	static Buffer buffer;
+	buffer.Clear();
 
 	// This sends the path of the symbols file to the visualizer
 	unsigned short stringLength = (unsigned short)strlen(SymbolsPath);
+	buffer.Add((void*)baseBuffer.GetData(), baseBuffer.GetSize());
 	buffer.Add((void*)&stringLength, sizeof(stringLength));
 	buffer.Add((void*)SymbolsPath, stringLength);
 

@@ -21,7 +21,7 @@ namespace Alloclave
 		Free();
 		Free(CallStack& callStackParser);
 
-		virtual Buffer Serialize() const;
+		virtual Buffer& Serialize() const;
 		virtual void Deserialize(const Buffer& buffer, unsigned int bufferLength);
 
 	protected:

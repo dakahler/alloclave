@@ -11,13 +11,16 @@ SetArchitecture::SetArchitecture()
 	
 }
 
-Buffer SetArchitecture::Serialize() const
+Buffer& SetArchitecture::Serialize() const
 {
-	Buffer buffer = Packet::Serialize();
+	Buffer& baseBuffer = Packet::Serialize();
+	static Buffer buffer;
+	buffer.Clear();
 
 	// This sends along the number of bytes in a pointer
 	// so the visualizer can auto-detect 32- or 64-bit
 	unsigned short pointerSize = (unsigned short)sizeof(void*);
+	buffer.Add((void*)baseBuffer.GetData(), baseBuffer.GetSize());
 	buffer.Add((void*)&pointerSize, sizeof(pointerSize));
 
 	return buffer;

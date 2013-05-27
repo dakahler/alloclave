@@ -32,11 +32,14 @@ Allocation::Allocation(CallStack& callStackParser)
 	CallStackParser.Rebuild();
 }
 
-Buffer Allocation::Serialize() const
+Buffer& Allocation::Serialize() const
 {
-	Buffer buffer = Packet::Serialize();
+	Buffer& baseBuffer = Packet::Serialize();
+	static Buffer buffer;
+	buffer.Clear();
 
 	// Push the allocation data into the buffer
+	buffer.Add((void*)baseBuffer.GetData(), baseBuffer.GetSize());
 	buffer.Add((void*)&Address, sizeof(Address));
 	buffer.Add((void*)&Size, sizeof(Size));
 	buffer.Add((void*)&Alignment, sizeof(Alignment));

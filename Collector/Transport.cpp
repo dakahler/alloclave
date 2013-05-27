@@ -8,11 +8,19 @@ namespace Alloclave
 {
 
 static bool g_SentArchtecturePacket = false;
-Queue Transport::PacketQueue;
+
+Buffer& GetGlobalBuffer()
+{
+	static Buffer buffer;
+	return buffer;
+}
+
+unsigned int Transport::NumItems = 0;
+//Queue Transport::PacketQueue;
 
 Transport::Transport()
 {
-
+	
 }
 
 Transport::~Transport()
@@ -26,27 +34,36 @@ void Transport::Send(const Packet& packet)
 	{
 		g_SentArchtecturePacket = true;
 		SetArchitecture architecturePacket;
-		PacketQueue.Enqueue(architecturePacket.Serialize());
+		GetGlobalBuffer().Add(architecturePacket.Serialize());
+		NumItems++;
 	}
 
-	Buffer buffer = packet.Serialize();
-	PacketQueue.Enqueue(buffer);
+	GetGlobalBuffer().Add(packet.Serialize());
+	NumItems++;
+
+	//PacketQueue.Enqueue(buffer);
 }
 
-Buffer Transport::BuildFinalBuffer(unsigned short version)
+Buffer& Transport::BuildFinalBuffer(unsigned short version)
 {
 	// This builds up the final packet bundle
+	static Buffer buffer;
+	buffer.Clear();
 
-	Buffer buffer;
 	buffer.Add(&version, sizeof(version));
 
-	unsigned int numItems = PacketQueue.GetNumItems();
-	buffer.Add(&numItems, sizeof(numItems));
+	//unsigned int numItems = PacketQueue.GetNumItems();
+	buffer.Add(&NumItems, sizeof(NumItems));
 
-	for (unsigned int i = 0; i < numItems; i++)
-	{
-		buffer.Add(PacketQueue.Dequeue());
-	}
+	//for (unsigned int i = 0; i < numItems; i++)
+	//{
+	//	buffer.Add(PacketQueue.Dequeue());
+	//}
+
+	buffer.Add((void*)GetGlobalBuffer().GetData(), GetGlobalBuffer().GetSize());
+
+	NumItems = 0;
+	GetGlobalBuffer().Clear();
 
 	return buffer;
 }

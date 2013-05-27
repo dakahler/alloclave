@@ -25,11 +25,14 @@ Free::Free(CallStack& callStackParser)
 	CallStackParser.Rebuild();
 }
 
-Buffer Free::Serialize() const
+Buffer& Free::Serialize() const
 {
-	Buffer buffer = Packet::Serialize();
+	Buffer& baseBuffer = Packet::Serialize();
+	static Buffer buffer;
+	buffer.Clear();
 
 	// Push the free data into the buffer
+	buffer.Add((void*)baseBuffer.GetData(), baseBuffer.GetSize());
 	buffer.Add((void*)&Address, sizeof(Address));
 	buffer.Add((void*)&HeapId, sizeof(HeapId));
 	buffer.Add(CallStackParser.Serialize());

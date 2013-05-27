@@ -35,6 +35,8 @@ namespace Alloclave
 		void Add(void* data, unsigned int dataSize);
 		void Add(const Buffer& buffer);
 
+		void Clear();
+
 		const void* GetData() const;
 		unsigned int GetSize() const;
 

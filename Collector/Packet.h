@@ -14,7 +14,7 @@ namespace Alloclave
 	class Packet : public ICustomSerializable
 	{
 	public:
-		virtual Buffer Serialize() const;
+		virtual Buffer& Serialize() const;
 
 	protected:
 		enum PacketType

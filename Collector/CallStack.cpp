@@ -15,9 +15,10 @@ void CallStack::Rebuild()
 	StackDepth = 0;
 }
 
-Buffer CallStack::Serialize() const
+Buffer& CallStack::Serialize() const
 {
-	Buffer buffer;
+	static Buffer buffer;
+	buffer.Clear();
 
 	// Run through each stack frame and add its address to the buffer
 	buffer.Add((void*)&StackDepth, sizeof(StackDepth));

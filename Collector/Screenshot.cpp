@@ -10,7 +10,7 @@ Screenshot::Screenshot()
 
 }
 
-Buffer Screenshot::Serialize() const
+Buffer& Screenshot::Serialize() const
 {
 	return Buffer();
 }

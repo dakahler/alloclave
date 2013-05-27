@@ -23,9 +23,11 @@ namespace Alloclave
 
 	protected:
 
-		virtual Buffer BuildFinalBuffer(unsigned short version);
+		virtual Buffer& BuildFinalBuffer(unsigned short version);
 
-		static Queue PacketQueue;
+		//static Queue PacketQueue;
+
+		static unsigned int NumItems;
 
 		static const unsigned short Version = 0;
 	};

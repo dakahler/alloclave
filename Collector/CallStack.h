@@ -17,7 +17,7 @@ namespace Alloclave
 
 		virtual void Rebuild();
 		
-		virtual Buffer Serialize() const;
+		virtual Buffer& Serialize() const;
 		virtual void Deserialize(const Buffer& buffer, unsigned int bufferLength);
 	protected:
 		virtual void Push(void* address);
