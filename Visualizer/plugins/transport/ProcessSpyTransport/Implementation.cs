@@ -28,13 +28,6 @@ namespace Alloclave_Plugin
 		System.Windows.Threading.Dispatcher Dispatcher = Dispatcher.CurrentDispatcher;
 
 		public ProcessSpyTransport()
-			: this(temp)
-		{
-			
-		}
-
-		public ProcessSpyTransport(Alloclave.TargetSystemInfo targetSystemInfo)
-			: base(targetSystemInfo)
 		{
 			ICommandLineParser parser = new CommandLineParser();
 			String[] args = Environment.GetCommandLineArgs();

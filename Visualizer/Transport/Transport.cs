@@ -9,11 +9,11 @@ namespace Alloclave
 {
 	public abstract class Transport
 	{
-		public TargetSystemInfo TargetSystemInfo;
+		public TargetSystemInfo TargetSystemInfo = new TargetSystemInfo();
 
-		public Transport(TargetSystemInfo targetSystemInfo)
+		public Transport()
 		{
-			TargetSystemInfo = targetSystemInfo;
+			
 		}
 
 		public abstract void Connect();
