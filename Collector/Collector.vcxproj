@@ -124,12 +124,12 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>pushd $(MSBuildProjectDirectory)
-..\External\makeitso\output\MakeItSo.exe
-popd</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>Generating makefiles...</Message>
+      <Message>
+      </Message>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>DbgHelp.lib</AdditionalDependencies>
@@ -150,12 +150,12 @@ popd</Command>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>pushd $(MSBuildProjectDirectory)
-..\External\makeitso\output\MakeItSo.exe
-popd</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>Generating makefiles...</Message>
+      <Message>
+      </Message>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>DbgHelp.lib</AdditionalDependencies>
