@@ -152,9 +152,6 @@ namespace Alloclave
 
 		private void Scrubber_MouseDown(object sender, MouseEventArgs e)
 		{
-			LeftMouseDown = true;
-			SetPosition(e);
-
 			if (Cursor.Current != Cursors.Hand)
 			{
 				Cursor.Current = Cursors.Hand;
@@ -164,6 +161,9 @@ namespace Alloclave
 			{
 				MousePressed(this, e);
 			}
+
+			LeftMouseDown = true;
+			SetPosition(e);
 		}
 
 		private void Scrubber_MouseUp(object sender, MouseEventArgs e)
