@@ -9,7 +9,7 @@ namespace Alloclave
 Buffer& Packet::Serialize() const
 {
 	unsigned char packetType = (unsigned char)GetPacketType();
-	__int64 timeStamp = time(NULL);
+	__int64 timeStamp = clock();
 
 	// All the various packet buffers are local statics as a way
 	// of reusing data and minimizing dynamic allocations
