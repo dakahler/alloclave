@@ -3,7 +3,7 @@
 #ifndef _ALLOCLAVE_TRANSPORT_H
 #define _ALLOCLAVE_TRANSPORT_H
 
-#include "Queue.h"
+#include "Buffer.h"
 
 namespace Alloclave
 {
@@ -25,8 +25,6 @@ namespace Alloclave
 	protected:
 
 		virtual Buffer& BuildFinalBuffer(Thread& callingThread);
-
-		//static Queue PacketQueue;
 
 		static unsigned int NumItems;
 

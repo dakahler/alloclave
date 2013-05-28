@@ -20,9 +20,6 @@
     <ClInclude Include="Buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Queue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Win32Transport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -83,9 +80,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Buffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Queue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Transport.cpp">

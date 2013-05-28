@@ -174,7 +174,6 @@ popd</Command>
     <ClInclude Include="ICustomSerializable.h" />
     <ClInclude Include="MemoryOverrides.h" />
     <ClInclude Include="Packet.h" />
-    <ClInclude Include="Queue.h" />
     <ClInclude Include="Registration.h" />
     <ClInclude Include="Screenshot.h" />
     <ClInclude Include="SetArchitecture.h" />
@@ -192,7 +191,6 @@ popd</Command>
     <ClCompile Include="Free.cpp" />
     <ClCompile Include="MemoryOverrides.cpp" />
     <ClCompile Include="Packet.cpp" />
-    <ClCompile Include="Queue.cpp" />
     <ClCompile Include="Registration.cpp" />
     <ClCompile Include="Screenshot.cpp" />
     <ClCompile Include="SetArchitecture.cpp" />
