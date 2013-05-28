@@ -34,7 +34,7 @@ namespace Alloclave
 		public event RenderEventHandler OnRender;
 		public event EventHandler OnDispose;
 
-		private const double FrameInterval = 10.0;
+		private const double FrameInterval = 30.0;
 
 		private class BlockMetadata
 		{
@@ -65,7 +65,7 @@ namespace Alloclave
 		private VertexData[] VBO1 = new VertexData[MaxVertices];
 		private VertexData[] VBO2 = new VertexData[MaxVertices];
 
-		private uint NumVertices;
+		private uint NumVertices = MaxVertices;
 		private uint VboHandle;
 
 		private bool BuffersCreated = false;
@@ -179,10 +179,10 @@ namespace Alloclave
 
 					// Tell OpenGL to discard old VBO when done drawing it and reserve memory _now_ for a new buffer.
 					// without this, GL would wait until draw operations on old VBO are complete before writing to it
-					GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * MaxVertices), IntPtr.Zero, BufferUsageHint.StreamDraw);
+					GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * NumVertices), IntPtr.Zero, BufferUsageHint.StreamDraw);
 
 					// Fill newly allocated buffer
-					GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * MaxVertices), VBO, BufferUsageHint.StreamDraw);
+					GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * NumVertices), VBO, BufferUsageHint.StreamDraw);
 
 					// Draw everything
 					GL.DrawArrays(BeginMode.Triangles, 0, (int)NumVertices);
@@ -212,7 +212,6 @@ namespace Alloclave
 
 			foreach (var block in MemoryBlockManager.Instance)
 			{
-				uint startVertex = numVertices;
 				foreach (Triangle triangle in block.Triangles)
 				{
 					foreach (Vector vertex in triangle.Vertices)
@@ -232,6 +231,7 @@ namespace Alloclave
 				}
 			}
 
+			// Swap
 			VBO = vbo;
 			NumVertices = numVertices;
 			IsVbo1 = !IsVbo1;
