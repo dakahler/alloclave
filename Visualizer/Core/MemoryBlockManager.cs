@@ -10,6 +10,17 @@ using System.Windows;
 
 namespace Alloclave
 {
+	sealed class ReverseComparer<T> : IComparer<T>
+	{
+		private readonly IComparer<T> inner;
+		public ReverseComparer() : this(null) { }
+		public ReverseComparer(IComparer<T> inner)
+		{
+			this.inner = inner ?? Comparer<T>.Default;
+		}
+		int IComparer<T>.Compare(T x, T y) { return inner.Compare(y, x); }
+	}
+
 	sealed class MemoryBlockManager : IEnumerable<VisualMemoryBlock>
 	{
 		private static readonly MemoryBlockManager _Instance = new MemoryBlockManager();
@@ -21,7 +32,10 @@ namespace Alloclave
 			}
 		}
 
-		private SortedDictionary<UInt64, VisualMemoryBlock> VisualMemoryBlocks = new SortedDictionary<UInt64, VisualMemoryBlock>();
+		// The dictionary is sorted in reverse order so that the Bounds getter
+		// below runs in O(log n) rather than O(n)
+		private SortedDictionary<UInt64, VisualMemoryBlock> VisualMemoryBlocks =
+			new SortedDictionary<UInt64, VisualMemoryBlock>(new ReverseComparer<UInt64>());
 
 		private Dictionary<uint, int> ColorDictionary = new Dictionary<uint, int>();
 		private int ColorIndex;
@@ -45,7 +59,7 @@ namespace Alloclave
 
 				lock (VisualMemoryBlocks)
 				{
-					VisualMemoryBlock block = VisualMemoryBlocks.Last().Value;
+					VisualMemoryBlock block = VisualMemoryBlocks.First().Value;
 					RectangleF lowerBounds = block.Bounds;
 					return new Rectangle(0, 0, block.MaxPixelWidth, (int)(lowerBounds.Bottom - TotalCompression));
 				}
