@@ -79,12 +79,6 @@ namespace Alloclave
 			FrameTimer.Start();
 		}
 
-		~RenderManager_OGL()
-		{
-			// TODO
-			//GL.DeleteBuffers(1, ref VboHandle);
-		}
-
 		public void Dispose()
 		{
 			OnUpdate = null;

@@ -55,11 +55,6 @@ namespace Alloclave
 			MessagesForm.AllocationSelected += MessagesForm_AllocationSelected;
 		}
 
-		~TransportForm()
-		{
-
-		}
-
 		void AddressSpaceControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			InfoForm.Update(e.SelectedBlock.Allocation);
