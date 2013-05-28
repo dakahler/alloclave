@@ -13,25 +13,27 @@ using namespace Alloclave;
 
 void main(int argc, char* argv[])
 {
-	// Send the symbols path to the tool
-	// Assumes the symbols are in a PDB and
-	// it's in the same directory as the executable
-	if (argc > 0)
-	{
-		char modifiedPath[512];
-		strncpy(modifiedPath, argv[0], sizeof(modifiedPath) - 1);
-
-		size_t pathLength = strlen(modifiedPath);
-		modifiedPath[pathLength - 3] = 'p';
-		modifiedPath[pathLength - 2] = 'd';
-		modifiedPath[pathLength - 1] = 'b';
-
-		RegisterSymbolsPath(modifiedPath);
-	}
-
 	//char* testMalloc = (char*)malloc(16);
 
-	srand(time(NULL));
+	//for (int i = 0; i < 30; i++)
+	//{
+	//	RegisterAllocation((void*)(0x00001020 + (i * 1024)), 1000);
+	//	Sleep(1000);
+	//}
+
+	//for (int i = 0; i < 5; i++)
+	//{
+	//	RegisterFree((void*)(0x00001020 + ((i * 3) * 1024)));
+	//	Sleep(1000);
+	//}
+
+	//for (int i = 32; i < 45; i++)
+	//{
+	//	RegisterAllocation((void*)(0x00001020 + (i * 1024)), 1000);
+	//	Sleep(1000);
+	//}
+
+	srand((unsigned int)time(NULL));
 
 	const int numAllocations = 500;
 	char* allocationArray[numAllocations];
@@ -54,10 +56,10 @@ void main(int argc, char* argv[])
 		Sleep(100 + (rand() % 100));
 	}
 
-	//for (int i = 30; i < 100; i++)
-	//{
-	//	printf("Freeing address 0x%p\n", allocationArray[i]);
-	//	delete[] allocationArray[i];
-	//	allocationArray[i] = NULL;
-	//}
+	for (int i = 30; i < 100; i++)
+	{
+		printf("Freeing address 0x%p\n", allocationArray[i]);
+		delete[] allocationArray[i];
+		allocationArray[i] = NULL;
+	}
 }
