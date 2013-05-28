@@ -165,7 +165,6 @@ namespace Alloclave
 							}
 
 							// Create final list, removing allocations as frees are encountered
-							// TODO: STILL needs performance improvements for large datasets
 							foreach (var pair in packets)
 							//Parallel.ForEach(newList, pair =>
 							{
@@ -182,7 +181,7 @@ namespace Alloclave
 
 										if (newBlock == null)
 										{
-											MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
+											//MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
 										}
 									}
 									else
@@ -216,7 +215,7 @@ namespace Alloclave
 										}
 										else
 										{
-											MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
+											//MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
 										}
 									}
 								}
