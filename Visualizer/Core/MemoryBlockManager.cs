@@ -225,18 +225,19 @@ namespace Alloclave
 
 		public VisualMemoryBlock Find(Vector localMouseCoordinates)
 		{
-			//VisualMemoryBlock tempBlock = new VisualMemoryBlock();
-			//tempBlock.GraphicsPath.AddLine(localMouseCoordinates.ToPoint(), (localMouseCoordinates + new Vector(1, 1)).ToPoint());
+			VisualMemoryBlock tempBlock = new VisualMemoryBlock();
+			tempBlock.GraphicsPath.AddLine(localMouseCoordinates.ToPoint(), (localMouseCoordinates + new Vector(1, 1)).ToPoint());
 
-			//lock (VisualMemoryBlocks)
-			//{
-			//	VisualMemoryBlocks.Where(
-			//	int index = VisualMemoryBlocks.Values.ToList().BinarySearch(tempBlock, new VisualMemoryBlockComparer());
-			//	if (index >= 0)
-			//	{
-			//		return VisualMemoryBlocks.Values[index];
-			//	}
-			//}
+			lock (VisualMemoryBlocks)
+			{
+				// TODO: Investigate performance implications of ToList() on a SortedDictionary
+				var values = VisualMemoryBlocks.Values.ToList();
+				int index = values.BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+				if (index >= 0)
+				{
+					return values[index];
+				}
+			}
 
 			return null;
 		}
@@ -261,21 +262,21 @@ namespace Alloclave
 
 				if (tempPath.PathPoints[0].Y + 1 < b.GraphicsPath.PathPoints[0].Y)
 				{
-					return -1;
+					return 1;
 				}
 				else if (tempPath.PathPoints[0].Y > b.GraphicsPath.PathPoints[0].Y)
 				{
-					return 1;
+					return -1;
 				}
 				else
 				{
 					if (tempPath.PathPoints[0].X < b.GraphicsPath.PathPoints[0].X)
 					{
-						return -1;
+						return 1;
 					}
 					else
 					{
-						return 1;
+						return -1;
 					}
 				}
 			}

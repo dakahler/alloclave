@@ -484,10 +484,9 @@ namespace Alloclave
 					return;
 				}
 
-				Renderer.HoverBlock = null;
-				//lock (RebuildDataLock)
+				lock (RebuildDataLock)
 				{
-					//Renderer.HoverBlock = MemoryBlockManager.Instance.Find(Renderer.GetLocalMouseLocation());
+					Renderer.HoverBlock = MemoryBlockManager.Instance.Find(Renderer.GetLocalMouseLocation());
 				}
 			}
 		}
@@ -503,7 +502,6 @@ namespace Alloclave
 					return;
 				}
 
-				Renderer.SelectedBlock = null;
 				lock (RebuildDataLock)
 				{
 					Renderer.SelectedBlock = MemoryBlockManager.Instance.Find(Renderer.GetLocalMouseLocation());
