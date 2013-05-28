@@ -60,12 +60,15 @@ namespace Alloclave
 
 		private const int MaxVertices = 1000000;
 		private VertexData[] VBO = new VertexData[MaxVertices];
+
+		bool IsVbo1 = true;
+		private VertexData[] VBO1 = new VertexData[MaxVertices];
+		private VertexData[] VBO2 = new VertexData[MaxVertices];
+
 		private uint NumVertices;
 		private uint VboHandle;
 
 		private bool BuffersCreated = false;
-
-		Dictionary<VisualMemoryBlock, BlockMetadata> NewBlocks = new Dictionary<VisualMemoryBlock, BlockMetadata>();
 
 		System.Timers.Timer FrameTimer;
 
@@ -149,34 +152,6 @@ namespace Alloclave
 
 		public void Update()
 		{
-			// TODO: Needs to be much faster
-			//lock (NewBlocks)
-			//{
-			//	for (int i = 0; i < NewBlocks.Count; i++)
-			//	{
-			//		var block = NewBlocks.ElementAt(i);
-
-			//		double startTimeSeconds = (double)block.Value.StartTime.Time / (double)Stopwatch.Frequency;
-			//		double currentTimeSeconds = (double)Stopwatch.GetTimestamp() / (double)Stopwatch.Frequency;
-			//		float difference = (float)(currentTimeSeconds - startTimeSeconds);
-
-			//		float percentage = (BlockMetadata.AliveSeconds - (float)difference) / BlockMetadata.AliveSeconds;
-			//		percentage = 1.0f - percentage;
-			//		percentage = Math.Min(percentage, 1.0f);
-			//		percentage = Math.Max(percentage, 0.0f);
-
-			//		ChangeBlockColor(block, Color.LightYellow, percentage);
-
-			//		// Delete if old
-			//		if (difference > BlockMetadata.AliveSeconds)
-			//		{
-			//			ChangeBlockColor(block, Color.LightYellow, 1.0f);
-			//			NewBlocks.Remove(block.Key);
-			//			i--;
-			//		}
-			//	}
-			//}
-
 			if (OnUpdate != null)
 			{
 				EventArgs e = new EventArgs();
@@ -222,78 +197,44 @@ namespace Alloclave
 		public void Rebuild(Dictionary<uint, float> offsets = null)
 		{
 			// TODO: Vertex incremental rebuilding
-			NumVertices = 0;
+			uint numVertices = 0;
 
-			lock (NewBlocks)
+			// Use temporary vertex buffers, and just swap out the real one at the end
+			VertexData[] vbo;
+			if (IsVbo1)
 			{
-				NewBlocks.Clear();
-				bool isSecondaryColor = false;
-				foreach (var block in MemoryBlockManager.Instance)
+				vbo = VBO1;
+			}
+			else
+			{
+				vbo = VBO2;
+			}
+
+			foreach (var block in MemoryBlockManager.Instance)
+			{
+				uint startVertex = numVertices;
+				foreach (Triangle triangle in block.Triangles)
 				{
-					uint startVertex = NumVertices;
-					foreach (Triangle triangle in block.Triangles)
+					foreach (Vector vertex in triangle.Vertices)
 					{
-						foreach (Vector vertex in triangle.Vertices)
+						if (numVertices >= vbo.Length)
 						{
-							if (NumVertices >= VBO.Length)
-							{
-								Array.Resize(ref VBO, VBO.Length * 2);
-							}
-
-							double yVertex = vertex.Y;
-							if (offsets != null && offsets.ContainsKey(block.Allocation.HeapId))
-							{
-								yVertex -= (double)offsets[block.Allocation.HeapId];
-							}
-
-							//Color color = Color.Red;
-							//switch (block.ColorIndex)
-							//{
-							//	case 0:
-							//		if (!isSecondaryColor)
-							//			color = Properties.Settings.Default.Heap1_Allocation1;
-							//		else
-							//			color = Properties.Settings.Default.Heap1_Allocation2;
-							//		break;
-							//	case 1:
-							//		if (!isSecondaryColor)
-							//			color = Properties.Settings.Default.Heap2_Allocation1;
-							//		else
-							//			color = Properties.Settings.Default.Heap2_Allocation2;
-							//		break;
-							//	case 2:
-							//		if (!isSecondaryColor)
-							//			color = Properties.Settings.Default.Heap3_Allocation1;
-							//		else
-							//			color = Properties.Settings.Default.Heap3_Allocation2;
-							//		break;
-							//	case 3:
-							//		if (!isSecondaryColor)
-							//			color = Properties.Settings.Default.Heap4_Allocation1;
-							//		else
-							//			color = Properties.Settings.Default.Heap4_Allocation2;
-							//		break;
-							//}
-
-							VBO[NumVertices].R = block._Color.R;
-							VBO[NumVertices].G = block._Color.G;
-							VBO[NumVertices].B = block._Color.B;
-							VBO[NumVertices].A = block._Color.A;
-							VBO[NumVertices].Position = new Vector3((float)vertex.X, (float)yVertex, 0);
-							NumVertices++;
+							Array.Resize(ref vbo, vbo.Length * 2);
 						}
-					}
-					uint endVertex = NumVertices - 1;
 
-					if (block.IsNew)
-					{
-						block.IsNew = false;
-						NewBlocks.Add(block, new BlockMetadata(startVertex, endVertex));
+						vbo[numVertices].R = block._Color.R;
+						vbo[numVertices].G = block._Color.G;
+						vbo[numVertices].B = block._Color.B;
+						vbo[numVertices].A = block._Color.A;
+						vbo[numVertices].Position = new Vector3((float)vertex.X, (float)vertex.Y, 0);
+						numVertices++;
 					}
-
-					isSecondaryColor = !isSecondaryColor;
 				}
 			}
+
+			VBO = vbo;
+			NumVertices = numVertices;
+			IsVbo1 = !IsVbo1;
 		}
 
 		private void ChangeBlockColor(KeyValuePair<VisualMemoryBlock, BlockMetadata> block, Color color, float blend)
