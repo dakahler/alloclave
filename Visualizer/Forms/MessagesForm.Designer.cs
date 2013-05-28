@@ -67,6 +67,7 @@
 			this.WarningsDataGrid.Size = new System.Drawing.Size(929, 226);
 			this.WarningsDataGrid.TabIndex = 1;
 			this.WarningsDataGrid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+			this.WarningsDataGrid.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
 			this.WarningsDataGrid.ColumnHeadersVisible = false;
 			this.WarningsDataGrid.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_CellContentDoubleClick);
 			// 
@@ -84,6 +85,7 @@
 			this.InfosDataGrid.Size = new System.Drawing.Size(935, 232);
 			this.InfosDataGrid.TabIndex = 1;
 			this.InfosDataGrid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+			this.InfosDataGrid.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
 			this.InfosDataGrid.ColumnHeadersVisible = false;
 			this.InfosDataGrid.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_CellContentDoubleClick);
 			// 
@@ -101,6 +103,7 @@
 			this.ErrorsDataGrid.Size = new System.Drawing.Size(943, 258);
 			this.ErrorsDataGrid.TabIndex = 0;
 			this.ErrorsDataGrid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+			this.ErrorsDataGrid.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
 			this.ErrorsDataGrid.ColumnHeadersVisible = false;
 			this.ErrorsDataGrid.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_CellContentDoubleClick);
 			// 
