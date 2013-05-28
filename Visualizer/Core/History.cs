@@ -15,7 +15,7 @@ namespace Alloclave
 		bool SentTrialWarning;
 
 		// Position tracker
-		int Position;
+		int Position = -1;
 
 		// TODO: Need to find a better way to synchronize this
 		public Object AddLock = new Object();
@@ -101,7 +101,7 @@ namespace Alloclave
 		public void Reset()
 		{
 			PacketList.Clear();
-			Position = 0;
+			Position = -1;
 			_AddressRange = new Range();
 			Updated = null;
 		}
@@ -170,7 +170,11 @@ namespace Alloclave
 			lock (PacketList)
 			{
 				var finalList = PacketList.Skip(Position + 1).TakeWhile(p => p.Key <= timeStamp);
-				Position = PacketList.IndexOfValue(finalList.LastOrDefault().Value);
+
+				if (finalList.Any())
+				{
+					Position = PacketList.IndexOfValue(finalList.Last().Value);
+				}
 
 				return finalList;
 			}
@@ -181,7 +185,11 @@ namespace Alloclave
 			lock (PacketList)
 			{
 				var finalList = PacketList.Take(Position + 1).SkipWhile(p => p.Key <= timeStamp).Reverse();
-				Position = PacketList.IndexOfValue(finalList.LastOrDefault().Value) - 1;
+
+				if (finalList.Any())
+				{
+					Position = PacketList.IndexOfValue(finalList.Last().Value) - 1;
+				}
 
 				return finalList;
 			}
