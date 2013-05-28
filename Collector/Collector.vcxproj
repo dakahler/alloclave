@@ -88,6 +88,7 @@
     <Lib>
       <AdditionalDependencies>DbgHelp.lib</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <OutputFile>$(OutDir)AlloclaveCollector$(TargetExt)</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -102,6 +103,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>DbgHelp.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)AlloclaveCollector$(TargetExt)</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -131,6 +133,7 @@ popd</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>DbgHelp.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)AlloclaveCollector$(TargetExt)</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -156,6 +159,7 @@ popd</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>DbgHelp.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)AlloclaveCollector$(TargetExt)</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

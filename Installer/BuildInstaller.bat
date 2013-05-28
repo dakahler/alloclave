@@ -23,10 +23,13 @@ xcopy ..\Visualizer\plugins\transport\Win32Transport\*.csproj working\plugins\tr
 xcopy ..\Visualizer\plugins\transport\Win32Transport\*.csproj working\plugins\transport\win32 /q /h /r /y /i
 xcopy ..\Visualizer\plugins\transport\Win32Transport\*.sln working\plugins\transport\win32 /q /h /r /y /i
 xcopy ..\Visualizer\plugins\transport\Win32Transport\Properties\* working\plugins\transport\win32\Properties /q /h /r /y /i
+xcopy ..\Visualizer\plugins\symbollookup\SymbolLookup_PDB.dll working\plugins\symbollookup /q /h /r /y /i
 
 mkdir working\collector
-mkdir working\collector\bin\debug
-mkdir working\collector\bin\release
+mkdir working\collector\bin\x86\debug
+mkdir working\collector\bin\x86\release
+mkdir working\collector\bin\x64\debug
+mkdir working\collector\bin\x64\release
 xcopy ..\Collector\*.h working\collector /q /h /r /y /i
 xcopy ..\Collector\*.cpp working\collector /q /h /r /y /i
 xcopy ..\Collector\*.makefile working\collector /q /h /r /y /i
@@ -34,8 +37,12 @@ xcopy ..\Collector\*.vcxproj working\collector /q /h /r /y /i
 xcopy ..\Collector\*.filters working\collector /q /h /r /y /i
 xcopy ..\Collector\*.sln working\collector /q /h /r /y /i
 xcopy ..\Collector\Makefile working\collector /q /h /r /y /i
-xcopy ..\Collector\Debug\Collector.lib working\collector\bin\debug /q /h /r /y /i
-xcopy ..\Collector\Release\Collector.lib working\collector\bin\release /q /h /r /y /i
+xcopy ..\Collector\Debug\AlloclaveCollector.lib working\collector\bin\x86\debug /q /h /r /y /i
+xcopy ..\Collector\Release\AlloclaveCollector.lib working\collector\bin\x86\release /q /h /r /y /i
+xcopy ..\Collector\Release\TestAlloclaveCollector.exe working\collector\bin\x86\release /q /h /r /y /i
+xcopy ..\Collector\Release\TestAlloclaveCollector.pdb working\collector\bin\x86\release /q /h /r /y /i
+xcopy ..\Collector\x64\Debug\AlloclaveCollector.lib working\collector\bin\x64\debug /q /h /r /y /i
+xcopy ..\Collector\x64\Release\AlloclaveCollector.lib working\collector\bin\x64\release /q /h /r /y /i
 
 mkdir working\collector\test
 xcopy ..\Collector\TestCollector\*.h working\collector\test /q /h /r /y /i

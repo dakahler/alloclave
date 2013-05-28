@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.IO;
 
 namespace Alloclave
 {
@@ -102,9 +103,15 @@ namespace Alloclave
 			ProcessStartInfo startInfo = new ProcessStartInfo();
 			startInfo.CreateNoWindow = true;
 			startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-			startInfo.FileName = @"collector\bin\TestCollector.exe";
+			startInfo.FileName = @"collector\bin\x86\release\TestAlloclaveCollector.exe";
 			startInfo.UseShellExecute = true;
 			startInfo.WorkingDirectory = Application.StartupPath;
+
+			if (!File.Exists(startInfo.FileName))
+			{
+				MessageBox.Show("Can't find test executable! Please reinstall Alloclave.");
+				Environment.Exit(0);
+			}
 
 			TestProcess = Process.Start(startInfo);
 			TestProcess.EnableRaisingEvents = true;
@@ -227,7 +234,7 @@ namespace Alloclave
 				"in the main area or in the zoomed out \"scroller\" to the right. " +
 				"You can also zoom in and out with the mouse scroll wheel." + Environment.NewLine +
 				Environment.NewLine +
-				"That's it for the tour! The button below will take you back to the start screen, " +
+				"That's it for the tour! The button below will restart the application to the start screen, " +
 				"where you can click \"New Profile\" to start using Alloclave after integrating " +
 				"it into your application. Enjoy!";
 

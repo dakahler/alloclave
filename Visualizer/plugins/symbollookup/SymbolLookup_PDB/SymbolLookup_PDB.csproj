@@ -7,8 +7,8 @@
     <ProjectGuid>{BBB24EF0-1FA7-4435-96DD-0FAA91CCA950}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CallStack_PDB</RootNamespace>
-    <AssemblyName>CallStack_PDB</AssemblyName>
+    <RootNamespace>SymbolLookup_PDB</RootNamespace>
+    <AssemblyName>SymbolLookup_PDB</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
