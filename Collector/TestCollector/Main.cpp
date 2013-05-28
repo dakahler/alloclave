@@ -4,38 +4,19 @@
 #include <time.h>
 #include <stdio.h>
 
-#include "Win32Transport.h"
+// To override new and delete, include this header in
+// a common header, or force include it in the project settings
 #include "MemoryOverrides.h"
-#include "Registration.h"
-
-
-using namespace Alloclave;
 
 void main(int argc, char* argv[])
 {
-	//char* testMalloc = (char*)malloc(16);
-
-	//for (int i = 0; i < 30; i++)
-	//{
-	//	RegisterAllocation((void*)(0x00001020 + (i * 1024)), 1000);
-	//	Sleep(1000);
-	//}
-
-	//for (int i = 0; i < 5; i++)
-	//{
-	//	RegisterFree((void*)(0x00001020 + ((i * 3) * 1024)));
-	//	Sleep(1000);
-	//}
-
-	//for (int i = 32; i < 45; i++)
-	//{
-	//	RegisterAllocation((void*)(0x00001020 + (i * 1024)), 1000);
-	//	Sleep(1000);
-	//}
+	// This test program generates some random allocations and frees
+	// to demonstrate the functionality of Alloclave. It is what
+	// gets executed when you run the tour in the visualizer.
 
 	srand((unsigned int)time(NULL));
 
-	const int numAllocations = 500;
+	const int numAllocations = 50;
 	char* allocationArray[numAllocations];
 
 	for (int i = 0; i < numAllocations; i++)
@@ -54,12 +35,5 @@ void main(int argc, char* argv[])
 		}
 
 		Sleep(100 + (rand() % 100));
-	}
-
-	for (int i = 30; i < 100; i++)
-	{
-		printf("Freeing address 0x%p\n", allocationArray[i]);
-		delete[] allocationArray[i];
-		allocationArray[i] = NULL;
 	}
 }
