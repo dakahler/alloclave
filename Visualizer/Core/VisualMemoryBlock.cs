@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Diagnostics;
 
 namespace Alloclave
 {
@@ -62,10 +63,7 @@ namespace Alloclave
 
 		public VisualMemoryBlock(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width, Color color)
 		{
-			if (allocation.Address < startAddress)
-			{
-				throw new ArgumentOutOfRangeException();
-			}
+			Debug.Assert(allocation.Address < startAddress);
 
 			Allocation = allocation;
 			MaxPixelWidth = width;

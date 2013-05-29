@@ -23,7 +23,7 @@ namespace Alloclave
 
 		public void Deserialize(BinaryReader binaryReader, TargetSystemInfo targetSystemInfo)
 		{
-			// TODO
+			throw new NotImplementedException();
 		}
 	}
 }

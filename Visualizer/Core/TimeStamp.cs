@@ -51,7 +51,8 @@ namespace Alloclave
 				}
 			}
 
-			throw new ArgumentException("object is not a TimeStamp");
+			Debug.Assert(false);
+			return 0;
 		}
 
 		public static bool operator <(TimeStamp emp1, TimeStamp emp2)

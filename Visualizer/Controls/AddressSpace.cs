@@ -203,7 +203,7 @@ namespace Alloclave
 										}
 										else
 										{
-											throw new DataException();
+											//throw new DataException();
 										}
 									}
 									else

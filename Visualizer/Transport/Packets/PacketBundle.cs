@@ -67,7 +67,8 @@ namespace Alloclave
 			UInt16 incomingVersion = binaryReader.ReadUInt16();
 			if (incomingVersion != Version)
 			{
-				throw new NotSupportedException();
+				MessagesForm.Add(MessagesForm.MessageType.Error, null, "Version error! Update your collector source.");
+				return;
 			}
 
 			BundleQueue.Add(new Tuple<BinaryReader, TargetSystemInfo>(binaryReader, targetSystemInfo));
@@ -96,7 +97,8 @@ namespace Alloclave
 					if (!Enum.IsDefined(typeof(PacketTypeRegistrar.PacketTypes), binaryReader.PeekChar()))
 					{
 						int invalidType = binaryReader.PeekChar();
-						throw new NotSupportedException();
+						MessagesForm.Add(MessagesForm.MessageType.Error, null,
+							"Serialization error! Please email support@circularshift.com.");
 					}
 
 					PacketTypeRegistrar.PacketTypes packetType = (PacketTypeRegistrar.PacketTypes)binaryReader.ReadByte();

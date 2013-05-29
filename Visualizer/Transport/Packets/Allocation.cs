@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.ComponentModel.Composition;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace Alloclave
 {
@@ -74,7 +75,8 @@ namespace Alloclave
 					}
 			}
 
-			throw new ArgumentException("object is not a Allocation");
+			Debug.Assert(false);
+			return 0;
 		}
 
 		public byte[] Serialize(TargetSystemInfo targetSystemInfo)
