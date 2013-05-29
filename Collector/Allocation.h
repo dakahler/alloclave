@@ -38,6 +38,8 @@ namespace Alloclave
 
 	private:
 		CallStack& CallStackParser;
+
+		Allocation& operator=(const Allocation&);
 	};
 
 };

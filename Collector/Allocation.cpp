@@ -50,7 +50,7 @@ Buffer& Allocation::Serialize() const
 	return buffer;
 }
 
-void Allocation::Deserialize(const Buffer& buffer, unsigned int bufferLength)
+void Allocation::Deserialize(const Buffer& /*buffer*/, unsigned int /*bufferLength*/)
 {
 	assert(false);
 }

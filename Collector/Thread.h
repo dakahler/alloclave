@@ -23,7 +23,7 @@ namespace Alloclave
 		virtual void Suspend() {}
 		virtual void Resume() {}
 
-		virtual void Sleep(int milliseconds) {}
+		virtual void Sleep(int /*milliseconds*/) {}
 
 		virtual void StartCriticalSection() {}
 		virtual void EndCriticalSection() {}

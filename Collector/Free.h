@@ -29,6 +29,8 @@ namespace Alloclave
 
 	private:
 		CallStack& CallStackParser;
+
+		Free& operator=(const Free&);
 	};
 
 };

@@ -47,7 +47,7 @@ void operator delete[](void* p)
 	}
 }
 
-void operator delete(void* p, const char *file, int line)
+void operator delete(void* p, const char* /*file*/, int /*line*/)
 {
 	if (p)
 	{
@@ -56,7 +56,7 @@ void operator delete(void* p, const char *file, int line)
 	}
 }
 
-void operator delete[](void* p, const char *file, int line)
+void operator delete[](void* p, const char* /*file*/, int /*line*/)
 {
 	if (p)
 	{

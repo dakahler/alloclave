@@ -28,7 +28,7 @@ Buffer& SetSymbols::Serialize() const
 	return buffer;
 }
 
-void SetSymbols::Deserialize(const Buffer& buffer, unsigned int bufferLength)
+void SetSymbols::Deserialize(const Buffer& /*buffer*/, unsigned int /*bufferLength*/)
 {
 	assert(false);
 }

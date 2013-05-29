@@ -40,7 +40,7 @@ Buffer& Free::Serialize() const
 	return buffer;
 }
 
-void Free::Deserialize(const Buffer& buffer, unsigned int bufferLength)
+void Free::Deserialize(const Buffer& /*buffer*/, unsigned int /*bufferLength*/)
 {
 	assert(false);
 }

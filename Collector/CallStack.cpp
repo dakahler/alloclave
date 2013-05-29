@@ -30,7 +30,7 @@ Buffer& CallStack::Serialize() const
 	return buffer;
 }
 
-void CallStack::Deserialize(const Buffer& buffer, unsigned int bufferLength)
+void CallStack::Deserialize(const Buffer& /*buffer*/, unsigned int /*bufferLength*/)
 {
 	assert(false);
 }

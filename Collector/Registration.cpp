@@ -29,7 +29,7 @@ namespace Alloclave
 		return s_Transport;
 	}
 
-	Thread& GetThreadModel();
+	static Thread& GetThreadModel();
 
 	static unsigned long __stdcall FlushThread(void* param)
 	{
@@ -41,7 +41,7 @@ namespace Alloclave
 			// Attempt to find the symbols automatically in win32
 			char path[MAX_PATH];
 			GetModuleFileName(NULL, path, sizeof(path));
-			int pathLength = strlen(path);
+			size_t pathLength = strlen(path);
 			if (pathLength > 3)
 			{
 				strcpy(path + (pathLength - 3), "pdb");

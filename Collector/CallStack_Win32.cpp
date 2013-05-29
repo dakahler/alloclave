@@ -30,7 +30,7 @@ void CallStack_Win32::Rebuild()
 	// in the visualization tool.
 	MEMORY_BASIC_INFORMATION lInfoMemory;
 	VirtualQuery((PVOID)stackFrames[0], &lInfoMemory, sizeof(lInfoMemory));
-	DWORD64 lBaseAllocation = reinterpret_cast<DWORD64>(lInfoMemory.AllocationBase);
+	DWORD64 lBaseAllocation = (DWORD64)lInfoMemory.AllocationBase;
 	for (int i = 0; i < stackDepth; i++)
 	{
 		DWORD64 currentAddress = (DWORD64)stackFrames[i];

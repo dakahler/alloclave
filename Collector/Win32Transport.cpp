@@ -36,11 +36,7 @@ void Win32Transport::Flush(Thread& callingThread)
 	cds.dwData = ALLOCLAVE_WIN32_ID;
 	cds.cbData = buffer.GetSize();
 	cds.lpData = (void*)buffer.GetData(); // TODO: constness
-	if (!SendMessage((HWND)VisualizerHandle, WM_COPYDATA, (WPARAM)VisualizerHandle, (LPARAM)(LPVOID)&cds))
-	{
-		int error = GetLastError();
-		return;
-	}
+	SendMessage((HWND)VisualizerHandle, WM_COPYDATA, (WPARAM)VisualizerHandle, (LPARAM)(LPVOID)&cds);
 }
 
 void Win32Transport::FindVisualizer()

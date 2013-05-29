@@ -26,7 +26,7 @@ Buffer& SetArchitecture::Serialize() const
 	return buffer;
 }
 
-void SetArchitecture::Deserialize(const Buffer& buffer, unsigned int bufferLength)
+void SetArchitecture::Deserialize(const Buffer& /*buffer*/, unsigned int /*bufferLength*/)
 {
 	assert(false);
 }

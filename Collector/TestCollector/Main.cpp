@@ -8,7 +8,7 @@
 // a common header, or force include it in the project settings
 #include "MemoryOverrides.h"
 
-void main(int argc, char* argv[])
+void main()
 {
 	// This test program generates some random allocations and frees
 	// to demonstrate the functionality of Alloclave. It is what
