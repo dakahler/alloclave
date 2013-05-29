@@ -15,14 +15,14 @@ xcopy ..\Visualizer\bin\x64\Installer\*.dll working /q /h /r /y /i
 mkdir working\plugins
 mkdir working\plugins\transport
 mkdir working\plugins\symbollookup
-mkdir working\plugins\transport\win32
-mkdir working\plugins\transport\win32\Properties
+mkdir working\plugins\transport\win32transport
+mkdir working\plugins\transport\win32transport\Properties
 xcopy ..\Visualizer\plugins\transport\Win32Transport.dll working\plugins\transport /q /h /r /y /i
-xcopy ..\Visualizer\plugins\transport\Win32Transport\*.cs working\plugins\transport\win32 /q /h /r /y /i
-xcopy ..\Visualizer\plugins\transport\Win32Transport\*.csproj working\plugins\transport\win32 /q /h /r /y /i
-xcopy ..\Visualizer\plugins\transport\Win32Transport\*.csproj working\plugins\transport\win32 /q /h /r /y /i
-xcopy ..\Visualizer\plugins\transport\Win32Transport\*.sln working\plugins\transport\win32 /q /h /r /y /i
-xcopy ..\Visualizer\plugins\transport\Win32Transport\Properties\* working\plugins\transport\win32\Properties /q /h /r /y /i
+xcopy ..\Visualizer\plugins\transport\Win32Transport\*.cs working\plugins\transport\win32transport /q /h /r /y /i
+xcopy ..\Visualizer\plugins\transport\Win32Transport\_Win32Transport.csproj working\plugins\transport\win32transport /q /h /r /y /i
+xcopy ..\Visualizer\plugins\transport\Win32Transport\*.sln working\plugins\transport\win32transport /q /h /r /y /i
+xcopy ..\Visualizer\plugins\transport\Win32Transport\Properties\* working\plugins\transport\win32transport\Properties /q /h /r /y /i
+xcopy ..\Visualizer\plugins\transport\Win32Transport\bin\x64\Installer\ConstantsBridge.dll working\plugins\transport\win32transport /q /h /r /y /i
 xcopy ..\Visualizer\plugins\symbollookup\SymbolLookup_PDB.dll working\plugins\symbollookup /q /h /r /y /i
 
 mkdir working\collector
