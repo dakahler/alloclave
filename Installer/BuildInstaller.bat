@@ -44,12 +44,12 @@ xcopy ..\Collector\Release\TestAlloclaveCollector.pdb working\collector\bin\x86\
 xcopy ..\Collector\x64\Debug\AlloclaveCollector.lib working\collector\bin\x64\debug /q /h /r /y /i
 xcopy ..\Collector\x64\Release\AlloclaveCollector.lib working\collector\bin\x64\release /q /h /r /y /i
 
-mkdir working\collector\test
-xcopy ..\Collector\TestCollector\*.h working\collector\test /q /h /r /y /i
-xcopy ..\Collector\TestCollector\*.cpp working\collector\test /q /h /r /y /i
-xcopy ..\Collector\TestCollector\*.makefile working\collector\test /q /h /r /y /i
-xcopy ..\Collector\TestCollector\*.vcxproj working\collector\test /q /h /r /y /i
-xcopy ..\Collector\TestCollector\*.filters working\collector\test /q /h /r /y /i
+mkdir working\collector\testcollector
+xcopy ..\Collector\TestCollector\*.h working\collector\testcollector /q /h /r /y /i
+xcopy ..\Collector\TestCollector\*.cpp working\collector\testcollector /q /h /r /y /i
+xcopy ..\Collector\TestCollector\*.makefile working\collector\testcollector /q /h /r /y /i
+xcopy ..\Collector\TestCollector\*.vcxproj working\collector\testcollector /q /h /r /y /i
+xcopy ..\Collector\TestCollector\*.filters working\collector\testcollector /q /h /r /y /i
 
 : Doesn't currently work
 :ilmerge /wildcards /zeropekind /log:merge.log /targetplatform:v4,"%ProgramFiles(x86)%\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5" /target:winexe /out:working\Alloclave_merged.exe working\Alloclave.exe working\*.dll
