@@ -103,6 +103,7 @@ namespace Alloclave
 				"SmtpServer=server1.circularshift.com;UseAuthentication=true;UseAttachment=true;" +
 				"Username=bugs@circularshift.com;Password=d0ntspammebro;";
 
+			Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
 			AppDomain.CurrentDomain.UnhandledException += NBug.Handler.UnhandledException;
 			Application.ThreadException += NBug.Handler.ThreadException;
 			TaskScheduler.UnobservedTaskException += NBug.Handler.UnobservedTaskException;
