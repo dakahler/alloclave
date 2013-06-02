@@ -33,6 +33,7 @@ mkdir working\collector\bin\x64\release
 xcopy ..\Collector\*.h working\collector /q /h /r /y /i
 xcopy ..\Collector\*.cpp working\collector /q /h /r /y /i
 xcopy ..\Collector\*.makefile working\collector /q /h /r /y /i
+xcopy ..\Collector\*.vcproj working\collector /q /h /r /y /i
 xcopy ..\Collector\*.vcxproj working\collector /q /h /r /y /i
 xcopy ..\Collector\*.filters working\collector /q /h /r /y /i
 xcopy ..\Collector\*.sln working\collector /q /h /r /y /i
@@ -48,6 +49,7 @@ mkdir working\collector\testcollector
 xcopy ..\Collector\TestCollector\*.h working\collector\testcollector /q /h /r /y /i
 xcopy ..\Collector\TestCollector\*.cpp working\collector\testcollector /q /h /r /y /i
 xcopy ..\Collector\TestCollector\*.makefile working\collector\testcollector /q /h /r /y /i
+xcopy ..\Collector\TestCollector\*.vcproj working\collector\testcollector /q /h /r /y /i
 xcopy ..\Collector\TestCollector\*.vcxproj working\collector\testcollector /q /h /r /y /i
 xcopy ..\Collector\TestCollector\*.filters working\collector\testcollector /q /h /r /y /i
 
