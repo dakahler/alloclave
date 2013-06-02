@@ -212,6 +212,9 @@
     <ClCompile Include="Transport.cpp" />
     <ClCompile Include="Win32Transport.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="license.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
