@@ -110,3 +110,4 @@ Installer/working
 Visualizer/bin
 Visualizer/obj
 Thumbs.db
+Collector/Collector.vcxproj.user
