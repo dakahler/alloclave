@@ -37,6 +37,7 @@ xcopy ..\Collector\*.vcproj working\collector /q /h /r /y /i
 xcopy ..\Collector\*.vcxproj working\collector /q /h /r /y /i
 xcopy ..\Collector\*.filters working\collector /q /h /r /y /i
 xcopy ..\Collector\*.sln working\collector /q /h /r /y /i
+xcopy ..\Collector\license.txt working\collector /q /h /r /y /i
 xcopy ..\Collector\Makefile working\collector /q /h /r /y /i
 xcopy ..\Collector\Debug\AlloclaveCollector.lib working\collector\bin\x86\debug /q /h /r /y /i
 xcopy ..\Collector\Release\AlloclaveCollector.lib working\collector\bin\x86\release /q /h /r /y /i
