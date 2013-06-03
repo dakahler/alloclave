@@ -29,7 +29,7 @@ namespace Alloclave
 			}
 
 			dataGrid.Rows.Clear();
-			dataGrid.Rows.Add("Alloclave");
+			dataGrid.Rows.Add("Alloclave Beta");
 			dataGrid.Rows.Add("Version " + Common.Version);
 			dataGrid.Rows.Add("© Copyright 2013");
 			dataGrid.Rows.Add("Circular Shift");
