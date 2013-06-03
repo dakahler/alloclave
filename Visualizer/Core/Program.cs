@@ -95,14 +95,6 @@ namespace Alloclave
 		[STAThread]
 		static void Main()
 		{
-			NBug.Settings.StoragePath = NBug.Enums.StoragePath.CurrentDirectory;
-			NBug.Settings.UIMode = NBug.Enums.UIMode.Full;
-			NBug.Settings.ReleaseMode = true;
-			NBug.Settings.Destination1 =
-				"Type=Mail;From=bugs@circularshift.com;To=support@circularshift.com;" +
-				"SmtpServer=server1.circularshift.com;UseAuthentication=true;UseAttachment=true;" +
-				"Username=bugs@circularshift.com;Password=d0ntspammebro;";
-
 			Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
 			AppDomain.CurrentDomain.UnhandledException += NBug.Handler.UnhandledException;
 			Application.ThreadException += NBug.Handler.ThreadException;
