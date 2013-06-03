@@ -61,4 +61,4 @@ rummage -o -p -s -i -j ".\ObfuscationMap.xml" --no-evaluation working\Alloclave.
 
 makensis /Oinstaller.log InstallerScript.nsi
 
-kSignCMD /d "Alloclave Installer" /du http://www.alloclave.com /f %~dp0\key.pfx %~dp0\InstallAlloclave.exe
+kSignCMD /d "Alloclave Installer" /du http://www.alloclave.com /f %~dp0\certificate.pfx /p aaabbb %~dp0\InstallAlloclave.exe
