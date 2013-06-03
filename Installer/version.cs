@@ -10,6 +10,6 @@ namespace Alloclave
 {
 	public static partial class Common
 	{
-		public const String Version = "0.1";
+		public const String Version = "0.1.0";
 	}
 }
