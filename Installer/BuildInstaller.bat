@@ -24,6 +24,7 @@ xcopy ..\Visualizer\plugins\transport\Win32Transport\*.sln working\plugins\trans
 xcopy ..\Visualizer\plugins\transport\Win32Transport\Properties\* working\plugins\transport\win32transport\Properties /q /h /r /y /i
 xcopy ..\Visualizer\plugins\transport\Win32Transport\bin\x64\Installer\ConstantsBridge.dll working\plugins\transport\win32transport /q /h /r /y /i
 xcopy ..\Visualizer\plugins\symbollookup\SymbolLookup_PDB.dll working\plugins\symbollookup /q /h /r /y /i
+xcopy AlloclaveLicense.txt working /q /h /r /y /i
 
 mkdir working\collector
 mkdir working\collector\bin\x86\debug
