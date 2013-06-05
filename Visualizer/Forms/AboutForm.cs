@@ -58,7 +58,7 @@ namespace Alloclave
 
 		private void purchaseButton_Click(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start(Common.ProductWebsiteUrl + "purchase");
+			System.Diagnostics.Process.Start(Common.CompanyWebsiteUrl + "pricing");
 		}
 
 		private void checkForUpdatesButton_Click(object sender, EventArgs e)
@@ -70,11 +70,18 @@ namespace Alloclave
 
 				if (asyncResult.IsCompleted)
 				{
-					// still need to check for caught exceptions if any and rethrow
-					((UpdateProcessAsyncResult)asyncResult).EndInvoke();
+					try
+					{
+						((UpdateProcessAsyncResult)asyncResult).EndInvoke();
 
-					// No updates were found, or an error has occured. We might want to check that...
-					if (UpdateManager.Instance.UpdatesAvailable == 0)
+						// No updates were found, or an error has occurred
+						if (UpdateManager.Instance.UpdatesAvailable == 0)
+						{
+							MessageBox.Show("There are no updates available.");
+							return;
+						}
+					}
+					catch (System.Exception)
 					{
 						MessageBox.Show("There are no updates available.");
 						return;
