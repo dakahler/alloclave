@@ -119,7 +119,8 @@ namespace Alloclave
 				if (!main.Disposing && !main.IsDisposed)
 				{
 					UpdateManager.Instance.UpdateFeedReader = new InstallerAwareAppcastReader(Application.ProductVersion);
-					UpdateManager.Instance.UpdateSource = new NAppUpdate.Framework.Sources.SimpleWebSource("http://www.alloclave.com/updatefeed.xml");
+					UpdateManager.Instance.UpdateSource = new NAppUpdate.Framework.Sources.SimpleWebSource(
+						Common.CompanyWebsiteUrl + "/alloclave/updatefeed.xml");
 					UpdateManager.Instance.ReinstateIfRestarted();
 
 					Application.Run(main);
