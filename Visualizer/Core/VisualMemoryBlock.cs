@@ -63,7 +63,7 @@ namespace Alloclave
 
 		public VisualMemoryBlock(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width, Color color)
 		{
-			Debug.Assert(allocation.Address < startAddress);
+			Debug.Assert(allocation.Address >= startAddress);
 
 			Allocation = allocation;
 			MaxPixelWidth = width;
@@ -176,6 +176,11 @@ namespace Alloclave
 			}
 
 			_Color = color;
+		}
+
+		public void Rebase(UInt64 startAddress, UInt64 addressWidth, int width)
+		{
+			Create(Allocation, startAddress, addressWidth, width, _Color);
 		}
 
 		public bool Contains(Vector v)

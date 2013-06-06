@@ -79,6 +79,8 @@ namespace Alloclave
 			}
 		}
 
+		public bool RebaseBlocks;
+
 		private History()
 		{
 			//this.Add(new Allocation(), 0);
@@ -143,8 +145,15 @@ namespace Alloclave
 						Allocation allocation = packet as Allocation;
 						if (allocation != null)
 						{
+							UInt64 oldMin = _AddressRange.Min;
 							_AddressRange.Min = Math.Min(_AddressRange.Min, allocation.Address);
 							_AddressRange.Max = Math.Max(_AddressRange.Max, allocation.Address);
+
+							// Requires a spatial rebuild
+							if (oldMin != _AddressRange.Min)
+							{
+								RebaseBlocks = true;
+							}
 						}
 					}
 

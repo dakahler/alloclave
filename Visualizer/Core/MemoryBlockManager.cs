@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -173,9 +174,32 @@ namespace Alloclave
 			lock (VisualMemoryBlocks)
 			{
 				VisualMemoryBlocks.Add(block.Allocation.Address, block);
+
+#if DEBUG
+				// Look for sorting issues
+				var values = VisualMemoryBlocks.Values.ToList();
+				values.Reverse();
+				float lastAddress = 0;
+				foreach (var value in values)
+				{
+					Debug.Assert(value.Bounds.Y >= lastAddress);
+					lastAddress = value.Bounds.Y;
+				}
+#endif
 			}
 
 			return block;
+		}
+
+		public void Rebase(UInt64 startAddress, UInt64 addressWidth, int width)
+		{
+			lock (VisualMemoryBlocks)
+			{
+				foreach (var block in VisualMemoryBlocks)
+				{
+					block.Value.Rebase(startAddress, addressWidth, width);
+				}
+			}
 		}
 
 		public VisualMemoryBlock Remove(VisualMemoryBlock block)

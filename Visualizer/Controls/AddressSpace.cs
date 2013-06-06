@@ -99,6 +99,13 @@ namespace Alloclave
 					{
 						lock (history.AddLock)
 						{
+							// Start by rebasing if necessary
+							if (history.RebaseBlocks)
+							{
+								MemoryBlockManager.Instance.Rebase(history.AddressRange.Min, AddressWidth, Width);
+								history.RebaseBlocks = false;
+							}
+
 							UInt64 maxTime = ArtificialMaxTime;
 							if (maxTime == 0)
 							{
