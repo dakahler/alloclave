@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -115,6 +116,15 @@ namespace Alloclave
 			{
 				AddInternal(MessageType.Info, null, "You are running a trial version of Alloclave.");
 				InfosForm.Activate();
+			}
+
+			bool isAdmin = (new WindowsPrincipal(WindowsIdentity.GetCurrent())).
+				IsInRole(WindowsBuiltInRole.Administrator);
+
+			if (isAdmin)
+			{
+				AddInternal(MessageType.Warning, null, "Alloclave has elevated priveleges, which may cause transport errors.");
+				WarningsForm.Activate();
 			}
 		}
 
