@@ -84,6 +84,7 @@ Collector/Debug/MemoryOverrides.obj
 Collector/Debug/Collector.Build.CppClean.log
 Collector/TestCollector/Debug/vc.nativecodeanalysis.all.xml
 Collector/TestCollector/Debug/Main.cpp.nativecodeanalysis.xml
+Installer/certificate.pfx
 *.tlog
 *.suo
 *.obj
