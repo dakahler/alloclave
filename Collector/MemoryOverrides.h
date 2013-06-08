@@ -7,9 +7,6 @@
 
 #ifdef __cplusplus
 
-// Since these are above the malloc/free redefines below,
-// they call the original system versions of these functions,
-// serving as wrappers to intercept the allocation data
 namespace Alloclave
 {
 	extern void* _malloc(size_t size);

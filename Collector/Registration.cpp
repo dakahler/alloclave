@@ -1,5 +1,10 @@
 // Copyright Circular Shift. For license information, see license.txt.
 
+// Needed to find symbols in win32
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #include "Registration.h"
 #include "Allocation.h"
 #include "Free.h"
@@ -14,11 +19,6 @@
 
 // Built-in threads
 #include "Thread_Win32.h"
-
-// Needed to find symbols in win32
-#ifdef _WIN32
-#include <windows.h>
-#endif
 
 namespace Alloclave
 {
