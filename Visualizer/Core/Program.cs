@@ -95,6 +95,14 @@ namespace Alloclave
 		[STAThread]
 		static void Main()
 		{
+			bool is45 = Type.GetType("System.Reflection.ReflectionContext", false) != null;
+			if (!is45)
+			{
+				FrameworkMessage message = new FrameworkMessage();
+				message.ShowDialog();
+				return;
+			}
+
 			Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
 			AppDomain.CurrentDomain.UnhandledException += NBug.Handler.UnhandledException;
 			Application.ThreadException += NBug.Handler.ThreadException;

@@ -35,6 +35,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConstantsBridge", "Visualiz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SymbolLookup_PDB", "Visualizer\plugins\symbollookup\SymbolLookup_PDB\SymbolLookup_PDB.csproj", "{BBB24EF0-1FA7-4435-96DD-0FAA91CCA950}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrameworkCheck", "Visualizer\FrameworkCheck\FrameworkCheck.csproj", "{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -327,6 +329,30 @@ Global
 		{BBB24EF0-1FA7-4435-96DD-0FAA91CCA950}.Release|x64.ActiveCfg = Release|x64
 		{BBB24EF0-1FA7-4435-96DD-0FAA91CCA950}.Release|x64.Build.0 = Release|x64
 		{BBB24EF0-1FA7-4435-96DD-0FAA91CCA950}.Release|x86.ActiveCfg = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Debug|x64.Build.0 = Debug|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Installer|Any CPU.ActiveCfg = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Installer|Any CPU.Build.0 = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Installer|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Installer|Mixed Platforms.Build.0 = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Installer|Win32.ActiveCfg = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Installer|x64.ActiveCfg = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Installer|x64.Build.0 = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Installer|x86.ActiveCfg = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Release|Win32.ActiveCfg = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Release|x64.ActiveCfg = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Release|x64.Build.0 = Release|Any CPU
+		{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

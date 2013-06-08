@@ -401,7 +401,9 @@
     </Compile>
     <None Include="app.config" />
     <None Include="Core\app.config" />
-    <None Include="Properties\app.manifest" />
+    <None Include="Properties\app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\DataSources\Alloclave.Properties.Settings.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
@@ -442,6 +444,10 @@
     <ProjectReference Include="..\External\nbug\NBug\NBug.csproj">
       <Project>{62ced1d5-f603-40de-8bf5-3e49d3a392f4}</Project>
       <Name>NBug</Name>
+    </ProjectReference>
+    <ProjectReference Include="FrameworkCheck\FrameworkCheck.csproj">
+      <Project>{ba0a91e4-a54e-4f5f-8be9-a966d687e850}</Project>
+      <Name>FrameworkCheck</Name>
     </ProjectReference>
     <ProjectReference Include="PdbParser\PdbParser.vcxproj">
       <Project>{73e0a3fa-c680-4d41-a40a-fabf2059f5d1}</Project>
