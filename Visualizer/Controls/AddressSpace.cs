@@ -100,10 +100,12 @@ namespace Alloclave
 						lock (history.AddLock)
 						{
 							// Start by rebasing if necessary
+							bool forceUpdate = false;
 							if (history.RebaseBlocks)
 							{
 								MemoryBlockManager.Instance.Rebase(history.AddressRange.Min, AddressWidth, Width);
 								history.RebaseBlocks = false;
+								forceUpdate = true;
 							}
 
 							UInt64 maxTime = ArtificialMaxTime;
@@ -160,7 +162,7 @@ namespace Alloclave
 
 								LastTimestamp = new TimeStamp(currentTime);
 
-								if (nothingToProcess)
+								if (nothingToProcess && !forceUpdate)
 								{
 									return;
 								}
@@ -172,61 +174,64 @@ namespace Alloclave
 							}
 
 							// Create final list, removing allocations as frees are encountered
-							foreach (var pair in packets)
-							//Parallel.ForEach(newList, pair =>
+							if (packets != null)
 							{
-								// TODO: Can allocation and free processing be combined?
-								// They should be exact opposites of each other
-								if (pair.Value is Allocation)
+								foreach (var pair in packets)
+								//Parallel.ForEach(newList, pair =>
 								{
-									Allocation allocation = pair.Value as Allocation;
+									// TODO: Can allocation and free processing be combined?
+									// They should be exact opposites of each other
+									if (pair.Value is Allocation)
+									{
+										Allocation allocation = pair.Value as Allocation;
 
-									if (!isBackward)
-									{
-										VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
-											allocation, history.AddressRange.Min, AddressWidth, Width);
-
-										if (newBlock == null)
-										{
-											//MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
-										}
-									}
-									else
-									{
-										MemoryBlockManager.Instance.Remove(allocation.Address);
-									}
-								}
-								else
-								{
-									Free free = pair.Value as Free;
-
-									if (MemoryBlockManager.Instance.Find(free.Address) != null)
-									{
-										VisualMemoryBlock removedBlock = MemoryBlockManager.Instance.Remove(free.Address);
-										if (removedBlock != null)
-										{
-											removedBlock.Allocation.AssociatedFree = free;
-											free.AssociatedAllocation = removedBlock.Allocation;
-										}
-										else
-										{
-											//throw new DataException();
-										}
-									}
-									else
-									{
-										if (isBackward)
+										if (!isBackward)
 										{
 											VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
-												free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
+												allocation, history.AddressRange.Min, AddressWidth, Width);
+
+											if (newBlock == null)
+											{
+												//MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
+											}
 										}
 										else
 										{
-											//MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
+											MemoryBlockManager.Instance.Remove(allocation.Address);
 										}
 									}
-								}
-							} //);
+									else
+									{
+										Free free = pair.Value as Free;
+
+										if (MemoryBlockManager.Instance.Find(free.Address) != null)
+										{
+											VisualMemoryBlock removedBlock = MemoryBlockManager.Instance.Remove(free.Address);
+											if (removedBlock != null)
+											{
+												removedBlock.Allocation.AssociatedFree = free;
+												free.AssociatedAllocation = removedBlock.Allocation;
+											}
+											else
+											{
+												//throw new DataException();
+											}
+										}
+										else
+										{
+											if (isBackward)
+											{
+												VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
+													free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
+											}
+											else
+											{
+												//MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
+											}
+										}
+									}
+								} //);
+							}
 						}
 
 						if (!MemoryBlockManager.Instance.Contains(Renderer.SelectedBlock))
@@ -529,6 +534,7 @@ namespace Alloclave
 
 		private void AddressSpace_SizeChanged(object sender, EventArgs e)
 		{
+			LastHistory.RebaseBlocks = true;
 			Rebuild(LastHistory);
 		}
 
