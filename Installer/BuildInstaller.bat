@@ -25,6 +25,8 @@ xcopy ..\Visualizer\plugins\transport\Win32Transport\Properties\* working\plugin
 xcopy ..\Visualizer\plugins\transport\Win32Transport\bin\x64\Installer\ConstantsBridge.dll working\plugins\transport\win32transport /q /h /r /y /i
 xcopy ..\Visualizer\plugins\symbollookup\SymbolLookup_PDB.dll working\plugins\symbollookup /q /h /r /y /i
 xcopy AlloclaveLicense.txt working /q /h /r /y /i
+xcopy msvcr110.dll working /q /h /r /y /i
+xcopy msdia110.dll working /q /h /r /y /i
 
 mkdir working\licenses
 xcopy ..\Licenses\* working\licenses\ /q /h /r /y /i /e
@@ -45,8 +47,8 @@ xcopy ..\Collector\license.txt working\collector /q /h /r /y /i
 xcopy ..\Collector\Makefile working\collector /q /h /r /y /i
 xcopy ..\Collector\Debug\AlloclaveCollector.lib working\collector\bin\x86\debug /q /h /r /y /i
 xcopy ..\Collector\Release\AlloclaveCollector.lib working\collector\bin\x86\release /q /h /r /y /i
-xcopy ..\Collector\Release\TestAlloclaveCollector.exe working\collector\bin\x86\release /q /h /r /y /i
-xcopy ..\Collector\Release\TestAlloclaveCollector.pdb working\collector\bin\x86\release /q /h /r /y /i
+copy TestCollector_VS2008.exe working\collector\bin\x86\release\TestAlloclaveCollector.exe
+copy TestCollector_VS2008.pdb working\collector\bin\x86\release\TestAlloclaveCollector.pdb
 xcopy ..\Collector\x64\Debug\AlloclaveCollector.lib working\collector\bin\x64\debug /q /h /r /y /i
 xcopy ..\Collector\x64\Release\AlloclaveCollector.lib working\collector\bin\x64\release /q /h /r /y /i
 
