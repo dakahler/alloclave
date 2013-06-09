@@ -35,11 +35,12 @@ namespace Alloclave_Plugin
 					File.Copy(SymbolsPath, TempPdbPath, true);
 
 					IsLoaded = pdbParser.Open(TempPdbPath);
-					if (!IsLoaded)
-					{
-						// TODO: Better exception
-						throw new FileNotFoundException();
-					}
+					
+					//if (!IsLoaded)
+					//{
+					//	// TODO: Better exception
+					//	throw new FileNotFoundException();
+					//}
 				}
 				catch (System.Exception)
 				{

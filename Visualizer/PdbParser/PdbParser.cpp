@@ -31,7 +31,7 @@ String^ PdbParser::GetFunctionName(UInt64 address)
 	if (functionName != NULL)
 	{
 		String^ finalString = gcnew String((wchar_t*)functionName);
-		SysFreeString(functionName);
+		//SysFreeString(functionName);
 		return finalString;
 	}
 	else

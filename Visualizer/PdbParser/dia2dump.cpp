@@ -13,6 +13,7 @@
 #include "stdafx.h"
 #include "Dia2Dump.h"
 #include "PrintSymbol.h"
+#include "diacreate.h"
 
 #include "Callback.h"
 
@@ -92,11 +93,15 @@ bool LoadDataFromPdb(
 
   // Obtain access to the provider
 
-  hr = CoCreateInstance(__uuidof(DiaSource),
-                        NULL,
-                        CLSCTX_INPROC_SERVER,
-                        __uuidof(IDiaDataSource),
-                        (void **) ppSource);
+  //hr = CoCreateInstance(__uuidof(DiaSource),
+  //                      NULL,
+  //                      CLSCTX_INPROC_SERVER,
+  //                      __uuidof(IDiaDataSource),
+  //                      (void **) ppSource);
+
+  hr = NoRegCoCreate( L"msdia110.dll", _uuidof( DiaSourceAlt ), _uuidof( IDiaDataSource ), (void **) ppSource );
+
+  
 
   if (FAILED(hr)) {
     wprintf(L"CoCreateInstance failed - HRESULT = %08X\n", hr);
@@ -1577,8 +1582,14 @@ BSTR DumpSymbolWithRVA(IDiaSession *pSession, DWORD dwRVA, const wchar_t *szChil
   }
 
   BSTR bstrName;
-  pSymbol->get_name(&bstrName);
-  return bstrName;
+  if (pSymbol->get_name(&bstrName) == S_OK)
+  {
+	  //pSymbol->Release();
+
+	  return bstrName;
+  }
+
+  return NULL;
 
 
   //wprintf(L"Displacement = 0x%X\n", lDisplacement);
