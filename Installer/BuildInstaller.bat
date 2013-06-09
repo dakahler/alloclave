@@ -26,6 +26,9 @@ xcopy ..\Visualizer\plugins\transport\Win32Transport\bin\x64\Installer\Constants
 xcopy ..\Visualizer\plugins\symbollookup\SymbolLookup_PDB.dll working\plugins\symbollookup /q /h /r /y /i
 xcopy AlloclaveLicense.txt working /q /h /r /y /i
 
+mkdir working\licenses
+xcopy ..\Licenses\* working\licenses\ /q /h /r /y /i /e
+
 mkdir working\collector
 mkdir working\collector\bin\x86\debug
 mkdir working\collector\bin\x86\release
@@ -58,7 +61,7 @@ xcopy ..\Collector\TestCollector\*.filters working\collector\testcollector /q /h
 : Doesn't currently work
 :ilmerge /wildcards /zeropekind /log:merge.log /targetplatform:v4,"%ProgramFiles(x86)%\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5" /target:winexe /out:working\Alloclave_merged.exe working\Alloclave.exe working\*.dll
 
-rummage -o -p -s -i -j ".\ObfuscationMap.xml" --no-evaluation working\Alloclave.exe working\Alloclave.exe
+:rummage -o -p -s -i -j ".\ObfuscationMap.xml" --no-evaluation working\Alloclave.exe working\Alloclave.exe
 
 makensis /Oinstaller.log InstallerScript.nsi
 
