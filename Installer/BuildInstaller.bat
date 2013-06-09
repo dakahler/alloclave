@@ -10,6 +10,7 @@ msbuild ../Alloclave.sln /p:Configuration=Installer;Platform=x64 /t:Clean;Build 
 rd /s /q working
 mkdir working
 xcopy ..\Visualizer\bin\x64\Installer\Alloclave.exe working /q /h /r /y /i
+xcopy ..\Visualizer\bin\x64\Installer\Alloclave.exe.config working /q /h /r /y /i
 xcopy ..\Visualizer\bin\x64\Installer\*.dll working /q /h /r /y /i
 
 mkdir working\plugins
