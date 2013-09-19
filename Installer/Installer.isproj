@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Project ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<!-- Select a Product Configuration -->
+		<InstallShieldProductConfiguration>Express</InstallShieldProductConfiguration>
+		<!-- Select a Visual Studio Configuration / InstallShield Release -->
+		<Configuration>Debug</Configuration>
+		<InstallShieldRelease>$(Configuration)</InstallShieldRelease>
+	</PropertyGroup>
+	<ItemGroup>
+		<!-- The InstallShieldProject item selects the project to build -->
+		<InstallShieldProject Include="$(MSBuildProjectDirectory)\$(MSBuildProjectName).isl"/>
+		<!-- The InstallShieldReleaseFlags sets Release Flags -->
+		<!--<InstallShieldReleaseFlags Include=""/>-->
+		<!-- The InstallShieldMergeModulePath specifies what directories are
+		searched for Merge Modules -->
+		<!--<InstallShieldMergeModulePath Include=""/>-->
+	</ItemGroup>
+	<ItemGroup>
+		<!-- The ProjectReference items refer to any Visual Studio solutions you want to automatically probe for Project Output Groups.  -->
+	</ItemGroup>
+	<ItemGroup>
+		<!-- The TaggedOutputs items allow you to explicitly add extra files to output groups. Each item must include both Name and OutputGroup, as well as TargetPath metadata values. -->
+		<!--<TaggedOutputs Include="C:\My Test Exe.exe">
+			<Name>My Test Project</Name>
+			<OutputGroup>Primary output</OutputGroup>
+			<TargetPath>My Test Exe.exe</TargetPath>
+		</TaggedOutputs> -->
+	</ItemGroup>
+	<Import Project="$(MSBuildExtensionsPath32)\InstallShield\2013Limited\InstallShield.targets"/>
+	<ItemGroup>
+		<ProjectReference Include="..\External\CommandLine\src\libcmdline\CommandLine.csproj">
+			<Name>CommandLine</Name>
+			<Project>{5DEA2811-2FFA-4959-830B-CAD3ACACABEB}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\Visualizer\FrameworkCheck\FrameworkCheck.csproj">
+			<Name>FrameworkCheck</Name>
+			<Project>{BA0A91E4-A54E-4F5F-8BE9-A966D687E850}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\External\nbug\NBug\NBug.csproj">
+			<Name>NBug</Name>
+			<Project>{62CED1D5-F603-40DE-8BF5-3E49D3A392F4}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\Visualizer\PdbParser\PdbParser.vcxproj">
+			<Name>PdbParser</Name>
+			<Project>{73E0A3FA-C680-4D41-A40A-FABF2059F5D1}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\Visualizer\plugins\symbollookup\SymbolLookup_PDB\SymbolLookup_PDB.csproj">
+			<Name>SymbolLookup_PDB</Name>
+			<Project>{BBB24EF0-1FA7-4435-96DD-0FAA91CCA950}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\Visualizer\Visualizer.csproj">
+			<Name>Visualizer</Name>
+			<Project>{DA73FD41-0CF7-41F6-803B-471A943923B9}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\Visualizer\plugins\transport\Win32Transport\Win32Transport.csproj">
+			<Name>Win32Transport</Name>
+			<Project>{C2C823A0-12C5-4D48-98C9-C9305C0A7E7B}</Project>
+		</ProjectReference>
+		<ProjectReference Include="..\External\dockpanelsuite\WinFormsUI\WinFormsUI.csproj">
+			<Name>WinFormsUI</Name>
+			<Project>{C75532C4-765B-418E-B09B-46D36B2ABDB1}</Project>
+		</ProjectReference>
+	</ItemGroup>
+</Project>
