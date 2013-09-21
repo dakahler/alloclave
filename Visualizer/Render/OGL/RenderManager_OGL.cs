@@ -231,7 +231,7 @@ namespace Alloclave
 			IsVbo1 = !IsVbo1;
 		}
 
-		private void ChangeBlockColor(KeyValuePair<VisualMemoryBlock, BlockMetadata> block, Color color, float blend)
+		private void ChangeBlockColor(KeyValuePair<MemoryBlock, BlockMetadata> block, Color color, float blend)
 		{
 			//byte r = (byte)((block.Key._Color.R * blend) + color.R * (1 - blend));
 			//byte g = (byte)((block.Key._Color.G * blend) + color.G * (1 - blend));

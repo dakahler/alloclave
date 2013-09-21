@@ -29,14 +29,13 @@ namespace Alloclave
 		}
 	}
 
-	public class VisualMemoryBlock
+	public class MemoryBlock
 	{
 		// TODO: Better encapsulation
 		const int RowHeight = 2;
 
 		public Color _Color = Color.Red;
 
-		// TODO: Too specific?
 		public Allocation Allocation;
 
 		public GraphicsPath GraphicsPath = new GraphicsPath();
@@ -56,12 +55,12 @@ namespace Alloclave
 
 		public int MaxPixelWidth = 0;
 
-		public VisualMemoryBlock()
+		public MemoryBlock()
 		{
 
 		}
 
-		public VisualMemoryBlock(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width, Color color)
+		public MemoryBlock(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width, Color color)
 		{
 			Debug.Assert(allocation.Address >= startAddress);
 

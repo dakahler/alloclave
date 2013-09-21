@@ -11,8 +11,8 @@ namespace Alloclave
 {
 	abstract class AddressSpaceRenderer
 	{
-		protected VisualMemoryBlock _SelectedBlock;
-		public virtual VisualMemoryBlock SelectedBlock
+		protected MemoryBlock _SelectedBlock;
+		public virtual MemoryBlock SelectedBlock
 		{
 			get
 			{
@@ -24,8 +24,8 @@ namespace Alloclave
 			}
 		}
 
-		protected VisualMemoryBlock _HoverBlock;
-		public virtual VisualMemoryBlock HoverBlock
+		protected MemoryBlock _HoverBlock;
+		public virtual MemoryBlock HoverBlock
 		{
 			get
 			{

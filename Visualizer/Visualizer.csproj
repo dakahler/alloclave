@@ -235,7 +235,7 @@
     <Compile Include="Core\Snapshot.cs" />
     <Compile Include="Core\SymbolLookup.cs" />
     <Compile Include="Core\TimeStamp.cs" />
-    <Compile Include="Core\VisualMemoryBlock.cs" />
+    <Compile Include="Core\MemoryBlock.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>

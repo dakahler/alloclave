@@ -187,7 +187,7 @@ namespace Alloclave
 
 										if (!isBackward)
 										{
-											VisualMemoryBlock newBlock = History.Instance.Snapshot.Add(
+											MemoryBlock newBlock = History.Instance.Snapshot.Add(
 												allocation, history.AddressRange.Min, AddressWidth, Width);
 
 											if (newBlock == null)
@@ -206,7 +206,7 @@ namespace Alloclave
 
 										if (History.Instance.Snapshot.Find(free.Address) != null)
 										{
-											VisualMemoryBlock removedBlock = History.Instance.Snapshot.Remove(free.Address);
+											MemoryBlock removedBlock = History.Instance.Snapshot.Remove(free.Address);
 											if (removedBlock != null)
 											{
 												removedBlock.Allocation.AssociatedFree = free;
@@ -221,7 +221,7 @@ namespace Alloclave
 										{
 											if (isBackward)
 											{
-												VisualMemoryBlock newBlock = History.Instance.Snapshot.Add(
+												MemoryBlock newBlock = History.Instance.Snapshot.Add(
 													free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
 											}
 											else
@@ -467,7 +467,7 @@ namespace Alloclave
 				return;
 			}
 
-			VisualMemoryBlock block = History.Instance.Snapshot.Find(targetAllocation.Address);
+			MemoryBlock block = History.Instance.Snapshot.Find(targetAllocation.Address);
 			if (block != null)
 			{
 				Renderer.SelectedBlock = block;
@@ -559,7 +559,7 @@ namespace Alloclave
 
 	public class SelectionChangedEventArgs : EventArgs
 	{
-		public VisualMemoryBlock SelectedBlock;
+		public MemoryBlock SelectedBlock;
 	}
 
 	public delegate void SelectionChangedEventHandler(object sender, SelectionChangedEventArgs e);

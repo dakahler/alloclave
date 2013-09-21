@@ -22,12 +22,12 @@ namespace Alloclave
 		int IComparer<T>.Compare(T x, T y) { return inner.Compare(y, x); }
 	}
 
-	public sealed class Snapshot : IEnumerable<VisualMemoryBlock>
+	public sealed class Snapshot : IEnumerable<MemoryBlock>
 	{
 		// The dictionary is sorted in reverse order so that the Bounds getter
 		// below runs in O(log n) rather than O(n)
-		private SortedDictionary<UInt64, VisualMemoryBlock> VisualMemoryBlocks =
-			new SortedDictionary<UInt64, VisualMemoryBlock>(new ReverseComparer<UInt64>());
+		private SortedDictionary<UInt64, MemoryBlock> VisualMemoryBlocks =
+			new SortedDictionary<UInt64, MemoryBlock>(new ReverseComparer<UInt64>());
 
 		private Dictionary<uint, int> ColorDictionary = new Dictionary<uint, int>();
 		private int ColorIndex;
@@ -51,7 +51,7 @@ namespace Alloclave
 
 				lock (VisualMemoryBlocks)
 				{
-					VisualMemoryBlock block = VisualMemoryBlocks.First().Value;
+					MemoryBlock block = VisualMemoryBlocks.First().Value;
 					RectangleF lowerBounds = block.Bounds;
 					return new Rectangle(0, 0, block.MaxPixelWidth, (int)(lowerBounds.Bottom - TotalCompression));
 				}
@@ -90,7 +90,7 @@ namespace Alloclave
 			}
 		}
 
-		public bool Add(VisualMemoryBlock block)
+		public bool Add(MemoryBlock block)
 		{
 			lock (VisualMemoryBlocks)
 			{
@@ -99,7 +99,7 @@ namespace Alloclave
 			}
 		}
 
-		public VisualMemoryBlock Add(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width)
+		public MemoryBlock Add(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width)
 		{
 			if (VisualMemoryBlocks.ContainsKey(allocation.Address))
 			{
@@ -159,7 +159,7 @@ namespace Alloclave
 				isSecondaryColor = !isSecondaryColor;
 			}
 
-			VisualMemoryBlock block = new VisualMemoryBlock(allocation, startAddress, addressWidth, width, color);
+			MemoryBlock block = new MemoryBlock(allocation, startAddress, addressWidth, width, color);
 			allocation.Color = color;
 
 			lock (VisualMemoryBlocks)
@@ -193,7 +193,7 @@ namespace Alloclave
 			}
 		}
 
-		public VisualMemoryBlock Remove(VisualMemoryBlock block)
+		public MemoryBlock Remove(MemoryBlock block)
 		{
 			lock (VisualMemoryBlocks)
 			{
@@ -202,11 +202,11 @@ namespace Alloclave
 			}
 		}
 
-		public VisualMemoryBlock Remove(UInt64 address)
+		public MemoryBlock Remove(UInt64 address)
 		{
 			lock (VisualMemoryBlocks)
 			{
-				VisualMemoryBlock block;
+				MemoryBlock block;
 				if (VisualMemoryBlocks.TryGetValue(address, out block))
 				{
 					return Remove(block);
@@ -216,7 +216,7 @@ namespace Alloclave
 			}
 		}
 
-		public bool Contains(VisualMemoryBlock block)
+		public bool Contains(MemoryBlock block)
 		{
 			lock (VisualMemoryBlocks)
 			{
@@ -224,11 +224,11 @@ namespace Alloclave
 			}
 		}
 
-		public VisualMemoryBlock Find(UInt64 address)
+		public MemoryBlock Find(UInt64 address)
 		{
 			lock (VisualMemoryBlocks)
 			{
-				VisualMemoryBlock outBlock;
+				MemoryBlock outBlock;
 				if (VisualMemoryBlocks.TryGetValue(address, out outBlock))
 				{
 					return outBlock;
@@ -238,9 +238,9 @@ namespace Alloclave
 			}
 		}
 
-		public VisualMemoryBlock Find(Vector localMouseCoordinates)
+		public MemoryBlock Find(Vector localMouseCoordinates)
 		{
-			VisualMemoryBlock tempBlock = new VisualMemoryBlock();
+			MemoryBlock tempBlock = new MemoryBlock();
 			tempBlock.GraphicsPath.AddLine(localMouseCoordinates.ToPoint(), (localMouseCoordinates + new Vector(1, 1)).ToPoint());
 
 			lock (VisualMemoryBlocks)
@@ -257,9 +257,9 @@ namespace Alloclave
 			return null;
 		}
 
-		private class VisualMemoryBlockComparer : IComparer<VisualMemoryBlock>
+		private class VisualMemoryBlockComparer : IComparer<MemoryBlock>
 		{
-			public int Compare(VisualMemoryBlock a, VisualMemoryBlock b)
+			public int Compare(MemoryBlock a, MemoryBlock b)
 			{
 				GraphicsPath tempPath = (GraphicsPath)a.GraphicsPath.Clone();
 
@@ -290,7 +290,7 @@ namespace Alloclave
 			}
 		}
 
-		public IEnumerator<VisualMemoryBlock> GetEnumerator()
+		public IEnumerator<MemoryBlock> GetEnumerator()
 		{
 			foreach (var block in VisualMemoryBlocks)
 			{
