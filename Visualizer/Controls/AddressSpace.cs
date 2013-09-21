@@ -25,11 +25,6 @@ namespace Alloclave
 		Vector CurrentMouseLocation;
 		const int WheelDelta = 120;
 
-		// TODO: This should be exposed in the UI
-		const UInt64 AddressWidth = 0xFF;
-
-		History LastHistory = History.Instance;
-
 		RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
 
 		AddressSpaceRenderer Renderer;
@@ -43,17 +38,10 @@ namespace Alloclave
 		// throughout the data flow
 		Dictionary<uint, RectangleF> HeapBounds = new Dictionary<uint, RectangleF>();
 
-		TimeStamp LastTimestamp = new TimeStamp();
-		UInt64 LastRange = 0;
-
 		CancellationTokenSource TokenSource;
 
 		// TODO: Probably shouldn't be static
 		public static event SelectionChangedEventHandler SelectionChanged;
-
-		public event EventHandler Rebuilt;
-
-		UInt64 ArtificialMaxTime = 0;
 
 		private bool _IsPaused = false;
 		public bool IsPaused
@@ -77,192 +65,6 @@ namespace Alloclave
 
 		System.Timers.Timer FrameTimer;
 		private const double FrameInterval = 30.0;
-
-		public void History_Updated(object sender, EventArgs e)
-		{
-			LastHistory = sender as History;
-			Rebuild(LastHistory);
-		}
-
-		public void Rebuild(History history, bool forceFullRebuild = false, bool synchronous = false)
-		{
-			if (Parent == null)
-			{
-				return;
-			}
-
-			Task task = new Task(() => 
-			{
-				NBug.Exceptions.Handle(false, () =>
-				{
-					lock (RebuildDataLock)
-					{
-						lock (history.AddLock)
-						{
-							// Start by rebasing if necessary
-							bool forceUpdate = false;
-							if (history.RebaseBlocks)
-							{
-								History.Instance.Snapshot.Rebase(history.AddressRange.Min, AddressWidth, Width);
-								history.RebaseBlocks = false;
-								forceUpdate = true;
-							}
-
-							UInt64 maxTime = ArtificialMaxTime;
-							if (maxTime == 0)
-							{
-								maxTime = history.TimeRange.Max;
-							}
-
-							IEnumerable<KeyValuePair<TimeStamp, IPacket>> packets = null;
-							bool isBackward = false;
-							if (forceFullRebuild)
-							{
-								History.Instance.Snapshot.Reset();
-								packets = history.Get();
-							}
-							else
-							{
-								// Determine what entries we need to get based off scrubber position
-								UInt64 timeRange = maxTime - history.TimeRange.Min;
-
-								// Readjust the position if needed
-								if (ArtificialMaxTime == 0 && timeRange > 0)
-								{
-									double rangeScale = (double)LastRange / (double)timeRange;
-
-									if (rangeScale > 0 && Scrubber._Position < 1.0)
-									{
-										// Hacky
-										Scrubber._Position *= rangeScale;
-										Scrubber._Position = Scrubber._Position.Clamp(0.0, 1.0);
-										Scrubber.Instance.FlagRedraw();
-									}
-								}
-
-								LastRange = timeRange;
-
-								double position = Scrubber.Position;
-								UInt64 currentTime = history.TimeRange.Min + (UInt64)((double)timeRange * position);
-
-								bool nothingToProcess = false;
-								if (currentTime > LastTimestamp.Time)
-								{
-									packets = history.GetForward(new TimeStamp(currentTime));
-								}
-								else if (currentTime < LastTimestamp.Time)
-								{
-									packets = history.GetBackward(new TimeStamp(currentTime));
-									isBackward = true;
-								}
-								else
-								{
-									nothingToProcess = true;
-								}
-
-								LastTimestamp = new TimeStamp(currentTime);
-
-								if (nothingToProcess && !forceUpdate)
-								{
-									return;
-								}
-							}
-
-							if (history.AddressRange.Max < history.AddressRange.Min)
-							{
-								return;
-							}
-
-							// Create final list, removing allocations as frees are encountered
-							if (packets != null)
-							{
-								foreach (var pair in packets)
-								//Parallel.ForEach(newList, pair =>
-								{
-									// TODO: Can allocation and free processing be combined?
-									// They should be exact opposites of each other
-									if (pair.Value is Allocation)
-									{
-										Allocation allocation = pair.Value as Allocation;
-
-										if (!isBackward)
-										{
-											MemoryBlock newBlock = History.Instance.Snapshot.Add(
-												allocation, history.AddressRange.Min, AddressWidth, Width);
-
-											if (newBlock == null)
-											{
-												//MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
-											}
-										}
-										else
-										{
-											History.Instance.Snapshot.Remove(allocation.Address);
-										}
-									}
-									else
-									{
-										Free free = pair.Value as Free;
-
-										if (History.Instance.Snapshot.Find(free.Address) != null)
-										{
-											MemoryBlock removedBlock = History.Instance.Snapshot.Remove(free.Address);
-											if (removedBlock != null)
-											{
-												removedBlock.Allocation.AssociatedFree = free;
-												free.AssociatedAllocation = removedBlock.Allocation;
-											}
-											else
-											{
-												//throw new DataException();
-											}
-										}
-										else
-										{
-											if (isBackward)
-											{
-												MemoryBlock newBlock = History.Instance.Snapshot.Add(
-													free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
-											}
-											else
-											{
-												//MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
-											}
-										}
-									}
-								} //);
-							}
-						}
-
-						if (!History.Instance.Snapshot.Contains(Renderer.SelectedBlock))
-						{
-							Renderer.SelectedBlock = null;
-						}
-
-						if (!History.Instance.Snapshot.Contains(Renderer.HoverBlock))
-						{
-							Renderer.HoverBlock = null;
-						}
-
-						if (Rebuilt != null)
-						{
-							EventArgs e = new EventArgs();
-							Rebuilt.Invoke(this, e);
-						}
-
-						// TODO: This should hook into the callback above instead
-						RenderManager_OGL.Instance.Rebuild(History.Instance.Snapshot.HeapOffsets);
-					}
-				});
-			});
-
-			task.Start();
-
-			if (synchronous)
-			{
-				task.Wait();
-			}
-		}
 
 		public AddressSpace()
 		{
@@ -291,21 +93,39 @@ namespace Alloclave
 			Scrubber.Instance.MousePressed += Scrubber_MouseDown;
 			Scrubber.Instance.MouseReleased += Scrubber_MouseUp;
 
+			History.Instance.Rebuilt += Snapshot_Rebuilt;
+
 			FrameTimer = new System.Timers.Timer(FrameInterval);
 			FrameTimer.Elapsed += TimerElapsed;
 			FrameTimer.Start();
 		}
 
+		void Snapshot_Rebuilt(object sender, EventArgs e)
+		{
+			// TODO: Too circular how history calls this and then it asks history for stuff
+			if (!History.Instance.Snapshot.Contains(Renderer.SelectedBlock))
+			{
+				Renderer.SelectedBlock = null;
+			}
+
+			if (!History.Instance.Snapshot.Contains(Renderer.HoverBlock))
+			{
+				Renderer.HoverBlock = null;
+			}
+
+			RenderManager_OGL.Instance.Rebuild();
+		}
+
 		void Scrubber_MouseDown(object sender, MouseEventArgs e)
 		{
-			ArtificialMaxTime = History.Instance.TimeRange.Max;
+			History.Instance.ArtificialMaxTime = History.Instance.TimeRange.Max;
 			IsPaused = true;
 		}
 
 		void Scrubber_MouseUp(object sender, MouseEventArgs e)
 		{
-			ArtificialMaxTime = 0;
-			Rebuild(History.Instance);
+			History.Instance.ArtificialMaxTime = 0;
+			History.Instance.UpdateRollingSnapshot();
 		}
 
 		private void TimerElapsed(object sender, EventArgs e)
@@ -313,22 +133,24 @@ namespace Alloclave
 			System.Timers.Timer timer = (System.Timers.Timer)sender;
 			timer.Stop();
 
-			if (ArtificialMaxTime == 0)
+			if (History.Instance.ArtificialMaxTime == 0)
 			{
 				// Recalculate the percentage
 				UInt64 timeRange = History.Instance.TimeRange.Max - History.Instance.TimeRange.Min;
 
-				if (LastTimestamp.Time > 0)
-				{
-					// Slowly move forward
-					// TODO: This should be target-time based, but the tool doesn't really
-					// know what units the target time is in right now
-					if (!IsPaused && Scrubber.Position < 1.0)
-					{
-						Scrubber.Position += 0.0005;
-						Rebuild(History.Instance, false, true);
-					}
-				}
+				// TODO
+				//// This just needs to check if everything is initialized
+				////if (LastTimestamp.Time > 0)
+				//{
+				//	// Slowly move forward
+				//	// TODO: This should be target-time based, but the tool doesn't really
+				//	// know what units the target time is in right now
+				//	if (!IsPaused && Scrubber.Position < 1.0)
+				//	{
+				//		Scrubber.Position += 0.0005;
+				//		History.Instance.UpdateRollingSnapshot(false, true);
+				//	}
+				//}
 			}
 
 			timer.Start();
@@ -343,7 +165,7 @@ namespace Alloclave
 
 		void ColorPickerDialog_ColorChanged(object sender, EventArgs e)
 		{
-			Rebuild(LastHistory, true);
+			History.Instance.UpdateRollingSnapshot(true);
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -534,8 +356,8 @@ namespace Alloclave
 
 		private void AddressSpace_SizeChanged(object sender, EventArgs e)
 		{
-			LastHistory.RebaseBlocks = true;
-			Rebuild(LastHistory);
+			History.Instance.RebaseBlocks = true;
+			History.Instance.UpdateRollingSnapshot();
 		}
 
 		private void AddressSpace_MouseHover(object sender, EventArgs e)

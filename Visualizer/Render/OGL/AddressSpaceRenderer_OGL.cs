@@ -125,13 +125,7 @@ namespace Alloclave
 					{
 						foreach (Vector vertex in triangle.Vertices)
 						{
-							double yVertex = vertex.Y;
-							if (History.Instance.Snapshot.HeapOffsets.ContainsKey(selectedBlock.Allocation.HeapId))
-							{
-								yVertex -= (double)History.Instance.Snapshot.HeapOffsets[selectedBlock.Allocation.HeapId];
-							}
-
-							GL.Vertex3(vertex.X, yVertex, 1);
+							GL.Vertex3(vertex.X, vertex.Y, 1);
 						}
 					}
 					GL.End();
@@ -146,13 +140,7 @@ namespace Alloclave
 					{
 						foreach (Vector vertex in triangle.Vertices)
 						{
-							double yVertex = vertex.Y;
-							if (History.Instance.Snapshot.HeapOffsets.ContainsKey(hoverBlock.Allocation.HeapId))
-							{
-								yVertex -= (double)History.Instance.Snapshot.HeapOffsets[hoverBlock.Allocation.HeapId];
-							}
-
-							GL.Vertex3(vertex.X, yVertex, 1);
+							GL.Vertex3(vertex.X, vertex.Y, 1);
 						}
 					}
 					GL.End();

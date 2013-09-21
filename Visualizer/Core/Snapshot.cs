@@ -62,18 +62,9 @@ namespace Alloclave
 		{
 			get
 			{
-				if (HeapOffsets.Count > 0)
-				{
-					return HeapOffsets.Last().Value;
-				}
-				else
-				{
-					return 0;
-				}
+				return 0;
 			}
 		}
-
-		public Dictionary<uint, float> HeapOffsets = new Dictionary<uint, float>();
 
 		private bool isSecondaryColor = false;
 

@@ -90,6 +90,20 @@ namespace Alloclave
             }
         }
 
+		// TODO: This should be exposed in the UI
+		const UInt64 AddressWidth = 0xFF;
+
+		TimeStamp LastTimestamp = new TimeStamp();
+		UInt64 LastRange = 0;
+
+		public event EventHandler Rebuilt;
+
+		public UInt64 ArtificialMaxTime
+		{
+			get;
+			set;
+		}
+
 		private History()
 		{
 			//this.Add(new Allocation(), 0);
@@ -119,63 +133,223 @@ namespace Alloclave
 
 		public void Add(IPacket packet, UInt64 timeStamp)
 		{
-			//Task task = new Task(() =>
+			// Trial limitation: Only allow 30 seconds of data
+			if (Licensing.IsTrial)
 			{
-				// Trial limitation: Only allow 1 minute of data
-				if (Licensing.IsTrial)
+				if (PacketList.Count > 0)
 				{
-					if (PacketList.Count > 0)
+					TimeSpan span = DateTime.Now.Subtract(TrialStartTime);
+					const double trialTimeLimit = 30.0;
+					if (span.TotalSeconds > trialTimeLimit)
 					{
-						TimeSpan span = DateTime.Now.Subtract(TrialStartTime);
-						const double trialTimeLimit = 60.0;
-						if (span.TotalSeconds > trialTimeLimit)
+						if (!SentTrialWarning)
 						{
-							if (!SentTrialWarning)
-							{
-								SentTrialWarning = true;
-								MessagesForm.Add(MessagesForm.MessageType.Warning, null, "Trial version can only collect one minute of data.");
-							}
-
-							return;
+							SentTrialWarning = true;
+							MessagesForm.Add(MessagesForm.MessageType.Warning, null, "Trial version can only collect 30 seconds of data.");
 						}
-					}
-					else
-					{
-						TrialStartTime = DateTime.Now;
+
+						return;
 					}
 				}
-
-				lock (AddLock)
+				else
 				{
-					lock (PacketList)
-					{
-						PacketList.Add(new TimeStamp(timeStamp), packet);
-
-						Allocation allocation = packet as Allocation;
-						if (allocation != null)
-						{
-							UInt64 oldMin = _AddressRange.Min;
-							_AddressRange.Min = Math.Min(_AddressRange.Min, allocation.Address);
-							_AddressRange.Max = Math.Max(_AddressRange.Max, allocation.Address);
-
-							// Requires a spatial rebuild
-							if (oldMin != _AddressRange.Min)
-							{
-								RebaseBlocks = true;
-							}
-						}
-					}
-
-					if (Updated != null && !SuspendRebuilding)
-					{
-						EventArgs e = new EventArgs();
-						Updated.Invoke(this, e);
-					}
+					TrialStartTime = DateTime.Now;
 				}
 			}
-			//});
 
-			//task.Start();
+			lock (AddLock)
+			{
+				lock (PacketList)
+				{
+					PacketList.Add(new TimeStamp(timeStamp), packet);
+
+					Allocation allocation = packet as Allocation;
+					if (allocation != null)
+					{
+						UInt64 oldMin = _AddressRange.Min;
+						_AddressRange.Min = Math.Min(_AddressRange.Min, allocation.Address);
+						_AddressRange.Max = Math.Max(_AddressRange.Max, allocation.Address);
+
+						// Requires a spatial rebuild
+						if (oldMin != _AddressRange.Min)
+						{
+							RebaseBlocks = true;
+						}
+					}
+				}
+
+				if (Updated != null && !SuspendRebuilding)
+				{
+					EventArgs e = new EventArgs();
+					Updated.Invoke(this, e);
+					UpdateRollingSnapshot();
+				}
+			}
+		}
+
+		public void UpdateRollingSnapshot(bool forceFullRebuild = false, bool synchronous = false)
+		{
+			Task task = new Task(() =>
+			{
+				NBug.Exceptions.Handle(false, () =>
+				{
+					// TODO: Width shouldn't even need to be known here
+					int Width = 200;
+
+					//lock (RebuildDataLock)
+					{
+						lock (AddLock)
+						{
+							// Start by rebasing if necessary
+							bool forceUpdate = false;
+							if (RebaseBlocks)
+							{
+								History.Instance.Snapshot.Rebase(AddressRange.Min, AddressWidth, Width);
+								RebaseBlocks = false;
+								forceUpdate = true;
+							}
+
+							UInt64 maxTime = ArtificialMaxTime;
+							if (maxTime == 0)
+							{
+								maxTime = TimeRange.Max;
+							}
+
+							IEnumerable<KeyValuePair<TimeStamp, IPacket>> packets = null;
+							bool isBackward = false;
+							if (forceFullRebuild)
+							{
+								History.Instance.Snapshot.Reset();
+								packets = Get();
+							}
+							else
+							{
+								// Determine what entries we need to get based off scrubber position
+								UInt64 timeRange = maxTime - TimeRange.Min;
+
+								// Readjust the position if needed
+								if (ArtificialMaxTime == 0 && timeRange > 0)
+								{
+									double rangeScale = (double)LastRange / (double)timeRange;
+
+									if (rangeScale > 0 && Scrubber._Position < 1.0)
+									{
+										// Hacky
+										Scrubber._Position *= rangeScale;
+										Scrubber._Position = Scrubber._Position.Clamp(0.0, 1.0);
+										Scrubber.Instance.FlagRedraw();
+									}
+								}
+
+								LastRange = timeRange;
+
+								double position = Scrubber.Position;
+								UInt64 currentTime = TimeRange.Min + (UInt64)((double)timeRange * position);
+
+								bool nothingToProcess = false;
+								if (currentTime > LastTimestamp.Time)
+								{
+									packets = GetForward(new TimeStamp(currentTime));
+								}
+								else if (currentTime < LastTimestamp.Time)
+								{
+									packets = GetBackward(new TimeStamp(currentTime));
+									isBackward = true;
+								}
+								else
+								{
+									nothingToProcess = true;
+								}
+
+								LastTimestamp = new TimeStamp(currentTime);
+
+								if (nothingToProcess && !forceUpdate)
+								{
+									return;
+								}
+							}
+
+							if (AddressRange.Max < AddressRange.Min)
+							{
+								return;
+							}
+
+							// Create final list, removing allocations as frees are encountered
+							if (packets != null)
+							{
+								foreach (var pair in packets)
+								//Parallel.ForEach(newList, pair =>
+								{
+									// TODO: Can allocation and free processing be combined?
+									// They should be exact opposites of each other
+									if (pair.Value is Allocation)
+									{
+										Allocation allocation = pair.Value as Allocation;
+
+										if (!isBackward)
+										{
+											MemoryBlock newBlock = History.Instance.Snapshot.Add(
+												allocation, AddressRange.Min, AddressWidth, Width);
+
+											if (newBlock == null)
+											{
+												//MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
+											}
+										}
+										else
+										{
+											History.Instance.Snapshot.Remove(allocation.Address);
+										}
+									}
+									else
+									{
+										Free free = pair.Value as Free;
+
+										if (History.Instance.Snapshot.Find(free.Address) != null)
+										{
+											MemoryBlock removedBlock = History.Instance.Snapshot.Remove(free.Address);
+											if (removedBlock != null)
+											{
+												removedBlock.Allocation.AssociatedFree = free;
+												free.AssociatedAllocation = removedBlock.Allocation;
+											}
+											else
+											{
+												//throw new DataException();
+											}
+										}
+										else
+										{
+											if (isBackward)
+											{
+												MemoryBlock newBlock = History.Instance.Snapshot.Add(
+													free.AssociatedAllocation, AddressRange.Min, AddressWidth, Width);
+											}
+											else
+											{
+												//MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
+											}
+										}
+									}
+								} //);
+							}
+						}
+
+						if (Rebuilt != null)
+						{
+							EventArgs e = new EventArgs();
+							Rebuilt.Invoke(this, e);
+						}
+					}
+				});
+			});
+
+			task.Start();
+
+			if (synchronous)
+			{
+				task.Wait();
+			}
 		}
 
 		public IEnumerable<KeyValuePair<TimeStamp, IPacket>> Get()
