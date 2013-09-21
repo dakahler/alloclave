@@ -40,7 +40,7 @@ namespace Alloclave
 
 		void MainScrubber_PositionChanged(object sender, EventArgs e)
 		{
-			History.Instance.UpdateRollingSnapshot();
+			History.Instance.UpdateRollingSnapshotAsync();
 		}
 
 		void AllocationForm_SizeChanged(object sender, EventArgs e)

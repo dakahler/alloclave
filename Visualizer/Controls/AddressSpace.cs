@@ -120,7 +120,7 @@ namespace Alloclave
 		void Scrubber_MouseUp(object sender, MouseEventArgs e)
 		{
 			History.Instance.ArtificialMaxTime = 0;
-			History.Instance.UpdateRollingSnapshot();
+			History.Instance.UpdateRollingSnapshotAsync();
 		}
 
 		private void TimerElapsed(object sender, EventArgs e)
@@ -160,7 +160,7 @@ namespace Alloclave
 
 		void ColorPickerDialog_ColorChanged(object sender, EventArgs e)
 		{
-			History.Instance.UpdateRollingSnapshot(true);
+			History.Instance.UpdateRollingSnapshotAsync(true);
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -352,7 +352,7 @@ namespace Alloclave
 		private void AddressSpace_SizeChanged(object sender, EventArgs e)
 		{
 			History.Instance.RebaseBlocks = true;
-			History.Instance.UpdateRollingSnapshot();
+			History.Instance.UpdateRollingSnapshotAsync();
 		}
 
 		private void AddressSpace_MouseHover(object sender, EventArgs e)

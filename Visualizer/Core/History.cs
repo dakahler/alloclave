@@ -184,170 +184,165 @@ namespace Alloclave
 					Updated.Invoke(this, e);
 				}
 
-				UpdateRollingSnapshot();
+				UpdateRollingSnapshotAsync();
 			}
 		}
 
-		internal void UpdateRollingSnapshot(bool forceFullRebuild = false, bool synchronous = false)
+		internal async void UpdateRollingSnapshotAsync(bool forceFullRebuild = false)
 		{
-			Task task = new Task(() =>
+			await Task.Run(() => UpdateRollingSnapshot(forceFullRebuild));
+		}
+
+		internal void UpdateRollingSnapshot(bool forceFullRebuild)
+		{
+			NBug.Exceptions.Handle(false, () =>
 			{
-				NBug.Exceptions.Handle(false, () =>
+				//lock (RebuildDataLock) // TODO
 				{
-					//lock (RebuildDataLock)
+					lock (AddLock)
 					{
-						lock (AddLock)
+						// Start by rebasing if necessary
+						bool forceUpdate = false;
+						if (RebaseBlocks)
 						{
-							// Start by rebasing if necessary
-							bool forceUpdate = false;
-							if (RebaseBlocks)
+							History.Instance.Snapshot.Rebase(AddressRange.Min, AddressWidth);
+							RebaseBlocks = false;
+							forceUpdate = true;
+						}
+
+						UInt64 maxTime = ArtificialMaxTime;
+						if (maxTime == 0)
+						{
+							maxTime = TimeRange.Max;
+						}
+
+						IEnumerable<KeyValuePair<TimeStamp, IPacket>> packets = null;
+						bool isBackward = false;
+						if (forceFullRebuild)
+						{
+							History.Instance.Snapshot.Reset();
+							packets = Get();
+						}
+						else
+						{
+							// Determine what entries we need to get based off scrubber position
+							UInt64 timeRange = maxTime - TimeRange.Min;
+
+							// Readjust the position if needed
+							if (ArtificialMaxTime == 0 && timeRange > 0)
 							{
-								History.Instance.Snapshot.Rebase(AddressRange.Min, AddressWidth);
-								RebaseBlocks = false;
-								forceUpdate = true;
+								double rangeScale = (double)LastRange / (double)timeRange;
+
+								if (rangeScale > 0 && Scrubber._Position < 1.0)
+								{
+									// Hacky
+									Scrubber._Position *= rangeScale;
+									Scrubber._Position = Scrubber._Position.Clamp(0.0, 1.0);
+									Scrubber.Instance.FlagRedraw();
+								}
 							}
 
-							UInt64 maxTime = ArtificialMaxTime;
-							if (maxTime == 0)
-							{
-								maxTime = TimeRange.Max;
-							}
+							LastRange = timeRange;
 
-							IEnumerable<KeyValuePair<TimeStamp, IPacket>> packets = null;
-							bool isBackward = false;
-							if (forceFullRebuild)
+							double position = Scrubber.Position;
+							UInt64 currentTime = TimeRange.Min + (UInt64)((double)timeRange * position);
+
+							bool nothingToProcess = false;
+							if (currentTime > LastTimestamp.Time)
 							{
-								History.Instance.Snapshot.Reset();
-								packets = Get();
+								packets = GetForward(new TimeStamp(currentTime));
+							}
+							else if (currentTime < LastTimestamp.Time)
+							{
+								packets = GetBackward(new TimeStamp(currentTime));
+								isBackward = true;
 							}
 							else
 							{
-								// Determine what entries we need to get based off scrubber position
-								UInt64 timeRange = maxTime - TimeRange.Min;
-
-								// Readjust the position if needed
-								if (ArtificialMaxTime == 0 && timeRange > 0)
-								{
-									double rangeScale = (double)LastRange / (double)timeRange;
-
-									if (rangeScale > 0 && Scrubber._Position < 1.0)
-									{
-										// Hacky
-										Scrubber._Position *= rangeScale;
-										Scrubber._Position = Scrubber._Position.Clamp(0.0, 1.0);
-										Scrubber.Instance.FlagRedraw();
-									}
-								}
-
-								LastRange = timeRange;
-
-								double position = Scrubber.Position;
-								UInt64 currentTime = TimeRange.Min + (UInt64)((double)timeRange * position);
-
-								bool nothingToProcess = false;
-								if (currentTime > LastTimestamp.Time)
-								{
-									packets = GetForward(new TimeStamp(currentTime));
-								}
-								else if (currentTime < LastTimestamp.Time)
-								{
-									packets = GetBackward(new TimeStamp(currentTime));
-									isBackward = true;
-								}
-								else
-								{
-									nothingToProcess = true;
-								}
-
-								LastTimestamp = new TimeStamp(currentTime);
-
-								if (nothingToProcess && !forceUpdate)
-								{
-									return;
-								}
+								nothingToProcess = true;
 							}
 
-							if (AddressRange.Max < AddressRange.Min)
+							LastTimestamp = new TimeStamp(currentTime);
+
+							if (nothingToProcess && !forceUpdate)
 							{
 								return;
 							}
+						}
 
-							// Create final list, removing allocations as frees are encountered
-							if (packets != null)
+						if (AddressRange.Max < AddressRange.Min)
+						{
+							return;
+						}
+
+						// Create final list, removing allocations as frees are encountered
+						if (packets != null)
+						{
+							foreach (var pair in packets)
+							//Parallel.ForEach(newList, pair =>
 							{
-								foreach (var pair in packets)
-								//Parallel.ForEach(newList, pair =>
+								// TODO: Can allocation and free processing be combined?
+								// They should be exact opposites of each other
+								if (pair.Value is Allocation)
 								{
-									// TODO: Can allocation and free processing be combined?
-									// They should be exact opposites of each other
-									if (pair.Value is Allocation)
+									Allocation allocation = pair.Value as Allocation;
+
+									if (!isBackward)
 									{
-										Allocation allocation = pair.Value as Allocation;
+										MemoryBlock newBlock = History.Instance.Snapshot.Add(
+											allocation, AddressRange.Min, AddressWidth);
 
-										if (!isBackward)
+										if (newBlock == null)
 										{
-											MemoryBlock newBlock = History.Instance.Snapshot.Add(
-												allocation, AddressRange.Min, AddressWidth);
-
-											if (newBlock == null)
-											{
-												//MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
-											}
-										}
-										else
-										{
-											History.Instance.Snapshot.Remove(allocation.Address);
+											//MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
 										}
 									}
 									else
 									{
-										Free free = pair.Value as Free;
+										History.Instance.Snapshot.Remove(allocation.Address);
+									}
+								}
+								else
+								{
+									Free free = pair.Value as Free;
 
-										if (History.Instance.Snapshot.Find(free.Address) != null)
+									if (History.Instance.Snapshot.Find(free.Address) != null)
+									{
+										MemoryBlock removedBlock = History.Instance.Snapshot.Remove(free.Address);
+										if (removedBlock != null)
 										{
-											MemoryBlock removedBlock = History.Instance.Snapshot.Remove(free.Address);
-											if (removedBlock != null)
-											{
-												removedBlock.Allocation.AssociatedFree = free;
-												free.AssociatedAllocation = removedBlock.Allocation;
-											}
-											else
-											{
-												//throw new DataException();
-											}
+											removedBlock.Allocation.AssociatedFree = free;
+											free.AssociatedAllocation = removedBlock.Allocation;
 										}
 										else
 										{
-											if (isBackward)
-											{
-												MemoryBlock newBlock = History.Instance.Snapshot.Add(
-													free.AssociatedAllocation, AddressRange.Min, AddressWidth);
-											}
-											else
-											{
-												//MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
-											}
+											//throw new DataException();
 										}
 									}
-								} //);
-							}
-						}
-
-						if (Rebuilt != null)
-						{
-							EventArgs e = new EventArgs();
-							Rebuilt.Invoke(this, e);
+									else
+									{
+										if (isBackward)
+										{
+											MemoryBlock newBlock = History.Instance.Snapshot.Add(
+												free.AssociatedAllocation, AddressRange.Min, AddressWidth);
+										}
+										else
+										{
+											//MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
+										}
+									}
+								}
+							} //);
 						}
 					}
-				});
+
+					if (Rebuilt != null)
+					{
+						EventArgs e = new EventArgs();
+						Rebuilt.Invoke(this, e);
+					}
+				}
 			});
-
-			task.Start();
-
-			if (synchronous)
-			{
-				task.Wait();
-			}
 		}
 
 		internal IEnumerable<KeyValuePair<TimeStamp, IPacket>> Get()
@@ -387,7 +382,7 @@ namespace Alloclave
 
 		public static void ForceRebuild()
 		{
-			Instance.UpdateRollingSnapshot();
+			Instance.UpdateRollingSnapshotAsync();
 		}
 	}
 }
