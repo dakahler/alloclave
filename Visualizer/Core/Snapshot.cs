@@ -22,17 +22,8 @@ namespace Alloclave
 		int IComparer<T>.Compare(T x, T y) { return inner.Compare(y, x); }
 	}
 
-	sealed class Snapshot : IEnumerable<VisualMemoryBlock>
+	public sealed class Snapshot : IEnumerable<VisualMemoryBlock>
 	{
-		private static readonly Snapshot _Instance = new Snapshot();
-		public static Snapshot Instance
-		{
-			get
-			{
-				return _Instance;
-			}
-		}
-
 		// The dictionary is sorted in reverse order so that the Bounds getter
 		// below runs in O(log n) rather than O(n)
 		private SortedDictionary<UInt64, VisualMemoryBlock> VisualMemoryBlocks =
@@ -84,9 +75,9 @@ namespace Alloclave
 
 		public Dictionary<uint, float> HeapOffsets = new Dictionary<uint, float>();
 
-		private static bool isSecondaryColor = false;
+		private bool isSecondaryColor = false;
 
-		private Snapshot()
+		public Snapshot()
 		{
 
 		}
@@ -271,13 +262,6 @@ namespace Alloclave
 			public int Compare(VisualMemoryBlock a, VisualMemoryBlock b)
 			{
 				GraphicsPath tempPath = (GraphicsPath)a.GraphicsPath.Clone();
-				Matrix tempMatrix = new Matrix();
-
-				if (Snapshot.Instance.HeapOffsets.ContainsKey(a.Allocation.HeapId))
-				{
-					tempMatrix.Translate(0.0f, -Snapshot.Instance.HeapOffsets[a.Allocation.HeapId]);
-				}
-				tempPath.Transform(tempMatrix);
 
 				if (tempPath.IsVisible(b.GraphicsPath.PathPoints[0]))
 				{

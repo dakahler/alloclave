@@ -87,7 +87,7 @@ namespace Alloclave
 				Monitor.Enter(glControl);
 				glControl.MakeCurrent();
 
-				Rectangle bounds = Snapshot.Instance.Bounds;
+				Rectangle bounds = History.Instance.Snapshot.Bounds;
 
 				UInt64 maxWidth = (UInt64)ParentWidth;
 				UInt64 maxHeight = (UInt64)bounds.Bottom;

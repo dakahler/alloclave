@@ -204,7 +204,7 @@ namespace Alloclave
 				vbo = VBO2;
 			}
 
-			foreach (var block in Snapshot.Instance)
+			foreach (var block in History.Instance.Snapshot)
 			{
 				foreach (Triangle triangle in block.Triangles)
 				{

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Alloclave
 {
-	public class History
+	public sealed class History
 	{
 		SortedList<TimeStamp, IPacket> PacketList = new SortedList<TimeStamp, IPacket>();
 
@@ -80,6 +80,15 @@ namespace Alloclave
 		}
 
 		public bool RebaseBlocks;
+
+        private Snapshot _Snapshot = new Snapshot();
+        public Snapshot Snapshot
+        {
+            get
+            {
+                return _Snapshot;
+            }
+        }
 
 		private History()
 		{
