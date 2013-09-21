@@ -53,24 +53,21 @@ namespace Alloclave
 
 		public bool IsNew = true;
 
-		public int MaxPixelWidth = 0;
-
 		public MemoryBlock()
 		{
 
 		}
 
-		public MemoryBlock(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width, Color color)
+		public MemoryBlock(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, Color color)
 		{
 			Debug.Assert(allocation.Address >= startAddress);
 
 			Allocation = allocation;
-			MaxPixelWidth = width;
 
-			Create(allocation, startAddress, addressWidth, width, color);
+			Create(allocation, startAddress, addressWidth, color);
 		}
 
-		private Vector GetPixelPos(UInt64 address, UInt64 startAddress, UInt64 addressWidth, int width)
+		private Vector GetPixelPos(UInt64 address, UInt64 startAddress, UInt64 addressWidth)
 		{
 			UInt64 workingStartAddress = address - startAddress;
 
@@ -82,7 +79,7 @@ namespace Alloclave
 			// X
 			UInt64 offset = workingStartAddress - rowStartAddress;
 			float scaleFactor = ((float)(offset) / (float)addressWidth);
-			UInt64 pixelX = (UInt64)(width * scaleFactor);
+			UInt64 pixelX = (UInt64)scaleFactor;
 
 			// Y
 			UInt64 rowNum = rowStartAddress / addressWidth;
@@ -91,7 +88,7 @@ namespace Alloclave
 			return new Vector((int)pixelX, (int)pixelY);
 		}
 
-		private void Create(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width, Color color)
+		private void Create(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, Color color)
 		{
 			Triangles.Clear();
 
@@ -106,15 +103,15 @@ namespace Alloclave
 
 			List<Vector> polygonPoints = new List<Vector>();
 
-			Vector rowOneUpperLeft = GetPixelPos(currentStartAddress, startAddress, addressWidth, width);
+			Vector rowOneUpperLeft = GetPixelPos(currentStartAddress, startAddress, addressWidth);
 			Vector rowOneLowerLeft = rowOneUpperLeft + new Vector(0, RowHeight);
 			Vector rowOneFarLeftLowerLeft = new Vector(0, rowOneLowerLeft.Y);
-			Vector rowOneFarRightUpperRight = new Vector(width, rowOneUpperLeft.Y);
+			Vector rowOneFarRightUpperRight = new Vector(1.0f, rowOneUpperLeft.Y);
 
-			Vector lastRowUpperRight = GetPixelPos(endAddress, startAddress, addressWidth, width);
+			Vector lastRowUpperRight = GetPixelPos(endAddress, startAddress, addressWidth);
 			Vector lastRowLowerRight = lastRowUpperRight + new Vector(0, RowHeight);
 			Vector lastRowFarLeftLowerLeft = new Vector(0, lastRowLowerRight.Y);
-			Vector lastRowFarRightUpperRight = new Vector(width, lastRowUpperRight.Y);
+			Vector lastRowFarRightUpperRight = new Vector(1.0f, lastRowUpperRight.Y);
 
 			// Create block by specifying polygon points
 			polygonPoints.Add(rowOneUpperLeft);
@@ -175,9 +172,9 @@ namespace Alloclave
 			_Color = color;
 		}
 
-		public void Rebase(UInt64 startAddress, UInt64 addressWidth, int width)
+		public void Rebase(UInt64 startAddress, UInt64 addressWidth)
 		{
-			Create(Allocation, startAddress, addressWidth, width, _Color);
+			Create(Allocation, startAddress, addressWidth, _Color);
 		}
 
 		public bool Contains(Vector v)

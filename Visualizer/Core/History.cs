@@ -193,9 +193,6 @@ namespace Alloclave
 			{
 				NBug.Exceptions.Handle(false, () =>
 				{
-					// TODO: Width shouldn't even need to be known here
-					int Width = 200;
-
 					//lock (RebuildDataLock)
 					{
 						lock (AddLock)
@@ -204,7 +201,7 @@ namespace Alloclave
 							bool forceUpdate = false;
 							if (RebaseBlocks)
 							{
-								History.Instance.Snapshot.Rebase(AddressRange.Min, AddressWidth, Width);
+								History.Instance.Snapshot.Rebase(AddressRange.Min, AddressWidth);
 								RebaseBlocks = false;
 								forceUpdate = true;
 							}
@@ -289,7 +286,7 @@ namespace Alloclave
 										if (!isBackward)
 										{
 											MemoryBlock newBlock = History.Instance.Snapshot.Add(
-												allocation, AddressRange.Min, AddressWidth, Width);
+												allocation, AddressRange.Min, AddressWidth);
 
 											if (newBlock == null)
 											{
@@ -323,7 +320,7 @@ namespace Alloclave
 											if (isBackward)
 											{
 												MemoryBlock newBlock = History.Instance.Snapshot.Add(
-													free.AssociatedAllocation, AddressRange.Min, AddressWidth, Width);
+													free.AssociatedAllocation, AddressRange.Min, AddressWidth);
 											}
 											else
 											{

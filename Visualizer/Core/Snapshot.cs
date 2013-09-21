@@ -26,7 +26,7 @@ namespace Alloclave
 	{
 		// The dictionary is sorted in reverse order so that the Bounds getter
 		// below runs in O(log n) rather than O(n)
-		private SortedDictionary<UInt64, MemoryBlock> VisualMemoryBlocks =
+		private SortedDictionary<UInt64, MemoryBlock> MemoryBlocks =
 			new SortedDictionary<UInt64, MemoryBlock>(new ReverseComparer<UInt64>());
 
 		private Dictionary<uint, int> ColorDictionary = new Dictionary<uint, int>();
@@ -36,7 +36,7 @@ namespace Alloclave
 		{
 			get
 			{
-				return VisualMemoryBlocks.Count;
+				return MemoryBlocks.Count;
 			}
 		}
 
@@ -49,11 +49,14 @@ namespace Alloclave
 					return new Rectangle();
 				}
 
-				lock (VisualMemoryBlocks)
+				lock (MemoryBlocks)
 				{
-					MemoryBlock block = VisualMemoryBlocks.First().Value;
+					// TODO: This needs to resolve to actual pixel width somehow
+					const int maxPixelWidth = 200;
+
+					MemoryBlock block = MemoryBlocks.First().Value;
 					RectangleF lowerBounds = block.Bounds;
-					return new Rectangle(0, 0, block.MaxPixelWidth, (int)(lowerBounds.Bottom - TotalCompression));
+					return new Rectangle(0, 0, maxPixelWidth, (int)(lowerBounds.Bottom - TotalCompression));
 				}
 			}
 		}
@@ -75,24 +78,24 @@ namespace Alloclave
 
 		public void Reset()
 		{
-			lock (VisualMemoryBlocks)
+			lock (MemoryBlocks)
 			{
-				VisualMemoryBlocks.Clear();
+				MemoryBlocks.Clear();
 			}
 		}
 
 		public bool Add(MemoryBlock block)
 		{
-			lock (VisualMemoryBlocks)
+			lock (MemoryBlocks)
 			{
-				VisualMemoryBlocks.Add(block.Allocation.Address, block);
+				MemoryBlocks.Add(block.Allocation.Address, block);
 				return true;
 			}
 		}
 
-		public MemoryBlock Add(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, int width)
+		public MemoryBlock Add(Allocation allocation, UInt64 startAddress, UInt64 addressWidth)
 		{
-			if (VisualMemoryBlocks.ContainsKey(allocation.Address))
+			if (MemoryBlocks.ContainsKey(allocation.Address))
 			{
 				return null;
 			}
@@ -150,16 +153,16 @@ namespace Alloclave
 				isSecondaryColor = !isSecondaryColor;
 			}
 
-			MemoryBlock block = new MemoryBlock(allocation, startAddress, addressWidth, width, color);
+			MemoryBlock block = new MemoryBlock(allocation, startAddress, addressWidth, color);
 			allocation.Color = color;
 
-			lock (VisualMemoryBlocks)
+			lock (MemoryBlocks)
 			{
-				VisualMemoryBlocks.Add(block.Allocation.Address, block);
+				MemoryBlocks.Add(block.Allocation.Address, block);
 
 #if DEBUG
 				// Look for sorting issues
-				var values = VisualMemoryBlocks.Values.ToList();
+				var values = MemoryBlocks.Values.ToList();
 				values.Reverse();
 				float lastAddress = 0;
 				foreach (var value in values)
@@ -173,32 +176,32 @@ namespace Alloclave
 			return block;
 		}
 
-		public void Rebase(UInt64 startAddress, UInt64 addressWidth, int width)
+		public void Rebase(UInt64 startAddress, UInt64 addressWidth)
 		{
-			lock (VisualMemoryBlocks)
+			lock (MemoryBlocks)
 			{
-				foreach (var block in VisualMemoryBlocks)
+				foreach (var block in MemoryBlocks)
 				{
-					block.Value.Rebase(startAddress, addressWidth, width);
+					block.Value.Rebase(startAddress, addressWidth);
 				}
 			}
 		}
 
 		public MemoryBlock Remove(MemoryBlock block)
 		{
-			lock (VisualMemoryBlocks)
+			lock (MemoryBlocks)
 			{
-				VisualMemoryBlocks.Remove(block.Allocation.Address);
+				MemoryBlocks.Remove(block.Allocation.Address);
 				return block;
 			}
 		}
 
 		public MemoryBlock Remove(UInt64 address)
 		{
-			lock (VisualMemoryBlocks)
+			lock (MemoryBlocks)
 			{
 				MemoryBlock block;
-				if (VisualMemoryBlocks.TryGetValue(address, out block))
+				if (MemoryBlocks.TryGetValue(address, out block))
 				{
 					return Remove(block);
 				}
@@ -209,18 +212,18 @@ namespace Alloclave
 
 		public bool Contains(MemoryBlock block)
 		{
-			lock (VisualMemoryBlocks)
+			lock (MemoryBlocks)
 			{
-				return VisualMemoryBlocks.ContainsValue(block);
+				return MemoryBlocks.ContainsValue(block);
 			}
 		}
 
 		public MemoryBlock Find(UInt64 address)
 		{
-			lock (VisualMemoryBlocks)
+			lock (MemoryBlocks)
 			{
 				MemoryBlock outBlock;
-				if (VisualMemoryBlocks.TryGetValue(address, out outBlock))
+				if (MemoryBlocks.TryGetValue(address, out outBlock))
 				{
 					return outBlock;
 				}
@@ -234,10 +237,10 @@ namespace Alloclave
 			MemoryBlock tempBlock = new MemoryBlock();
 			tempBlock.GraphicsPath.AddLine(localMouseCoordinates.ToPoint(), (localMouseCoordinates + new Vector(1, 1)).ToPoint());
 
-			lock (VisualMemoryBlocks)
+			lock (MemoryBlocks)
 			{
 				// TODO: Investigate performance implications of ToList() on a SortedDictionary
-				var values = VisualMemoryBlocks.Values.ToList();
+				var values = MemoryBlocks.Values.ToList();
 				int index = values.BinarySearch(tempBlock, new VisualMemoryBlockComparer());
 				if (index >= 0)
 				{
@@ -283,7 +286,7 @@ namespace Alloclave
 
 		public IEnumerator<MemoryBlock> GetEnumerator()
 		{
-			foreach (var block in VisualMemoryBlocks)
+			foreach (var block in MemoryBlocks)
 			{
 				yield return block.Value;
 			}
