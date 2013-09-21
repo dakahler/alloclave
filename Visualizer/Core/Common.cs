@@ -22,8 +22,8 @@ namespace Alloclave
 			BigEndian,
 		}
 
-		public static readonly String CompanyWebsiteUrl = "http://www.circularshift.com/";
-		public static readonly String ProductWebsiteUrl = "http://www.alloclave.com/";
+		internal static readonly String CompanyWebsiteUrl = "http://www.circularshift.com/";
+		internal static readonly String ProductWebsiteUrl = "http://www.alloclave.com/";
 
 		#region Endian swap helpers
 		public static void EndianSwap(ref UInt16 value)
@@ -80,7 +80,7 @@ namespace Alloclave
 		#endregion
 
 		#region Extension Methods
-		public static T Clamp<T>(this T val, T min, T max) where T : IComparable<T>
+		internal static T Clamp<T>(this T val, T min, T max) where T : IComparable<T>
 		{
 			if (val.CompareTo(min) < 0)
 			{
@@ -96,24 +96,24 @@ namespace Alloclave
 			}
 		}
 
-		public static Vector ToVector(this System.Drawing.Point point)
+		internal static Vector ToVector(this System.Drawing.Point point)
 		{
 			return new Vector(point.X, point.Y);
 		}
 
-		public static System.Drawing.Point ToPoint(this Vector vector)
+		internal static System.Drawing.Point ToPoint(this Vector vector)
 		{
 			return new System.Drawing.Point((int)vector.X, (int)vector.Y);
 		}
 
-		public static void TransformVector(this Matrix matrix, ref Vector vector)
+		internal static void TransformVector(this Matrix matrix, ref Vector vector)
 		{
 			System.Drawing.Point[] points = { vector.ToPoint() };
 			matrix.TransformPoints(points);
 			vector = points[0].ToVector();
 		}
 
-		public static UInt64 Align(this UInt64 source, UInt64 alignment)
+		internal static UInt64 Align(this UInt64 source, UInt64 alignment)
 		{
 			return source & ~alignment;
 		}

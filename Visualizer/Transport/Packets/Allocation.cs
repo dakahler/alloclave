@@ -24,10 +24,10 @@ namespace Alloclave
 		public UInt64 Alignment;
 		public AllocationType Type;
 		public UInt32 HeapId;
-		public CallStack Stack = new CallStack();
+		internal CallStack Stack = new CallStack();
 		public byte[] UserData;
 
-		public Free AssociatedFree;
+		internal Free AssociatedFree;
 
 		public Common.Architecture Architecture;
 

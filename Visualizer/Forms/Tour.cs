@@ -12,7 +12,7 @@ using System.IO;
 
 namespace Alloclave
 {
-	public partial class Tour : Form
+	internal partial class Tour : Form
 	{
 		enum TourStage
 		{

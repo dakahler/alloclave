@@ -14,7 +14,7 @@ using System.Windows.Threading;
 
 namespace Alloclave
 {
-	public partial class AboutForm : Form
+	internal partial class AboutForm : Form
 	{
 		[DllImport("user32.dll")]
 		static extern bool HideCaret(IntPtr hWnd);

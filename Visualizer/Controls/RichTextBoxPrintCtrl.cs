@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Alloclave
 {
-	public class RichTextBoxPrintCtrl : RichTextBox
+	internal class RichTextBoxPrintCtrl : RichTextBox
 	{
 		//Convert the unit used by the .NET framework (1/100 inch) 
 		//and the unit used by Win32 API calls (twips 1/1440 inch)

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Alloclave
 {
-	public static class PacketTypeRegistrar
+	internal static class PacketTypeRegistrar
 	{
 		// NOTE: To register a new packet type, add it to both the enum
 		// AND the constructor below

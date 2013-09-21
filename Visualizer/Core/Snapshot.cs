@@ -22,7 +22,7 @@ namespace Alloclave
 		int IComparer<T>.Compare(T x, T y) { return inner.Compare(y, x); }
 	}
 
-	public sealed class Snapshot : IEnumerable<MemoryBlock>
+	internal sealed class Snapshot : IEnumerable<MemoryBlock>
 	{
 		// The dictionary is sorted in reverse order so that the Bounds getter
 		// below runs in O(log n) rather than O(n)

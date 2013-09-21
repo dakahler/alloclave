@@ -16,7 +16,7 @@ namespace Alloclave
 		public string ProcessName { get; set; }
 
 		[HelpOption]
-		public string GetUsage()
+		internal string GetUsage()
 		{
 			var usage = new StringBuilder();
 			usage.AppendLine("Alloclave Beta");

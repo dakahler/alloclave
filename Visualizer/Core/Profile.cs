@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Alloclave
 {
-	class Profile
+	internal class Profile
 	{
 		public History History;
 		Transport Transport;

@@ -11,7 +11,7 @@ using System.Windows;
 
 namespace Alloclave
 {
-	public abstract partial class AddressSpaceScroller : UserControl
+	internal abstract partial class AddressSpaceScroller : UserControl
 	{
 		private bool IsLeftMouseDown;
 		private bool IsMiddleMouseDown;

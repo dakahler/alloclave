@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Alloclave
 {
-	public class Screenshot : IPacket
+	internal class Screenshot : IPacket
 	{
 		Image Image;
 

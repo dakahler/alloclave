@@ -9,7 +9,7 @@ namespace Alloclave
 	/// <summary>
 	/// Extends BinaryReader and transparently swaps endianness when necessary
 	/// </summary>
-	public class CustomBinaryReader : BinaryReader
+	internal class CustomBinaryReader : BinaryReader
 	{
 		Common.Endianness VisualizerEndianness;
 		Common.Endianness TargetEndianness;

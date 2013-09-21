@@ -11,7 +11,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace Alloclave
 {
-	public partial class AllocationForm : ToolForm
+	internal partial class AllocationForm : ToolForm
 	{
 		private AddressSpaceScroller_OGL AddressSpaceScroller;
 

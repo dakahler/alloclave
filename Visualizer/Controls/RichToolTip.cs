@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Alloclave
 {
-	public class RichToolTip : ToolTip
+	internal class RichToolTip : ToolTip
 	{
 		Size toolTipSize = new Size();
 

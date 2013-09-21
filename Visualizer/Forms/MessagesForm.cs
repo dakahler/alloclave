@@ -12,7 +12,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace Alloclave
 {
-	public partial class MessagesForm : ToolForm
+	internal partial class MessagesForm : ToolForm
 	{
 		private static MessagesForm Instance;
 

@@ -11,7 +11,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace Alloclave
 {
-	public partial class TransportForm : ToolForm
+	internal partial class TransportForm : ToolForm
 	{
 		Profile Profile;
 

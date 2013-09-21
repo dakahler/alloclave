@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Alloclave
 {
-	public partial class StartScreen : Form
+	internal partial class StartScreen : Form
 	{
 		Tour Tour;
 

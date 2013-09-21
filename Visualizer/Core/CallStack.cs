@@ -6,13 +6,13 @@ using System.IO;
 
 namespace Alloclave
 {
-	public class CallStack : ICustomSerializable
+	internal class CallStack : ICustomSerializable
 	{
 		public class Frame
 		{
-			public String FunctionSignature;
-			public String FilePath;
-			public uint LineNumber;
+			//public String FunctionSignature;
+			//public String FilePath;
+			//public uint LineNumber;
 			public UInt64 Address;
 		}
 

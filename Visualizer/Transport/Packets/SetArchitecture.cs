@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Alloclave
 {
-	public class SetArchitecture : IPacket
+	internal class SetArchitecture : IPacket
 	{
 		// Data passed in from target system
 		// TODO: Better encapsulation

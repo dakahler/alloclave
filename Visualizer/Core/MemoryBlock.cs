@@ -12,7 +12,7 @@ using System.Diagnostics;
 
 namespace Alloclave
 {
-	public class Triangle
+	internal class Triangle
 	{
 		public Vector[] Vertices = new Vector[3];
 
@@ -29,7 +29,7 @@ namespace Alloclave
 		}
 	}
 
-	public class MemoryBlock
+	internal class MemoryBlock
 	{
 		// TODO: Better encapsulation
 		const int RowHeight = 2;

@@ -21,7 +21,7 @@ namespace Alloclave
 		Object AddLock = new Object();
 
 		// TODO: Might not be able to make these static
-		public static event EventHandler Updated;
+		internal static event EventHandler Updated;
 		public static bool SuspendRebuilding = false;
 		private static History _Instance;
 		public static History Instance
@@ -37,7 +37,7 @@ namespace Alloclave
 			}
 		}
 
-		public class Range
+		internal class Range
 		{
 			public UInt64 Min;
 			public UInt64 Max;
@@ -50,7 +50,7 @@ namespace Alloclave
 		}
 
 		private Range _AddressRange = new Range();
-		public Range AddressRange
+		internal Range AddressRange
 		{
 			get
 			{
@@ -58,7 +58,7 @@ namespace Alloclave
 			}
 		}
 
-		public Range TimeRange
+		internal Range TimeRange
 		{
 			get
 			{
@@ -79,10 +79,10 @@ namespace Alloclave
 			}
 		}
 
-		public bool RebaseBlocks;
+		internal bool RebaseBlocks;
 
         private Snapshot _Snapshot = new Snapshot();
-        public Snapshot Snapshot
+		internal Snapshot Snapshot
         {
             get
             {
@@ -96,9 +96,9 @@ namespace Alloclave
 		TimeStamp LastTimestamp = new TimeStamp();
 		UInt64 LastRange = 0;
 
-		public event EventHandler Rebuilt;
+		internal event EventHandler Rebuilt;
 
-		public UInt64 ArtificialMaxTime
+		internal UInt64 ArtificialMaxTime
 		{
 			get;
 			set;
@@ -123,7 +123,7 @@ namespace Alloclave
 			//result = GetForward(new TimeStamp(10));
 		}
 
-		public void Reset()
+		internal void Reset()
 		{
 			PacketList.Clear();
 			Position = -1;
@@ -131,7 +131,7 @@ namespace Alloclave
 			Updated = null;
 		}
 
-		public void Add(IPacket packet, UInt64 timeStamp)
+		internal void Add(IPacket packet, UInt64 timeStamp)
 		{
 			// Trial limitation: Only allow 30 seconds of data
 			if (Licensing.IsTrial)
@@ -188,7 +188,7 @@ namespace Alloclave
 			}
 		}
 
-		public void UpdateRollingSnapshot(bool forceFullRebuild = false, bool synchronous = false)
+		internal void UpdateRollingSnapshot(bool forceFullRebuild = false, bool synchronous = false)
 		{
 			Task task = new Task(() =>
 			{
@@ -350,12 +350,12 @@ namespace Alloclave
 			}
 		}
 
-		public IEnumerable<KeyValuePair<TimeStamp, IPacket>> Get()
+		internal IEnumerable<KeyValuePair<TimeStamp, IPacket>> Get()
 		{
 			return PacketList.AsEnumerable();
 		}
 
-		public IEnumerable<KeyValuePair<TimeStamp, IPacket>> GetForward(TimeStamp timeStamp)
+		internal IEnumerable<KeyValuePair<TimeStamp, IPacket>> GetForward(TimeStamp timeStamp)
 		{
 			lock (PacketList)
 			{
@@ -370,7 +370,7 @@ namespace Alloclave
 			}
 		}
 
-		public IEnumerable<KeyValuePair<TimeStamp, IPacket>> GetBackward(TimeStamp timeStamp)
+		internal IEnumerable<KeyValuePair<TimeStamp, IPacket>> GetBackward(TimeStamp timeStamp)
 		{
 			lock (PacketList)
 			{

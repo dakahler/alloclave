@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 
 namespace Alloclave
 {
-	public partial class Main : Form, IMessageFilter
+	internal partial class Main : Form, IMessageFilter
 	{
 		public static Main Instance;
 

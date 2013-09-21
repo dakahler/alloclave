@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Alloclave
 {
-	public partial class InfoForm : ToolForm
+	internal partial class InfoForm : ToolForm
 	{
 		// TODO: Should this support other types of messages?
 

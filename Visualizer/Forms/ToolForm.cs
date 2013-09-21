@@ -11,7 +11,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace Alloclave
 {
-	public partial class ToolForm : DockContent
+	internal partial class ToolForm : DockContent
 	{
 		public ToolForm()
 		{

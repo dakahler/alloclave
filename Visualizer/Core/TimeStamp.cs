@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace Alloclave
 {
-	public class TimeStamp : IComparable
+	internal class TimeStamp : IComparable
 	{
 		public TimeStamp()
 		{

@@ -16,7 +16,7 @@ using System.Windows;
 
 namespace Alloclave
 {
-	public partial class AddressSpace : UserControl
+	internal partial class AddressSpace : UserControl
 	{
 		bool IsLeftMouseDown;
 		bool IsMiddleMouseDown;
@@ -379,10 +379,10 @@ namespace Alloclave
 		}
 	}
 
-	public class SelectionChangedEventArgs : EventArgs
+	internal class SelectionChangedEventArgs : EventArgs
 	{
 		public MemoryBlock SelectedBlock;
 	}
 
-	public delegate void SelectionChangedEventHandler(object sender, SelectionChangedEventArgs e);
+	internal delegate void SelectionChangedEventHandler(object sender, SelectionChangedEventArgs e);
 }

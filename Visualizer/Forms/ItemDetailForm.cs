@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Alloclave
 {
-	public partial class ItemDetailForm : Form
+	internal partial class ItemDetailForm : Form
 	{
 		public ItemDetailForm()
 		{

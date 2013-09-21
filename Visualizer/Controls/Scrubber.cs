@@ -12,7 +12,7 @@ using System.Drawing.Drawing2D;
 
 namespace Alloclave
 {
-	public partial class Scrubber : UserControl
+	internal partial class Scrubber : UserControl
 	{
 		Bitmap MainBitmap;
 		Graphics MainGraphics;

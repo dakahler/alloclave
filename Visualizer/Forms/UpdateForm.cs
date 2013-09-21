@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace Alloclave
 {
-	public partial class UpdateForm : Form
+	internal partial class UpdateForm : Form
 	{
 		[DllImport("user32.dll")]
 		static extern bool HideCaret(IntPtr hWnd);
