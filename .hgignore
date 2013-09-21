@@ -111,4 +111,12 @@ Installer/working
 Visualizer/bin
 Visualizer/obj
 Thumbs.db
-Collector/Collector.vcxproj.user
+*.user
+*.sdf
+*.camrec
+*.htm
+*.dep
+bin/*
+Debug/*
+Release/*
+LogFiles/*
