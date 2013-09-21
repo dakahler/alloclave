@@ -113,7 +113,7 @@ namespace Alloclave
 				Renderer.HoverBlock = null;
 			}
 
-			RenderManager_OGL.Instance.Rebuild();
+			RenderManager_OGL.Instance.Rebuild(Width);
 		}
 
 		void Scrubber_MouseDown(object sender, MouseEventArgs e)

@@ -188,7 +188,7 @@ namespace Alloclave
 			}
 		}
 
-		public void Rebuild(Dictionary<uint, float> offsets = null)
+		public void Rebuild(int width)
 		{
 			// TODO: Vertex incremental rebuilding
 			uint numVertices = 0;
@@ -219,7 +219,7 @@ namespace Alloclave
 						vbo[numVertices].G = block._Color.G;
 						vbo[numVertices].B = block._Color.B;
 						vbo[numVertices].A = block._Color.A;
-						vbo[numVertices].Position = new Vector3((float)vertex.X, (float)vertex.Y, 0);
+						vbo[numVertices].Position = new Vector3((float)vertex.X * width, (float)vertex.Y, 0);
 						numVertices++;
 					}
 				}
