@@ -178,12 +178,13 @@ namespace Alloclave
 					}
 				}
 
-				if (Updated != null && !SuspendRebuilding)
+				if (Updated != null)
 				{
 					EventArgs e = new EventArgs();
 					Updated.Invoke(this, e);
-					UpdateRollingSnapshot();
 				}
+
+				UpdateRollingSnapshot();
 			}
 		}
 
@@ -386,8 +387,7 @@ namespace Alloclave
 
 		public static void ForceRebuild()
 		{
-			EventArgs e = new EventArgs();
-			Updated.Invoke(Instance, e);
+			Instance.UpdateRollingSnapshot();
 		}
 	}
 }

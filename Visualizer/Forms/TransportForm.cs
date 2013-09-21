@@ -20,22 +20,6 @@ namespace Alloclave
 		MessagesForm MessagesForm = new MessagesForm();
 		InfoForm InfoForm = new InfoForm();
 
-		public History History
-		{
-			get
-			{
-				return Profile.History;
-			}
-			set
-			{
-				Profile.History = value;
-				if (Profile.History != null)
-				{
-					History.Updated += History_Updated;
-				}
-			}
-		}
-
 		void History_Updated(object sender, EventArgs e)
 		{
 			this.Invoke((MethodInvoker)(() =>
@@ -51,6 +35,7 @@ namespace Alloclave
 
 			AddressSpace.SelectionChanged += AddressSpaceControl_SelectionChanged;
 			MessagesForm.AllocationSelected += MessagesForm_AllocationSelected;
+			History.Updated += History_Updated;
 		}
 
 		void AddressSpaceControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -67,7 +52,6 @@ namespace Alloclave
 			: this()
 		{
 			Profile = new Profile(ref transport);
-			History = History.Instance;
 
 			WeifenLuo.WinFormsUI.Docking.DockHelper.PreventActivation = true;
 			_DockPanel.Theme = new VS2012LightTheme();
