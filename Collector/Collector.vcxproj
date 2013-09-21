@@ -162,12 +162,10 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>python $(ProjectDir)..\Installer\amalgamate.py $(ProjectDir) $(ProjectDir) $(ProjectDir)..\Installer\alloclave</Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>
-      </Message>
+      <Message>Generating amalgamation...</Message>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>
@@ -176,6 +174,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Installer\alloclave.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Allocation.h" />
     <ClInclude Include="Alloclave.h" />
     <ClInclude Include="Buffer.h" />
@@ -197,20 +198,51 @@
     <ClInclude Include="Win32Transport.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Allocation.cpp" />
-    <ClCompile Include="Buffer.cpp" />
-    <ClCompile Include="CallStack.cpp" />
-    <ClCompile Include="CallStack_Win32.cpp" />
-    <ClCompile Include="Free.cpp" />
-    <ClCompile Include="MemoryOverrides.cpp" />
-    <ClCompile Include="Packet.cpp" />
-    <ClCompile Include="Registration.cpp" />
-    <ClCompile Include="Screenshot.cpp" />
-    <ClCompile Include="SetArchitecture.cpp" />
-    <ClCompile Include="SetSymbols.cpp" />
-    <ClCompile Include="Thread_Win32.cpp" />
-    <ClCompile Include="Transport.cpp" />
-    <ClCompile Include="Win32Transport.cpp" />
+    <ClCompile Include="..\Installer\alloclave.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Allocation.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Buffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="CallStack.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="CallStack_Win32.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Free.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="MemoryOverrides.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Packet.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Registration.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Screenshot.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="SetArchitecture.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="SetSymbols.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Thread_Win32.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Transport.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Win32Transport.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="license.txt" />

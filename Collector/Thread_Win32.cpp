@@ -1,5 +1,3 @@
-// Copyright Circular Shift. For license information, see license.txt.
-
 #include <windows.h>
 #include "Thread_Win32.h"
 

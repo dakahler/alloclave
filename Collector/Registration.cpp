@@ -1,5 +1,3 @@
-// Copyright Circular Shift. For license information, see license.txt.
-
 // Needed to find symbols in win32
 #ifdef _WIN32
 #include <windows.h>

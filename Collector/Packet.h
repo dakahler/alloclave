@@ -1,5 +1,3 @@
-// Copyright Circular Shift. For license information, see license.txt.
-
 #ifndef _ALLOCLAVE_IPACKET_H
 #define _ALLOCLAVE_IPACKET_H
 

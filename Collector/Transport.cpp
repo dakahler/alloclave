@@ -1,5 +1,3 @@
-// Copyright Circular Shift. For license information, see license.txt.
-
 #include "Transport.h"
 #include "Packet.h"
 #include "SetArchitecture.h"

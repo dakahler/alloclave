@@ -1,13 +1,9 @@
-// Copyright Circular Shift. For license information, see license.txt.
-
 #include "Allocation.h"
 #include "CallStack.h"
 
 
 namespace Alloclave
 {
-
-static CallStack NullCallStack;
 
 Allocation::Allocation()
 	: CallStackParser(NullCallStack)

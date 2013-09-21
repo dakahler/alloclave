@@ -1,5 +1,3 @@
-// Copyright Circular Shift. For license information, see license.txt.
-
 #include <time.h>
 #include "Packet.h"
 

@@ -1,5 +1,3 @@
-// Copyright Circular Shift. For license information, see license.txt.
-
 #include <windows.h>
 #include <winnt.h>
 #include "CallStack_Win32.h"

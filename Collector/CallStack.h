@@ -1,5 +1,3 @@
-// Copyright Circular Shift. For license information, see license.txt.
-
 #ifndef _ALLOCLAVE_CALLSTACK_H
 #define _ALLOCLAVE_CALLSTACK_H
 
@@ -28,6 +26,8 @@ namespace Alloclave
 		void* StackAddresses[MaxStackDepth];
 		unsigned int StackDepth;
 	};
+
+	static CallStack NullCallStack;
 
 };
 

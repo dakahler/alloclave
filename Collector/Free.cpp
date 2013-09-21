@@ -1,13 +1,9 @@
-// Copyright Circular Shift. For license information, see license.txt.
-
 #include "Free.h"
 #include "CallStack.h"
 
 
 namespace Alloclave
 {
-
-static CallStack NullCallStack;
 
 Free::Free()
 	: CallStackParser(NullCallStack)

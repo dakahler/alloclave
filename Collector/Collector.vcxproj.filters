@@ -9,6 +9,9 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Amalgamation">
+      <UniqueIdentifier>{56579d9b-0ad9-4ac1-99df-16b8f8a1e789}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Transport.h">
@@ -68,6 +71,9 @@
     <ClInclude Include="Packet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Installer\alloclave.h">
+      <Filter>Amalgamation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Registration.cpp">
@@ -111,6 +117,9 @@
     </ClCompile>
     <ClCompile Include="Thread_Win32.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Installer\alloclave.cpp">
+      <Filter>Amalgamation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

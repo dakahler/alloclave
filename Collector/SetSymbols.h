@@ -1,5 +1,3 @@
-// Copyright Circular Shift. For license information, see license.txt.
-
 #ifndef _ALLOCLAVE_SETSYMBOLS_H
 #define _ALLOCLAVE_SETSYMBOLS_H
 

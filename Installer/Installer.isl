@@ -352,9 +352,12 @@
 		<row><td>ISX_DEFAULTCOMPONENT10</td><td>{7ED1B4EE-DDA4-4297-BC48-BA142E60E417}</td><td>NAPPUPDATE</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT11</td><td>{9105CC58-752F-4B81-BF30-D91DC940D62A}</td><td>NBUG</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT12</td><td>{ABAC2339-C42F-48CC-9E65-F4E4E1D6ACB0}</td><td>OPENTK</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT13</td><td>{5DC824B5-578D-45B3-AF47-F2ADE8DD0C46}</td><td>COLLECTOR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT13</td><td>{5DC824B5-578D-45B3-AF47-F2ADE8DD0C46}</td><td>COLLECTOR</td><td>258</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT14</td><td>{7314E10D-F2CB-4873-A1E2-04D478A26A1B}</td><td>INSTALLDIR</td><td>258</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT15</td><td>{6D6950DA-2B6F-4B06-9A1B-1681B955A526}</td><td>ProgramFiles64Folder</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT16</td><td>{8B7A995D-3E21-4DF2-B096-437F09A44F94}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT17</td><td>{A1FE6604-7B8A-42E3-976F-BBE0F12E8C79}</td><td>COLLECTOR</td><td>258</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT18</td><td>{340D79D9-B9B5-4B24-8185-07DEDF50598E}</td><td>COLLECTOR</td><td>258</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT2</td><td>{051C05A2-5B9C-45FA-8E9B-09704940F144}</td><td>TRANSPORT</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT3</td><td>{97B5FACB-B949-40D4-8254-41756A6CB7D8}</td><td>WIN32TRANSPORT</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT4</td><td>{BF403635-4A1E-4C5D-A5C1-593EEFC756FE}</td><td>LICENSES</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -1084,9 +1087,9 @@
 	<table name="CreateFolder">
 		<col key="yes" def="s72">Directory_</col>
 		<col key="yes" def="s72">Component_</col>
-		<row><td>COLLECTOR</td><td>ISX_DEFAULTCOMPONENT13</td></row>
 		<row><td>CommonAppDataFolder</td><td>ISO19770_SystemTag</td></row>
 		<row><td>INSTALLDIR</td><td>ISO19770_LocalTag</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT16</td></row>
 		<row><td>LICENSES</td><td>ISX_DEFAULTCOMPONENT4</td></row>
 		<row><td>PLUGINS</td><td>ISX_DEFAULTCOMPONENT</td></row>
 		<row><td>ProgramFiles64Folder</td><td>ISX_DEFAULTCOMPONENT15</td></row>
@@ -1936,6 +1939,9 @@
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT13</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT14</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT15</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT16</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT17</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT18</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT2</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT3</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT4</td></row>
@@ -1969,6 +1975,8 @@
 		<col def="S255">ISBuildSourcePath</col>
 		<col def="I4">ISAttributes</col>
 		<col def="S72">ISComponentSubFolder_</col>
+		<row><td>alloclave.cpp</td><td>ISX_DEFAULTCOMPONENT13</td><td>ALLOCL~1.CPP|alloclave.cpp</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Installer\alloclave.cpp</td><td>1</td><td/></row>
+		<row><td>alloclave.h</td><td>ISX_DEFAULTCOMPONENT17</td><td>ALLOCL~1.H|alloclave.h</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Installer\alloclave.h</td><td>1</td><td/></row>
 		<row><td>alloclavelicense.txt</td><td>ISX_DEFAULTCOMPONENT14</td><td>ALLOCL~1.TXT|AlloclaveLicense.txt</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Installer\AlloclaveLicense.txt</td><td>1</td><td/></row>
 		<row><td>commandline.primary_output</td><td>CommandLine.Primary_output</td><td>CommandLine.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;CommandLine&gt;|Built</td><td>3</td><td/></row>
 		<row><td>copying</td><td>ISX_DEFAULTCOMPONENT9</td><td>COPYING</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Licenses\MHook\COPYING</td><td>1</td><td/></row>
@@ -1979,6 +1987,7 @@
 		<row><td>license.txt2</td><td>ISX_DEFAULTCOMPONENT8</td><td>license.txt</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Licenses\MakeItSo\license.txt</td><td>1</td><td/></row>
 		<row><td>license.txt3</td><td>ISX_DEFAULTCOMPONENT11</td><td>License.txt</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Licenses\NBug\License.txt</td><td>1</td><td/></row>
 		<row><td>license.txt4</td><td>ISX_DEFAULTCOMPONENT12</td><td>License.txt</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Licenses\OpenTK\License.txt</td><td>1</td><td/></row>
+		<row><td>license.txt5</td><td>ISX_DEFAULTCOMPONENT18</td><td>license.txt</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Collector\license.txt</td><td>1</td><td/></row>
 		<row><td>license1</td><td>ISX_DEFAULTCOMPONENT10</td><td>LICENSE</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Licenses\NAppUpdate\LICENSE</td><td>1</td><td/></row>
 		<row><td>nappupdate.framework.dll</td><td>NAppUpdate.Framework.dll</td><td>NAPPUP~1.DLL|NAppUpdate.Framework.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\External\NAppUpdate\src\NAppUpdate.Framework\bin\Release\NAppUpdate.Framework.dll</td><td>1</td><td/></row>
 		<row><td>nbug.primary_output</td><td>NBug.Primary_output</td><td>NBug.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;NBug&gt;|Built</td><td>3</td><td/></row>
@@ -2148,6 +2157,9 @@
 		<row><td>ISX_DEFAULTCOMPONENT13</td><td/><td/><td>_93822BFA_0142_4A7C_836B_BE4E9584F0A6_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT14</td><td/><td/><td>_6DE72737_CFB6_4C41_A309_22CF87E5E50A_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT15</td><td/><td/><td>_15011EF3_5808_4114_AB8D_AE631B0E30B0_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT16</td><td/><td/><td>_5C00C5CE_72B4_40D2_9382_D39EAD4BAD10_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT17</td><td/><td/><td>_051EF077_EFE9_4008_A2B5_8B826DD4EE2F_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT18</td><td/><td/><td>_E0524D5F_0DF7_400F_BE09_D7C3271A3172_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT2</td><td/><td/><td>_A3CCA387_F420_4810_A2F2_6CF86D417F5C_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT3</td><td/><td/><td>_4C89F565_0241_4F37_AFB8_10027DBA32C5_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT4</td><td/><td/><td>_447C645D_43B5_4624_B681_AD2C86F804C9_FILTER</td><td/><td/><td/><td/></row>
