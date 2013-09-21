@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace Alloclave
 {
@@ -30,6 +31,9 @@ namespace Alloclave
 
 		public void Deserialize(BinaryReader binaryReader, TargetSystemInfo targetSystemInfo)
 		{
+			Debug.Assert(binaryReader != null);
+			Debug.Assert(targetSystemInfo != null);
+
 			if (targetSystemInfo.Architecture == Common.Architecture._32Bit)
 			{
 				uint stackDepth = binaryReader.ReadUInt32();

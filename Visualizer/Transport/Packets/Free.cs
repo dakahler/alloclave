@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 
 namespace Alloclave
 {
@@ -25,6 +26,8 @@ namespace Alloclave
 
 		public byte[] Serialize(TargetSystemInfo targetSystemInfo)
 		{
+			Debug.Assert(targetSystemInfo != null);
+
 			MemoryStream memoryStream = new MemoryStream();
 			BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
 
@@ -44,6 +47,9 @@ namespace Alloclave
 
 		public void Deserialize(BinaryReader binaryReader, TargetSystemInfo targetSystemInfo)
 		{
+			Debug.Assert(binaryReader != null);
+			Debug.Assert(targetSystemInfo != null);
+
 			// Process the correct number of bytes depending on the target platform
 			if (targetSystemInfo.Architecture == Common.Architecture._32Bit)
 			{

@@ -25,18 +25,13 @@ namespace Alloclave
 		Vector CurrentMouseLocation;
 		const int WheelDelta = 120;
 
-		RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
+		//RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
 
 		AddressSpaceRenderer Renderer;
 
 		private Object RebuildDataLock = new Object();
-		private Object RebuildGfxLock = new Object();
 		private AutoResetEvent RecalculateSelectedBlock = new AutoResetEvent(false);
 		private AutoResetEvent RecalculateHoverBlock = new AutoResetEvent(false);
-
-		// TODO: May want to make the idea of multiple heaps more pervasive
-		// throughout the data flow
-		Dictionary<uint, RectangleF> HeapBounds = new Dictionary<uint, RectangleF>();
 
 		CancellationTokenSource TokenSource;
 
@@ -136,7 +131,7 @@ namespace Alloclave
 			if (History.Instance.ArtificialMaxTime == 0)
 			{
 				// Recalculate the percentage
-				UInt64 timeRange = History.Instance.TimeRange.Max - History.Instance.TimeRange.Min;
+				//UInt64 timeRange = History.Instance.TimeRange.Max - History.Instance.TimeRange.Min;
 
 				// TODO
 				//// This just needs to check if everything is initialized

@@ -36,19 +36,19 @@ namespace Alloclave
 
 		private const double FrameInterval = 30.0;
 
-		private class BlockMetadata
-		{
-			public BlockMetadata(uint startVertex, uint endVertex)
-			{
-				VertexStartIndex = startVertex;
-				VertexEndIndex = endVertex;
-			}
+		//private class BlockMetadata
+		//{
+		//	public BlockMetadata(uint startVertex, uint endVertex)
+		//	{
+		//		VertexStartIndex = startVertex;
+		//		VertexEndIndex = endVertex;
+		//	}
 
-			public TimeStamp StartTime = new TimeStamp();
-			public uint VertexStartIndex;
-			public uint VertexEndIndex;
-			public const float AliveSeconds = 3.0f;
-		}
+		//	public TimeStamp StartTime = new TimeStamp();
+		//	public uint VertexStartIndex;
+		//	public uint VertexEndIndex;
+		//	public const float AliveSeconds = 3.0f;
+		//}
 
 		private struct VertexData
 		{
@@ -231,19 +231,19 @@ namespace Alloclave
 			IsVbo1 = !IsVbo1;
 		}
 
-		private void ChangeBlockColor(KeyValuePair<MemoryBlock, BlockMetadata> block, Color color, float blend)
-		{
-			//byte r = (byte)((block.Key._Color.R * blend) + color.R * (1 - blend));
-			//byte g = (byte)((block.Key._Color.G * blend) + color.G * (1 - blend));
-			//byte b = (byte)((block.Key._Color.B * blend) + color.B * (1 - blend));
+		//private void ChangeBlockColor(KeyValuePair<MemoryBlock, BlockMetadata> block, Color color, float blend)
+		//{
+		//	//byte r = (byte)((block.Key._Color.R * blend) + color.R * (1 - blend));
+		//	//byte g = (byte)((block.Key._Color.G * blend) + color.G * (1 - blend));
+		//	//byte b = (byte)((block.Key._Color.B * blend) + color.B * (1 - blend));
 
-			//for (uint j = block.Value.VertexStartIndex; j <= block.Value.VertexEndIndex; j++)
-			//{
-			//	VBO[j].R = r;
-			//	VBO[j].G = g;
-			//	VBO[j].B = b;
-			//	VBO[j].A = 255;
-			//}
-		}
+		//	//for (uint j = block.Value.VertexStartIndex; j <= block.Value.VertexEndIndex; j++)
+		//	//{
+		//	//	VBO[j].R = r;
+		//	//	VBO[j].G = g;
+		//	//	VBO[j].B = b;
+		//	//	VBO[j].A = 255;
+		//	//}
+		//}
 	}
 }

@@ -23,9 +23,9 @@ namespace Alloclave
 
 		public int CompareTo(object obj)
 		{
-			if (obj is TimeStamp)
+			TimeStamp other = obj as TimeStamp;
+			if (other != null)
 			{
-				TimeStamp other = obj as TimeStamp;
 				if (this.Time != other.Time)
 				{
 
@@ -98,6 +98,16 @@ namespace Alloclave
 
 		public static int Comparison(TimeStamp emp1, TimeStamp emp2)
 		{
+			if (System.Object.ReferenceEquals(emp1, emp2))
+			{
+				return 0;
+			}
+
+			if ((Object)emp1 == null || (Object)emp2 == null)
+			{
+				return -1;
+			}
+
 			if (emp1.Time < emp2.Time)
 			{
 				return -1;

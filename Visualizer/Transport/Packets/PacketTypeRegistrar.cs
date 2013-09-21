@@ -24,11 +24,7 @@ namespace Alloclave
 
 		static PacketTypeRegistrar()
 		{
-			Types.Add(PacketTypes.Allocation, typeof(Allocation));
-			Types.Add(PacketTypes.Free, typeof(Free));
-			Types.Add(PacketTypes.Screenshot, typeof(Screenshot));
-			Types.Add(PacketTypes.SetSymbols, typeof(SetSymbols));
-			Types.Add(PacketTypes.SetArchitecture, typeof(SetArchitecture));
+			
 		}
 
 
@@ -63,6 +59,14 @@ namespace Alloclave
 			throw new NotImplementedException();
 		}
 
-		static Dictionary<PacketTypes, Type> Types = new Dictionary<PacketTypes, Type>();
+		static Dictionary<PacketTypes, Type> Types =
+			new Dictionary<PacketTypes, Type>()
+		{
+			{ PacketTypes.Allocation, typeof(Allocation) },
+			{ PacketTypes.Free, typeof(Free) },
+			{ PacketTypes.Screenshot, typeof(Screenshot) },
+			{ PacketTypes.SetSymbols, typeof(SetSymbols) },
+			{ PacketTypes.SetArchitecture, typeof(SetArchitecture) }
+		};
 	}
 }

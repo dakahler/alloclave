@@ -43,6 +43,9 @@ namespace Alloclave
 
 		public byte[] Serialize<T>(List<T> packets, TargetSystemInfo targetSystemInfo) where T : IPacket
 		{
+			Debug.Assert(packets != null);
+			Debug.Assert(targetSystemInfo != null);
+
 			MemoryStream memoryStream = new MemoryStream();
 			BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
 
@@ -64,6 +67,9 @@ namespace Alloclave
 
 		public void Deserialize(BinaryReader binaryReader, TargetSystemInfo targetSystemInfo)
 		{
+			Debug.Assert(binaryReader != null);
+			Debug.Assert(targetSystemInfo != null);
+
 			UInt16 incomingVersion = binaryReader.ReadUInt16();
 			if (incomingVersion != Version)
 			{

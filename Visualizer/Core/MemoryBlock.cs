@@ -51,7 +51,7 @@ namespace Alloclave
 
 		public List<Triangle> Triangles = new List<Triangle>();
 
-		public bool IsNew = true;
+		//public bool IsNew = true;
 
 		public MemoryBlock()
 		{
@@ -67,7 +67,7 @@ namespace Alloclave
 			Create(allocation, startAddress, addressWidth, color);
 		}
 
-		private Vector GetPixelPos(UInt64 address, UInt64 startAddress, UInt64 addressWidth)
+		private static Vector GetPixelPos(UInt64 address, UInt64 startAddress, UInt64 addressWidth)
 		{
 			UInt64 workingStartAddress = address - startAddress;
 

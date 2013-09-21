@@ -62,17 +62,17 @@ namespace Alloclave
 
 		public int CompareTo(object obj)
 		{
-			if (obj is Allocation)
+			Allocation other = obj as Allocation;
+			if (other != null)
 			{
-				Allocation other = obj as Allocation;
 				if (this.Address <= other.Address)
-					{
-						return -1;
-					}
-					else
-					{
-						return 1;
-					}
+				{
+					return -1;
+				}
+				else
+				{
+					return 1;
+				}
 			}
 
 			Debug.Assert(false);
@@ -81,6 +81,8 @@ namespace Alloclave
 
 		public byte[] Serialize(TargetSystemInfo targetSystemInfo)
 		{
+			Debug.Assert(targetSystemInfo != null);
+
 			MemoryStream memoryStream = new MemoryStream();
 			BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
 
@@ -109,6 +111,9 @@ namespace Alloclave
 
 		public void Deserialize(BinaryReader binaryReader, TargetSystemInfo targetSystemInfo)
 		{
+			Debug.Assert(binaryReader != null);
+			Debug.Assert(targetSystemInfo != null);
+
 			// Process the correct number of bytes depending on the target platform
 			if (targetSystemInfo.Architecture == Common.Architecture._32Bit)
 			{

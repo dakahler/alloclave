@@ -25,7 +25,7 @@ namespace Alloclave
 
 		protected virtual void ProcessPacket(byte[] packet)
 		{
-			if (packet.Length <= 0)
+			if (packet == null || packet.Length <= 0)
 			{
 				return;
 			}

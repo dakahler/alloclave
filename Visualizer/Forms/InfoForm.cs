@@ -60,7 +60,7 @@ namespace Alloclave
 				// TODO: Is this parser-specific?
 				String functionName = "";
 				String rawFunctionName = SymbolLookup.Instance.GetName(frame.Address);
-				if (rawFunctionName.Contains("NULL_THUNK_DATA") || rawFunctionName == String.Empty)
+				if (String.IsNullOrEmpty(rawFunctionName) || rawFunctionName.Contains("NULL_THUNK_DATA"))
 				{
 					functionName += "Unknown";
 				}
