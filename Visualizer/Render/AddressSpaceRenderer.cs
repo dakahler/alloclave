@@ -63,6 +63,11 @@ namespace Alloclave
 			}
 		}
 
+		protected abstract float Width
+		{
+			get;
+		}
+
 		protected Vector _CurrentMouseLocation;
 		public virtual Vector CurrentMouseLocation
 		{
@@ -80,6 +85,7 @@ namespace Alloclave
 		public Vector GetLocalMouseLocation(Vector worldLocation)
 		{
 			Vector finalPoint = worldLocation;
+			finalPoint.X /= Width;
 			finalPoint = finalPoint - Offset;
 			finalPoint /= Scale;
 

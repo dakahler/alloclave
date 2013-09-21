@@ -125,7 +125,7 @@ namespace Alloclave
 					{
 						foreach (Vector vertex in triangle.Vertices)
 						{
-							GL.Vertex3(vertex.X, vertex.Y, 1);
+							GL.Vertex3(vertex.X * Width, vertex.Y, 1);
 						}
 					}
 					GL.End();
@@ -140,7 +140,7 @@ namespace Alloclave
 					{
 						foreach (Vector vertex in triangle.Vertices)
 						{
-							GL.Vertex3(vertex.X, vertex.Y, 1);
+							GL.Vertex3(vertex.X * Width, vertex.Y, 1);
 						}
 					}
 					GL.End();
@@ -191,6 +191,14 @@ namespace Alloclave
 				GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
 
 				glControl.Context.MakeCurrent(null);
+			}
+		}
+
+		protected override float Width
+		{
+			get
+			{
+				return glControl.Width;
 			}
 		}
 	}
