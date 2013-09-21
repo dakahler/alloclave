@@ -18,7 +18,7 @@ namespace Alloclave
 		int Position = -1;
 
 		// TODO: Need to find a better way to synchronize this
-		public Object AddLock = new Object();
+		Object AddLock = new Object();
 
 		// TODO: Might not be able to make these static
 		public static event EventHandler Updated;
