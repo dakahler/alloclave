@@ -75,9 +75,7 @@ namespace Alloclave
 			UInt64 workingStartAddress = address - startAddress;
 
 			// Find row start and end addresses
-			// Note that this is the same operation as memory alignment
-			// TODO: Have an alignment helper function?
-			UInt64 rowStartAddress = workingStartAddress & ~addressWidth;
+			UInt64 rowStartAddress = workingStartAddress.Align(addressWidth);
 
 			// Box creation
 			// Transform address space range to pixel space range
@@ -101,8 +99,8 @@ namespace Alloclave
 			UInt64 size = allocation.Size;
 			UInt64 endAddress = currentStartAddress + size;
 
-			UInt64 rowStartAddress = (currentStartAddress - startAddress) & ~addressWidth;
-			UInt64 rowEndAddress = (endAddress - startAddress) & ~addressWidth;
+			UInt64 rowStartAddress = (currentStartAddress - startAddress).Align(addressWidth);
+			UInt64 rowEndAddress = (endAddress - startAddress).Align(addressWidth);
 
 			GraphicsPath.Reset();
 

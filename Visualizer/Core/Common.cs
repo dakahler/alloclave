@@ -113,6 +113,11 @@ namespace Alloclave
 			vector = points[0].ToVector();
 		}
 
+		public static UInt64 Align(this UInt64 source, UInt64 alignment)
+		{
+			return source & ~alignment;
+		}
+
 		#endregion
 	}
 }
