@@ -103,7 +103,7 @@ namespace Alloclave
 							bool forceUpdate = false;
 							if (history.RebaseBlocks)
 							{
-								MemoryBlockManager.Instance.Rebase(history.AddressRange.Min, AddressWidth, Width);
+								Snapshot.Instance.Rebase(history.AddressRange.Min, AddressWidth, Width);
 								history.RebaseBlocks = false;
 								forceUpdate = true;
 							}
@@ -118,7 +118,7 @@ namespace Alloclave
 							bool isBackward = false;
 							if (forceFullRebuild)
 							{
-								MemoryBlockManager.Instance.Reset();
+								Snapshot.Instance.Reset();
 								packets = history.Get();
 							}
 							else
@@ -187,7 +187,7 @@ namespace Alloclave
 
 										if (!isBackward)
 										{
-											VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
+											VisualMemoryBlock newBlock = Snapshot.Instance.Add(
 												allocation, history.AddressRange.Min, AddressWidth, Width);
 
 											if (newBlock == null)
@@ -197,16 +197,16 @@ namespace Alloclave
 										}
 										else
 										{
-											MemoryBlockManager.Instance.Remove(allocation.Address);
+											Snapshot.Instance.Remove(allocation.Address);
 										}
 									}
 									else
 									{
 										Free free = pair.Value as Free;
 
-										if (MemoryBlockManager.Instance.Find(free.Address) != null)
+										if (Snapshot.Instance.Find(free.Address) != null)
 										{
-											VisualMemoryBlock removedBlock = MemoryBlockManager.Instance.Remove(free.Address);
+											VisualMemoryBlock removedBlock = Snapshot.Instance.Remove(free.Address);
 											if (removedBlock != null)
 											{
 												removedBlock.Allocation.AssociatedFree = free;
@@ -221,7 +221,7 @@ namespace Alloclave
 										{
 											if (isBackward)
 											{
-												VisualMemoryBlock newBlock = MemoryBlockManager.Instance.Add(
+												VisualMemoryBlock newBlock = Snapshot.Instance.Add(
 													free.AssociatedAllocation, history.AddressRange.Min, AddressWidth, Width);
 											}
 											else
@@ -234,12 +234,12 @@ namespace Alloclave
 							}
 						}
 
-						if (!MemoryBlockManager.Instance.Contains(Renderer.SelectedBlock))
+						if (!Snapshot.Instance.Contains(Renderer.SelectedBlock))
 						{
 							Renderer.SelectedBlock = null;
 						}
 
-						if (!MemoryBlockManager.Instance.Contains(Renderer.HoverBlock))
+						if (!Snapshot.Instance.Contains(Renderer.HoverBlock))
 						{
 							Renderer.HoverBlock = null;
 						}
@@ -251,7 +251,7 @@ namespace Alloclave
 						}
 
 						// TODO: This should hook into the callback above instead
-						RenderManager_OGL.Instance.Rebuild(MemoryBlockManager.Instance.HeapOffsets);
+						RenderManager_OGL.Instance.Rebuild(Snapshot.Instance.HeapOffsets);
 					}
 				});
 			});
@@ -467,7 +467,7 @@ namespace Alloclave
 				return;
 			}
 
-			VisualMemoryBlock block = MemoryBlockManager.Instance.Find(targetAllocation.Address);
+			VisualMemoryBlock block = Snapshot.Instance.Find(targetAllocation.Address);
 			if (block != null)
 			{
 				Renderer.SelectedBlock = block;
@@ -498,7 +498,7 @@ namespace Alloclave
 
 				lock (RebuildDataLock)
 				{
-					Renderer.HoverBlock = MemoryBlockManager.Instance.Find(Renderer.GetLocalMouseLocation());
+					Renderer.HoverBlock = Snapshot.Instance.Find(Renderer.GetLocalMouseLocation());
 				}
 			}
 		}
@@ -516,7 +516,7 @@ namespace Alloclave
 
 				lock (RebuildDataLock)
 				{
-					Renderer.SelectedBlock = MemoryBlockManager.Instance.Find(Renderer.GetLocalMouseLocation());
+					Renderer.SelectedBlock = Snapshot.Instance.Find(Renderer.GetLocalMouseLocation());
 					if (Renderer.SelectedBlock != null)
 					{
 						SelectionChangedEventArgs e = new SelectionChangedEventArgs();

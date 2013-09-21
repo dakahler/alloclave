@@ -22,10 +22,10 @@ namespace Alloclave
 		int IComparer<T>.Compare(T x, T y) { return inner.Compare(y, x); }
 	}
 
-	sealed class MemoryBlockManager : IEnumerable<VisualMemoryBlock>
+	sealed class Snapshot : IEnumerable<VisualMemoryBlock>
 	{
-		private static readonly MemoryBlockManager _Instance = new MemoryBlockManager();
-		public static MemoryBlockManager Instance
+		private static readonly Snapshot _Instance = new Snapshot();
+		public static Snapshot Instance
 		{
 			get
 			{
@@ -86,7 +86,7 @@ namespace Alloclave
 
 		private static bool isSecondaryColor = false;
 
-		private MemoryBlockManager()
+		private Snapshot()
 		{
 
 		}
@@ -273,9 +273,9 @@ namespace Alloclave
 				GraphicsPath tempPath = (GraphicsPath)a.GraphicsPath.Clone();
 				Matrix tempMatrix = new Matrix();
 
-				if (MemoryBlockManager.Instance.HeapOffsets.ContainsKey(a.Allocation.HeapId))
+				if (Snapshot.Instance.HeapOffsets.ContainsKey(a.Allocation.HeapId))
 				{
-					tempMatrix.Translate(0.0f, -MemoryBlockManager.Instance.HeapOffsets[a.Allocation.HeapId]);
+					tempMatrix.Translate(0.0f, -Snapshot.Instance.HeapOffsets[a.Allocation.HeapId]);
 				}
 				tempPath.Transform(tempMatrix);
 

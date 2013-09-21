@@ -80,7 +80,7 @@ namespace Alloclave
 		{
 			if (FocusChanged != null)
 			{
-				Rectangle bounds = MemoryBlockManager.Instance.Bounds;
+				Rectangle bounds = Snapshot.Instance.Bounds;
 
 				UInt64 maxWidth = (UInt64)ParentWidth;
 				UInt64 maxHeight = (UInt64)bounds.Bottom;

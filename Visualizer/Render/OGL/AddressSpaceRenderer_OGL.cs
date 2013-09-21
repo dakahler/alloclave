@@ -126,9 +126,9 @@ namespace Alloclave
 						foreach (Vector vertex in triangle.Vertices)
 						{
 							double yVertex = vertex.Y;
-							if (MemoryBlockManager.Instance.HeapOffsets.ContainsKey(selectedBlock.Allocation.HeapId))
+							if (Snapshot.Instance.HeapOffsets.ContainsKey(selectedBlock.Allocation.HeapId))
 							{
-								yVertex -= (double)MemoryBlockManager.Instance.HeapOffsets[selectedBlock.Allocation.HeapId];
+								yVertex -= (double)Snapshot.Instance.HeapOffsets[selectedBlock.Allocation.HeapId];
 							}
 
 							GL.Vertex3(vertex.X, yVertex, 1);
@@ -147,9 +147,9 @@ namespace Alloclave
 						foreach (Vector vertex in triangle.Vertices)
 						{
 							double yVertex = vertex.Y;
-							if (MemoryBlockManager.Instance.HeapOffsets.ContainsKey(hoverBlock.Allocation.HeapId))
+							if (Snapshot.Instance.HeapOffsets.ContainsKey(hoverBlock.Allocation.HeapId))
 							{
-								yVertex -= (double)MemoryBlockManager.Instance.HeapOffsets[hoverBlock.Allocation.HeapId];
+								yVertex -= (double)Snapshot.Instance.HeapOffsets[hoverBlock.Allocation.HeapId];
 							}
 
 							GL.Vertex3(vertex.X, yVertex, 1);
@@ -160,7 +160,7 @@ namespace Alloclave
 
 				GL.PopMatrix();
 
-				if (MemoryBlockManager.Instance.Count == 0 && ShowText)
+				if (Snapshot.Instance.Count == 0 && ShowText)
 				{
 					GL.PushMatrix();
 					String waitingText = "Waiting For Data...";
