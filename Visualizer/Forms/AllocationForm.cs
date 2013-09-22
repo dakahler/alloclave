@@ -19,6 +19,11 @@ namespace Alloclave
 		{
 			InitializeComponent();
 
+			history.Scrubber = MainScrubber;
+
+			MainScrubber.MousePressed += ((object sender, MouseEventArgs e) => Scrubber_MouseDown(history, e));
+			MainScrubber.MouseReleased += ((object sender, MouseEventArgs e) => Scrubber_MouseUp(history, e));
+
 			this.AddressSpaceScroller = new Alloclave.AddressSpaceScroller_OGL(history, AddressSpaceControl.Width);
 			this.AddressSpaceScroller.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.AddressSpaceScroller.Location = new System.Drawing.Point(679, 6);
@@ -72,6 +77,22 @@ namespace Alloclave
 			{
 				PlayPausePictureBox.Image = Properties.Resources.pause;
 			}
+		}
+
+		void Scrubber_MouseDown(object sender, MouseEventArgs e)
+		{
+			History history = sender as History;
+
+			history.ArtificialMaxTime = history.TimeRange.Max;
+			AddressSpaceControl.IsPaused = true;
+		}
+
+		void Scrubber_MouseUp(object sender, MouseEventArgs e)
+		{
+			History history = sender as History;
+
+			history.ArtificialMaxTime = 0;
+			history.UpdateRollingSnapshotAsync();
 		}
 	}
 }

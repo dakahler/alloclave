@@ -18,9 +18,8 @@ namespace Alloclave
 		Graphics MainGraphics;
 		bool LeftMouseDown;
 
-		// TODO: Static hack
-		public static double _Position = 1.0;
-		public static double Position
+		public double _Position = 1.0;
+		public double Position
 		{
 			get
 			{
@@ -30,14 +29,11 @@ namespace Alloclave
 			{
 				_Position = value.Clamp(0.0, 1.0);
 
-				if (Instance != null)
-				{
-					Instance.Redraw();
+				Redraw();
 
-					if (Instance.PositionChanged != null)
-					{
-						Instance.PositionChanged(Instance, new EventArgs());
-					}
+				if (PositionChanged != null)
+				{
+					PositionChanged(this, new EventArgs());
 				}
 			}
 		}
@@ -49,8 +45,6 @@ namespace Alloclave
 		public event MouseEventHandler MousePressed;
 		public event MouseEventHandler MouseReleased;
 
-		public static Scrubber Instance;
-
 		bool HandleExists;
 
 		Object LockObject = new Object();
@@ -60,9 +54,6 @@ namespace Alloclave
 			InitializeComponent();
 
 			Rebuild();
-
-			Instance = this;
-
 			HandleCreated += Scrubber_HandleCreated;
 		}
 

@@ -101,9 +101,6 @@ namespace Alloclave
 
 		void AddressSpace_Load(object sender, EventArgs e)
 		{
-			Scrubber.Instance.MousePressed += Scrubber_MouseDown;
-			Scrubber.Instance.MouseReleased += Scrubber_MouseUp;
-
 			FrameTimer = new System.Timers.Timer(FrameInterval);
 			FrameTimer.Elapsed += TimerElapsed;
 			FrameTimer.Start();
@@ -125,18 +122,6 @@ namespace Alloclave
 			}
 
 			RenderManager_OGL.Instance.Rebuild(history.Snapshot, Width);
-		}
-
-		void Scrubber_MouseDown(object sender, MouseEventArgs e)
-		{
-			History.ArtificialMaxTime = History.TimeRange.Max;
-			IsPaused = true;
-		}
-
-		void Scrubber_MouseUp(object sender, MouseEventArgs e)
-		{
-			History.ArtificialMaxTime = 0;
-			History.UpdateRollingSnapshotAsync();
 		}
 
 		private void TimerElapsed(object sender, EventArgs e)

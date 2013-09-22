@@ -20,7 +20,6 @@ namespace Alloclave
 		// TODO: Need to find a better way to synchronize this
 		Object AddLock = new Object();
 
-		// TODO: Might not be able to make these static
 		internal event EventHandler Updated;
 		public bool SuspendRebuilding = false;
 
@@ -86,6 +85,12 @@ namespace Alloclave
 		internal event EventHandler Rebuilt;
 
 		internal UInt64 ArtificialMaxTime
+		{
+			get;
+			set;
+		}
+
+		internal Scrubber Scrubber
 		{
 			get;
 			set;
@@ -226,7 +231,7 @@ namespace Alloclave
 									// Hacky
 									Scrubber._Position *= rangeScale;
 									Scrubber._Position = Scrubber._Position.Clamp(0.0, 1.0);
-									Scrubber.Instance.FlagRedraw();
+									Scrubber.FlagRedraw();
 								}
 							}
 

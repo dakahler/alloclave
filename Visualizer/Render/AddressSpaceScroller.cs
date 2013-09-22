@@ -98,7 +98,7 @@ namespace Alloclave
 			}
 		}
 
-		protected abstract Rectangle Bounds
+		protected abstract new Rectangle Bounds
 		{
 			get;
 		}
