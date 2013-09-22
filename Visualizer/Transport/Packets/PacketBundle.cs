@@ -11,30 +11,40 @@ using System.ComponentModel;
 
 namespace Alloclave
 {
-	public class PacketReceivedEventArgs : EventArgs
+	internal class PacketReceivedEventArgs : EventArgs
 	{
 		public IPacket Packet;
 		public UInt64 TimeStamp;
 	}
 
-	public delegate void PacketReceivedEventHandler(object sender, PacketReceivedEventArgs e);
-	public sealed class PacketBundle : ICustomSerializable
+	internal delegate void PacketReceivedEventHandler(object sender, PacketReceivedEventArgs e);
+	internal sealed class PacketBundle : ICustomSerializable
 	{
 		public static readonly UInt16 Version = 0;
 
 		public event PacketReceivedEventHandler PacketReceived;
 
-		// Enforces in-order bundle processing
-		BlockingCollection<Tuple<BinaryReader, TargetSystemInfo>> BundleQueue =
-			new BlockingCollection<Tuple<BinaryReader, TargetSystemInfo>>();
-
-		public static PacketBundle Instance
+		private History _History;
+		public History History
 		{
 			get
 			{
-				return _Instance;
+				return _History;
+			}
+			set
+			{
+				Debug.Assert(_History == null);
+				_History = value;
+
+				BackgroundWorker worker = new BackgroundWorker();
+				worker.DoWork += worker_DoWork;
+				worker.RunWorkerAsync();
 			}
 		}
+
+		// Enforces in-order bundle processing
+		BlockingCollection<Tuple<BinaryReader, TargetSystemInfo>> BundleQueue =
+			new BlockingCollection<Tuple<BinaryReader, TargetSystemInfo>>();
 
 		public byte[] Serialize(TargetSystemInfo targetSystemInfo)
 		{
@@ -80,13 +90,9 @@ namespace Alloclave
 			BundleQueue.Add(new Tuple<BinaryReader, TargetSystemInfo>(binaryReader, targetSystemInfo));
 		}
 
-		private static readonly PacketBundle _Instance = new PacketBundle();
-
-		private PacketBundle()
+		public PacketBundle()
 		{
-			BackgroundWorker worker = new BackgroundWorker();
-			worker.DoWork += worker_DoWork;
-			worker.RunWorkerAsync();
+			
 		}
 
 		void worker_DoWork(object sender, DoWorkEventArgs e)

@@ -8,19 +8,20 @@ namespace Alloclave
 {
 	internal class Profile
 	{
-		public History History;
+		public History History = new History();
 		Transport Transport;
 
 		public Profile()
 		{
-			History = History.Instance;
+			
 		}
 
 		public Profile(ref Transport transport)
 			: this()
 		{
 			Transport = transport;
-			PacketBundle.Instance.PacketReceived += new PacketReceivedEventHandler(HandlePacket);
+			Transport.PacketBundle.PacketReceived += new PacketReceivedEventHandler(HandlePacket);
+			Transport.PacketBundle.History = History;
 		}
 
 		public void Start()

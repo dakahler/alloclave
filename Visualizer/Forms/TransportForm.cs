@@ -14,9 +14,7 @@ namespace Alloclave
 	internal partial class TransportForm : ToolForm
 	{
 		Profile Profile;
-
-		// TODO: Should this be spawned immediately?
-		AllocationForm AllocationForm = new AllocationForm();
+		AllocationForm AllocationForm;
 		MessagesForm MessagesForm = new MessagesForm();
 		InfoForm InfoForm = new InfoForm();
 
@@ -25,7 +23,7 @@ namespace Alloclave
 			this.Invoke((MethodInvoker)(() =>
 			{
 				AllocationForm.Enabled = true;
-				History.Updated -= History_Updated;
+				Profile.History.Updated -= History_Updated;
 			}));
 		}
 
@@ -35,7 +33,6 @@ namespace Alloclave
 
 			AddressSpace.SelectionChanged += AddressSpaceControl_SelectionChanged;
 			MessagesForm.AllocationSelected += MessagesForm_AllocationSelected;
-			History.Updated += History_Updated;
 		}
 
 		void AddressSpaceControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -48,10 +45,19 @@ namespace Alloclave
 			AllocationForm.AddressSpaceControl.SelectAt(e.SelectedAllocation);
 		}
 
+		void MainScrubber_PositionChanged(object sender, EventArgs e)
+		{
+			Profile.History.UpdateRollingSnapshotAsync();
+		}
+
 		public TransportForm(ref Transport transport)
 			: this()
 		{
 			Profile = new Profile(ref transport);
+			Profile.History.Updated += History_Updated;
+
+			AllocationForm = new AllocationForm(Profile.History);
+			AllocationForm.MainScrubber.PositionChanged += MainScrubber_PositionChanged;
 
 			WeifenLuo.WinFormsUI.Docking.DockHelper.PreventActivation = true;
 			_DockPanel.Theme = new VS2012LightTheme();

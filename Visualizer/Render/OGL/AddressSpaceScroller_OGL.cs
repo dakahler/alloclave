@@ -14,10 +14,13 @@ namespace Alloclave
 	class AddressSpaceScroller_OGL : AddressSpaceScroller
 	{
 		GLControl glControl;
+		History History;
 
-		public AddressSpaceScroller_OGL(int parentWidth)
+		public AddressSpaceScroller_OGL(History history, int parentWidth)
 			: base(parentWidth)
 		{
+			History = history;
+
 			glControl = new GLControl();
 			glControl.Parent = this;
 			glControl.Dock = DockStyle.Fill;
@@ -87,7 +90,7 @@ namespace Alloclave
 				Monitor.Enter(glControl);
 				glControl.MakeCurrent();
 
-				Rectangle bounds = History.Instance.Snapshot.Bounds;
+				Rectangle bounds = Bounds;
 
 				UInt64 maxWidth = (UInt64)ParentWidth;
 				UInt64 maxHeight = (UInt64)bounds.Bottom;
@@ -131,6 +134,14 @@ namespace Alloclave
 				GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
 
 				glControl.Context.MakeCurrent(null);
+			}
+		}
+
+		protected override Rectangle Bounds
+		{
+			get
+			{
+				return History.Snapshot.Bounds;
 			}
 		}
 	}

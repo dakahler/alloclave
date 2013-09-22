@@ -61,6 +61,22 @@ namespace Alloclave
 		System.Timers.Timer FrameTimer;
 		private const double FrameInterval = 30.0;
 
+		private History _History;
+		public History History
+		{
+			get
+			{
+				return _History;
+			}
+			set
+			{
+				Debug.Assert(_History == null);
+				_History = value;
+				_History.Rebuilt += Snapshot_Rebuilt;
+				SizeChanged += new System.EventHandler(AddressSpace_SizeChanged);
+			}
+		}
+
 		public AddressSpace()
 		{
 			InitializeComponent();
@@ -88,8 +104,6 @@ namespace Alloclave
 			Scrubber.Instance.MousePressed += Scrubber_MouseDown;
 			Scrubber.Instance.MouseReleased += Scrubber_MouseUp;
 
-			History.Instance.Rebuilt += Snapshot_Rebuilt;
-
 			FrameTimer = new System.Timers.Timer(FrameInterval);
 			FrameTimer.Elapsed += TimerElapsed;
 			FrameTimer.Start();
@@ -97,30 +111,32 @@ namespace Alloclave
 
 		void Snapshot_Rebuilt(object sender, EventArgs e)
 		{
+			History history = sender as History;
+
 			// TODO: Too circular how history calls this and then it asks history for stuff
-			if (!History.Instance.Snapshot.Contains(Renderer.SelectedBlock))
+			if (!history.Snapshot.Contains(Renderer.SelectedBlock))
 			{
 				Renderer.SelectedBlock = null;
 			}
 
-			if (!History.Instance.Snapshot.Contains(Renderer.HoverBlock))
+			if (!history.Snapshot.Contains(Renderer.HoverBlock))
 			{
 				Renderer.HoverBlock = null;
 			}
 
-			RenderManager_OGL.Instance.Rebuild(Width);
+			RenderManager_OGL.Instance.Rebuild(history.Snapshot, Width);
 		}
 
 		void Scrubber_MouseDown(object sender, MouseEventArgs e)
 		{
-			History.Instance.ArtificialMaxTime = History.Instance.TimeRange.Max;
+			History.ArtificialMaxTime = History.TimeRange.Max;
 			IsPaused = true;
 		}
 
 		void Scrubber_MouseUp(object sender, MouseEventArgs e)
 		{
-			History.Instance.ArtificialMaxTime = 0;
-			History.Instance.UpdateRollingSnapshotAsync();
+			History.ArtificialMaxTime = 0;
+			History.UpdateRollingSnapshotAsync();
 		}
 
 		private void TimerElapsed(object sender, EventArgs e)
@@ -128,7 +144,7 @@ namespace Alloclave
 			System.Timers.Timer timer = (System.Timers.Timer)sender;
 			timer.Stop();
 
-			if (History.Instance.ArtificialMaxTime == 0)
+			if (History.ArtificialMaxTime == 0)
 			{
 				// Recalculate the percentage
 				//UInt64 timeRange = History.Instance.TimeRange.Max - History.Instance.TimeRange.Min;
@@ -160,7 +176,7 @@ namespace Alloclave
 
 		void ColorPickerDialog_ColorChanged(object sender, EventArgs e)
 		{
-			History.Instance.UpdateRollingSnapshotAsync(true);
+			History.UpdateRollingSnapshotAsync(true);
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -284,7 +300,7 @@ namespace Alloclave
 				return;
 			}
 
-			MemoryBlock block = History.Instance.Snapshot.Find(targetAllocation.Address);
+			MemoryBlock block = History.Snapshot.Find(targetAllocation.Address);
 			if (block != null)
 			{
 				Renderer.SelectedBlock = block;
@@ -315,7 +331,7 @@ namespace Alloclave
 
 				lock (RebuildDataLock)
 				{
-					Renderer.HoverBlock = History.Instance.Snapshot.Find(Renderer.GetLocalMouseLocation());
+					Renderer.HoverBlock = History.Snapshot.Find(Renderer.GetLocalMouseLocation());
 				}
 			}
 		}
@@ -333,7 +349,7 @@ namespace Alloclave
 
 				lock (RebuildDataLock)
 				{
-					Renderer.SelectedBlock = History.Instance.Snapshot.Find(Renderer.GetLocalMouseLocation());
+					Renderer.SelectedBlock = History.Snapshot.Find(Renderer.GetLocalMouseLocation());
 					if (Renderer.SelectedBlock != null)
 					{
 						SelectionChangedEventArgs e = new SelectionChangedEventArgs();
@@ -351,8 +367,8 @@ namespace Alloclave
 
 		private void AddressSpace_SizeChanged(object sender, EventArgs e)
 		{
-			History.Instance.RebaseBlocks = true;
-			History.Instance.UpdateRollingSnapshotAsync();
+			History.RebaseBlocks = true;
+			History.UpdateRollingSnapshotAsync();
 		}
 
 		private void AddressSpace_MouseHover(object sender, EventArgs e)

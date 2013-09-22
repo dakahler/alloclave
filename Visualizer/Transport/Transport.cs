@@ -11,6 +11,8 @@ namespace Alloclave
 	{
 		public TargetSystemInfo TargetSystemInfo = new TargetSystemInfo();
 
+		internal PacketBundle PacketBundle = new PacketBundle();
+
 		public Transport()
 		{
 			
@@ -40,7 +42,7 @@ namespace Alloclave
 			CustomBinaryReader binaryReader = new CustomBinaryReader(
 				memoryStream, visualizerEndianness, targetEndianness);
 
-			PacketBundle.Instance.Deserialize(binaryReader, TargetSystemInfo);
+			PacketBundle.Deserialize(binaryReader, TargetSystemInfo);
 		}
 	}
 }

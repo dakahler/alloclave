@@ -21,7 +21,12 @@ namespace Alloclave
 		AddressSpace Parent;
 		GLControl glControl;
 		bool GlControlLoaded;
-		bool ShowText = true;
+
+		bool ShowText
+		{
+			get;
+			set;
+		}
 
 		OpenTK.Graphics.TextPrinter textPrinter = new OpenTK.Graphics.TextPrinter(OpenTK.Graphics.TextQuality.High);
 
@@ -39,6 +44,8 @@ namespace Alloclave
 			glControl.MouseMove += new MouseEventHandler(Parent.AddressSpace_MouseMove);
 			glControl.MouseWheel += new MouseEventHandler(Parent.AddressSpace_MouseWheel);
 			glControl.MouseLeave += new EventHandler(Parent.AddressSpace_MouseLeave);
+
+			ShowText = true;
 		}
 
 		~AddressSpaceRenderer_OGL()
@@ -148,7 +155,7 @@ namespace Alloclave
 
 				GL.PopMatrix();
 
-				if (History.Instance.Snapshot.Count == 0 && ShowText)
+				if (ShowText)
 				{
 					GL.PushMatrix();
 					String waitingText = "Waiting For Data...";
@@ -160,10 +167,6 @@ namespace Alloclave
 
 					textPrinter.Print(waitingText, font, Color.FromArgb(200, 200, 200));
 					GL.PopMatrix();
-				}
-				else
-				{
-					ShowText = false;
 				}
 
 				glControl.SwapBuffers();

@@ -83,6 +83,8 @@ namespace Alloclave_Plugin
 
 		private void MonitorHeap(ref Process process)
 		{
+			// TODO
+			/*
 			int pid = process.Id;
 			HeapWalker heapWalker = new HeapWalker();
 			List<AllocationData> oldData = new List<AllocationData>();
@@ -143,6 +145,7 @@ namespace Alloclave_Plugin
 
 				Thread.Sleep(1000);
 			}
+			*/
 		}
 	}
 }

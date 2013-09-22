@@ -188,7 +188,7 @@ namespace Alloclave
 			}
 		}
 
-		public void Rebuild(int width)
+		public void Rebuild(Snapshot snapshot, int width)
 		{
 			// TODO: Vertex incremental rebuilding
 			uint numVertices = 0;
@@ -204,7 +204,7 @@ namespace Alloclave
 				vbo = VBO2;
 			}
 
-			foreach (var block in History.Instance.Snapshot)
+			foreach (var block in snapshot)
 			{
 				foreach (Triangle triangle in block.Triangles)
 				{

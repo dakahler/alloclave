@@ -21,21 +21,8 @@ namespace Alloclave
 		Object AddLock = new Object();
 
 		// TODO: Might not be able to make these static
-		internal static event EventHandler Updated;
-		public static bool SuspendRebuilding = false;
-		private static History _Instance;
-		public static History Instance
-		{
-			get
-			{
-				if (_Instance == null)
-				{
-					_Instance = new History();
-				}
-
-				return _Instance;
-			}
-		}
+		internal event EventHandler Updated;
+		public bool SuspendRebuilding = false;
 
 		internal class Range
 		{
@@ -104,7 +91,7 @@ namespace Alloclave
 			set;
 		}
 
-		private History()
+		public History()
 		{
 			//this.Add(new Allocation(), 0);
 			//this.Add(new Allocation(), 1);
@@ -145,7 +132,8 @@ namespace Alloclave
 						if (!SentTrialWarning)
 						{
 							SentTrialWarning = true;
-							MessagesForm.Add(MessagesForm.MessageType.Warning, null, "Trial version can only collect 30 seconds of data.");
+							MessagesForm.Add(MessagesForm.MessageType.Warning, null,
+								"Trial version can only collect 30 seconds of data.");
 						}
 
 						return;
@@ -205,7 +193,7 @@ namespace Alloclave
 						bool forceUpdate = false;
 						if (RebaseBlocks)
 						{
-							History.Instance.Snapshot.Rebase(AddressRange.Min, AddressWidth);
+							Snapshot.Rebase(AddressRange.Min, AddressWidth);
 							RebaseBlocks = false;
 							forceUpdate = true;
 						}
@@ -220,7 +208,7 @@ namespace Alloclave
 						bool isBackward = false;
 						if (forceFullRebuild)
 						{
-							History.Instance.Snapshot.Reset();
+							Snapshot.Reset();
 							packets = Get();
 						}
 						else
@@ -289,7 +277,7 @@ namespace Alloclave
 
 									if (!isBackward)
 									{
-										MemoryBlock newBlock = History.Instance.Snapshot.Add(
+										MemoryBlock newBlock = Snapshot.Add(
 											allocation, AddressRange.Min, AddressWidth);
 
 										if (newBlock == null)
@@ -299,16 +287,16 @@ namespace Alloclave
 									}
 									else
 									{
-										History.Instance.Snapshot.Remove(allocation.Address);
+										Snapshot.Remove(allocation.Address);
 									}
 								}
 								else
 								{
 									Free free = pair.Value as Free;
 
-									if (History.Instance.Snapshot.Find(free.Address) != null)
+									if (Snapshot.Find(free.Address) != null)
 									{
-										MemoryBlock removedBlock = History.Instance.Snapshot.Remove(free.Address);
+										MemoryBlock removedBlock = Snapshot.Remove(free.Address);
 										if (removedBlock != null)
 										{
 											removedBlock.Allocation.AssociatedFree = free;
@@ -323,7 +311,7 @@ namespace Alloclave
 									{
 										if (isBackward)
 										{
-											MemoryBlock newBlock = History.Instance.Snapshot.Add(
+											MemoryBlock newBlock = Snapshot.Add(
 												free.AssociatedAllocation, AddressRange.Min, AddressWidth);
 										}
 										else
@@ -380,9 +368,9 @@ namespace Alloclave
 			}
 		}
 
-		public static void ForceRebuild()
+		public void ForceRebuild()
 		{
-			Instance.UpdateRollingSnapshotAsync();
+			UpdateRollingSnapshotAsync();
 		}
 	}
 }

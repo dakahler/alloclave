@@ -15,11 +15,11 @@ namespace Alloclave
 	{
 		private AddressSpaceScroller_OGL AddressSpaceScroller;
 
-		public AllocationForm()
+		public AllocationForm(History history)
 		{
 			InitializeComponent();
 
-			this.AddressSpaceScroller = new Alloclave.AddressSpaceScroller_OGL(AddressSpaceControl.Width);
+			this.AddressSpaceScroller = new Alloclave.AddressSpaceScroller_OGL(history, AddressSpaceControl.Width);
 			this.AddressSpaceScroller.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.AddressSpaceScroller.Location = new System.Drawing.Point(679, 6);
 			this.AddressSpaceScroller.Name = "AddressSpaceScroller";
@@ -30,17 +30,12 @@ namespace Alloclave
 			TopLevel = false;
 			AddressSpaceScroller.FocusChanged += addressSpaceScroller_FocusChanged;
 			this.SizeChanged += AllocationForm_SizeChanged;
-			MainScrubber.PositionChanged += MainScrubber_PositionChanged;
 
 			// Disabled by default - gets enabled when data comes in
 			this.Enabled = false;
 
 			AddressSpaceControl.PauseChanged += AddressSpaceControl_PauseChanged;
-		}
-
-		void MainScrubber_PositionChanged(object sender, EventArgs e)
-		{
-			History.Instance.UpdateRollingSnapshotAsync();
+			AddressSpaceControl.History = history;
 		}
 
 		void AllocationForm_SizeChanged(object sender, EventArgs e)

@@ -80,10 +80,8 @@ namespace Alloclave
 		{
 			if (FocusChanged != null)
 			{
-				Rectangle bounds = History.Instance.Snapshot.Bounds;
-
 				UInt64 maxWidth = (UInt64)ParentWidth;
-				UInt64 maxHeight = (UInt64)bounds.Bottom;
+				UInt64 maxHeight = (UInt64)Bounds.Bottom;
 
 				// Focusing width-wise is jarring
 				focus.X = Width / 2;
@@ -98,6 +96,11 @@ namespace Alloclave
 				MouseEventArgs eventArgs = new MouseEventArgs(MouseButtons.Left, 1, (int)finalPoint.X, (int)finalPoint.Y, 0);
 				FocusChanged(this, eventArgs);
 			}
+		}
+
+		protected abstract Rectangle Bounds
+		{
+			get;
 		}
 	}
 }
