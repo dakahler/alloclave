@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace Alloclave
 {
+	[DataContract()]
 	internal class TimeStamp : IComparable
 	{
 		public TimeStamp()
@@ -124,8 +126,12 @@ namespace Alloclave
 			return 0;
 		}
 
+		[DataMember]
 		public readonly UInt64 Time;
+
+		[DataMember]
 		private UInt64 UID;
+
 		private static UInt64 UniquenessModifier = 0;
 	}
 }

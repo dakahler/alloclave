@@ -25,7 +25,7 @@ namespace Alloclave
 
 		CommandLineOptions options = new CommandLineOptions();
 
-		
+		TransportForm TransportForm;
 
 		public Main()
 		{
@@ -165,17 +165,17 @@ namespace Alloclave
 		{
 			Transport transport = transportAdapter.CreateExport().Value;
 
-			TransportForm transportForm = new TransportForm(ref transport);
-			transportForm.Text = transportAdapter.Metadata.Name;
+			TransportForm = new TransportForm(ref transport);
+			TransportForm.Text = transportAdapter.Metadata.Name;
 
 			transport.SpawnCustomUI(this);
 
-			transportForm.TopLevel = false;
-			transportForm.FormBorderStyle = FormBorderStyle.None;
-			transportForm.Dock = DockStyle.Fill;
-			transportForm.Visible = true;
+			TransportForm.TopLevel = false;
+			TransportForm.FormBorderStyle = FormBorderStyle.None;
+			TransportForm.Dock = DockStyle.Fill;
+			TransportForm.Visible = true;
 			menuStrip1.Show();
-			_DockPanel.Controls.Add(transportForm);
+			_DockPanel.Controls.Add(TransportForm);
 		}
 
 		public void ReturnToStartScreen()
@@ -233,6 +233,31 @@ namespace Alloclave
 		private void helpToolStripMenuItem_DropDownClosed(object sender, EventArgs e)
 		{
 			helpToolStripMenuItem.ForeColor = Color.White;
+		}
+
+		private void NewMenuItem_Click(object sender, EventArgs e)
+		{
+			
+		}
+
+		private void OpenMenuItem_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+			openFileDialog.Filter = "XML|*.xml";
+			if (openFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				TransportForm.Load(openFileDialog.FileName);
+			}
+		}
+
+		private void SaveMenuItem_Click(object sender, EventArgs e)
+		{
+			SaveFileDialog saveFileDialog = new SaveFileDialog();
+			saveFileDialog.Filter = "XML|*.xml";
+			if (saveFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				TransportForm.Save(saveFileDialog.FileName);
+			}
 		}
 	}
 

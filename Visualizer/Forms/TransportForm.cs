@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Alloclave
 {
 	internal partial class TransportForm : ToolForm
 	{
-		Profile Profile;
+		public Profile Profile
+		{
+			get;
+			set;
+		}
+
 		AllocationForm AllocationForm;
 		MessagesForm MessagesForm = new MessagesForm();
 		InfoForm InfoForm = new InfoForm();
@@ -54,6 +62,11 @@ namespace Alloclave
 			: this()
 		{
 			Profile = new Profile(ref transport);
+			Init();
+		}
+
+		private void Init()
+		{
 			Profile.History.Updated += History_Updated;
 
 			AllocationForm = new AllocationForm(Profile.History);
@@ -67,6 +80,39 @@ namespace Alloclave
 			InfoForm.Show(MessagesForm.Pane, WeifenLuo.WinFormsUI.Docking.DockAlignment.Right, 0.55);
 
 			WeifenLuo.WinFormsUI.Docking.DockHelper.PreventActivation = false;
+		}
+
+		public void Save(String path)
+		{
+			if (!File.Exists(path))
+			{
+				return;
+			}
+
+			DataContractSerializer serializer = new DataContractSerializer(Profile.GetType());
+			var settings = new XmlWriterSettings { Indent = true };
+			using (var w = XmlWriter.Create(File.Create(path), settings))
+			{
+				serializer.WriteObject(w, Profile);
+			}
+		}
+
+		public void Load(String path)
+		{
+			if (!File.Exists(path))
+			{
+				return;
+			}
+
+			DataContractSerializer serializer = new DataContractSerializer(Profile.GetType());
+			FileStream fileStream = new FileStream(path, FileMode.Open);
+			Profile = (Profile)serializer.ReadObject(fileStream);
+
+			// TODO: Whole transport form needs to be reinitialized on load
+			InitializeComponent();
+			Init();
+			Profile.History.LastTimestamp = new TimeStamp();
+			Profile.History.UpdateRollingSnapshotAsync(true);
 		}
 	}
 }

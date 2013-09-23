@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Xml.Serialization;
+using System.Runtime.Serialization;
+using System.Xml;
 
 namespace Alloclave
 {
-	internal class Profile
+	[DataContract()]
+	public class Profile
 	{
+		[DataMember]
 		public History History = new History();
 		Transport Transport;
 

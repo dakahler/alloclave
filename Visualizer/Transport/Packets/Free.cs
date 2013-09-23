@@ -5,16 +5,25 @@ using System.Text;
 using System.IO;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace Alloclave
 {
+	[DataContract()]
 	public class Free : IPacket
 	{
 		// Data passed in from target system
 		// TODO: Better encapsulation
+		[DataMember]
 		public UInt64 Address;
+
+		[DataMember]
 		public UInt32 HeapId;
+
+		[DataMember]
 		internal CallStack Stack = new CallStack();
+
+		[DataMember]
 		public byte[] UserData;
 
 		public Allocation AssociatedAllocation;

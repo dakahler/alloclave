@@ -6,9 +6,11 @@ using System.IO;
 using System.ComponentModel.Composition;
 using System.Drawing;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace Alloclave
 {
+	[DataContract()]
 	public class Allocation : IPacket, IComparable
 	{
 		public enum AllocationType : byte
@@ -19,16 +21,30 @@ namespace Alloclave
 
 		// Data passed in from target system
 		// TODO: Better encapsulation
+		[DataMember]
 		public UInt64 Address;
+
+		[DataMember]
 		public UInt64 Size;
+
+		[DataMember]
 		public UInt64 Alignment;
+
+		[DataMember]
 		public AllocationType Type;
+
+		[DataMember]
 		public UInt32 HeapId;
+
+		[DataMember]
 		internal CallStack Stack = new CallStack();
+
+		[DataMember]
 		public byte[] UserData;
 
 		internal Free AssociatedFree;
 
+		[DataMember]
 		public Common.Architecture Architecture;
 
 		// HACK

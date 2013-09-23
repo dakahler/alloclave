@@ -2,13 +2,19 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Alloclave
 {
+	[DataContract()]
+	[KnownType(typeof(Allocation))]
+	[KnownType(typeof(Free))]
 	public sealed class History
 	{
+		[DataMember]
 		SortedList<TimeStamp, IPacket> PacketList = new SortedList<TimeStamp, IPacket>();
 
 		DateTime TrialStartTime;
@@ -18,14 +24,20 @@ namespace Alloclave
 		int Position = -1;
 
 		// TODO: Need to find a better way to synchronize this
+		[DataMember]
 		Object AddLock = new Object();
 
 		internal event EventHandler Updated;
-		public bool SuspendRebuilding = false;
 
-		internal class Range
+		public bool SuspendRebuilding;
+
+		[DataContract()]
+		public class Range
 		{
+			[DataMember]
 			public UInt64 Min;
+
+			[DataMember]
 			public UInt64 Max;
 
 			public Range()
@@ -35,6 +47,7 @@ namespace Alloclave
 			}
 		}
 
+		[DataMember]
 		private Range _AddressRange = new Range();
 		internal Range AddressRange
 		{
@@ -67,23 +80,31 @@ namespace Alloclave
 
 		internal bool RebaseBlocks;
 
-        private Snapshot _Snapshot = new Snapshot();
-		internal Snapshot Snapshot
+        private Snapshot _Snapshot;
+		public Snapshot Snapshot
         {
             get
             {
+				if (_Snapshot == null)
+				{
+					_Snapshot = new Snapshot();
+				}
+
                 return _Snapshot;
             }
         }
 
 		// TODO: This should be exposed in the UI
+		[DataMember]
 		const UInt64 AddressWidth = 0xFF;
 
-		TimeStamp LastTimestamp = new TimeStamp();
+		[DataMember]
+		internal TimeStamp LastTimestamp = new TimeStamp();
 		UInt64 LastRange = 0;
 
 		internal event EventHandler Rebuilt;
 
+		[DataMember]
 		internal UInt64 ArtificialMaxTime
 		{
 			get;

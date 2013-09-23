@@ -4,19 +4,25 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace Alloclave
 {
+	[DataContract()]
 	internal class CallStack : ICustomSerializable
 	{
+		[DataContract()]
 		public class Frame
 		{
 			//public String FunctionSignature;
 			//public String FilePath;
 			//public uint LineNumber;
+
+			[DataMember]
 			public UInt64 Address;
 		}
 
+		[DataMember]
 		public Stack<Frame> Frames = new Stack<Frame>();
 
 		public CallStack()
