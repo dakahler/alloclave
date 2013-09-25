@@ -69,6 +69,7 @@ namespace Alloclave
 		private uint VboHandle;
 
 		private bool BuffersCreated = false;
+		private bool BuffersDirty = true;
 
 		System.Timers.Timer FrameTimer;
 
@@ -155,6 +156,8 @@ namespace Alloclave
 
 		public void Render()
 		{
+			bool callBufferData = BuffersDirty;
+
 			if (OnRender != null)
 			{
 				MulticastDelegate m = (MulticastDelegate)OnRender;
@@ -171,12 +174,17 @@ namespace Alloclave
 						continue;
 					}
 
-					// Tell OpenGL to discard old VBO when done drawing it and reserve memory _now_ for a new buffer.
-					// without this, GL would wait until draw operations on old VBO are complete before writing to it
-					GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * NumVertices), IntPtr.Zero, BufferUsageHint.StreamDraw);
+					if (callBufferData)
+					{
+						// Tell OpenGL to discard old VBO when done drawing it and reserve memory _now_ for a new buffer.
+						// without this, GL would wait until draw operations on old VBO are complete before writing to it
+						GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * NumVertices), IntPtr.Zero, BufferUsageHint.StreamDraw);
 
-					// Fill newly allocated buffer
-					GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * NumVertices), VBO, BufferUsageHint.StreamDraw);
+						// Fill newly allocated buffer
+						GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(VertexData.SizeInBytes * NumVertices), VBO, BufferUsageHint.StreamDraw);
+
+						BuffersDirty = false;
+					}
 
 					// Draw everything
 					GL.DrawArrays(BeginMode.Triangles, 0, (int)NumVertices);
@@ -229,6 +237,7 @@ namespace Alloclave
 			VBO = vbo;
 			NumVertices = numVertices;
 			IsVbo1 = !IsVbo1;
+			BuffersDirty = true;
 		}
 
 		//private void ChangeBlockColor(KeyValuePair<MemoryBlock, BlockMetadata> block, Color color, float blend)
