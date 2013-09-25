@@ -102,76 +102,87 @@ namespace Alloclave
 
 		void OnRender(object sender, RenderManager_OGL.RenderEventArgs e)
 		{
-			if (!GlControlLoaded)
+			try
 			{
-				return;
-			}
-
-			if (e.IsPreRender)
-			{
-				Monitor.Enter(glControl);
-				glControl.MakeCurrent();
-
-				GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-				GL.MatrixMode(MatrixMode.Modelview);
-
-				GL.PushMatrix();
-				GL.Translate(Offset.X, Offset.Y, 0);
-				GL.Scale(Scale, Scale, Scale);
-			}
-			else
-			{
-				// TODO: These should modify the VBO instead of using immediate mode
-				MemoryBlock selectedBlock = _SelectedBlock;
-				if (selectedBlock != null)
+				if (!GlControlLoaded)
 				{
-					GL.Begin(BeginMode.Triangles);
-					GL.Color3(Color.FromArgb(40, 40, 40));
-					foreach (Triangle triangle in selectedBlock.Triangles)
-					{
-						foreach (Vector vertex in triangle.Vertices)
-						{
-							GL.Vertex3(vertex.X * Width, vertex.Y, 1);
-						}
-					}
-					GL.End();
+					return;
 				}
 
-				MemoryBlock hoverBlock = _HoverBlock;
-				if (hoverBlock != null)
+				if (e.IsPreRender)
 				{
-					GL.Begin(BeginMode.Triangles);
-					GL.Color3(Color.FromArgb(40, 40, 40));
-					foreach (Triangle triangle in hoverBlock.Triangles)
+					Monitor.Enter(glControl);
+
+					if (!glControl.Context.IsCurrent)
 					{
-						foreach (Vector vertex in triangle.Vertices)
-						{
-							GL.Vertex3(vertex.X * Width, vertex.Y, 1);
-						}
+						glControl.MakeCurrent();
 					}
-					GL.End();
-				}
 
-				GL.PopMatrix();
+					GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-				if (ShowText)
-				{
+					GL.MatrixMode(MatrixMode.Modelview);
+
 					GL.PushMatrix();
-					String waitingText = "Waiting For Data...";
-					Font font = new Font("Arial", 30);
-					OpenTK.Graphics.TextExtents extents = textPrinter.Measure(waitingText, font);
-
-					GL.Translate((glControl.Width / 2) - (extents.BoundingBox.Width / 2),
-						(glControl.Height / 2) - (extents.BoundingBox.Height / 2), 0);
-
-					textPrinter.Print(waitingText, font, Color.FromArgb(200, 200, 200));
-					GL.PopMatrix();
+					GL.Translate(Offset.X, Offset.Y, 0);
+					GL.Scale(Scale, Scale, Scale);
 				}
+				else
+				{
+					// TODO: These should modify the VBO instead of using immediate mode
+					MemoryBlock selectedBlock = _SelectedBlock;
+					if (selectedBlock != null)
+					{
+						GL.Begin(BeginMode.Triangles);
+						GL.Color3(Color.FromArgb(40, 40, 40));
+						foreach (Triangle triangle in selectedBlock.Triangles)
+						{
+							foreach (Vector vertex in triangle.Vertices)
+							{
+								GL.Vertex3(vertex.X * Width, vertex.Y, 1);
+							}
+						}
+						GL.End();
+					}
 
-				glControl.SwapBuffers();
-				glControl.Context.MakeCurrent(null);
-				Monitor.Exit(glControl);
+					MemoryBlock hoverBlock = _HoverBlock;
+					if (hoverBlock != null)
+					{
+						GL.Begin(BeginMode.Triangles);
+						GL.Color3(Color.FromArgb(40, 40, 40));
+						foreach (Triangle triangle in hoverBlock.Triangles)
+						{
+							foreach (Vector vertex in triangle.Vertices)
+							{
+								GL.Vertex3(vertex.X * Width, vertex.Y, 1);
+							}
+						}
+						GL.End();
+					}
+
+					GL.PopMatrix();
+
+					if (ShowText)
+					{
+						GL.PushMatrix();
+						String waitingText = "Waiting For Data...";
+						Font font = new Font("Arial", 30);
+						OpenTK.Graphics.TextExtents extents = textPrinter.Measure(waitingText, font);
+
+						GL.Translate((glControl.Width / 2) - (extents.BoundingBox.Width / 2),
+							(glControl.Height / 2) - (extents.BoundingBox.Height / 2), 0);
+
+						textPrinter.Print(waitingText, font, Color.FromArgb(200, 200, 200));
+						GL.PopMatrix();
+					}
+
+					glControl.SwapBuffers();
+					glControl.Context.MakeCurrent(null);
+					Monitor.Exit(glControl);
+				}
+			}
+			catch (ObjectDisposedException)
+			{
+
 			}
 		}
 

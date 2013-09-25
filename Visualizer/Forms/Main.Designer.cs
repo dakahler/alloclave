@@ -31,14 +31,13 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.NewMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.OpenMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.SaveMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this._DockPanel = new System.Windows.Forms.Panel();
-			this.NewMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.OpenMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -73,12 +72,30 @@
 			this.fileToolStripMenuItem.DropDownClosed += new System.EventHandler(this.fileToolStripMenuItem_DropDownClosed);
 			this.fileToolStripMenuItem.DropDownOpening += new System.EventHandler(this.fileToolStripMenuItem_DropDownOpening);
 			// 
+			// NewMenuItem
+			// 
+			this.NewMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+			this.NewMenuItem.ForeColor = System.Drawing.Color.White;
+			this.NewMenuItem.Name = "NewMenuItem";
+			this.NewMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.NewMenuItem.Text = "New";
+			this.NewMenuItem.Click += new System.EventHandler(this.NewMenuItem_Click);
+			// 
+			// OpenMenuItem
+			// 
+			this.OpenMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+			this.OpenMenuItem.ForeColor = System.Drawing.Color.White;
+			this.OpenMenuItem.Name = "OpenMenuItem";
+			this.OpenMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.OpenMenuItem.Text = "Open...";
+			this.OpenMenuItem.Click += new System.EventHandler(this.OpenMenuItem_Click);
+			// 
 			// SaveMenuItem
 			// 
 			this.SaveMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
 			this.SaveMenuItem.ForeColor = System.Drawing.Color.White;
 			this.SaveMenuItem.Name = "SaveMenuItem";
-			this.SaveMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.SaveMenuItem.Size = new System.Drawing.Size(113, 22);
 			this.SaveMenuItem.Text = "Save";
 			this.SaveMenuItem.Click += new System.EventHandler(this.SaveMenuItem_Click);
 			// 
@@ -87,14 +104,14 @@
 			this.toolStripSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
 			this.toolStripSeparator1.ForeColor = System.Drawing.Color.White;
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(110, 6);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this.exitToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
 			this.exitToolStripMenuItem.ForeColor = System.Drawing.Color.White;
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
 			this.exitToolStripMenuItem.Text = "E&xit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
 			// 
@@ -120,34 +137,6 @@
 			this.aboutToolStripMenuItem.Text = "&About...";
 			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
 			// 
-			// _DockPanel
-			// 
-			this._DockPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this._DockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._DockPanel.ForeColor = System.Drawing.Color.White;
-			this._DockPanel.Location = new System.Drawing.Point(0, 24);
-			this._DockPanel.Name = "_DockPanel";
-			this._DockPanel.Size = new System.Drawing.Size(1017, 702);
-			this._DockPanel.TabIndex = 2;
-			// 
-			// NewMenuItem
-			// 
-			this.NewMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-			this.NewMenuItem.ForeColor = System.Drawing.Color.White;
-			this.NewMenuItem.Name = "NewMenuItem";
-			this.NewMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.NewMenuItem.Text = "New";
-			this.NewMenuItem.Click += new System.EventHandler(this.NewMenuItem_Click);
-			// 
-			// OpenMenuItem
-			// 
-			this.OpenMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-			this.OpenMenuItem.ForeColor = System.Drawing.Color.White;
-			this.OpenMenuItem.Name = "OpenMenuItem";
-			this.OpenMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.OpenMenuItem.Text = "Open...";
-			this.OpenMenuItem.Click += new System.EventHandler(this.OpenMenuItem_Click);
-			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -155,7 +144,6 @@
 			this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.ClientSize = new System.Drawing.Size(1017, 726);
-			this.Controls.Add(this._DockPanel);
 			this.Controls.Add(this.menuStrip1);
 			this.DoubleBuffered = true;
 			this.ForeColor = System.Drawing.Color.White;
@@ -177,7 +165,6 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-		private System.Windows.Forms.Panel _DockPanel;
 		private System.Windows.Forms.ToolStripMenuItem SaveMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripMenuItem NewMenuItem;

@@ -58,6 +58,12 @@ namespace Alloclave
 			Profile.History.UpdateRollingSnapshotAsync();
 		}
 
+		public TransportForm(Profile profile)
+		{
+			Profile = profile;
+			Init();
+		}
+
 		public TransportForm(ref Transport transport)
 			: this()
 		{
@@ -80,39 +86,6 @@ namespace Alloclave
 			InfoForm.Show(MessagesForm.Pane, WeifenLuo.WinFormsUI.Docking.DockAlignment.Right, 0.55);
 
 			WeifenLuo.WinFormsUI.Docking.DockHelper.PreventActivation = false;
-		}
-
-		public void Save(String path)
-		{
-			if (!File.Exists(path))
-			{
-				return;
-			}
-
-			DataContractSerializer serializer = new DataContractSerializer(Profile.GetType());
-			var settings = new XmlWriterSettings { Indent = true };
-			using (var w = XmlWriter.Create(File.Create(path), settings))
-			{
-				serializer.WriteObject(w, Profile);
-			}
-		}
-
-		public void Load(String path)
-		{
-			if (!File.Exists(path))
-			{
-				return;
-			}
-
-			DataContractSerializer serializer = new DataContractSerializer(Profile.GetType());
-			FileStream fileStream = new FileStream(path, FileMode.Open);
-			Profile = (Profile)serializer.ReadObject(fileStream);
-
-			// TODO: Whole transport form needs to be reinitialized on load
-			InitializeComponent();
-			Init();
-			Profile.History.LastTimestamp = new TimeStamp();
-			Profile.History.UpdateRollingSnapshotAsync(true);
 		}
 	}
 }

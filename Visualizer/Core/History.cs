@@ -81,7 +81,7 @@ namespace Alloclave
 		internal bool RebaseBlocks;
 
         private Snapshot _Snapshot;
-		public Snapshot Snapshot
+		internal Snapshot Snapshot
         {
             get
             {

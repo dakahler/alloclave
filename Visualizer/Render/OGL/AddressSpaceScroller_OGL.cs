@@ -85,33 +85,44 @@ namespace Alloclave
 
 		void OnRender(object sender, RenderManager_OGL.RenderEventArgs e)
 		{
-			if (e.IsPreRender)
+			try
 			{
-				Monitor.Enter(glControl);
-				glControl.MakeCurrent();
+				if (e.IsPreRender)
+				{
+					Monitor.Enter(glControl);
 
-				Rectangle bounds = Bounds;
+					if (!glControl.Context.IsCurrent)
+					{
+						glControl.MakeCurrent();
+					}
 
-				UInt64 maxWidth = (UInt64)ParentWidth;
-				UInt64 maxHeight = (UInt64)bounds.Bottom;
+					Rectangle bounds = Bounds;
 
-				float scaleX = (float)Width / (float)maxWidth;
-				float scaleY = (float)Height / (float)maxHeight;
+					UInt64 maxWidth = (UInt64)ParentWidth;
+					UInt64 maxHeight = (UInt64)bounds.Bottom;
+
+					float scaleX = (float)Width / (float)maxWidth;
+					float scaleY = (float)Height / (float)maxHeight;
 
 
-				GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+					GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-				GL.MatrixMode(MatrixMode.Modelview);
+					GL.MatrixMode(MatrixMode.Modelview);
 
-				GL.PushMatrix();
-				GL.Scale(scaleX, scaleY, 1);
+					GL.PushMatrix();
+					GL.Scale(scaleX, scaleY, 1);
+				}
+				else
+				{
+					GL.PopMatrix();
+					glControl.SwapBuffers();
+					glControl.Context.MakeCurrent(null);
+					Monitor.Exit(glControl);
+				}
 			}
-			else
+			catch (ObjectDisposedException)
 			{
-				GL.PopMatrix();
-				glControl.SwapBuffers();
-				glControl.Context.MakeCurrent(null);
-				Monitor.Exit(glControl);
+
 			}
 		}
 

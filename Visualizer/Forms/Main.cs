@@ -9,6 +9,9 @@ using System.Text;
 using System.Windows.Forms;
 using CommandLine;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.IO;
+using System.Xml;
 
 namespace Alloclave
 {
@@ -26,6 +29,7 @@ namespace Alloclave
 		CommandLineOptions options = new CommandLineOptions();
 
 		TransportForm TransportForm;
+		StartScreen StartScreen;
 
 		public Main()
 		{
@@ -107,16 +111,6 @@ namespace Alloclave
 			return false;
 		}
 
-		void ClearDockControls()
-		{
-			_DockPanel.Controls.Clear();
-
-			//foreach (Control control in _DockPanel.Controls)
-			//{
-			//	control.Dispose();
-			//}
-		}
-
 		public void StartNewSession(String autoTransportSelect = null)
 		{
 			NewForm newForm = new NewForm();
@@ -142,7 +136,8 @@ namespace Alloclave
 
             if (newForm.TransportComboBox.Items.Count == 1 || newForm.ShowDialog() == DialogResult.OK)
 			{
-				ClearDockControls();
+				//ClearDockControls();
+				Controls.Remove(StartScreen);
 
 				foreach (ExportFactory<Transport, ITransportName> transportAdapter in Program.TransportAdapters)
 				{
@@ -175,27 +170,27 @@ namespace Alloclave
 			TransportForm.Dock = DockStyle.Fill;
 			TransportForm.Visible = true;
 			menuStrip1.Show();
-			_DockPanel.Controls.Add(TransportForm);
+			Controls.Add(TransportForm);
 		}
 
 		public void ReturnToStartScreen()
 		{
 			// Too many issues with disposing controls
 
-			ClearDockControls();
+			//ClearDockControls();
 			//History.Instance.Reset();
 			//MemoryBlockManager.Instance.Reset();
 			//RenderManager_OGL.Instance.Rebuild();
 			//Scrubber.Position = 1.0f;
 
 			// Show the start screen
-			StartScreen startScreen = new StartScreen();
+			StartScreen = new StartScreen();
 
-			startScreen.TopLevel = false;
-			startScreen.FormBorderStyle = FormBorderStyle.None;
-			startScreen.Dock = DockStyle.Fill;
-			startScreen.Visible = true;
-			_DockPanel.Controls.Add(startScreen);
+			StartScreen.TopLevel = false;
+			StartScreen.FormBorderStyle = FormBorderStyle.None;
+			StartScreen.Dock = DockStyle.Fill;
+			StartScreen.Visible = true;
+			Controls.Add(StartScreen);
 		}
 
 		private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -246,7 +241,7 @@ namespace Alloclave
 			openFileDialog.Filter = "XML|*.xml";
 			if (openFileDialog.ShowDialog() == DialogResult.OK)
 			{
-				TransportForm.Load(openFileDialog.FileName);
+				Load(openFileDialog.FileName);
 			}
 		}
 
@@ -256,8 +251,48 @@ namespace Alloclave
 			saveFileDialog.Filter = "XML|*.xml";
 			if (saveFileDialog.ShowDialog() == DialogResult.OK)
 			{
-				TransportForm.Save(saveFileDialog.FileName);
+				Save(saveFileDialog.FileName);
 			}
+		}
+
+		public void Save(String path)
+		{
+			if (!File.Exists(path))
+			{
+				return;
+			}
+
+			DataContractSerializer serializer = new DataContractSerializer(typeof(Profile));
+			var settings = new XmlWriterSettings { Indent = true };
+			using (var w = XmlWriter.Create(File.Create(path), settings))
+			{
+				serializer.WriteObject(w, TransportForm.Profile);
+			}
+		}
+
+		public void Load(String path)
+		{
+			if (!File.Exists(path))
+			{
+				return;
+			}
+
+			DataContractSerializer serializer = new DataContractSerializer(typeof(Profile));
+			FileStream fileStream = new FileStream(path, FileMode.Open);
+			Profile profile = (Profile)serializer.ReadObject(fileStream);
+
+			// TODO: Whole transport form needs to be reinitialized on load
+			TransportForm.Close();
+			TransportForm = new TransportForm(profile);
+
+			TransportForm.TopLevel = false;
+			TransportForm.FormBorderStyle = FormBorderStyle.None;
+			TransportForm.Dock = DockStyle.Fill;
+			TransportForm.Visible = true;
+			Controls.Add(TransportForm);
+
+			TransportForm.Profile.History.LastTimestamp = new TimeStamp();
+			TransportForm.Profile.History.UpdateRollingSnapshotAsync(true);
 		}
 	}
 
