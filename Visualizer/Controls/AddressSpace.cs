@@ -80,7 +80,6 @@ namespace Alloclave
 		public AddressSpace()
 		{
 			InitializeComponent();
-			this.DoubleBuffered = true;
 
 			Renderer = new AddressSpaceRenderer_OGL(this);
 

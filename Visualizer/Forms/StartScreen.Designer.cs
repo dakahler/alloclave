@@ -202,7 +202,6 @@
 			this.ClientSize = new System.Drawing.Size(713, 454);
 			this.ControlBox = false;
 			this.Controls.Add(this.panel1);
-			this.DoubleBuffered = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "StartScreen";
