@@ -237,12 +237,16 @@ namespace Alloclave
 
 		private void OpenMenuItem_Click(object sender, EventArgs e)
 		{
+			RenderManager_OGL.Instance.Suspend = true;
+
 			OpenFileDialog openFileDialog = new OpenFileDialog();
 			openFileDialog.Filter = "XML|*.xml";
 			if (openFileDialog.ShowDialog() == DialogResult.OK)
 			{
 				Load(openFileDialog.FileName);
 			}
+
+			RenderManager_OGL.Instance.Suspend = false;
 		}
 
 		private void SaveMenuItem_Click(object sender, EventArgs e)
@@ -282,7 +286,8 @@ namespace Alloclave
 			Profile profile = (Profile)serializer.ReadObject(fileStream);
 
 			// TODO: Whole transport form needs to be reinitialized on load
-			TransportForm.Close();
+			//TransportForm.Close();
+			TransportForm.Dispose();
 			TransportForm = new TransportForm(profile);
 
 			TransportForm.TopLevel = false;

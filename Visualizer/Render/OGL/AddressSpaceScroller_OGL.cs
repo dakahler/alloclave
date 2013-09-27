@@ -36,8 +36,25 @@ namespace Alloclave
 
 		~AddressSpaceScroller_OGL()
 		{
-			glControl.Dispose();
-			glControl = null;
+			
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			RenderManager_OGL.Instance.OnRender -= OnRender;
+			RenderManager_OGL.Instance.OnDispose -= OnDispose;
+
+
+			if (glControl != null && !glControl.Disposing)
+			{
+				lock (glControl)
+				{
+					glControl.Dispose();
+					glControl = null;
+				}
+			}
+
+			base.Dispose(disposing);
 		}
 
 		void glControl_Load(object sender, EventArgs e)

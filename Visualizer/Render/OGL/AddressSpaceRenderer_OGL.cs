@@ -50,10 +50,21 @@ namespace Alloclave
 
 		~AddressSpaceRenderer_OGL()
 		{
+			
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			RenderManager_OGL.Instance.OnRender -= OnRender;
+			RenderManager_OGL.Instance.OnDispose -= OnDispose;
+
 			if (glControl != null && !glControl.Disposing)
 			{
-				glControl.Dispose();
-				glControl = null;
+				lock (glControl)
+				{
+					glControl.Dispose();
+					glControl = null;
+				}
 			}
 		}
 
@@ -96,8 +107,7 @@ namespace Alloclave
 
 		void OnDispose(object sender, EventArgs e)
 		{
-			glControl.Dispose();
-			glControl = null;
+			Dispose(true);
 		}
 
 		void OnRender(object sender, RenderManager_OGL.RenderEventArgs e)

@@ -59,6 +59,7 @@ namespace Alloclave
 		}
 
 		public TransportForm(Profile profile)
+			: this()
 		{
 			Profile = profile;
 			Init();

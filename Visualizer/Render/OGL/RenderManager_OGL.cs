@@ -73,6 +73,8 @@ namespace Alloclave
 
 		System.Timers.Timer FrameTimer;
 
+		public bool Suspend;
+
 		private RenderManager_OGL()
 		{
 			FrameTimer = new System.Timers.Timer(FrameInterval);
@@ -147,6 +149,11 @@ namespace Alloclave
 
 		public void Update()
 		{
+			if (Suspend)
+			{
+				return;
+			}
+
 			if (OnUpdate != null)
 			{
 				EventArgs e = new EventArgs();
@@ -156,6 +163,11 @@ namespace Alloclave
 
 		public void Render()
 		{
+			if (Suspend)
+			{
+				return;
+			}
+
 			bool callBufferData = BuffersDirty;
 
 			if (OnRender != null)

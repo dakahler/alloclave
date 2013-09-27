@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace Alloclave
 {
-	abstract class AddressSpaceRenderer
+	abstract class AddressSpaceRenderer : IDisposable
 	{
 		protected MemoryBlock _SelectedBlock;
 		public virtual MemoryBlock SelectedBlock
@@ -91,5 +91,21 @@ namespace Alloclave
 
 			return finalPoint;
 		}
+
+		// Implement IDisposable. 
+		// Do not make this method virtual. 
+		// A derived class should not be able to override this method. 
+		public void Dispose()
+		{
+			Dispose(true);
+			// This object will be cleaned up by the Dispose method. 
+			// Therefore, you should call GC.SupressFinalize to 
+			// take this object off the finalization queue 
+			// and prevent finalization code for this object 
+			// from executing a second time.
+			GC.SuppressFinalize(this);
+		}
+
+		protected abstract void Dispose(bool disposing);
 	}
 }
