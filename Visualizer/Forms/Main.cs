@@ -266,6 +266,7 @@ namespace Alloclave
 			using (var w = XmlWriter.Create(File.Create(path), settings))
 			{
 				serializer.WriteObject(w, TransportForm.Profile);
+				w.Close();
 			}
 		}
 
@@ -279,6 +280,7 @@ namespace Alloclave
 			DataContractSerializer serializer = new DataContractSerializer(typeof(Profile));
 			FileStream fileStream = new FileStream(path, FileMode.Open);
 			Profile profile = (Profile)serializer.ReadObject(fileStream);
+			fileStream.Close();
 
 			// TODO: Whole transport form needs to be reinitialized on load
 			//TransportForm.Close();
