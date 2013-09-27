@@ -261,11 +261,6 @@ namespace Alloclave
 
 		public void Save(String path)
 		{
-			if (!File.Exists(path))
-			{
-				return;
-			}
-
 			DataContractSerializer serializer = new DataContractSerializer(typeof(Profile));
 			var settings = new XmlWriterSettings { Indent = true };
 			using (var w = XmlWriter.Create(File.Create(path), settings))
