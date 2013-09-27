@@ -63,6 +63,7 @@ namespace Alloclave
 		{
 			Profile = profile;
 			Init();
+			AllocationForm.Enabled = true;
 		}
 
 		public TransportForm(ref Transport transport)
