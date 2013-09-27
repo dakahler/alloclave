@@ -21,6 +21,7 @@ namespace Alloclave
 		bool SentTrialWarning;
 
 		// Position tracker
+		[DataMember]
 		int Position = -1;
 
 		// TODO: Need to find a better way to synchronize this
