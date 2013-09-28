@@ -14,15 +14,6 @@ namespace Alloclave
 {
 	class RenderManager_OGL : IDisposable
 	{
-		static readonly RenderManager_OGL _Instance = new RenderManager_OGL();
-		public static RenderManager_OGL Instance
-		{
-			get
-			{
-				return _Instance;
-			}
-		}
-
 		public class RenderEventArgs : EventArgs
 		{
 			public bool IsPreRender = true;
@@ -73,9 +64,9 @@ namespace Alloclave
 
 		System.Timers.Timer FrameTimer;
 
-		public bool Suspend;
+		public static bool Suspend { get; set; }
 
-		RenderManager_OGL()
+		public RenderManager_OGL()
 		{
 			FrameTimer = new System.Timers.Timer(FrameInterval);
 			FrameTimer.Elapsed += TimerElapsed;

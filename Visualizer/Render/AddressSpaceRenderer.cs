@@ -75,6 +75,20 @@ namespace Alloclave
 			return finalPoint;
 		}
 
+		internal virtual void Rebuilt(History history)
+		{
+			// TODO: Too circular how history calls this and then it asks history for stuff
+			if (!history.Snapshot.Contains(SelectedBlock))
+			{
+				SelectedBlock = null;
+			}
+
+			if (!history.Snapshot.Contains(HoverBlock))
+			{
+				HoverBlock = null;
+			}
+		}
+
 		// Implement IDisposable. 
 		// Do not make this method virtual. 
 		// A derived class should not be able to override this method. 

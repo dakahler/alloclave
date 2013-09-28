@@ -15,11 +15,13 @@ namespace Alloclave
 	{
 		GLControl glControl;
 		History History;
+		RenderManager_OGL RenderManager;
 
-		public AddressSpaceScroller_OGL(History history, int parentWidth)
+		public AddressSpaceScroller_OGL(History history, RenderManager_OGL renderManager, int parentWidth)
 			: base(parentWidth)
 		{
 			History = history;
+			RenderManager = renderManager;
 
 			glControl = new GLControl();
 			glControl.Parent = this;
@@ -41,8 +43,8 @@ namespace Alloclave
 
 		protected override void Dispose(bool disposing)
 		{
-			RenderManager_OGL.Instance.OnRender -= OnRender;
-			RenderManager_OGL.Instance.OnDispose -= OnDispose;
+			RenderManager.OnRender -= OnRender;
+			RenderManager.OnDispose -= OnDispose;
 
 
 			if (glControl != null && !glControl.Disposing)
@@ -77,7 +79,7 @@ namespace Alloclave
 				GL.EnableClientState(ArrayCap.ColorArray);
 				GL.EnableClientState(ArrayCap.VertexArray);
 
-				RenderManager_OGL.Instance.Bind();
+				RenderManager.Bind();
 
 
 				glControl.BringToFront();
@@ -87,8 +89,8 @@ namespace Alloclave
 
 			SetupViewport();
 
-			RenderManager_OGL.Instance.OnRender += OnRender;
-			RenderManager_OGL.Instance.OnDispose += OnDispose;
+			RenderManager.OnRender += OnRender;
+			RenderManager.OnDispose += OnDispose;
 		}
 
 		void OnDispose(object sender, EventArgs e)

@@ -13,7 +13,8 @@ namespace Alloclave
 {
 	internal partial class AllocationForm : ToolForm
 	{
-		private AddressSpaceScroller_OGL AddressSpaceScroller;
+		AddressSpaceScroller_OGL AddressSpaceScroller;
+		RenderManager_OGL RenderManager = new RenderManager_OGL();
 
 		public AllocationForm(History history)
 		{
@@ -24,7 +25,10 @@ namespace Alloclave
 			MainScrubber.MousePressed += ((object sender, MouseEventArgs e) => Scrubber_MouseDown(history, e));
 			MainScrubber.MouseReleased += ((object sender, MouseEventArgs e) => Scrubber_MouseUp(history, e));
 
-			this.AddressSpaceScroller = new Alloclave.AddressSpaceScroller_OGL(history, AddressSpaceControl.Width);
+			AddressSpaceControl.Renderer = new AddressSpaceRenderer_OGL(AddressSpaceControl, RenderManager);
+
+			this.AddressSpaceScroller =
+				new Alloclave.AddressSpaceScroller_OGL(history, RenderManager, AddressSpaceControl.Width);
 			this.AddressSpaceScroller.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.AddressSpaceScroller.Location = new System.Drawing.Point(679, 6);
 			this.AddressSpaceScroller.Name = "AddressSpaceScroller";

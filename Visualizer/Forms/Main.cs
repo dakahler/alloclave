@@ -91,7 +91,7 @@ namespace Alloclave
 
 		void Main_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			RenderManager_OGL.Instance.Dispose();
+			RenderManager_OGL.Suspend = true;
 			Properties.Settings.Default.Save();
 		}
 
@@ -237,7 +237,7 @@ namespace Alloclave
 
 		public void OpenMenuItem_Click(object sender, EventArgs e)
 		{
-			RenderManager_OGL.Instance.Suspend = true;
+			RenderManager_OGL.Suspend = true;
 
 			OpenFileDialog openFileDialog = new OpenFileDialog();
 			openFileDialog.Filter = "XML|*.xml";
@@ -246,7 +246,7 @@ namespace Alloclave
 				Load(openFileDialog.FileName);
 			}
 
-			RenderManager_OGL.Instance.Suspend = false;
+			RenderManager_OGL.Suspend = false;
 		}
 
 		void SaveMenuItem_Click(object sender, EventArgs e)
@@ -271,6 +271,8 @@ namespace Alloclave
 			var settings = new XmlWriterSettings { Indent = true };
 			using (var w = XmlWriter.Create(File.Create(path), settings))
 			{
+				// Force all symbols into the name cache
+				TransportForm.Profile.History.ForceFullSymbolLookup();
 
 				serializer.WriteObject(w, TransportForm.Profile);
 				w.Close();

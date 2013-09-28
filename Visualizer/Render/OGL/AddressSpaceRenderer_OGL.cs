@@ -20,6 +20,8 @@ namespace Alloclave
 	{
 		AddressSpace Parent;
 		GLControl glControl;
+		RenderManager_OGL RenderManager;
+
 		bool GlControlLoaded;
 
 		bool ShowText
@@ -30,9 +32,11 @@ namespace Alloclave
 
 		OpenTK.Graphics.TextPrinter textPrinter = new OpenTK.Graphics.TextPrinter(OpenTK.Graphics.TextQuality.High);
 
-		public AddressSpaceRenderer_OGL(AddressSpace parent)
+		public AddressSpaceRenderer_OGL(AddressSpace parent, RenderManager_OGL renderManager)
 		{
 			Parent = parent;
+			RenderManager = renderManager;
+
 			glControl = new GLControl();
 			glControl.Parent = parent;
 			glControl.Dock = DockStyle.Fill;
@@ -55,8 +59,8 @@ namespace Alloclave
 
 		protected override void Dispose(bool disposing)
 		{
-			RenderManager_OGL.Instance.OnRender -= OnRender;
-			RenderManager_OGL.Instance.OnDispose -= OnDispose;
+			RenderManager.OnRender -= OnRender;
+			RenderManager.OnDispose -= OnDispose;
 
 			if (glControl != null && !glControl.Disposing)
 			{
@@ -91,7 +95,7 @@ namespace Alloclave
 				GL.EnableClientState(ArrayCap.ColorArray);
 				GL.EnableClientState(ArrayCap.VertexArray);
 
-				RenderManager_OGL.Instance.Bind();
+				RenderManager.Bind();
 
 				glControl.BringToFront();
 				GlControlLoaded = true;
@@ -101,8 +105,8 @@ namespace Alloclave
 
 			SetupViewport();
 
-			RenderManager_OGL.Instance.OnRender += OnRender;
-			RenderManager_OGL.Instance.OnDispose += OnDispose;
+			RenderManager.OnRender += OnRender;
+			RenderManager.OnDispose += OnDispose;
 		}
 
 		void OnDispose(object sender, EventArgs e)
@@ -216,6 +220,12 @@ namespace Alloclave
 
 				glControl.Context.MakeCurrent(null);
 			}
+		}
+
+		internal override void Rebuilt(History history)
+		{
+			base.Rebuilt(history);
+			RenderManager.Rebuild(history.Snapshot, (int)Width);
 		}
 
 		protected override float Width

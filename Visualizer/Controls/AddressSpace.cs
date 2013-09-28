@@ -27,7 +27,7 @@ namespace Alloclave
 
 		//RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
 
-		AddressSpaceRenderer Renderer;
+		public AddressSpaceRenderer Renderer { get; set; }
 
 		Object RebuildDataLock = new Object();
 		AutoResetEvent RecalculateSelectedBlock = new AutoResetEvent(false);
@@ -81,10 +81,6 @@ namespace Alloclave
 		{
 			InitializeComponent();
 
-			Renderer = new AddressSpaceRenderer_OGL(this);
-
-			//Tooltip.RtbPCtrl = printCtrl;
-
 			this.MouseWheel += AddressSpace_MouseWheel;
 
 			ColorPickerDialog.ColorChanged += ColorPickerDialog_ColorChanged;
@@ -108,19 +104,7 @@ namespace Alloclave
 		void Snapshot_Rebuilt(object sender, EventArgs e)
 		{
 			History history = sender as History;
-
-			// TODO: Too circular how history calls this and then it asks history for stuff
-			if (!history.Snapshot.Contains(Renderer.SelectedBlock))
-			{
-				Renderer.SelectedBlock = null;
-			}
-
-			if (!history.Snapshot.Contains(Renderer.HoverBlock))
-			{
-				Renderer.HoverBlock = null;
-			}
-
-			RenderManager_OGL.Instance.Rebuild(history.Snapshot, Width);
+			Renderer.Rebuilt(History);
 		}
 
 		void TimerElapsed(object sender, EventArgs e)
