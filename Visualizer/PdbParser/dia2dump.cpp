@@ -99,7 +99,7 @@ bool LoadDataFromPdb(
   //                      __uuidof(IDiaDataSource),
   //                      (void **) ppSource);
 
-  hr = NoRegCoCreate( L"msdia110.dll", _uuidof( DiaSourceAlt ), _uuidof( IDiaDataSource ), (void **) ppSource );
+  hr = NoRegCoCreate( L"msdia120.dll", _uuidof( DiaSourceAlt ), _uuidof( IDiaDataSource ), (void **) ppSource );
 
   
 
