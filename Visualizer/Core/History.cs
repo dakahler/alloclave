@@ -399,5 +399,20 @@ namespace Alloclave
 		{
 			UpdateRollingSnapshotAsync();
 		}
+
+		public void ForceFullSymbolLookup()
+		{
+			foreach (IPacket packet in PacketList.Values)
+			{
+				Allocation allocation = packet as Allocation;
+				if (allocation != null)
+				{
+					foreach (var frame in allocation.Stack.Frames)
+					{
+						SymbolLookup.Instance.Lookup(frame.Address);
+					}
+				}
+			}
+		}
 	}
 }
