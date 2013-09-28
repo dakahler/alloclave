@@ -40,7 +40,7 @@ namespace Alloclave
 
 		public GraphicsPath GraphicsPath = new GraphicsPath();
 
-		private RectangleF _Bounds = new RectangleF();
+		RectangleF _Bounds = new RectangleF();
 		public RectangleF Bounds
 		{
 			get
@@ -67,7 +67,7 @@ namespace Alloclave
 			Create(allocation, startAddress, addressWidth, color);
 		}
 
-		private static Vector GetPixelPos(UInt64 address, UInt64 startAddress, UInt64 addressWidth)
+		static Vector GetPixelPos(UInt64 address, UInt64 startAddress, UInt64 addressWidth)
 		{
 			UInt64 workingStartAddress = address - startAddress;
 
@@ -88,7 +88,7 @@ namespace Alloclave
 			return new Vector((int)pixelX, (int)pixelY);
 		}
 
-		private void Create(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, Color color)
+		void Create(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, Color color)
 		{
 			Triangles.Clear();
 

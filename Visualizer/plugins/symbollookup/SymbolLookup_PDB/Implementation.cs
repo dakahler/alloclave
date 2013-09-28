@@ -16,14 +16,14 @@ namespace Alloclave_Plugin
 		static Alloclave.PdbParser pdbParser = new Alloclave.PdbParser();
 		static bool IsLoaded;
 
-		private String TempPdbPath;
+		String TempPdbPath;
 
 		public SymbolLookup_PDB()
 		{
 			LoadSymbols();
 		}
 
-		private void LoadSymbols()
+		void LoadSymbols()
 		{
 			if (!IsLoaded && File.Exists(SymbolsPath))
 			{

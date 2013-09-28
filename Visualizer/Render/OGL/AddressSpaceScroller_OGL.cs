@@ -148,7 +148,7 @@ namespace Alloclave
 			SetupViewport();
 		}
 
-		private void SetupViewport()
+		void SetupViewport()
 		{
 			lock (glControl)
 			{

@@ -18,7 +18,7 @@ namespace Alloclave
 
 		// This should only be used by the serializer
 		[DataMember]
-		private SymbolLookup SymbolLookup
+		SymbolLookup SymbolLookup
 		{
 			get
 			{

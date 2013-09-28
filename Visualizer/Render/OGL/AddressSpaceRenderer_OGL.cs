@@ -139,7 +139,7 @@ namespace Alloclave
 				else
 				{
 					// TODO: These should modify the VBO instead of using immediate mode
-					MemoryBlock selectedBlock = _SelectedBlock;
+					MemoryBlock selectedBlock = SelectedBlock;
 					if (selectedBlock != null)
 					{
 						GL.Begin(BeginMode.Triangles);
@@ -154,7 +154,7 @@ namespace Alloclave
 						GL.End();
 					}
 
-					MemoryBlock hoverBlock = _HoverBlock;
+					MemoryBlock hoverBlock = HoverBlock;
 					if (hoverBlock != null)
 					{
 						GL.Begin(BeginMode.Triangles);
@@ -201,7 +201,7 @@ namespace Alloclave
 			SetupViewport();
 		}
 
-		private void SetupViewport()
+		void SetupViewport()
 		{
 			lock (glControl)
 			{

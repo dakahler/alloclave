@@ -20,11 +20,11 @@ namespace Alloclave
 		public static Main Instance;
 
 		[DllImport("user32.dll")]
-		private static extern IntPtr WindowFromPoint(Point pt);
+		static extern IntPtr WindowFromPoint(Point pt);
 		[DllImport("user32.dll")]
-		private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
+		static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
 
-		private const uint WM_MOUSEWHEEL = 0x20a;
+		const uint WM_MOUSEWHEEL = 0x20a;
 
 		CommandLineOptions options = new CommandLineOptions();
 
@@ -151,12 +151,12 @@ namespace Alloclave
 			}
 		}
 
-		private void newToolStripMenuItem_Click(object sender, EventArgs e)
+		void newToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			StartNewSession();
 		}
 
-		private void SpawnTransport(ExportFactory<Transport, ITransportName> transportAdapter)
+		void SpawnTransport(ExportFactory<Transport, ITransportName> transportAdapter)
 		{
 			Transport transport = transportAdapter.CreateExport().Value;
 
@@ -193,49 +193,49 @@ namespace Alloclave
 			Controls.Add(StartScreen);
 		}
 
-		private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+		void aboutToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			AboutForm aboutForm = new AboutForm();
 			aboutForm.ShowDialog();
 		}
 
-		private void customizeToolStripMenuItem_Click(object sender, EventArgs e)
+		void customizeToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Alloclave.ColorPickerDialog dialog = new Alloclave.ColorPickerDialog();
 			dialog.ShowDialog();
 		}
 
-		private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+		void exitToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Application.Exit();
 		}
 
-		private void fileToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+		void fileToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
 		{
 			fileToolStripMenuItem.ForeColor = Color.Black;
 		}
 
-		private void fileToolStripMenuItem_DropDownClosed(object sender, EventArgs e)
+		void fileToolStripMenuItem_DropDownClosed(object sender, EventArgs e)
 		{
 			fileToolStripMenuItem.ForeColor = Color.White;
 		}
 
-		private void helpToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+		void helpToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
 		{
 			helpToolStripMenuItem.ForeColor = Color.Black;
 		}
 
-		private void helpToolStripMenuItem_DropDownClosed(object sender, EventArgs e)
+		void helpToolStripMenuItem_DropDownClosed(object sender, EventArgs e)
 		{
 			helpToolStripMenuItem.ForeColor = Color.White;
 		}
 
-		private void NewMenuItem_Click(object sender, EventArgs e)
+		void NewMenuItem_Click(object sender, EventArgs e)
 		{
 			
 		}
 
-		private void OpenMenuItem_Click(object sender, EventArgs e)
+		void OpenMenuItem_Click(object sender, EventArgs e)
 		{
 			RenderManager_OGL.Instance.Suspend = true;
 
@@ -249,7 +249,7 @@ namespace Alloclave
 			RenderManager_OGL.Instance.Suspend = false;
 		}
 
-		private void SaveMenuItem_Click(object sender, EventArgs e)
+		void SaveMenuItem_Click(object sender, EventArgs e)
 		{
 			SaveFileDialog saveFileDialog = new SaveFileDialog();
 			saveFileDialog.Filter = "XML|*.xml";
@@ -259,7 +259,7 @@ namespace Alloclave
 			}
 		}
 
-		public void Save(String path)
+		void Save(String path)
 		{
 			List<Type> knownTypes = new List<Type>();
 			if (SymbolLookup.Instance != null)
@@ -277,7 +277,7 @@ namespace Alloclave
 			}
 		}
 
-		public void Load(String path)
+		new void Load(String path)
 		{
 			if (!File.Exists(path))
 			{

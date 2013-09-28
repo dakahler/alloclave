@@ -130,8 +130,8 @@ namespace Alloclave
 		public readonly UInt64 Time;
 
 		[DataMember]
-		private UInt64 UID;
+		UInt64 UID;
 
-		private static UInt64 UniquenessModifier = 0;
+		static UInt64 UniquenessModifier = 0;
 	}
 }

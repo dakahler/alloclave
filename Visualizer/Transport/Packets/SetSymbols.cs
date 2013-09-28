@@ -9,8 +9,7 @@ namespace Alloclave
 	internal class SetSymbols : IPacket
 	{
 		// Data passed in from target system
-		// TODO: Better encapsulation
-		public String SymbolsPath;
+		public String SymbolsPath { get; set; }
 
 		public byte[] Serialize(TargetSystemInfo targetSystemInfo)
 		{

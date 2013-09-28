@@ -24,16 +24,16 @@ namespace Alloclave
 
 	class Program
 	{
-		private static CompositionContainer _container;
+		static CompositionContainer _container;
 
 		public static IEnumerable<ExportFactory<Transport, ITransportName>> TransportAdapters;
 		public static IEnumerable<ExportFactory<SymbolLookup, ISymbolLookupExtension>> SymbolLookupAdapters;
 		
 		[ImportMany]
-		private IEnumerable<ExportFactory<Transport, ITransportName>> InternalTransportAdapters = null;
+		IEnumerable<ExportFactory<Transport, ITransportName>> InternalTransportAdapters = null;
 
 		[ImportMany]
-		private IEnumerable<ExportFactory<SymbolLookup, ISymbolLookupExtension>> InternalSymbolLookupAdapters = null;
+		IEnumerable<ExportFactory<SymbolLookup, ISymbolLookupExtension>> InternalSymbolLookupAdapters = null;
 
 		[DllImport("kernel32.dll")]
 		static extern bool AttachConsole(int dwProcessId);
@@ -41,9 +41,9 @@ namespace Alloclave
 		[DllImport("kernel32.dll")]
 		static extern bool FreeConsole();
 
-		private const int ATTACH_PARENT_PROCESS = -1;
+		const int ATTACH_PARENT_PROCESS = -1;
 
-		private static void ImportPlugins()
+		static void ImportPlugins()
 		{
 			// Figure out proper plugins location
 			String executablePath = Application.StartupPath;
@@ -119,7 +119,7 @@ namespace Alloclave
 				Application.Run(licensing);
 			}
 
-			if (Licensing.CurrentLicenseStatus != Licensing.LicenseStatus.Invalid)
+			if (Licensing.Status != Licensing.LicenseStatus.Invalid)
 			{
 				AttachConsole(ATTACH_PARENT_PROCESS);
 

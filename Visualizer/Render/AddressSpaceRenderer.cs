@@ -11,30 +11,16 @@ namespace Alloclave
 {
 	abstract class AddressSpaceRenderer : IDisposable
 	{
-		protected MemoryBlock _SelectedBlock;
 		public virtual MemoryBlock SelectedBlock
 		{
-			get
-			{
-				return _SelectedBlock;
-			}
-			set
-			{
-				_SelectedBlock = value;
-			}
+			get;
+			set;
 		}
 
-		protected MemoryBlock _HoverBlock;
 		public virtual MemoryBlock HoverBlock
 		{
-			get
-			{
-				return _HoverBlock;
-			}
-			set
-			{
-				_HoverBlock = value;
-			}
+			get;
+			set;
 		}
 
 		protected Vector _Offset = new Vector();
@@ -68,18 +54,15 @@ namespace Alloclave
 			get;
 		}
 
-		protected Vector _CurrentMouseLocation;
 		public virtual Vector CurrentMouseLocation
 		{
-			set
-			{
-				_CurrentMouseLocation = value;
-			}
+			private get;
+			set;
 		}
 
 		public Vector GetLocalMouseLocation()
 		{
-			return GetLocalMouseLocation(_CurrentMouseLocation);
+			return GetLocalMouseLocation(CurrentMouseLocation);
 		}
 
 		public Vector GetLocalMouseLocation(Vector worldLocation)

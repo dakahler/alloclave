@@ -13,8 +13,8 @@ namespace Alloclave
 {
 	internal abstract partial class AddressSpaceScroller : UserControl
 	{
-		private bool IsLeftMouseDown;
-		private bool IsMiddleMouseDown;
+		bool IsLeftMouseDown;
+		bool IsMiddleMouseDown;
 
 		public int ParentWidth;
 

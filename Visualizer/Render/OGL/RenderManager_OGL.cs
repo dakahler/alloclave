@@ -14,7 +14,7 @@ namespace Alloclave
 {
 	class RenderManager_OGL : IDisposable
 	{
-		private static readonly RenderManager_OGL _Instance = new RenderManager_OGL();
+		static readonly RenderManager_OGL _Instance = new RenderManager_OGL();
 		public static RenderManager_OGL Instance
 		{
 			get
@@ -34,7 +34,7 @@ namespace Alloclave
 		public event RenderEventHandler OnRender;
 		public event EventHandler OnDispose;
 
-		private const double FrameInterval = 30.0;
+		const double FrameInterval = 30.0;
 
 		//private class BlockMetadata
 		//{
@@ -50,7 +50,7 @@ namespace Alloclave
 		//	public const float AliveSeconds = 3.0f;
 		//}
 
-		private struct VertexData
+		struct VertexData
 		{
 			public byte R, G, B, A;
 			public Vector3 Position;
@@ -58,24 +58,24 @@ namespace Alloclave
 			public static int SizeInBytes = 16;
 		}
 
-		private const int MaxVertices = 1000000;
-		private VertexData[] VBO = new VertexData[MaxVertices];
+		const int MaxVertices = 1000000;
+		VertexData[] VBO = new VertexData[MaxVertices];
 
 		bool IsVbo1 = true;
-		private VertexData[] VBO1 = new VertexData[MaxVertices];
-		private VertexData[] VBO2 = new VertexData[MaxVertices];
+		VertexData[] VBO1 = new VertexData[MaxVertices];
+		VertexData[] VBO2 = new VertexData[MaxVertices];
 
-		private uint NumVertices = MaxVertices;
-		private uint VboHandle;
+		uint NumVertices = MaxVertices;
+		uint VboHandle;
 
-		private bool BuffersCreated = false;
-		private bool BuffersDirty = true;
+		bool BuffersCreated = false;
+		bool BuffersDirty = true;
 
 		System.Timers.Timer FrameTimer;
 
 		public bool Suspend;
 
-		private RenderManager_OGL()
+		RenderManager_OGL()
 		{
 			FrameTimer = new System.Timers.Timer(FrameInterval);
 			FrameTimer.Elapsed += TimerElapsed;
@@ -113,7 +113,7 @@ namespace Alloclave
 			FrameTimer.Start();
 		}
 
-		private void TimerElapsed(object sender, EventArgs e)
+		void TimerElapsed(object sender, EventArgs e)
 		{
 			System.Timers.Timer timer = (System.Timers.Timer)sender;
 			timer.Stop();

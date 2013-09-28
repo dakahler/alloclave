@@ -13,20 +13,19 @@ namespace Alloclave
 	public class Free : IPacket
 	{
 		// Data passed in from target system
-		// TODO: Better encapsulation
 		[DataMember]
-		public UInt64 Address;
+		public UInt64 Address { get; set; }
 
 		[DataMember]
-		public UInt32 HeapId;
+		public UInt32 HeapId { get; set; }
 
 		[DataMember]
 		internal CallStack Stack = new CallStack();
 
 		[DataMember]
-		public byte[] UserData;
+		public byte[] UserData { get; set; }
 
-		public Allocation AssociatedAllocation;
+		public Allocation AssociatedAllocation { get; set; }
 
 		public Free()
 		{

@@ -18,6 +18,7 @@ namespace Alloclave
 		Graphics MainGraphics;
 		bool LeftMouseDown;
 
+		// TODO: Still hacky
 		public double _Position = 1.0;
 		public double Position
 		{
@@ -136,12 +137,12 @@ namespace Alloclave
 			e.Graphics.DrawImage(MainBitmap, new Point(0, 0));
 		}
 
-		private void Scrubber_SizeChanged(object sender, EventArgs e)
+		void Scrubber_SizeChanged(object sender, EventArgs e)
 		{
 			Rebuild();
 		}
 
-		private void Scrubber_MouseDown(object sender, MouseEventArgs e)
+		void Scrubber_MouseDown(object sender, MouseEventArgs e)
 		{
 			if (Cursor.Current != Cursors.Hand)
 			{
@@ -157,7 +158,7 @@ namespace Alloclave
 			SetPosition(e);
 		}
 
-		private void Scrubber_MouseUp(object sender, MouseEventArgs e)
+		void Scrubber_MouseUp(object sender, MouseEventArgs e)
 		{
 			LeftMouseDown = false;
 			Redraw();
@@ -168,7 +169,7 @@ namespace Alloclave
 			}
 		}
 
-		private void Scrubber_MouseMove(object sender, MouseEventArgs e)
+		void Scrubber_MouseMove(object sender, MouseEventArgs e)
 		{
 			if (LeftMouseDown)
 			{
@@ -195,7 +196,7 @@ namespace Alloclave
 			}
 		}
 
-		private void SetPosition(MouseEventArgs e)
+		void SetPosition(MouseEventArgs e)
 		{
 			// This all calculates the fudge factor needed to make sure
 			// the scrubber is centered horizontally on the mouse location

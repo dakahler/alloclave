@@ -49,7 +49,7 @@ namespace Alloclave
 		}
 
 		[DataMember]
-		private Range _AddressRange = new Range();
+		Range _AddressRange = new Range();
 		internal Range AddressRange
 		{
 			get
@@ -81,7 +81,7 @@ namespace Alloclave
 
 		internal bool RebaseBlocks;
 
-        private Snapshot _Snapshot;
+        Snapshot _Snapshot;
 		internal Snapshot Snapshot
         {
             get

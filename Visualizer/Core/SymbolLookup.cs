@@ -12,7 +12,7 @@ namespace Alloclave
 	public abstract class SymbolLookup
 	{
 		[DataMember]
-		private Dictionary<UInt64, String> NameCache
+		Dictionary<UInt64, String> NameCache
 		{
 			get;
 			set;
@@ -24,7 +24,7 @@ namespace Alloclave
 			set;
 		}
 
-		private static String _SymbolsPath;
+		static String _SymbolsPath;
 		public static String SymbolsPath
 		{
 			get

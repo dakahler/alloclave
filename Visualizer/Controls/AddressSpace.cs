@@ -29,16 +29,16 @@ namespace Alloclave
 
 		AddressSpaceRenderer Renderer;
 
-		private Object RebuildDataLock = new Object();
-		private AutoResetEvent RecalculateSelectedBlock = new AutoResetEvent(false);
-		private AutoResetEvent RecalculateHoverBlock = new AutoResetEvent(false);
+		Object RebuildDataLock = new Object();
+		AutoResetEvent RecalculateSelectedBlock = new AutoResetEvent(false);
+		AutoResetEvent RecalculateHoverBlock = new AutoResetEvent(false);
 
 		CancellationTokenSource TokenSource;
 
 		// TODO: Probably shouldn't be static
 		public static event SelectionChangedEventHandler SelectionChanged;
 
-		private bool _IsPaused = false;
+		bool _IsPaused = false;
 		public bool IsPaused
 		{
 			get
@@ -59,9 +59,9 @@ namespace Alloclave
 		public event EventHandler PauseChanged;
 
 		System.Timers.Timer FrameTimer;
-		private const double FrameInterval = 30.0;
+		const double FrameInterval = 30.0;
 
-		private History _History;
+		History _History;
 		public History History
 		{
 			get
@@ -123,7 +123,7 @@ namespace Alloclave
 			RenderManager_OGL.Instance.Rebuild(history.Snapshot, Width);
 		}
 
-		private void TimerElapsed(object sender, EventArgs e)
+		void TimerElapsed(object sender, EventArgs e)
 		{
 			System.Timers.Timer timer = (System.Timers.Timer)sender;
 			timer.Stop();
@@ -366,13 +366,13 @@ namespace Alloclave
 			// TODO: Tooltip?
 		}
 
-		private void AddressSpace_SizeChanged(object sender, EventArgs e)
+		void AddressSpace_SizeChanged(object sender, EventArgs e)
 		{
 			History.RebaseBlocks = true;
 			History.UpdateRollingSnapshotAsync();
 		}
 
-		private void AddressSpace_MouseHover(object sender, EventArgs e)
+		void AddressSpace_MouseHover(object sender, EventArgs e)
 		{
 			HoverAt(CurrentMouseLocation);
 		}

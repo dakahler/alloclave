@@ -24,7 +24,7 @@ namespace Alloclave
 
 		public event PacketReceivedEventHandler PacketReceived;
 
-		private History _History;
+		History _History;
 		public History History
 		{
 			get

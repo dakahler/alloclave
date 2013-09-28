@@ -20,32 +20,31 @@ namespace Alloclave
 		}
 
 		// Data passed in from target system
-		// TODO: Better encapsulation
 		[DataMember]
-		public UInt64 Address;
+		public UInt64 Address { get; set; }
 
 		[DataMember]
-		public UInt64 Size;
+		public UInt64 Size { get; set; }
 
 		[DataMember]
-		public UInt64 Alignment;
+		public UInt64 Alignment { get; set; }
 
 		[DataMember]
-		public AllocationType Type;
+		public AllocationType Type { get; set; }
 
 		[DataMember]
-		public UInt32 HeapId;
+		public UInt32 HeapId { get; set; }
 
 		[DataMember]
 		internal CallStack Stack = new CallStack();
 
 		[DataMember]
-		public byte[] UserData;
+		public byte[] UserData { get; set; }
 
-		internal Free AssociatedFree;
+		internal Free AssociatedFree { get; set; }
 
 		[DataMember]
-		public Common.Architecture Architecture;
+		public Common.Architecture Architecture { get; set; }
 
 		// HACK
 		bool _HasColor;

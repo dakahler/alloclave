@@ -89,7 +89,7 @@ namespace Alloclave
 			Init();
 		}
 
-		private void Init()
+		void Init()
 		{
 			Profile.History.Updated += History_Updated;
 

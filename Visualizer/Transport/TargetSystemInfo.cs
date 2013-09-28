@@ -22,10 +22,10 @@ namespace Alloclave
 			Endianness = endianness;
 		}
 
-		public String Name;
-		public String Host;
-		public int Port;
-		public Common.Architecture Architecture;
-		public Common.Endianness Endianness;
+		public String Name { get; set; }
+		public String Host { get; set; }
+		public int Port { get; set; }
+		public Common.Architecture Architecture { get; set; }
+		public Common.Endianness Endianness { get; set; }
 	}
 }

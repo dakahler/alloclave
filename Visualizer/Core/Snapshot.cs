@@ -13,7 +13,7 @@ namespace Alloclave
 {
 	sealed class ReverseComparer<T> : IComparer<T>
 	{
-		private readonly IComparer<T> inner;
+		readonly IComparer<T> inner;
 		public ReverseComparer() : this(null) { }
 		public ReverseComparer(IComparer<T> inner)
 		{
@@ -26,11 +26,11 @@ namespace Alloclave
 	{
 		// The dictionary is sorted in reverse order so that the Bounds getter
 		// below runs in O(log n) rather than O(n)
-		private SortedDictionary<UInt64, MemoryBlock> MemoryBlocks =
+		SortedDictionary<UInt64, MemoryBlock> MemoryBlocks =
 			new SortedDictionary<UInt64, MemoryBlock>(new ReverseComparer<UInt64>());
 
-		private Dictionary<uint, int> ColorDictionary = new Dictionary<uint, int>();
-		private int ColorIndex;
+		Dictionary<uint, int> ColorDictionary = new Dictionary<uint, int>();
+		int ColorIndex;
 
 		public int Count
 		{
@@ -69,7 +69,7 @@ namespace Alloclave
 			}
 		}
 
-		private bool isSecondaryColor = false;
+		bool isSecondaryColor = false;
 
 		public Snapshot()
 		{
@@ -251,7 +251,7 @@ namespace Alloclave
 			return null;
 		}
 
-		private class VisualMemoryBlockComparer : IComparer<MemoryBlock>
+		class VisualMemoryBlockComparer : IComparer<MemoryBlock>
 		{
 			public int Compare(MemoryBlock a, MemoryBlock b)
 			{

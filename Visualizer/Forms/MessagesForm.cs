@@ -18,23 +18,22 @@ namespace Alloclave
 
 		private class StringSource
 		{
-			private String _Description;
-			public System.String Description
+			public String Description
 			{
-				get { return _Description; }
-				set { _Description = value; }
+				get;
+				set;
 			}
 
 			public Allocation ReferenceAllocation;
 
 			public StringSource(String description)
 			{
-				_Description = description;
+				Description = description;
 			}
 
 			public StringSource(String description, Allocation referenceAllocation)
+				: this(description)
 			{
-				_Description = description;
 				ReferenceAllocation = referenceAllocation;
 			}
 
