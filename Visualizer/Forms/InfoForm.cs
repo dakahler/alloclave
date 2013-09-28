@@ -59,14 +59,21 @@ namespace Alloclave
 
 				// TODO: Is this parser-specific?
 				String functionName = "";
-				String rawFunctionName = SymbolLookup.Instance.GetName(frame.Address);
-				if (String.IsNullOrEmpty(rawFunctionName) || rawFunctionName.Contains("NULL_THUNK_DATA"))
+				if (SymbolLookup.Instance != null)
 				{
-					functionName += "Unknown";
+					String rawFunctionName = SymbolLookup.Instance.GetName(frame.Address);
+					if (String.IsNullOrEmpty(rawFunctionName) || rawFunctionName.Contains("NULL_THUNK_DATA"))
+					{
+						functionName += "Unknown";
+					}
+					else
+					{
+						functionName += rawFunctionName;
+					}
 				}
 				else
 				{
-					functionName += rawFunctionName;
+					functionName += "Symbol parser not found!";
 				}
 
 				StackTable.Rows.Add(addressText, functionName, "", "");

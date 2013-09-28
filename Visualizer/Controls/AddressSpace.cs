@@ -153,9 +153,7 @@ namespace Alloclave
 
 		~AddressSpace()
 		{
-			TokenSource.Cancel();
-			RecalculateHoverBlock.Set();
-			RecalculateSelectedBlock.Set();
+			
 		}
 
 		/// <summary> 
@@ -165,6 +163,10 @@ namespace Alloclave
 		protected override void Dispose(bool disposing)
 		{
 			Renderer.Dispose();
+
+			TokenSource.Cancel();
+			RecalculateHoverBlock.Set();
+			RecalculateSelectedBlock.Set();
 
 			if (disposing && (components != null))
 			{

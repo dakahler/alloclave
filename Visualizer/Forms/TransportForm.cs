@@ -43,6 +43,22 @@ namespace Alloclave
 			MessagesForm.AllocationSelected += MessagesForm_AllocationSelected;
 		}
 
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			AddressSpace.SelectionChanged -= AddressSpaceControl_SelectionChanged;
+			MessagesForm.AllocationSelected -= MessagesForm_AllocationSelected;
+
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+
 		void AddressSpaceControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			InfoForm.Update(e.SelectedBlock.Allocation);
