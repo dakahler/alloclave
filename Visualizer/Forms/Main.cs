@@ -261,10 +261,17 @@ namespace Alloclave
 
 		public void Save(String path)
 		{
-			DataContractSerializer serializer = new DataContractSerializer(typeof(Profile));
+			List<Type> knownTypes = new List<Type>();
+			if (SymbolLookup.Instance != null)
+			{
+				knownTypes.Add(SymbolLookup.Instance.GetType());
+			}
+
+			DataContractSerializer serializer = new DataContractSerializer(typeof(Profile), knownTypes);
 			var settings = new XmlWriterSettings { Indent = true };
 			using (var w = XmlWriter.Create(File.Create(path), settings))
 			{
+
 				serializer.WriteObject(w, TransportForm.Profile);
 				w.Close();
 			}
@@ -277,7 +284,14 @@ namespace Alloclave
 				return;
 			}
 
-			DataContractSerializer serializer = new DataContractSerializer(typeof(Profile));
+			List<Type> knownTypes = new List<Type>();
+			foreach (ExportFactory<SymbolLookup, ISymbolLookupExtension> symbolLookupAdapter in Program.SymbolLookupAdapters)
+			{
+				Type type = symbolLookupAdapter.CreateExport().Value.GetType();
+				knownTypes.Add(type);
+			}
+
+			DataContractSerializer serializer = new DataContractSerializer(typeof(Profile), knownTypes);
 			FileStream fileStream = new FileStream(path, FileMode.Open);
 			Profile profile = (Profile)serializer.ReadObject(fileStream);
 			fileStream.Close();

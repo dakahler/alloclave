@@ -4,18 +4,24 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.ComponentModel.Composition;
+using System.Runtime.Serialization;
 
 namespace Alloclave
 {
+	[DataContract()]
 	public abstract class SymbolLookup
 	{
-		private static SymbolLookup _Instance;
-		public static SymbolLookup Instance
+		[DataMember]
+		private Dictionary<UInt64, String> NameCache
 		{
-			get
-			{
-				return _Instance;
-			}
+			get;
+			set;
+		}
+
+		internal static SymbolLookup Instance
+		{
+			get;
+			set;
 		}
 
 		private static String _SymbolsPath;
@@ -36,18 +42,35 @@ namespace Alloclave
 						String extension = symbolLookupAdapter.Metadata.Extension;
 						if (String.Compare(Path.GetExtension(_SymbolsPath), "." + extension, true) == 0)
 						{
-							_Instance = symbolLookupAdapter.CreateExport().Value;
+							Instance = symbolLookupAdapter.CreateExport().Value;
 						}
 					}
 				}
 				else
 				{
-					_Instance = null;
+					Instance = null;
 					_SymbolsPath = null;
 				}
 			}
 		}
 
-		public abstract String GetName(UInt64 address);
+		protected SymbolLookup()
+		{
+			NameCache = new Dictionary<UInt64, String>();
+		}
+
+		internal String Lookup(UInt64 address)
+		{
+			String name;
+			if (!NameCache.TryGetValue(address, out name))
+			{
+				name = GetName(address);
+				NameCache.Add(address, name);
+			}
+
+			return name;
+		}
+
+		protected abstract String GetName(UInt64 address);
 	}
 }

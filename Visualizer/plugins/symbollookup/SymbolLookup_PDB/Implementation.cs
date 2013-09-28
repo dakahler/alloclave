@@ -50,7 +50,7 @@ namespace Alloclave_Plugin
 			}
 		}
 
-		public override String GetName(UInt64 address)
+		protected override String GetName(UInt64 address)
 		{
 			LoadSymbols();
 

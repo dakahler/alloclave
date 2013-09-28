@@ -16,6 +16,20 @@ namespace Alloclave
 		public History History = new History();
 		Transport Transport;
 
+		// This should only be used by the serializer
+		[DataMember]
+		private SymbolLookup SymbolLookup
+		{
+			get
+			{
+				return SymbolLookup.Instance;
+			}
+			set
+			{
+				SymbolLookup.Instance = value;
+			}
+		}
+
 		public Profile()
 		{
 			

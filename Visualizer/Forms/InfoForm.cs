@@ -61,7 +61,7 @@ namespace Alloclave
 				String functionName = "";
 				if (SymbolLookup.Instance != null)
 				{
-					String rawFunctionName = SymbolLookup.Instance.GetName(frame.Address);
+					String rawFunctionName = SymbolLookup.Instance.Lookup(frame.Address);
 					if (String.IsNullOrEmpty(rawFunctionName) || rawFunctionName.Contains("NULL_THUNK_DATA"))
 					{
 						functionName += "Unknown";
