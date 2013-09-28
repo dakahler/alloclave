@@ -31,23 +31,31 @@
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.NewPanel = new System.Windows.Forms.Panel();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.NewProfilePictureBox = new System.Windows.Forms.PictureBox();
+			this.openProfilePictureBox = new System.Windows.Forms.PictureBox();
 			this.QuickStartPanel = new System.Windows.Forms.Panel();
 			this.QuickStartPictureBox = new System.Windows.Forms.PictureBox();
 			this.DemoPanel = new System.Windows.Forms.Panel();
 			this.TourPictureBox = new System.Windows.Forms.PictureBox();
 			this.LogoPanel = new System.Windows.Forms.Panel();
 			this.LogoPictureBox = new System.Windows.Forms.PictureBox();
+			this.NewPanel2 = new System.Windows.Forms.Panel();
+			this.OpenPanel = new System.Windows.Forms.Panel();
 			this.panel1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.NewPanel.SuspendLayout();
+			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.NewProfilePictureBox)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.openProfilePictureBox)).BeginInit();
 			this.QuickStartPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.QuickStartPictureBox)).BeginInit();
 			this.DemoPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.TourPictureBox)).BeginInit();
 			this.LogoPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).BeginInit();
+			this.NewPanel2.SuspendLayout();
+			this.OpenPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel1
@@ -82,7 +90,7 @@
 			// NewPanel
 			// 
 			this.NewPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-			this.NewPanel.Controls.Add(this.NewProfilePictureBox);
+			this.NewPanel.Controls.Add(this.tableLayoutPanel2);
 			this.NewPanel.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.NewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.NewPanel.Location = new System.Drawing.Point(10, 78);
@@ -91,13 +99,30 @@
 			this.NewPanel.Size = new System.Drawing.Size(407, 229);
 			this.NewPanel.TabIndex = 0;
 			// 
+			// tableLayoutPanel2
+			// 
+			this.tableLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.tableLayoutPanel2.ColumnCount = 1;
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.Controls.Add(this.NewPanel2, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.OpenPanel, 0, 1);
+			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(10);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 2;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(407, 229);
+			this.tableLayoutPanel2.TabIndex = 1;
+			// 
 			// NewProfilePictureBox
 			// 
 			this.NewProfilePictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.NewProfilePictureBox.Image = global::Alloclave.Properties.Resources.newprofile;
 			this.NewProfilePictureBox.Location = new System.Drawing.Point(0, 0);
 			this.NewProfilePictureBox.Name = "NewProfilePictureBox";
-			this.NewProfilePictureBox.Size = new System.Drawing.Size(407, 229);
+			this.NewProfilePictureBox.Size = new System.Drawing.Size(407, 104);
 			this.NewProfilePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.NewProfilePictureBox.TabIndex = 0;
 			this.NewProfilePictureBox.TabStop = false;
@@ -106,6 +131,18 @@
 			this.NewProfilePictureBox.MouseEnter += new System.EventHandler(this.NewProfilePictureBox_MouseEnter);
 			this.NewProfilePictureBox.MouseLeave += new System.EventHandler(this.NewProfilePictureBox_MouseLeave);
 			this.NewProfilePictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.NewProfilePictureBox_MouseUp);
+			// 
+			// openProfilePictureBox
+			// 
+			this.openProfilePictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.openProfilePictureBox.Image = global::Alloclave.Properties.Resources.play;
+			this.openProfilePictureBox.Location = new System.Drawing.Point(0, 0);
+			this.openProfilePictureBox.Name = "openProfilePictureBox";
+			this.openProfilePictureBox.Size = new System.Drawing.Size(407, 105);
+			this.openProfilePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+			this.openProfilePictureBox.TabIndex = 1;
+			this.openProfilePictureBox.TabStop = false;
+			this.openProfilePictureBox.Click += new System.EventHandler(this.openProfilePictureBox_Click);
 			// 
 			// QuickStartPanel
 			// 
@@ -195,6 +232,28 @@
 			this.LogoPictureBox.MouseLeave += new System.EventHandler(this.LogoPictureBox_MouseLeave);
 			this.LogoPictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.LogoPictureBox_MouseUp);
 			// 
+			// NewPanel2
+			// 
+			this.NewPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+			this.NewPanel2.Controls.Add(this.NewProfilePictureBox);
+			this.NewPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.NewPanel2.Location = new System.Drawing.Point(0, 0);
+			this.NewPanel2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 10);
+			this.NewPanel2.Name = "NewPanel2";
+			this.NewPanel2.Size = new System.Drawing.Size(407, 104);
+			this.NewPanel2.TabIndex = 2;
+			// 
+			// OpenPanel
+			// 
+			this.OpenPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+			this.OpenPanel.Controls.Add(this.openProfilePictureBox);
+			this.OpenPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.OpenPanel.Location = new System.Drawing.Point(0, 124);
+			this.OpenPanel.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
+			this.OpenPanel.Name = "OpenPanel";
+			this.OpenPanel.Size = new System.Drawing.Size(407, 105);
+			this.OpenPanel.TabIndex = 3;
+			// 
 			// StartScreen
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -211,13 +270,17 @@
 			this.panel1.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.NewPanel.ResumeLayout(false);
+			this.tableLayoutPanel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.NewProfilePictureBox)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.openProfilePictureBox)).EndInit();
 			this.QuickStartPanel.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.QuickStartPictureBox)).EndInit();
 			this.DemoPanel.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.TourPictureBox)).EndInit();
 			this.LogoPanel.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).EndInit();
+			this.NewPanel2.ResumeLayout(false);
+			this.OpenPanel.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -234,5 +297,9 @@
 		private System.Windows.Forms.Panel LogoPanel;
 		private System.Windows.Forms.PictureBox LogoPictureBox;
 		private System.Windows.Forms.PictureBox TourPictureBox;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.PictureBox openProfilePictureBox;
+		private System.Windows.Forms.Panel NewPanel2;
+		private System.Windows.Forms.Panel OpenPanel;
 	}
 }

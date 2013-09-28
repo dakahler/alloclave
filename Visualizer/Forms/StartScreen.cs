@@ -100,6 +100,16 @@ namespace Alloclave
 			Main.Instance.StartNewSession();
 		}
 
+		private void openProfilePictureBox_Click(object sender, EventArgs e)
+		{
+			if (Tour != null)
+			{
+				Tour.Close();
+			}
+
+			Main.Instance.OpenMenuItem_Click(this, new EventArgs());
+		}
+
 		private void TourPictureBox_MouseEnter(object sender, EventArgs e)
 		{
 			TourPictureBox.Image = Resources.tour_hover;

@@ -235,7 +235,7 @@ namespace Alloclave
 			
 		}
 
-		void OpenMenuItem_Click(object sender, EventArgs e)
+		public void OpenMenuItem_Click(object sender, EventArgs e)
 		{
 			RenderManager_OGL.Instance.Suspend = true;
 
@@ -296,9 +296,14 @@ namespace Alloclave
 			Profile profile = (Profile)serializer.ReadObject(fileStream);
 			fileStream.Close();
 
-			// TODO: Whole transport form needs to be reinitialized on load
-			//TransportForm.Close();
-			TransportForm.Dispose();
+			if (TransportForm != null)
+			{
+				TransportForm.Dispose();
+			}
+
+			Controls.Remove(StartScreen);
+			menuStrip1.Show();
+
 			TransportForm = new TransportForm(profile);
 
 			TransportForm.TopLevel = false;
