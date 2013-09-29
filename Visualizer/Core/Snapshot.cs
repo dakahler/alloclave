@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,6 +23,7 @@ namespace Alloclave
 		int IComparer<T>.Compare(T x, T y) { return inner.Compare(y, x); }
 	}
 
+	[DataContract()]
 	internal sealed class Snapshot : IEnumerable<MemoryBlock>
 	{
 		// The dictionary is sorted in reverse order so that the Bounds getter
@@ -69,11 +71,23 @@ namespace Alloclave
 			}
 		}
 
+		[DataMember]
+		public int Position { get; set; }
+
 		bool isSecondaryColor = false;
 
 		public Snapshot()
 		{
 
+		}
+
+		public Snapshot(Snapshot other)
+		{
+			MemoryBlocks = new SortedDictionary<UInt64, MemoryBlock>(other.MemoryBlocks);
+			ColorDictionary = new Dictionary<uint, int>(other.ColorDictionary);
+			ColorIndex = other.ColorIndex;
+			Position = other.Position;
+			isSecondaryColor = other.isSecondaryColor;
 		}
 
 		public void Reset()
@@ -210,6 +224,14 @@ namespace Alloclave
 			}
 		}
 
+		public bool Contains(UInt64 address)
+		{
+			lock (MemoryBlocks)
+			{
+				return MemoryBlocks.ContainsKey(address);
+			}
+		}
+
 		public bool Contains(MemoryBlock block)
 		{
 			lock (MemoryBlocks)
@@ -249,6 +271,26 @@ namespace Alloclave
 			}
 
 			return null;
+		}
+
+		public static Snapshot operator-(Snapshot left, Snapshot right)
+		{
+			HashSet<MemoryBlock> finalHash = new HashSet<MemoryBlock>(left.MemoryBlocks.Values);
+			finalHash.SymmetricExceptWith(right.MemoryBlocks.Values);
+
+			// finalHash now contains the symmetric difference of left and right
+			Snapshot finalSnapshot = new Snapshot();
+			foreach (MemoryBlock block in finalHash)
+			{
+				// TODO: It's possible for different allocations with overlapping address
+				// ranges to be in this hash map. How do we handle that?
+				if (!finalSnapshot.Contains(block.Allocation.Address))
+				{
+					finalSnapshot.Add(block);
+				}
+			}
+
+			return finalSnapshot;
 		}
 
 		class VisualMemoryBlockComparer : IComparer<MemoryBlock>

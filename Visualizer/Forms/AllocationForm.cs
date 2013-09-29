@@ -16,17 +16,26 @@ namespace Alloclave
 		AddressSpaceScroller_OGL AddressSpaceScroller;
 		RenderManager_OGL RenderManager = new RenderManager_OGL();
 
-		public AllocationForm(History history)
+		Diff Diff;
+
+		private AllocationForm()
 		{
 			InitializeComponent();
 
+			AddressSpaceControl.Renderer = new AddressSpaceRenderer_OGL(AddressSpaceControl, RenderManager);
+			TopLevel = false;
+			this.SizeChanged += AllocationForm_SizeChanged;
+		}
+
+		public AllocationForm(History history)
+			: this()
+		{
 			history.Scrubber = MainScrubber;
 
 			MainScrubber.MousePressed += ((object sender, MouseEventArgs e) => Scrubber_MouseDown(history, e));
 			MainScrubber.MouseReleased += ((object sender, MouseEventArgs e) => Scrubber_MouseUp(history, e));
 
-			AddressSpaceControl.Renderer = new AddressSpaceRenderer_OGL(AddressSpaceControl, RenderManager);
-
+			// TODO: Why does this need history?
 			this.AddressSpaceScroller =
 				new Alloclave.AddressSpaceScroller_OGL(history, RenderManager, AddressSpaceControl.Width);
 			this.AddressSpaceScroller.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -34,11 +43,8 @@ namespace Alloclave
 			this.AddressSpaceScroller.Name = "AddressSpaceScroller";
 			this.AddressSpaceScroller.Size = new System.Drawing.Size(44, 436);
 			this.AddressSpaceScroller.TabIndex = 5;
+			this.AddressSpaceScroller.FocusChanged += addressSpaceScroller_FocusChanged;
 			this.TableLayoutPanel.Controls.Add(this.AddressSpaceScroller, 2, 0);
-
-			TopLevel = false;
-			AddressSpaceScroller.FocusChanged += addressSpaceScroller_FocusChanged;
-			this.SizeChanged += AllocationForm_SizeChanged;
 
 			// Disabled by default - gets enabled when data comes in
 			this.Enabled = false;
@@ -47,9 +53,19 @@ namespace Alloclave
 			AddressSpaceControl.History = history;
 		}
 
+		public AllocationForm(Diff diff)
+			: this()
+		{
+			Diff = diff;
+			RenderManager.Rebuild(Diff.Difference, AddressSpaceControl.Width);
+		}
+
 		void AllocationForm_SizeChanged(object sender, EventArgs e)
 		{
-			AddressSpaceScroller.ParentWidth = AddressSpaceControl.Width;
+			if (AddressSpaceScroller != null)
+			{
+				AddressSpaceScroller.ParentWidth = AddressSpaceControl.Width;
+			}
 		}
 
 		void addressSpaceScroller_FocusChanged(object sender, MouseEventArgs e)

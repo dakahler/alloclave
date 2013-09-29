@@ -105,5 +105,15 @@ namespace Alloclave
 
 			WeifenLuo.WinFormsUI.Docking.DockHelper.PreventActivation = false;
 		}
+
+		public void AddTab(AllocationForm allocationForm)
+		{
+			allocationForm.TopLevel = false;
+			allocationForm.Dock = DockStyle.Fill;
+			//allocationForm.Visible = true;
+			//this.Controls.Add(allocationForm);
+			//_DockPanel.Controls.Add(allocationForm);
+			allocationForm.Show(_DockPanel);
+		}
 	}
 }

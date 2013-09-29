@@ -185,7 +185,7 @@ namespace Alloclave
 						GL.Translate((glControl.Width / 2) - (extents.BoundingBox.Width / 2),
 							(glControl.Height / 2) - (extents.BoundingBox.Height / 2), 0);
 
-						textPrinter.Print(waitingText, font, Color.FromArgb(200, 200, 200));
+						//textPrinter.Print(waitingText, font, Color.FromArgb(200, 200, 200));
 						GL.PopMatrix();
 					}
 

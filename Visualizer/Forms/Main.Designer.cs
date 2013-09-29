@@ -36,8 +36,12 @@
 			this.SaveMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.startDiffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.stopDiffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.panel1 = new System.Windows.Forms.Panel();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -47,6 +51,7 @@
 			this.menuStrip1.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.toolStripMenuItem1,
             this.helpToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
@@ -115,6 +120,29 @@
 			this.exitToolStripMenuItem.Text = "E&xit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
 			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.startDiffToolStripMenuItem,
+            this.stopDiffToolStripMenuItem});
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(49, 20);
+			this.toolStripMenuItem1.Text = "Tools";
+			// 
+			// startDiffToolStripMenuItem
+			// 
+			this.startDiffToolStripMenuItem.Name = "startDiffToolStripMenuItem";
+			this.startDiffToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+			this.startDiffToolStripMenuItem.Text = "Start Diff";
+			this.startDiffToolStripMenuItem.Click += new System.EventHandler(this.startDiffToolStripMenuItem_Click);
+			// 
+			// stopDiffToolStripMenuItem
+			// 
+			this.stopDiffToolStripMenuItem.Name = "stopDiffToolStripMenuItem";
+			this.stopDiffToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+			this.stopDiffToolStripMenuItem.Text = "Stop Diff";
+			this.stopDiffToolStripMenuItem.Click += new System.EventHandler(this.stopDiffToolStripMenuItem_Click);
+			// 
 			// helpToolStripMenuItem
 			// 
 			this.helpToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -137,6 +165,14 @@
 			this.aboutToolStripMenuItem.Text = "&About...";
 			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
 			// 
+			// panel1
+			// 
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel1.Location = new System.Drawing.Point(0, 24);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(1017, 702);
+			this.panel1.TabIndex = 2;
+			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -144,6 +180,7 @@
 			this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.ClientSize = new System.Drawing.Size(1017, 726);
+			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.menuStrip1);
 			this.ForeColor = System.Drawing.Color.White;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -168,6 +205,10 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripMenuItem NewMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem OpenMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem startDiffToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem stopDiffToolStripMenuItem;
+		private System.Windows.Forms.Panel panel1;
 	}
 }
 

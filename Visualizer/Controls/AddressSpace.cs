@@ -109,6 +109,11 @@ namespace Alloclave
 
 		void TimerElapsed(object sender, EventArgs e)
 		{
+			if (History == null)
+			{
+				return;
+			}
+
 			System.Timers.Timer timer = (System.Timers.Timer)sender;
 			timer.Stop();
 
@@ -316,7 +321,11 @@ namespace Alloclave
 
 				lock (RebuildDataLock)
 				{
-					Renderer.HoverBlock = History.Snapshot.Find(Renderer.GetLocalMouseLocation());
+					// TODO: This shouldn't even need history
+					if (History != null)
+					{
+						Renderer.HoverBlock = History.Snapshot.Find(Renderer.GetLocalMouseLocation());
+					}
 				}
 			}
 		}
@@ -334,12 +343,16 @@ namespace Alloclave
 
 				lock (RebuildDataLock)
 				{
-					Renderer.SelectedBlock = History.Snapshot.Find(Renderer.GetLocalMouseLocation());
-					if (Renderer.SelectedBlock != null)
+					// TODO: This shouldn't even need history
+					if (History != null)
 					{
-						SelectionChangedEventArgs e = new SelectionChangedEventArgs();
-						e.SelectedBlock = Renderer.SelectedBlock;
-						this.Invoke((MethodInvoker)(() => SelectionChanged(this, e)));
+						Renderer.SelectedBlock = History.Snapshot.Find(Renderer.GetLocalMouseLocation());
+						if (Renderer.SelectedBlock != null)
+						{
+							SelectionChangedEventArgs e = new SelectionChangedEventArgs();
+							e.SelectedBlock = Renderer.SelectedBlock;
+							this.Invoke((MethodInvoker)(() => SelectionChanged(this, e)));
+						}
 					}
 				}
 			}

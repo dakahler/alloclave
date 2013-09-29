@@ -229,6 +229,7 @@
     <Compile Include="Core\CallStack.cs" />
     <Compile Include="Core\CommandLineOptions.cs" />
     <Compile Include="Core\Common.cs" />
+    <Compile Include="Core\Diff.cs" />
     <Compile Include="Core\History.cs" />
     <Compile Include="Core\MessageBoxHelper.cs" />
     <Compile Include="Core\Profile.cs" />

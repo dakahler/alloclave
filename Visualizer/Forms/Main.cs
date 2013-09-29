@@ -31,6 +31,8 @@ namespace Alloclave
 		TransportForm TransportForm;
 		StartScreen StartScreen;
 
+		Diff CurrentDiff;
+
 		public Main()
 		{
 			Instance = this;
@@ -137,7 +139,7 @@ namespace Alloclave
             if (newForm.TransportComboBox.Items.Count == 1 || newForm.ShowDialog() == DialogResult.OK)
 			{
 				//ClearDockControls();
-				Controls.Remove(StartScreen);
+				panel1.Controls.Remove(StartScreen);
 
 				foreach (ExportFactory<Transport, ITransportName> transportAdapter in Program.TransportAdapters)
 				{
@@ -165,12 +167,13 @@ namespace Alloclave
 
 			transport.SpawnCustomUI(this);
 
+			menuStrip1.Show();
+
 			TransportForm.TopLevel = false;
 			TransportForm.FormBorderStyle = FormBorderStyle.None;
 			TransportForm.Dock = DockStyle.Fill;
 			TransportForm.Visible = true;
-			menuStrip1.Show();
-			Controls.Add(TransportForm);
+			panel1.Controls.Add(TransportForm);
 		}
 
 		public void ReturnToStartScreen()
@@ -190,7 +193,7 @@ namespace Alloclave
 			StartScreen.FormBorderStyle = FormBorderStyle.None;
 			StartScreen.Dock = DockStyle.Fill;
 			StartScreen.Visible = true;
-			Controls.Add(StartScreen);
+			panel1.Controls.Add(StartScreen);
 		}
 
 		void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -316,6 +319,23 @@ namespace Alloclave
 
 			TransportForm.Profile.History.LastTimestamp = new TimeStamp();
 			TransportForm.Profile.History.UpdateRollingSnapshotAsync(true);
+		}
+
+		private void startDiffToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			CurrentDiff = new Diff();
+			CurrentDiff.SetLeft(TransportForm.Profile.History.Snapshot);
+		}
+
+		private void stopDiffToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (CurrentDiff != null)
+			{
+				CurrentDiff.SetRight(TransportForm.Profile.History.Snapshot);
+
+				AllocationForm allocationForm = new AllocationForm(CurrentDiff);
+				TransportForm.AddTab(allocationForm);
+			}
 		}
 	}
 
