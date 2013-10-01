@@ -306,7 +306,7 @@ namespace Alloclave
 				TransportForm.Dispose();
 			}
 
-			Controls.Remove(StartScreen);
+			panel1.Controls.Remove(StartScreen);
 			menuStrip1.Show();
 
 			TransportForm = new TransportForm(profile);
@@ -315,7 +315,7 @@ namespace Alloclave
 			TransportForm.FormBorderStyle = FormBorderStyle.None;
 			TransportForm.Dock = DockStyle.Fill;
 			TransportForm.Visible = true;
-			Controls.Add(TransportForm);
+			panel1.Controls.Add(TransportForm);
 
 			TransportForm.Profile.History.LastTimestamp = new TimeStamp();
 			TransportForm.Profile.History.UpdateRollingSnapshotAsync(true);
@@ -334,6 +334,7 @@ namespace Alloclave
 				CurrentDiff.SetRight(TransportForm.Profile.History.Snapshot);
 
 				AllocationForm allocationForm = new AllocationForm(CurrentDiff);
+				allocationForm.Text = "Diff";
 				TransportForm.AddTab(allocationForm);
 			}
 		}
