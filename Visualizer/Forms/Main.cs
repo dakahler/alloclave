@@ -33,6 +33,8 @@ namespace Alloclave
 
 		Diff CurrentDiff;
 
+        static bool SentDiffNag;
+
 		public Main()
 		{
 			Instance = this;
@@ -196,6 +198,14 @@ namespace Alloclave
                 AllocationForm allocationForm = new AllocationForm(CurrentDiff);
                 allocationForm.Text = "Diff";
                 TransportForm.AddTab(allocationForm);
+
+                if (Licensing.IsTrial && !SentDiffNag)
+                {
+                    MessagesForm.Add(MessagesForm.MessageType.Info, null,
+                                    "Find your leak? Support Alloclave and purchase a license!");
+
+                    SentDiffNag = true;
+                }
             }
         }
 
