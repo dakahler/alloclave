@@ -214,6 +214,12 @@
       <DependentUpon>AddressSpace.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\AddressSpaceScroller.Designer.cs" />
+    <Compile Include="Controls\DiffMarkers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DiffMarkers.Designer.cs">
+      <DependentUpon>DiffMarkers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RichTextBoxPrintCtrl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -352,6 +358,9 @@
       <DependentUpon>AddressSpace.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\AddressSpaceScroller.resx" />
+    <EmbeddedResource Include="Controls\DiffMarkers.resx">
+      <DependentUpon>DiffMarkers.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Scrubber.resx">
       <DependentUpon>Scrubber.cs</DependentUpon>
     </EmbeddedResource>
@@ -460,6 +469,8 @@
     <Content Include="AlloclaveIcon.ico" />
     <Content Include="AlloclaveIcon_NSIS.ico" />
     <Content Include="Core\AlloclaveIcon.ico" />
+    <None Include="Resources\Diff2.png" />
+    <None Include="Resources\Diff1.png" />
     <None Include="Resources\tour_hover.png" />
     <None Include="Resources\tour.png" />
     <None Include="Resources\CircularShiftLogo_hover.png" />

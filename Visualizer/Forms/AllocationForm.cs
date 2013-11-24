@@ -44,6 +44,7 @@ namespace Alloclave
 			this.AddressSpaceScroller.Size = new System.Drawing.Size(44, 436);
 			this.AddressSpaceScroller.TabIndex = 5;
 			this.AddressSpaceScroller.FocusChanged += addressSpaceScroller_FocusChanged;
+            this.AddressSpaceScroller.Margin = new System.Windows.Forms.Padding(1);
 			this.TableLayoutPanel.Controls.Add(this.AddressSpaceScroller, 2, 0);
 
 			// Disabled by default - gets enabled when data comes in

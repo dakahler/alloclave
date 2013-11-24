@@ -99,7 +99,9 @@ bool LoadDataFromPdb(
   //                      __uuidof(IDiaDataSource),
   //                      (void **) ppSource);
 
+#ifndef DISABLENOREG
   hr = NoRegCoCreate( L"msdia120.dll", _uuidof( DiaSourceAlt ), _uuidof( IDiaDataSource ), (void **) ppSource );
+#endif
 
   
 

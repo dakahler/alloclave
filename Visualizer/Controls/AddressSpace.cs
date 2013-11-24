@@ -72,8 +72,12 @@ namespace Alloclave
 			{
 				Debug.Assert(_History == null);
 				_History = value;
-				_History.Rebuilt += Snapshot_Rebuilt;
-				SizeChanged += new System.EventHandler(AddressSpace_SizeChanged);
+
+                if (_History != null)
+                {
+                    _History.Rebuilt += Snapshot_Rebuilt;
+                    SizeChanged += new System.EventHandler(AddressSpace_SizeChanged);
+                }
 			}
 		}
 

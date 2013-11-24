@@ -185,11 +185,13 @@ namespace Alloclave
                 // Start a new diff
                 CurrentDiff = new Diff();
                 CurrentDiff.SetLeft(TransportForm.Profile.History.Snapshot);
+                TransportForm.AllocationForm.DiffMarkers.SetDiff1((float)TransportForm.AllocationForm.MainScrubber._Position);
             }
             else if (CurrentDiff.Difference == null)
             {
                 // Complete the diff
                 CurrentDiff.SetRight(TransportForm.Profile.History.Snapshot);
+                TransportForm.AllocationForm.DiffMarkers.SetDiff2((float)TransportForm.AllocationForm.MainScrubber._Position);
 
                 AllocationForm allocationForm = new AllocationForm(CurrentDiff);
                 allocationForm.Text = "Diff";

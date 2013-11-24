@@ -110,9 +110,6 @@ namespace Alloclave
 		{
 			allocationForm.TopLevel = false;
 			allocationForm.Dock = DockStyle.Fill;
-			//allocationForm.Visible = true;
-			//this.Controls.Add(allocationForm);
-			//_DockPanel.Controls.Add(allocationForm);
 			allocationForm.Show(_DockPanel);
 		}
 	}
