@@ -18,6 +18,13 @@ namespace Alloclave
 
 		Diff Diff;
 
+		public enum DiffMode
+		{
+			Left,
+			Middle,
+			Right
+		}
+
 		private AllocationForm()
 		{
 			InitializeComponent();
@@ -35,17 +42,7 @@ namespace Alloclave
 			MainScrubber.MousePressed += ((object sender, MouseEventArgs e) => Scrubber_MouseDown(history, e));
 			MainScrubber.MouseReleased += ((object sender, MouseEventArgs e) => Scrubber_MouseUp(history, e));
 
-			// TODO: Why does this need history?
-			this.AddressSpaceScroller =
-				new Alloclave.AddressSpaceScroller_OGL(history, RenderManager, AddressSpaceControl.Width);
-			this.AddressSpaceScroller.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.AddressSpaceScroller.Location = new System.Drawing.Point(679, 6);
-			this.AddressSpaceScroller.Name = "AddressSpaceScroller";
-			this.AddressSpaceScroller.Size = new System.Drawing.Size(44, 436);
-			this.AddressSpaceScroller.TabIndex = 5;
-			this.AddressSpaceScroller.FocusChanged += addressSpaceScroller_FocusChanged;
-            this.AddressSpaceScroller.Margin = new System.Windows.Forms.Padding(1);
-			this.TableLayoutPanel.Controls.Add(this.AddressSpaceScroller, 2, 0);
+			SetupScroller(history);
 
 			// Disabled by default - gets enabled when data comes in
 			this.Enabled = false;
@@ -54,11 +51,39 @@ namespace Alloclave
 			AddressSpaceControl.History = history;
 		}
 
-		public AllocationForm(Diff diff)
+		public AllocationForm(Diff diff, int startWidth)
 			: this()
 		{
 			Diff = diff;
-			RenderManager.Rebuild(Diff.Difference, AddressSpaceControl.Width);
+			RenderManager.Rebuild(Diff.Difference, startWidth);
+			SetupScroller(new History(diff.Difference));
+		}
+
+		private void SetupScroller(History history)
+		{
+			this.AddressSpaceScroller =
+				new Alloclave.AddressSpaceScroller_OGL(history, RenderManager, AddressSpaceControl.Width);
+			this.AddressSpaceScroller.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.AddressSpaceScroller.Location = new System.Drawing.Point(679, 6);
+			this.AddressSpaceScroller.Name = "AddressSpaceScroller";
+			this.AddressSpaceScroller.Size = new System.Drawing.Size(44, 436);
+			this.AddressSpaceScroller.TabIndex = 5;
+			this.AddressSpaceScroller.FocusChanged += addressSpaceScroller_FocusChanged;
+			this.AddressSpaceScroller.Margin = new System.Windows.Forms.Padding(1);
+			this.TableLayoutPanel.Controls.Add(this.AddressSpaceScroller, 2, 0);
+		}
+
+		public void SetDiffMode(DiffMode mode)
+		{
+			switch (mode)
+			{
+				case DiffMode.Left:
+					RenderManager.Rebuild(Diff.Left, AddressSpaceControl.Width); break;
+				case DiffMode.Middle:
+					RenderManager.Rebuild(Diff.Difference, AddressSpaceControl.Width); break;
+				case DiffMode.Right:
+					RenderManager.Rebuild(Diff.Right, AddressSpaceControl.Width); break;
+			}
 		}
 
 		void AllocationForm_SizeChanged(object sender, EventArgs e)

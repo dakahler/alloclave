@@ -195,10 +195,14 @@ namespace Alloclave
 				CurrentDiff.SetRight(TransportForm.Profile.History.Snapshot);
 				TransportForm.AllocationForm.DiffMarkers.SetDiff2((float)TransportForm.AllocationForm.MainScrubber._Position);
 
-				AllocationForm allocationForm = new AllocationForm(CurrentDiff);
+				AllocationForm allocationForm = new AllocationForm(CurrentDiff, TransportForm.AllocationForm.AddressSpaceControl.Width);
 				allocationForm.Text = "Diff";
 				allocationForm.ControllerContainer.Controls.Remove(allocationForm.MainScrubber);
-				allocationForm.ControllerContainer.Controls.Add(new DiffButtons());
+				DiffButtons diffButtons = new DiffButtons();
+				diffButtons.StartLabel.Click += (_, __) => allocationForm.SetDiffMode(AllocationForm.DiffMode.Left);
+				diffButtons.DifferenceLabel.Click += (_, __) => allocationForm.SetDiffMode(AllocationForm.DiffMode.Middle);
+				diffButtons.EndLabel.Click += (_, __) => allocationForm.SetDiffMode(AllocationForm.DiffMode.Right);
+				allocationForm.ControllerContainer.Controls.Add(diffButtons);
 				TransportForm.AddTab(allocationForm);
 
 				if (Licensing.IsTrial && !SentDiffNag)

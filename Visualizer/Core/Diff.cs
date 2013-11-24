@@ -12,10 +12,10 @@ namespace Alloclave
 	internal class Diff
 	{
 		[DataMember]
-		Snapshot Left;
+		public Snapshot Left { get; private set; }
 
 		[DataMember]
-		Snapshot Right;
+		public Snapshot Right { get; private set; }
 
 		public Snapshot Difference { get; private set; }
 

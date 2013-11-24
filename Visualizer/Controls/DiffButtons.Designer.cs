@@ -32,9 +32,9 @@
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.panel3 = new System.Windows.Forms.Panel();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
+			this.DifferenceLabel = new System.Windows.Forms.Label();
+			this.StartLabel = new System.Windows.Forms.Label();
+			this.EndLabel = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -61,7 +61,7 @@
 			// 
 			// panel1
 			// 
-			this.panel1.Controls.Add(this.label2);
+			this.panel1.Controls.Add(this.StartLabel);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Margin = new System.Windows.Forms.Padding(0);
@@ -71,7 +71,7 @@
 			// 
 			// panel2
 			// 
-			this.panel2.Controls.Add(this.label1);
+			this.panel2.Controls.Add(this.DifferenceLabel);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel2.Location = new System.Drawing.Point(333, 0);
 			this.panel2.Margin = new System.Windows.Forms.Padding(0);
@@ -81,7 +81,7 @@
 			// 
 			// panel3
 			// 
-			this.panel3.Controls.Add(this.label3);
+			this.panel3.Controls.Add(this.EndLabel);
 			this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel3.Location = new System.Drawing.Point(1000, 0);
 			this.panel3.Margin = new System.Windows.Forms.Padding(0);
@@ -89,46 +89,49 @@
 			this.panel3.Size = new System.Drawing.Size(335, 64);
 			this.panel3.TabIndex = 2;
 			// 
-			// label1
+			// DifferenceLabel
 			// 
-			this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(157)))), ((int)(((byte)(103)))));
-			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label1.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(0, 0);
-			this.label1.Margin = new System.Windows.Forms.Padding(0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(667, 64);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "Difference";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.DifferenceLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(157)))), ((int)(((byte)(103)))));
+			this.DifferenceLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.DifferenceLabel.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.DifferenceLabel.Location = new System.Drawing.Point(0, 0);
+			this.DifferenceLabel.Margin = new System.Windows.Forms.Padding(0);
+			this.DifferenceLabel.Name = "DifferenceLabel";
+			this.DifferenceLabel.Size = new System.Drawing.Size(667, 64);
+			this.DifferenceLabel.TabIndex = 0;
+			this.DifferenceLabel.Text = "Difference";
+			this.DifferenceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.DifferenceLabel.Click += new System.EventHandler(this.DifferenceLabel_Click);
 			// 
-			// label2
+			// StartLabel
 			// 
-			this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(208)))), ((int)(((byte)(177)))));
-			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label2.ForeColor = System.Drawing.Color.Black;
-			this.label2.Location = new System.Drawing.Point(0, 0);
-			this.label2.Margin = new System.Windows.Forms.Padding(0);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(333, 64);
-			this.label2.TabIndex = 0;
-			this.label2.Text = "Start";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.StartLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(208)))), ((int)(((byte)(177)))));
+			this.StartLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.StartLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.StartLabel.ForeColor = System.Drawing.Color.Black;
+			this.StartLabel.Location = new System.Drawing.Point(0, 0);
+			this.StartLabel.Margin = new System.Windows.Forms.Padding(0);
+			this.StartLabel.Name = "StartLabel";
+			this.StartLabel.Size = new System.Drawing.Size(333, 64);
+			this.StartLabel.TabIndex = 0;
+			this.StartLabel.Text = "Start";
+			this.StartLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.StartLabel.Click += new System.EventHandler(this.StartLabel_Click);
 			// 
-			// label3
+			// EndLabel
 			// 
-			this.label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(208)))), ((int)(((byte)(177)))));
-			this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label3.ForeColor = System.Drawing.Color.Black;
-			this.label3.Location = new System.Drawing.Point(0, 0);
-			this.label3.Margin = new System.Windows.Forms.Padding(0);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(335, 64);
-			this.label3.TabIndex = 1;
-			this.label3.Text = "End";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.EndLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(237)))), ((int)(((byte)(208)))), ((int)(((byte)(177)))));
+			this.EndLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.EndLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.EndLabel.ForeColor = System.Drawing.Color.Black;
+			this.EndLabel.Location = new System.Drawing.Point(0, 0);
+			this.EndLabel.Margin = new System.Windows.Forms.Padding(0);
+			this.EndLabel.Name = "EndLabel";
+			this.EndLabel.Size = new System.Drawing.Size(335, 64);
+			this.EndLabel.TabIndex = 1;
+			this.EndLabel.Text = "End";
+			this.EndLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.EndLabel.Click += new System.EventHandler(this.EndLabel_Click);
 			// 
 			// DiffButtons
 			// 
@@ -151,8 +154,8 @@
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Panel panel3;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label3;
+		public System.Windows.Forms.Label StartLabel;
+		public System.Windows.Forms.Label DifferenceLabel;
+		public System.Windows.Forms.Label EndLabel;
     }
 }

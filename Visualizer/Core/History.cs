@@ -137,6 +137,11 @@ namespace Alloclave
 			//result = GetForward(new TimeStamp(10));
 		}
 
+		internal History(Snapshot snapshot)
+		{
+			_Snapshot = snapshot;
+		}
+
 		internal void Reset()
 		{
 			PacketList.Clear();
