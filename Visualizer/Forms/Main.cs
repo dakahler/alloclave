@@ -33,7 +33,7 @@ namespace Alloclave
 
 		Diff CurrentDiff;
 
-        static bool SentDiffNag;
+		static bool SentDiffNag;
 
 		public Main()
 		{
@@ -138,7 +138,7 @@ namespace Alloclave
 				newForm.TransportComboBox.SelectedIndex = 0;
 			}
 
-            if (newForm.TransportComboBox.Items.Count == 1 || newForm.ShowDialog() == DialogResult.OK)
+			if (newForm.TransportComboBox.Items.Count == 1 || newForm.ShowDialog() == DialogResult.OK)
 			{
 				//ClearDockControls();
 				panel1.Controls.Remove(StartScreen);
@@ -175,39 +175,41 @@ namespace Alloclave
 			TransportForm.FormBorderStyle = FormBorderStyle.None;
 			TransportForm.Dock = DockStyle.Fill;
 			TransportForm.Visible = true;
-            TransportForm.AllocationForm.MainScrubber.DoubleClick += MainScrubber_DoubleClick;
+			TransportForm.AllocationForm.MainScrubber.DoubleClick += MainScrubber_DoubleClick;
 			panel1.Controls.Add(TransportForm);
 		}
 
-        void MainScrubber_DoubleClick(object sender, EventArgs e)
-        {
-            // React to double click based on current diff state
-            if (CurrentDiff == null || CurrentDiff.Difference != null)
-            {
-                // Start a new diff
-                CurrentDiff = new Diff();
-                CurrentDiff.SetLeft(TransportForm.Profile.History.Snapshot);
-                TransportForm.AllocationForm.DiffMarkers.SetDiff1((float)TransportForm.AllocationForm.MainScrubber._Position);
-            }
-            else if (CurrentDiff.Difference == null)
-            {
-                // Complete the diff
-                CurrentDiff.SetRight(TransportForm.Profile.History.Snapshot);
-                TransportForm.AllocationForm.DiffMarkers.SetDiff2((float)TransportForm.AllocationForm.MainScrubber._Position);
+		void MainScrubber_DoubleClick(object sender, EventArgs e)
+		{
+			// React to double click based on current diff state
+			if (CurrentDiff == null || CurrentDiff.Difference != null)
+			{
+				// Start a new diff
+				CurrentDiff = new Diff();
+				CurrentDiff.SetLeft(TransportForm.Profile.History.Snapshot);
+				TransportForm.AllocationForm.DiffMarkers.SetDiff1((float)TransportForm.AllocationForm.MainScrubber._Position);
+			}
+			else if (CurrentDiff.Difference == null)
+			{
+				// Complete the diff
+				CurrentDiff.SetRight(TransportForm.Profile.History.Snapshot);
+				TransportForm.AllocationForm.DiffMarkers.SetDiff2((float)TransportForm.AllocationForm.MainScrubber._Position);
 
-                AllocationForm allocationForm = new AllocationForm(CurrentDiff);
-                allocationForm.Text = "Diff";
-                TransportForm.AddTab(allocationForm);
+				AllocationForm allocationForm = new AllocationForm(CurrentDiff);
+				allocationForm.Text = "Diff";
+				allocationForm.ControllerContainer.Controls.Remove(allocationForm.MainScrubber);
+				allocationForm.ControllerContainer.Controls.Add(new DiffButtons());
+				TransportForm.AddTab(allocationForm);
 
-                if (Licensing.IsTrial && !SentDiffNag)
-                {
-                    MessagesForm.Add(MessagesForm.MessageType.Info, null,
-                                    "Find your leak? Support Alloclave and purchase a license!");
+				if (Licensing.IsTrial && !SentDiffNag)
+				{
+					MessagesForm.Add(MessagesForm.MessageType.Info, null,
+									"Find your leak? Support Alloclave and purchase a license!");
 
-                    SentDiffNag = true;
-                }
-            }
-        }
+					SentDiffNag = true;
+				}
+			}
+		}
 
 		public void ReturnToStartScreen()
 		{
@@ -260,7 +262,7 @@ namespace Alloclave
 
 		void NewMenuItem_Click(object sender, EventArgs e)
 		{
-			
+
 		}
 
 		public void OpenMenuItem_Click(object sender, EventArgs e)
@@ -340,7 +342,7 @@ namespace Alloclave
 			TransportForm.FormBorderStyle = FormBorderStyle.None;
 			TransportForm.Dock = DockStyle.Fill;
 			TransportForm.Visible = true;
-            TransportForm.AllocationForm.MainScrubber.DoubleClick += MainScrubber_DoubleClick;
+			TransportForm.AllocationForm.MainScrubber.DoubleClick += MainScrubber_DoubleClick;
 			panel1.Controls.Add(TransportForm);
 
 			TransportForm.Profile.History.LastTimestamp = new TimeStamp();

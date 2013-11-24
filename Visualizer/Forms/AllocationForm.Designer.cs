@@ -34,6 +34,7 @@
 		private void InitializeComponent()
 		{
             this.AddressSpaceControl = new Alloclave.AddressSpace();
+            this.ControllerContainer = new ControllerContainer();
             this.MainScrubber = new Alloclave.Scrubber();
             this.DiffMarkers = new Alloclave.DiffMarkers();
             this.TableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -57,13 +58,24 @@
             this.AddressSpaceControl.Size = new System.Drawing.Size(677, 442);
             this.AddressSpaceControl.TabIndex = 0;
             // 
+            // ControllerContainer
+            // 
+            this.ControllerContainer.AutoSize = true;
+            this.ControllerContainer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ControllerContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ControllerContainer.Location = new System.Drawing.Point(1, 445);
+            this.ControllerContainer.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
+            this.ControllerContainer.Name = "ControllerContainer";
+            this.ControllerContainer.Size = new System.Drawing.Size(677, 26);
+            this.ControllerContainer.TabIndex = 1;
+            // 
             // MainScrubber
             // 
             this.MainScrubber.AutoSize = true;
             this.MainScrubber.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.MainScrubber.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainScrubber.Location = new System.Drawing.Point(1, 445);
-            this.MainScrubber.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
+            this.MainScrubber.Margin = new System.Windows.Forms.Padding(0);
             this.MainScrubber.Name = "MainScrubber";
             this.MainScrubber.Position = 1D;
             this.MainScrubber.Size = new System.Drawing.Size(677, 26);
@@ -89,7 +101,7 @@
             this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0F));
             this.TableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.TableLayoutPanel.Controls.Add(this.AddressSpaceControl, 0, 0);
-            this.TableLayoutPanel.Controls.Add(this.MainScrubber, 0, 1);
+            this.TableLayoutPanel.Controls.Add(this.ControllerContainer, 0, 1);
             this.TableLayoutPanel.Controls.Add(this.PlayPausePictureBox, 2, 1);
             this.TableLayoutPanel.Controls.Add(this.DiffMarkers, 0, 2);
             this.TableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -127,6 +139,7 @@
             this.CloseButtonVisible = false;
             this.ControlBox = false;
             this.Controls.Add(this.TableLayoutPanel);
+            this.ControllerContainer.Controls.Add(MainScrubber);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "AllocationForm";
             this.ShowIcon = false;
@@ -143,6 +156,7 @@
 
 		public AddressSpace AddressSpaceControl;
 		private System.Windows.Forms.TableLayoutPanel TableLayoutPanel;
+        public ControllerContainer ControllerContainer;
 		public Scrubber MainScrubber;
         public DiffMarkers DiffMarkers;
 		private System.Windows.Forms.PictureBox PlayPausePictureBox;
