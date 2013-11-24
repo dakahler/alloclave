@@ -173,19 +173,32 @@ namespace Alloclave
 			TransportForm.FormBorderStyle = FormBorderStyle.None;
 			TransportForm.Dock = DockStyle.Fill;
 			TransportForm.Visible = true;
+            TransportForm.AllocationForm.MainScrubber.DoubleClick += MainScrubber_DoubleClick;
 			panel1.Controls.Add(TransportForm);
 		}
 
+        void MainScrubber_DoubleClick(object sender, EventArgs e)
+        {
+            // React to double click based on current diff state
+            if (CurrentDiff == null || CurrentDiff.Difference != null)
+            {
+                // Start a new diff
+                CurrentDiff = new Diff();
+                CurrentDiff.SetLeft(TransportForm.Profile.History.Snapshot);
+            }
+            else if (CurrentDiff.Difference == null)
+            {
+                // Complete the diff
+                CurrentDiff.SetRight(TransportForm.Profile.History.Snapshot);
+
+                AllocationForm allocationForm = new AllocationForm(CurrentDiff);
+                allocationForm.Text = "Diff";
+                TransportForm.AddTab(allocationForm);
+            }
+        }
+
 		public void ReturnToStartScreen()
 		{
-			// Too many issues with disposing controls
-
-			//ClearDockControls();
-			//History.Instance.Reset();
-			//MemoryBlockManager.Instance.Reset();
-			//RenderManager_OGL.Instance.Rebuild();
-			//Scrubber.Position = 1.0f;
-
 			// Show the start screen
 			StartScreen = new StartScreen();
 
@@ -315,28 +328,11 @@ namespace Alloclave
 			TransportForm.FormBorderStyle = FormBorderStyle.None;
 			TransportForm.Dock = DockStyle.Fill;
 			TransportForm.Visible = true;
+            TransportForm.AllocationForm.MainScrubber.DoubleClick += MainScrubber_DoubleClick;
 			panel1.Controls.Add(TransportForm);
 
 			TransportForm.Profile.History.LastTimestamp = new TimeStamp();
 			TransportForm.Profile.History.UpdateRollingSnapshotAsync(true);
-		}
-
-		private void startDiffToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			CurrentDiff = new Diff();
-			CurrentDiff.SetLeft(TransportForm.Profile.History.Snapshot);
-		}
-
-		private void stopDiffToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			if (CurrentDiff != null)
-			{
-				CurrentDiff.SetRight(TransportForm.Profile.History.Snapshot);
-
-				AllocationForm allocationForm = new AllocationForm(CurrentDiff);
-				allocationForm.Text = "Diff";
-				TransportForm.AddTab(allocationForm);
-			}
 		}
 	}
 

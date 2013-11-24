@@ -120,29 +120,6 @@
 			this.exitToolStripMenuItem.Text = "E&xit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
 			// 
-			// toolStripMenuItem1
-			// 
-			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.startDiffToolStripMenuItem,
-            this.stopDiffToolStripMenuItem});
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(49, 20);
-			this.toolStripMenuItem1.Text = "Tools";
-			// 
-			// startDiffToolStripMenuItem
-			// 
-			this.startDiffToolStripMenuItem.Name = "startDiffToolStripMenuItem";
-			this.startDiffToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
-			this.startDiffToolStripMenuItem.Text = "Start Diff";
-			this.startDiffToolStripMenuItem.Click += new System.EventHandler(this.startDiffToolStripMenuItem_Click);
-			// 
-			// stopDiffToolStripMenuItem
-			// 
-			this.stopDiffToolStripMenuItem.Name = "stopDiffToolStripMenuItem";
-			this.stopDiffToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
-			this.stopDiffToolStripMenuItem.Text = "Stop Diff";
-			this.stopDiffToolStripMenuItem.Click += new System.EventHandler(this.stopDiffToolStripMenuItem_Click);
-			// 
 			// helpToolStripMenuItem
 			// 
 			this.helpToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));

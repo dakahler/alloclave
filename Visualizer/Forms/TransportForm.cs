@@ -22,7 +22,7 @@ namespace Alloclave
 			set;
 		}
 
-		AllocationForm AllocationForm;
+        public AllocationForm AllocationForm { get; private set; }
 		MessagesForm MessagesForm = new MessagesForm();
 		InfoForm InfoForm = new InfoForm();
 
