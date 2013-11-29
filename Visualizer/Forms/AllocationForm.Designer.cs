@@ -57,6 +57,7 @@
             this.AddressSpaceControl.Renderer = null;
             this.AddressSpaceControl.Size = new System.Drawing.Size(677, 442);
             this.AddressSpaceControl.TabIndex = 0;
+			this.AddressSpaceControl.Dock = System.Windows.Forms.DockStyle.Fill;
             // 
             // ControllerContainer
             // 

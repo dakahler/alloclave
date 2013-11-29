@@ -24,14 +24,6 @@ namespace Alloclave
 
 		bool GlControlLoaded;
 
-		bool ShowText
-		{
-			get;
-			set;
-		}
-
-		OpenTK.Graphics.TextPrinter textPrinter = new OpenTK.Graphics.TextPrinter(OpenTK.Graphics.TextQuality.High);
-
 		public AddressSpaceRenderer_OGL(AddressSpace parent, RenderManager_OGL renderManager)
 		{
 			Parent = parent;
@@ -48,13 +40,6 @@ namespace Alloclave
 			glControl.MouseMove += new MouseEventHandler(Parent.AddressSpace_MouseMove);
 			glControl.MouseWheel += new MouseEventHandler(Parent.AddressSpace_MouseWheel);
 			glControl.MouseLeave += new EventHandler(Parent.AddressSpace_MouseLeave);
-
-			ShowText = true;
-		}
-
-		~AddressSpaceRenderer_OGL()
-		{
-			
 		}
 
 		protected override void Dispose(bool disposing)
@@ -174,20 +159,6 @@ namespace Alloclave
 					}
 
 					GL.PopMatrix();
-
-					if (ShowText)
-					{
-						GL.PushMatrix();
-						String waitingText = "Waiting For Data...";
-						Font font = new Font("Arial", 30);
-						OpenTK.Graphics.TextExtents extents = textPrinter.Measure(waitingText, font);
-
-						GL.Translate((glControl.Width / 2) - (extents.BoundingBox.Width / 2),
-							(glControl.Height / 2) - (extents.BoundingBox.Height / 2), 0);
-
-						//textPrinter.Print(waitingText, font, Color.FromArgb(200, 200, 200));
-						GL.PopMatrix();
-					}
 
 					glControl.SwapBuffers();
 					glControl.Context.MakeCurrent(null);

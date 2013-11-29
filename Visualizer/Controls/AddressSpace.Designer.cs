@@ -15,21 +15,27 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			//this.Tooltip = new Alloclave.RichToolTip();
+			this.NoDataPanel = new System.Windows.Forms.Panel();
 			this.SuspendLayout();
 			// 
-			// Tooltip
+			// NoDataPanel
 			// 
-			//this.Tooltip.OwnerDraw = true;
-			//this.Tooltip.ShowAlways = true;
+			this.NoDataPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
+			this.NoDataPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.NoDataPanel.Location = new System.Drawing.Point(0, 0);
+			this.NoDataPanel.Name = "NoDataPanel";
+			this.NoDataPanel.Size = new System.Drawing.Size(1348, 756);
+			this.NoDataPanel.TabIndex = 0;
 			// 
 			// AddressSpace
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.Controls.Add(this.NoDataPanel);
+			this.Margin = new System.Windows.Forms.Padding(6);
 			this.Name = "AddressSpace";
-			this.Size = new System.Drawing.Size(674, 393);
+			this.Size = new System.Drawing.Size(1348, 756);
 			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AddressSpace_MouseDown);
 			this.MouseLeave += new System.EventHandler(this.AddressSpace_MouseLeave);
 			this.MouseHover += new System.EventHandler(this.AddressSpace_MouseHover);
@@ -40,6 +46,10 @@
 		}
 
 		#endregion
+
+		private System.Windows.Forms.Panel NoDataPanel;
+
+
 
 		//private RichToolTip Tooltip;
 

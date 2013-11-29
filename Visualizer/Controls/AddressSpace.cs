@@ -25,8 +25,6 @@ namespace Alloclave
 		Vector CurrentMouseLocation;
 		const int WheelDelta = 120;
 
-		//RichTextBoxPrintCtrl printCtrl = new RichTextBoxPrintCtrl();
-
 		public AddressSpaceRenderer Renderer { get; set; }
 
 		Object RebuildDataLock = new Object();
@@ -96,6 +94,28 @@ namespace Alloclave
 			Task.Factory.StartNew(() => SelectTask(cancellationToken), cancellationToken);
 
 			this.Load += AddressSpace_Load;
+			this.NoDataPanel.Paint += NoDataPanel_Paint;
+			this.EnabledChanged += AddressSpace_EnabledChanged;
+		}
+
+		void AddressSpace_EnabledChanged(object sender, EventArgs e)
+		{
+			NoDataPanel.Visible = !Enabled;
+		}
+
+		void NoDataPanel_Paint(object sender, PaintEventArgs e)
+		{
+			if (!Enabled)
+			{
+				Graphics g = e.Graphics;
+				Font font = new Font("Arial", 30);
+				String text = "Waiting For Data...";
+				SizeF stringSize = g.MeasureString(text, font);
+
+				float x = (float)((NoDataPanel.Width / 2) - (stringSize.Width / 2));
+				float y = (float)((NoDataPanel.Height / 2) - (stringSize.Height / 2));
+				g.DrawString(text, font, new SolidBrush(Color.FromArgb(180, 180, 180)), new PointF(x, y));
+			}
 		}
 
 		void AddressSpace_Load(object sender, EventArgs e)
@@ -103,6 +123,8 @@ namespace Alloclave
 			FrameTimer = new System.Timers.Timer(FrameInterval);
 			FrameTimer.Elapsed += TimerElapsed;
 			FrameTimer.Start();
+
+			NoDataPanel.BringToFront();
 		}
 
 		void Snapshot_Rebuilt(object sender, EventArgs e)
@@ -142,11 +164,6 @@ namespace Alloclave
 			}
 
 			timer.Start();
-		}
-
-		~AddressSpace()
-		{
-			
 		}
 
 		/// <summary> 
@@ -371,6 +388,7 @@ namespace Alloclave
 		{
 			History.RebaseBlocks = true;
 			History.UpdateRollingSnapshotAsync();
+			NoDataPanel.Refresh();
 		}
 
 		void AddressSpace_MouseHover(object sender, EventArgs e)
