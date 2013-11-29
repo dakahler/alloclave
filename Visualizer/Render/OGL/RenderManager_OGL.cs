@@ -242,20 +242,5 @@ namespace Alloclave
 			IsVbo1 = !IsVbo1;
 			BuffersDirty = true;
 		}
-
-		//private void ChangeBlockColor(KeyValuePair<MemoryBlock, BlockMetadata> block, Color color, float blend)
-		//{
-		//	//byte r = (byte)((block.Key._Color.R * blend) + color.R * (1 - blend));
-		//	//byte g = (byte)((block.Key._Color.G * blend) + color.G * (1 - blend));
-		//	//byte b = (byte)((block.Key._Color.B * blend) + color.B * (1 - blend));
-
-		//	//for (uint j = block.Value.VertexStartIndex; j <= block.Value.VertexEndIndex; j++)
-		//	//{
-		//	//	VBO[j].R = r;
-		//	//	VBO[j].G = g;
-		//	//	VBO[j].B = b;
-		//	//	VBO[j].A = 255;
-		//	//}
-		//}
 	}
 }

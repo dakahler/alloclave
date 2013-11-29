@@ -263,7 +263,7 @@ namespace Alloclave
 			{
 				// TODO: Investigate performance implications of ToList() on a SortedDictionary
 				var values = MemoryBlocks.Values.ToList();
-				int index = values.BinarySearch(tempBlock, new VisualMemoryBlockComparer());
+				int index = values.BinarySearch(tempBlock, new SnapshotComparer());
 				if (index >= 0)
 				{
 					return values[index];
@@ -275,12 +275,15 @@ namespace Alloclave
 
 		public static Snapshot operator-(Snapshot left, Snapshot right)
 		{
-			HashSet<MemoryBlock> finalHash = new HashSet<MemoryBlock>(left.MemoryBlocks.Values);
-			finalHash.SymmetricExceptWith(right.MemoryBlocks.Values);
+			HashSet<MemoryBlock> symmetricHash = new HashSet<MemoryBlock>(left.MemoryBlocks.Values);
+			symmetricHash.SymmetricExceptWith(right.MemoryBlocks.Values);
 
-			// finalHash now contains the symmetric difference of left and right
+			HashSet<MemoryBlock> intersectionHash = new HashSet<MemoryBlock>(left.MemoryBlocks.Values);
+			intersectionHash.IntersectWith(right.MemoryBlocks.Values);
+
+			// symmetricHash now contains the symmetric difference of left and right
 			Snapshot finalSnapshot = new Snapshot();
-			foreach (MemoryBlock block in finalHash)
+			foreach (MemoryBlock block in symmetricHash)
 			{
 				// TODO: It's possible for different allocations with overlapping address
 				// ranges to be in this hash map. How do we handle that?
@@ -290,10 +293,32 @@ namespace Alloclave
 				}
 			}
 
+			// intersectionHash now contains the intersection of left and right
+			foreach (MemoryBlock block in intersectionHash)
+			{
+				MemoryBlock tempBlock = new MemoryBlock(block);
+				tempBlock._Color = LerpColor(tempBlock._Color, Color.FromArgb(102, 102, 102), 0.1f);
+
+				if (!finalSnapshot.Contains(tempBlock.Allocation.Address))
+				{
+					finalSnapshot.Add(tempBlock);
+				}
+			}
+
 			return finalSnapshot;
 		}
 
-		class VisualMemoryBlockComparer : IComparer<MemoryBlock>
+		// TODO: This can be a more generic lerp extension method
+		private static Color LerpColor(Color start, Color end, float t)
+		{
+			byte r = (byte)((start.R * t) + end.R * (1 - t));
+			byte g = (byte)((start.G * t) + end.G * (1 - t));
+			byte b = (byte)((start.B * t) + end.B * (1 - t));
+
+			return Color.FromArgb(r, g, b);
+		}
+
+		class SnapshotComparer : IComparer<MemoryBlock>
 		{
 			public int Compare(MemoryBlock a, MemoryBlock b)
 			{

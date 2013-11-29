@@ -51,11 +51,18 @@ namespace Alloclave
 
 		public List<Triangle> Triangles = new List<Triangle>();
 
-		//public bool IsNew = true;
-
 		public MemoryBlock()
 		{
 
+		}
+
+		public MemoryBlock(MemoryBlock other)
+		{
+			_Color = other._Color;
+			Allocation = other.Allocation;
+			GraphicsPath = other.GraphicsPath;
+			_Bounds = other._Bounds;
+			Triangles = other.Triangles;
 		}
 
 		public MemoryBlock(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, Color color)
