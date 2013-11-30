@@ -125,6 +125,7 @@ namespace Alloclave
 			FrameTimer.Start();
 
 			NoDataPanel.BringToFront();
+			NoDataPanel.Visible = !Enabled;
 		}
 
 		void Snapshot_Rebuilt(object sender, EventArgs e)
