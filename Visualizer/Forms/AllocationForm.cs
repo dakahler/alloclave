@@ -78,11 +78,17 @@ namespace Alloclave
 			switch (mode)
 			{
 				case DiffMode.Left:
-					RenderManager.Rebuild(Diff.Left, AddressSpaceControl.Width); break;
+					RenderManager.Rebuild(Diff.Left, AddressSpaceControl.Width);
+					AddressSpaceControl.SnapshotOverride = Diff.Left;
+					break;
 				case DiffMode.Middle:
-					RenderManager.Rebuild(Diff.Difference, AddressSpaceControl.Width); break;
+					RenderManager.Rebuild(Diff.Difference, AddressSpaceControl.Width);
+					AddressSpaceControl.SnapshotOverride = Diff.Difference;
+					break;
 				case DiffMode.Right:
-					RenderManager.Rebuild(Diff.Right, AddressSpaceControl.Width); break;
+					RenderManager.Rebuild(Diff.Right, AddressSpaceControl.Width);
+					AddressSpaceControl.SnapshotOverride = Diff.Right;
+					break;
 			}
 		}
 

@@ -203,6 +203,7 @@ namespace Alloclave
 				diffButtons.DifferenceLabel.Click += (_, __) => allocationForm.SetDiffMode(AllocationForm.DiffMode.Middle);
 				diffButtons.EndLabel.Click += (_, __) => allocationForm.SetDiffMode(AllocationForm.DiffMode.Right);
 				allocationForm.ControllerContainer.Controls.Add(diffButtons);
+				allocationForm.AddressSpaceControl.SnapshotOverride = CurrentDiff.Difference;
 				TransportForm.AddTab(allocationForm);
 
 				if (Licensing.IsTrial && !SentDiffNag)

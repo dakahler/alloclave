@@ -59,6 +59,7 @@ namespace Alloclave
 		System.Timers.Timer FrameTimer;
 		const double FrameInterval = 30.0;
 
+		// TODO: This class shouldn't need a history reference at all
 		History _History;
 		public History History
 		{
@@ -78,6 +79,8 @@ namespace Alloclave
                 }
 			}
 		}
+
+		public Snapshot SnapshotOverride { get; set; }
 
 		public AddressSpace()
 		{
@@ -312,7 +315,9 @@ namespace Alloclave
 				return;
 			}
 
-			MemoryBlock block = History.Snapshot.Find(targetAllocation.Address);
+			Snapshot snapshot = SnapshotOverride ?? History.Snapshot;
+
+			MemoryBlock block = snapshot.Find(targetAllocation.Address);
 			if (block != null)
 			{
 				Renderer.SelectedBlock = block;
@@ -344,9 +349,14 @@ namespace Alloclave
 				lock (RebuildDataLock)
 				{
 					// TODO: This shouldn't even need history
-					if (History != null)
+					Snapshot snapshot = SnapshotOverride ?? History.Snapshot;
+					if (snapshot != null)
 					{
-						Renderer.HoverBlock = History.Snapshot.Find(Renderer.GetLocalMouseLocation());
+						Renderer.HoverBlock = snapshot.Find(Renderer.GetLocalMouseLocation());
+						if (Renderer.HoverBlock != null && !Renderer.HoverBlock.IsValid)
+						{
+							Renderer.HoverBlock = null;
+						}
 					}
 				}
 			}
@@ -366,9 +376,15 @@ namespace Alloclave
 				lock (RebuildDataLock)
 				{
 					// TODO: This shouldn't even need history
-					if (History != null)
+					Snapshot snapshot = SnapshotOverride ?? History.Snapshot;
+					if (snapshot != null)
 					{
-						Renderer.SelectedBlock = History.Snapshot.Find(Renderer.GetLocalMouseLocation());
+						Renderer.SelectedBlock = snapshot.Find(Renderer.GetLocalMouseLocation());
+						if (Renderer.SelectedBlock != null && !Renderer.SelectedBlock.IsValid)
+						{
+							Renderer.SelectedBlock = null;
+						}
+
 						if (Renderer.SelectedBlock != null)
 						{
 							SelectionChangedEventArgs e = new SelectionChangedEventArgs();
@@ -387,8 +403,12 @@ namespace Alloclave
 
 		void AddressSpace_SizeChanged(object sender, EventArgs e)
 		{
-			History.RebaseBlocks = true;
-			History.UpdateRollingSnapshotAsync();
+			if (History != null)
+			{
+				History.RebaseBlocks = true;
+				History.UpdateRollingSnapshotAsync();
+			}
+
 			NoDataPanel.Refresh();
 		}
 

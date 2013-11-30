@@ -83,7 +83,8 @@ namespace Alloclave
 
 		public Snapshot(Snapshot other)
 		{
-			MemoryBlocks = new SortedDictionary<UInt64, MemoryBlock>(other.MemoryBlocks);
+			MemoryBlocks = new SortedDictionary<UInt64, MemoryBlock>(
+				other.MemoryBlocks, new ReverseComparer<UInt64>());
 			ColorDictionary = new Dictionary<uint, int>(other.ColorDictionary);
 			ColorIndex = other.ColorIndex;
 			Position = other.Position;
@@ -297,6 +298,7 @@ namespace Alloclave
 			foreach (MemoryBlock block in intersectionHash)
 			{
 				MemoryBlock tempBlock = new MemoryBlock(block);
+				tempBlock.IsValid = false;
 				tempBlock._Color = LerpColor(tempBlock._Color, Color.FromArgb(102, 102, 102), 0.1f);
 
 				if (!finalSnapshot.Contains(tempBlock.Allocation.Address))
