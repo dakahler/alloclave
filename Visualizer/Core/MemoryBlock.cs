@@ -191,4 +191,40 @@ namespace Alloclave
 			return GraphicsPath.IsVisible(v.ToPoint());
 		}
 	}
+
+	internal class MemoryBlockEqualityComparer : IEqualityComparer<MemoryBlock>
+	{
+		public bool Equals(MemoryBlock item1, MemoryBlock item2)
+		{
+			if (object.ReferenceEquals(item1, item2))
+			{
+				return true;
+			}
+
+			if (item1 == null || item2 == null)
+			{
+				return false;
+			}
+
+			if (item1.Allocation == null || item2.Allocation == null)
+			{
+				Debug.Assert(false);
+				return false;
+			}
+
+			return (item1.Allocation.Address == item2.Allocation.Address) &&
+				(item1.Allocation.Size == item2.Allocation.Size);
+		}
+
+		public int GetHashCode(MemoryBlock item)
+		{
+			if (item.Allocation == null)
+			{
+				Debug.Assert(false);
+				return item.Bounds.GetHashCode();
+			}
+
+			return (item.Allocation.Address + item.Allocation.Size).GetHashCode();
+		}
+	}
 }

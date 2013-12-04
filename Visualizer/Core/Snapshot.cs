@@ -276,25 +276,13 @@ namespace Alloclave
 
 		public static Snapshot operator-(Snapshot left, Snapshot right)
 		{
-			HashSet<MemoryBlock> symmetricHash = new HashSet<MemoryBlock>(left.MemoryBlocks.Values);
-			symmetricHash.SymmetricExceptWith(right.MemoryBlocks.Values);
+			HashSet<MemoryBlock> leftHash = new HashSet<MemoryBlock>(left.MemoryBlocks.Values, new MemoryBlockEqualityComparer());
+			HashSet<MemoryBlock> rightHash = new HashSet<MemoryBlock>(right.MemoryBlocks.Values, new MemoryBlockEqualityComparer());
 
-			HashSet<MemoryBlock> intersectionHash = new HashSet<MemoryBlock>(left.MemoryBlocks.Values);
-			intersectionHash.IntersectWith(right.MemoryBlocks.Values);
-
-			// symmetricHash now contains the symmetric difference of left and right
-			Snapshot finalSnapshot = new Snapshot();
-			foreach (MemoryBlock block in symmetricHash)
-			{
-				// TODO: It's possible for different allocations with overlapping address
-				// ranges to be in this hash map. How do we handle that?
-				if (!finalSnapshot.Contains(block.Allocation.Address))
-				{
-					finalSnapshot.Add(block);
-				}
-			}
+			var intersectionHash = leftHash.Intersect(rightHash, new MemoryBlockEqualityComparer());
 
 			// intersectionHash now contains the intersection of left and right
+			Snapshot finalSnapshot = new Snapshot();
 			foreach (MemoryBlock block in intersectionHash)
 			{
 				MemoryBlock tempBlock = new MemoryBlock(block);
@@ -307,7 +295,31 @@ namespace Alloclave
 				}
 			}
 
+			var symmetricHash = leftHash;
+			symmetricHash.SymmetricExceptWith(right.MemoryBlocks.Values);
+
+			// symmetricHash now contains the symmetric difference of left and right
+			foreach (MemoryBlock block in symmetricHash)
+			{
+				// TODO: It's possible for different allocations with overlapping address
+				// ranges to be in this hash map. How do we handle that?
+				if (!finalSnapshot.Contains(block.Allocation.Address))
+				{
+					finalSnapshot.Add(block);
+				}
+			}
+
+			
+
 			return finalSnapshot;
+		}
+
+		public void ProcessSnapshot(History history)
+		{
+			MemoryBlocks =
+				new SortedDictionary<UInt64, MemoryBlock>(new ReverseComparer<UInt64>());
+			ColorDictionary = new Dictionary<uint, int>();
+			history.UpdateSnapshot(this, true);
 		}
 
 		// TODO: This can be a more generic lerp extension method

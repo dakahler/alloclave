@@ -30,9 +30,12 @@ namespace Alloclave
 			}
 		}
 
+		[DataMember]
+		internal List<Diff> Diffs { get; private set; }
+
 		public Profile()
 		{
-			
+			Diffs = new List<Diff>();
 		}
 
 		public Profile(ref Transport transport)
@@ -51,6 +54,28 @@ namespace Alloclave
 		public void Stop()
 		{
 			Transport.Disconnect();
+		}
+
+		internal void AddDiff(Diff diff)
+		{
+			Diffs.Add(diff);
+		}
+
+		internal void RemoveDiff(Diff diff)
+		{
+			Diffs.Remove(diff);
+		}
+
+		public void ProcessDiffs()
+		{
+			if (Diffs != null)
+			{
+				Diffs.ForEach((diff) => diff.ProcessDiff(History));
+			}
+			else
+			{
+				Diffs = new List<Diff>();
+			}
 		}
 
 		void HandlePacket(object sender, PacketReceivedEventArgs e)

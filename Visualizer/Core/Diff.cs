@@ -41,5 +41,12 @@ namespace Alloclave
 		{
 			Difference = Right - Left;
 		}
+
+		public void ProcessDiff(History history)
+		{
+			Left.ProcessSnapshot(history);
+			Right.ProcessSnapshot(history);
+			CalculateDiff();
+		}
 	}
 }

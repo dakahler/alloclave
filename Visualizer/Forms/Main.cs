@@ -194,17 +194,10 @@ namespace Alloclave
 				// Complete the diff
 				CurrentDiff.SetRight(TransportForm.Profile.History.Snapshot);
 				TransportForm.AllocationForm.DiffMarkers.SetDiff2((float)TransportForm.AllocationForm.MainScrubber._Position);
+				AddDiffTab(CurrentDiff);
 
-				AllocationForm allocationForm = new AllocationForm(CurrentDiff, TransportForm.AllocationForm.AddressSpaceControl.Width);
-				allocationForm.Text = "Diff";
-				allocationForm.ControllerContainer.Controls.Remove(allocationForm.MainScrubber);
-				DiffButtons diffButtons = new DiffButtons();
-				diffButtons.StartLabel.Click += (_, __) => allocationForm.SetDiffMode(AllocationForm.DiffMode.Left);
-				diffButtons.DifferenceLabel.Click += (_, __) => allocationForm.SetDiffMode(AllocationForm.DiffMode.Middle);
-				diffButtons.EndLabel.Click += (_, __) => allocationForm.SetDiffMode(AllocationForm.DiffMode.Right);
-				allocationForm.ControllerContainer.Controls.Add(diffButtons);
-				allocationForm.AddressSpaceControl.SnapshotOverride = CurrentDiff.Difference;
-				TransportForm.AddTab(allocationForm);
+				// TODO: Remove diff on tab close
+				TransportForm.Profile.AddDiff(CurrentDiff);
 
 				if (Licensing.IsTrial && !SentDiffNag)
 				{
@@ -214,6 +207,20 @@ namespace Alloclave
 					SentDiffNag = true;
 				}
 			}
+		}
+
+		private void AddDiffTab(Diff diff)
+		{
+			AllocationForm allocationForm = new AllocationForm(diff, TransportForm.AllocationForm.AddressSpaceControl.Width);
+			allocationForm.Text = "Diff";
+			allocationForm.ControllerContainer.Controls.Remove(allocationForm.MainScrubber);
+			DiffButtons diffButtons = new DiffButtons();
+			diffButtons.StartLabel.Click += (_, __) => allocationForm.SetDiffMode(AllocationForm.DiffMode.Left);
+			diffButtons.DifferenceLabel.Click += (_, __) => allocationForm.SetDiffMode(AllocationForm.DiffMode.Middle);
+			diffButtons.EndLabel.Click += (_, __) => allocationForm.SetDiffMode(AllocationForm.DiffMode.Right);
+			allocationForm.ControllerContainer.Controls.Add(diffButtons);
+			allocationForm.AddressSpaceControl.SnapshotOverride = diff.Difference;
+			TransportForm.AddTab(allocationForm);
 		}
 
 		public void ReturnToStartScreen()
@@ -350,8 +357,15 @@ namespace Alloclave
 			TransportForm.AllocationForm.MainScrubber.DoubleClick += MainScrubber_DoubleClick;
 			panel1.Controls.Add(TransportForm);
 
+			// Do some post-processing of the dataset
 			TransportForm.Profile.History.LastTimestamp = new TimeStamp();
-			TransportForm.Profile.History.UpdateRollingSnapshotAsync(true);
+			TransportForm.Profile.History.UpdateSnapshotAsync(TransportForm.Profile.History.Snapshot, true);
+			TransportForm.Profile.ProcessDiffs();
+
+			if (TransportForm.Profile.Diffs != null)
+			{
+				TransportForm.Profile.Diffs.ForEach((diff) => AddDiffTab(diff));
+			}
 		}
 	}
 

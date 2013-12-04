@@ -191,7 +191,7 @@ namespace Alloclave
 
 		void ColorPickerDialog_ColorChanged(object sender, EventArgs e)
 		{
-			History.UpdateRollingSnapshotAsync(true);
+			History.UpdateSnapshotAsync(History.Snapshot, true);
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -406,7 +406,7 @@ namespace Alloclave
 			if (History != null)
 			{
 				History.RebaseBlocks = true;
-				History.UpdateRollingSnapshotAsync();
+				History.UpdateSnapshotAsync(History.Snapshot);
 			}
 
 			NoDataPanel.Refresh();

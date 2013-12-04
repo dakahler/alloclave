@@ -144,7 +144,7 @@ namespace Alloclave
 			History history = sender as History;
 
 			history.ArtificialMaxTime = 0;
-			history.UpdateRollingSnapshotAsync();
+			history.UpdateSnapshotAsync(history.Snapshot);
 		}
 	}
 }

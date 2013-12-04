@@ -204,16 +204,16 @@ namespace Alloclave
 					Updated.Invoke(this, e);
 				}
 
-				UpdateRollingSnapshotAsync();
+				UpdateSnapshotAsync(Snapshot);
 			}
 		}
 
-		internal async void UpdateRollingSnapshotAsync(bool forceFullRebuild = false)
+		internal async void UpdateSnapshotAsync(Snapshot snapshot, bool forceFullRebuild = false)
 		{
-			await Task.Run(() => UpdateRollingSnapshot(forceFullRebuild));
+			await Task.Run(() => UpdateSnapshot(snapshot, forceFullRebuild));
 		}
 
-		internal void UpdateRollingSnapshot(bool forceFullRebuild)
+		internal void UpdateSnapshot(Snapshot snapshot, bool forceFullRebuild)
 		{
 			NBug.Exceptions.Handle(false, () =>
 			{
@@ -225,7 +225,7 @@ namespace Alloclave
 						bool forceUpdate = false;
 						if (RebaseBlocks)
 						{
-							Snapshot.Rebase(AddressRange.Min, AddressWidth);
+							snapshot.Rebase(AddressRange.Min, AddressWidth);
 							RebaseBlocks = false;
 							forceUpdate = true;
 						}
@@ -240,7 +240,7 @@ namespace Alloclave
 						bool isBackward = false;
 						if (forceFullRebuild)
 						{
-							Snapshot.Reset();
+							snapshot.Reset();
 							packets = Get();
 						}
 						else
@@ -298,9 +298,20 @@ namespace Alloclave
 						// Create final list, removing allocations as frees are encountered
 						if (packets != null)
 						{
+							int index = 0;
 							foreach (var pair in packets)
 							//Parallel.ForEach(newList, pair =>
 							{
+								// On a full rebuild, if there's a position specified in
+								// the snapshot, only go up to that position
+								if (forceFullRebuild && snapshot.Position > 0)
+								{
+									if (index > snapshot.Position)
+									{
+										break;
+									}
+								}
+
 								// TODO: Can allocation and free processing be combined?
 								// They should be exact opposites of each other
 								if (pair.Value is Allocation)
@@ -309,7 +320,7 @@ namespace Alloclave
 
 									if (!isBackward)
 									{
-										MemoryBlock newBlock = Snapshot.Add(
+										MemoryBlock newBlock = snapshot.Add(
 											allocation, AddressRange.Min, AddressWidth);
 
 										if (newBlock == null)
@@ -319,16 +330,16 @@ namespace Alloclave
 									}
 									else
 									{
-										Snapshot.Remove(allocation.Address);
+										snapshot.Remove(allocation.Address);
 									}
 								}
 								else
 								{
 									Free free = pair.Value as Free;
 
-									if (Snapshot.Find(free.Address) != null)
+									if (snapshot.Find(free.Address) != null)
 									{
-										MemoryBlock removedBlock = Snapshot.Remove(free.Address);
+										MemoryBlock removedBlock = snapshot.Remove(free.Address);
 										if (removedBlock != null)
 										{
 											removedBlock.Allocation.AssociatedFree = free;
@@ -343,7 +354,7 @@ namespace Alloclave
 									{
 										if (isBackward)
 										{
-											MemoryBlock newBlock = Snapshot.Add(
+											MemoryBlock newBlock = snapshot.Add(
 												free.AssociatedAllocation, AddressRange.Min, AddressWidth);
 										}
 										else
@@ -352,7 +363,14 @@ namespace Alloclave
 										}
 									}
 								}
+
+								index++;
 							} //);
+
+							if (!forceFullRebuild || snapshot.Position == 0)
+							{
+								snapshot.Position = Position;
+							}
 						}
 					}
 
@@ -402,7 +420,7 @@ namespace Alloclave
 
 		public void ForceRebuild()
 		{
-			UpdateRollingSnapshotAsync();
+			UpdateSnapshotAsync(Snapshot);
 		}
 
 		public void ForceFullSymbolLookup()
@@ -414,7 +432,11 @@ namespace Alloclave
 				{
 					foreach (var frame in allocation.Stack.Frames)
 					{
-						SymbolLookup.Instance.Lookup(frame.Address);
+						// TODO: This shouldn't need to know if there's an instance
+						if (SymbolLookup.Instance != null)
+						{
+							SymbolLookup.Instance.Lookup(frame.Address);
+						}
 					}
 				}
 			}

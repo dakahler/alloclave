@@ -71,7 +71,7 @@ namespace Alloclave
 
 		void MainScrubber_PositionChanged(object sender, EventArgs e)
 		{
-			Profile.History.UpdateRollingSnapshotAsync();
+			Profile.History.UpdateSnapshotAsync(Profile.History.Snapshot);
 		}
 
 		public TransportForm(Profile profile)
