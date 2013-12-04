@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
+using System.Threading;
 
 namespace Alloclave
 {
@@ -105,7 +106,7 @@ namespace Alloclave
 				return;
 			}
 
-			lock (LockObject)
+			if (Monitor.TryEnter(LockObject, 10))
 			{
 				MainGraphics.Clear(Color.FromArgb(100, 100, 100));
 
@@ -124,6 +125,8 @@ namespace Alloclave
 						}
 					));
 				}
+
+				Monitor.Exit(LockObject);
 			}
 		}
 
