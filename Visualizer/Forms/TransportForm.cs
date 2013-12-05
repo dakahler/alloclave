@@ -24,7 +24,7 @@ namespace Alloclave
 
         public AllocationForm AllocationForm { get; private set; }
 		MessagesForm MessagesForm = new MessagesForm();
-		InfoForm InfoForm = new InfoForm();
+		InfoForm InfoForm;
 
 		void History_Updated(object sender, EventArgs e)
 		{
@@ -79,6 +79,7 @@ namespace Alloclave
 		public TransportForm(Profile profile)
 			: this()
 		{
+            InfoForm = new InfoForm(true);
 			Profile = profile;
 			Init();
 			AllocationForm.Enabled = true;
@@ -87,6 +88,7 @@ namespace Alloclave
 		public TransportForm(ref Transport transport)
 			: this()
 		{
+            InfoForm = new InfoForm(false);
 			Profile = new Profile(ref transport);
 			Init();
 		}

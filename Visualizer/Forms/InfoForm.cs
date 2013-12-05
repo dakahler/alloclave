@@ -17,17 +17,24 @@ namespace Alloclave
 
 		private Allocation CurrentAllocation;
 
-		public InfoForm()
+        bool AllowSymbolsErrors;
+
+        /// <summary>
+        /// Info form constructor
+        /// </summary>
+        /// <param name="fromXml">If true, data is coming from a profile loaded from a file.</param>
+		public InfoForm(bool fromXml)
 		{
 			InitializeComponent();
 			TopLevel = false;
+            AllowSymbolsErrors = !fromXml;
 		}
 
 		public void Update(Allocation allocation)
 		{
 			CurrentAllocation = allocation;
 
-			if (!File.Exists(SymbolLookup.SymbolsPath))
+			if (AllowSymbolsErrors && !File.Exists(SymbolLookup.SymbolsPath))
 			{
 				symbolsNotFoundLabel.Visible = true;
 			}
@@ -73,7 +80,7 @@ namespace Alloclave
 				}
 				else
 				{
-					functionName += "Symbol parser not found!";
+                    functionName += "Unknown";
 				}
 
 				StackTable.Rows.Add(addressText, functionName, "", "");
