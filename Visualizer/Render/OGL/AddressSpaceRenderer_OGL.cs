@@ -195,8 +195,11 @@ namespace Alloclave
 
 		internal override void Rebuilt(History history)
 		{
-			base.Rebuilt(history);
-			RenderManager.Rebuild(history.Snapshot, (int)Width);
+            if (glControl != null)
+            {
+                base.Rebuilt(history);
+                RenderManager.Rebuild(history.Snapshot, (int)Width);
+            }
 		}
 
 		protected override float Width
