@@ -215,6 +215,11 @@ namespace Alloclave
 
 		internal void UpdateSnapshot(Snapshot snapshot, bool forceFullRebuild)
 		{
+            if (SuspendRebuilding)
+            {
+                return;
+            }
+
 			NBug.Exceptions.Handle(false, () =>
 			{
 				//lock (RebuildDataLock) // TODO
