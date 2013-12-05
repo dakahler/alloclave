@@ -112,6 +112,12 @@ namespace Alloclave
 				{
 					Monitor.Enter(glControl);
 
+                    if (glControl.Context == null)
+                    {
+                        Monitor.Exit(glControl);
+                        return;
+                    }
+
 					if (!glControl.Context.IsCurrent)
 					{
 						glControl.MakeCurrent();
