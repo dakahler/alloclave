@@ -105,7 +105,7 @@ namespace Alloclave
 			ProcessStartInfo startInfo = new ProcessStartInfo();
 			startInfo.CreateNoWindow = true;
 			startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-			startInfo.FileName = @"collector\bin\x86\release\TestAlloclaveCollector.exe";
+			startInfo.FileName = @"collector\test\TestAlloclaveCollector.exe";
 			startInfo.UseShellExecute = true;
 			startInfo.WorkingDirectory = Application.StartupPath;
 
