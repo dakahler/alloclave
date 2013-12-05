@@ -153,18 +153,17 @@ namespace Alloclave
 				//UInt64 timeRange = History.Instance.TimeRange.Max - History.Instance.TimeRange.Min;
 
 				// TODO
-				//// This just needs to check if everything is initialized
-				////if (LastTimestamp.Time > 0)
-				//{
-				//	// Slowly move forward
-				//	// TODO: This should be target-time based, but the tool doesn't really
-				//	// know what units the target time is in right now
-				//	if (!IsPaused && Scrubber.Position < 1.0)
-				//	{
-				//		Scrubber.Position += 0.0005;
-				//		History.Instance.UpdateRollingSnapshot(false, true);
-				//	}
-				//}
+				// This just needs to check if everything is initialized
+				//if (LastTimestamp.Time > 0)
+				{
+					// Slowly move forward
+					// TODO: This should be target-time based, but the tool doesn't really
+					// know what units the target time is in right now
+					if (!IsPaused && History.Scrubber.Position < 1.0)
+					{
+						History.Scrubber.Position += 0.0005;
+					}
+				}
 			}
 
 			timer.Start();

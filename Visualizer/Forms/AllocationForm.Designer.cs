@@ -129,6 +129,7 @@
             this.PlayPausePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.PlayPausePictureBox.TabIndex = 6;
             this.PlayPausePictureBox.TabStop = false;
+			this.PlayPausePictureBox.Click += PlayPausePictureBox_Click;
             // 
             // AllocationForm
             // 

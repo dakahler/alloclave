@@ -52,6 +52,8 @@ namespace Alloclave
 			AddressSpace.SelectionChanged -= AddressSpaceControl_SelectionChanged;
 			MessagesForm.AllocationSelected -= MessagesForm_AllocationSelected;
 
+			AllocationForm.MainScrubber.Dispose();
+
 			if (disposing && (components != null))
 			{
 				components.Dispose();

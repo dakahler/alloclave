@@ -309,8 +309,6 @@ namespace Alloclave
 				}
 			}
 
-			
-
 			return finalSnapshot;
 		}
 

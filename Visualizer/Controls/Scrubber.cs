@@ -142,7 +142,10 @@ namespace Alloclave
 
 		void Scrubber_SizeChanged(object sender, EventArgs e)
 		{
-			Rebuild();
+			if (!this.Disposing && !IsDisposed)
+			{
+				Rebuild();
+			}
 		}
 
 		void Scrubber_MouseDown(object sender, MouseEventArgs e)
