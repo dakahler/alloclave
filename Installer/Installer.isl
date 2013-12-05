@@ -3916,13 +3916,14 @@
 		<row><td>IDS__TargetReq_DESC_RAM</td><td>1033</td><td>The amount of RAM is not adequate for running [ProductName].</td><td>0</td><td/><td>-1801330451</td></row>
 		<row><td>IDS__TargetReq_DESC_RESOLUTION</td><td>1033</td><td>The screen resolution is not adequate for running [ProductName].</td><td>0</td><td/><td>-1801330451</td></row>
 		<row><td>ID_STRING1</td><td>1033</td><td/><td>0</td><td/><td>-1801330451</td></row>
-		<row><td>ID_STRING2</td><td>1033</td><td>http://www.CircularShift.com</td><td>0</td><td/><td>-1801373452</td></row>
+		<row><td>ID_STRING2</td><td>1033</td><td>http://www.circularshift.com</td><td>0</td><td/><td>639739379</td></row>
 		<row><td>ID_STRING3</td><td>1033</td><td>Circular Shift</td><td>0</td><td/><td>-1801373452</td></row>
 		<row><td>ID_STRING4</td><td>1033</td><td>support@circularshift.com</td><td>0</td><td/><td>-1801337903</td></row>
 		<row><td>ID_STRING5</td><td>1033</td><td>ALLOCL~1|Alloclave</td><td>0</td><td/><td>-1801350574</td></row>
 		<row><td>ID_STRING6</td><td>1033</td><td>ALLOCL~1|Alloclave</td><td>0</td><td/><td>-1801377166</td></row>
 		<row><td>ID_STRING7</td><td>1033</td><td>Uninstall</td><td>0</td><td/><td>-1801373070</td></row>
 		<row><td>ID_STRING8</td><td>1033</td><td>Uninstall</td><td>0</td><td/><td>-1801348812</td></row>
+		<row><td>ID_STRING9</td><td>1033</td><td>http://www.circularshift.com/support</td><td>0</td><td/><td>639718931</td></row>
 		<row><td>IIDS_UITEXT_FeatureUninstalled</td><td>1033</td><td>This feature will remain uninstalled.</td><td>0</td><td/><td>-1801330451</td></row>
 	</table>
 
@@ -4481,6 +4482,7 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="S255">ISComments</col>
 		<row><td>ALLUSERS</td><td>1</td><td/></row>
 		<row><td>ARPCONTACT</td><td>##ID_STRING4##</td><td/></row>
+		<row><td>ARPHELPLINK</td><td>##ID_STRING9##</td><td/></row>
 		<row><td>ARPINSTALLLOCATION</td><td/><td/></row>
 		<row><td>ARPNOMODIFY</td><td>1</td><td/></row>
 		<row><td>ARPNOREPAIR</td><td>1</td><td/></row>
