@@ -42,7 +42,7 @@ namespace Alloclave
 			}
 
 			SizeLabel.Text = String.Format("Size: {0} bytes", allocation.Size);
-			HeapLabel.Text = String.Format("Heap ID: {0}", allocation.HeapId);
+			//HeapLabel.Text = String.Format("Heap ID: {0}", allocation.HeapId);
 
 			StackTable.Rows.Clear();
 			foreach (CallStack.Frame frame in allocation.Stack.Frames.Reverse())

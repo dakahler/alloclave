@@ -154,5 +154,25 @@ namespace Alloclave
 				existingForm.Activate();
 			}
 		}
+
+        private void openProfilePictureBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            openProfilePictureBox.Image = Resources.openprofile;
+        }
+
+        private void openProfilePictureBox_MouseEnter(object sender, EventArgs e)
+        {
+            openProfilePictureBox.Image = Resources.openprofile_hover;
+        }
+
+        private void openProfilePictureBox_MouseLeave(object sender, EventArgs e)
+        {
+            openProfilePictureBox.Image = Resources.openprofile;
+        }
+
+        private void openProfilePictureBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            openProfilePictureBox.Image = Resources.openprofile_hover;
+        }
 	}
 }

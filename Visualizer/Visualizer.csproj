@@ -484,6 +484,8 @@
     <Content Include="AlloclaveIcon.ico" />
     <Content Include="AlloclaveIcon_NSIS.ico" />
     <Content Include="Core\AlloclaveIcon.ico" />
+    <None Include="Resources\openprofile_hover.png" />
+    <None Include="Resources\openprofile.png" />
     <None Include="Resources\Diff2.png" />
     <None Include="Resources\Diff1.png" />
     <None Include="Resources\tour_hover.png" />
