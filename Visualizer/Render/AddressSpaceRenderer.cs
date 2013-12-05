@@ -68,8 +68,8 @@ namespace Alloclave
 		public Vector GetLocalMouseLocation(Vector worldLocation)
 		{
 			Vector finalPoint = worldLocation;
-			finalPoint.X /= Width;
 			finalPoint = finalPoint - Offset;
+            finalPoint.X /= Width;
 			finalPoint /= Scale;
 
 			return finalPoint;
