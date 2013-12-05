@@ -6,6 +6,7 @@
 		<!-- Select a Visual Studio Configuration / InstallShield Release -->
 		<Configuration>Debug</Configuration>
 		<InstallShieldRelease>$(Configuration)</InstallShieldRelease>
+		<InstallShieldPath>C:\Program Files (x86)\InstallShield\2013LE\System</InstallShieldPath>
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- The InstallShieldProject item selects the project to build -->
