@@ -117,16 +117,15 @@ namespace Alloclave
 				SolidBrush brush = new SolidBrush(Color.FromArgb(148, 168, 172));
 				MainGraphics.FillRectangle(brush, barRectangle);
 
-				if (HandleExists && IsHandleCreated)
-				{
-					this.Invoke((MethodInvoker)(() =>
-						{
-							Refresh();
-						}
-					));
-				}
-
 				Monitor.Exit(LockObject);
+
+                if (HandleExists && IsHandleCreated)
+                {
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                        Refresh();
+                    }));
+                }
 			}
 		}
 
