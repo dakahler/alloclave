@@ -366,6 +366,7 @@
 		<row><td>ISX_DEFAULTCOMPONENT5</td><td>{73A949F6-4430-40D6-ACAA-0C7F72BE88B4}</td><td>COMMANDLINEPARSER</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT6</td><td>{2C646F7E-6A2C-49BC-9347-5EA436B8A578}</td><td>DOCKPANELSUITE</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT7</td><td>{CF53CB04-7E03-4B85-9DFA-203EA6ACA269}</td><td>HEAPWALKER</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT8</td><td>{274A58DF-36CC-4F0E-BC34-6C134F8E3E6E}</td><td>TEST</td><td>258</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT9</td><td>{960E5221-AC16-4C49-88A9-3F44796214CF}</td><td>MHOOK</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>NAppUpdate.Framework.dll</td><td>{7F0B4560-E1A6-4244-BE7B-8A8D57A66CD5}</td><td>INSTALLDIR</td><td>258</td><td/><td>nappupdate.framework.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>NBug.Primary_output</td><td>{B9BFC7C7-0990-415B-B893-D350C520EB5A}</td><td>INSTALLDIR</td><td>2</td><td/><td>nbug.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -1953,6 +1954,7 @@
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT5</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT6</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT7</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT8</td></row>
 		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT9</td></row>
 		<row><td>AlwaysInstall</td><td>NAppUpdate.Framework.dll</td></row>
 		<row><td>AlwaysInstall</td><td>NBug.Primary_output</td></row>
@@ -2004,6 +2006,7 @@
 		<row><td>pdbparser.primary_output</td><td>PdbParser.Primary_Output</td><td>PdbParser.Primary Output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PdbParser&gt;|Built</td><td>3</td><td/></row>
 		<row><td>symbollookup_pdb.primary_out2</td><td>SymbolLookup_PDB.Primary_output2</td><td>SymbolLookup_PDB.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;SymbolLookup_PDB&gt;|Built</td><td>3</td><td/></row>
 		<row><td>testalloclavecollector.exe</td><td>TestAlloclaveCollector.exe</td><td>TESTAL~1.EXE|TestAlloclaveCollector.exe</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Collector\Release\TestAlloclaveCollector.exe</td><td>1</td><td/></row>
+		<row><td>testalloclavecollector.pdb</td><td>ISX_DEFAULTCOMPONENT8</td><td>TESTAL~1.PDB|TestAlloclaveCollector.pdb</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Collector\Release\TestAlloclaveCollector.pdb</td><td>1</td><td/></row>
 		<row><td>visualizer.primary_output</td><td>Visualizer.Primary_output</td><td>Visualizer.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;Visualizer&gt;|Built</td><td>3</td><td/></row>
 		<row><td>win32transport.primary_outpu2</td><td>Win32Transport.Primary_output2</td><td>Win32Transport.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;Win32Transport&gt;|Built</td><td>3</td><td/></row>
 		<row><td>win32transport.source_files1</td><td>Win32Transport.Source_Files1</td><td>Win32Transport.Source Files</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;Win32Transport&gt;|SourceFiles</td><td>3</td><td/></row>
@@ -2174,6 +2177,7 @@
 		<row><td>ISX_DEFAULTCOMPONENT5</td><td/><td/><td>_B43E665F_86CF_4748_9369_EAAD3A73272E_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT6</td><td/><td/><td>_47B43F3B_FC5B_461C_BBF8_041DABF2F9EE_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT7</td><td/><td/><td>_3D75C4E1_18E4_4A21_A14D_F5681BE70234_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT8</td><td/><td/><td>_F9D3C93A_46E8_4670_8DA0_4B80D82D4F3C_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT9</td><td/><td/><td>_A90E03E0_4BD0_46A3_9AFC_8FCF0146EBE2_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NAppUpdate.Framework.dll</td><td/><td/><td>_E08CED8A_05E7_4414_8CDC_5F52427F4EA5_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NBug.Primary_output</td><td/><td/><td>_219260D3_3051_4D72_B8F8_D12EE418B803_FILTER</td><td/><td/><td/><td/></row>
