@@ -78,7 +78,7 @@
             this.NewMenuItem.Name = "NewMenuItem";
             this.NewMenuItem.Size = new System.Drawing.Size(152, 22);
             this.NewMenuItem.Text = "New";
-            this.NewMenuItem.Click += new System.EventHandler(this.NewMenuItem_Click);
+            this.NewMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // OpenMenuItem
             // 

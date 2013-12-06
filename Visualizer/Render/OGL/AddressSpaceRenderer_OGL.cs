@@ -101,16 +101,16 @@ namespace Alloclave
 
 		void OnRender(object sender, RenderManager_OGL.RenderEventArgs e)
 		{
-			try
-			{
-				if (!GlControlLoaded)
-				{
-					return;
-				}
+            try
+            {
+                if (!GlControlLoaded)
+                {
+                    return;
+                }
 
-				if (e.IsPreRender)
-				{
-					Monitor.Enter(glControl);
+                if (e.IsPreRender)
+                {
+                    Monitor.Enter(glControl);
 
                     if (glControl.Context == null)
                     {
@@ -118,63 +118,67 @@ namespace Alloclave
                         return;
                     }
 
-					if (!glControl.Context.IsCurrent)
-					{
-						glControl.MakeCurrent();
-					}
+                    if (!glControl.Context.IsCurrent)
+                    {
+                        glControl.MakeCurrent();
+                    }
 
-					GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+                    GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-					GL.MatrixMode(MatrixMode.Modelview);
+                    GL.MatrixMode(MatrixMode.Modelview);
 
-					GL.PushMatrix();
-					GL.Translate(Offset.X, Offset.Y, 0);
-					GL.Scale(Scale, Scale, Scale);
-				}
-				else
-				{
-					// TODO: These should modify the VBO instead of using immediate mode
-					MemoryBlock selectedBlock = SelectedBlock;
-					if (selectedBlock != null)
-					{
-						GL.Begin(BeginMode.Triangles);
-						GL.Color3(Color.FromArgb(40, 40, 40));
-						foreach (Triangle triangle in selectedBlock.Triangles)
-						{
-							foreach (Vector vertex in triangle.Vertices)
-							{
-								GL.Vertex3(vertex.X * Width, vertex.Y, 1);
-							}
-						}
-						GL.End();
-					}
+                    GL.PushMatrix();
+                    GL.Translate(Offset.X, Offset.Y, 0);
+                    GL.Scale(Scale, Scale, Scale);
+                }
+                else
+                {
+                    // TODO: These should modify the VBO instead of using immediate mode
+                    MemoryBlock selectedBlock = SelectedBlock;
+                    if (selectedBlock != null)
+                    {
+                        GL.Begin(BeginMode.Triangles);
+                        GL.Color3(Color.FromArgb(40, 40, 40));
+                        foreach (Triangle triangle in selectedBlock.Triangles)
+                        {
+                            foreach (Vector vertex in triangle.Vertices)
+                            {
+                                GL.Vertex3(vertex.X * Width, vertex.Y, 1);
+                            }
+                        }
+                        GL.End();
+                    }
 
-					MemoryBlock hoverBlock = HoverBlock;
-					if (hoverBlock != null)
-					{
-						GL.Begin(BeginMode.Triangles);
-						GL.Color3(Color.FromArgb(40, 40, 40));
-						foreach (Triangle triangle in hoverBlock.Triangles)
-						{
-							foreach (Vector vertex in triangle.Vertices)
-							{
-								GL.Vertex3(vertex.X * Width, vertex.Y, 1);
-							}
-						}
-						GL.End();
-					}
+                    MemoryBlock hoverBlock = HoverBlock;
+                    if (hoverBlock != null)
+                    {
+                        GL.Begin(BeginMode.Triangles);
+                        GL.Color3(Color.FromArgb(40, 40, 40));
+                        foreach (Triangle triangle in hoverBlock.Triangles)
+                        {
+                            foreach (Vector vertex in triangle.Vertices)
+                            {
+                                GL.Vertex3(vertex.X * Width, vertex.Y, 1);
+                            }
+                        }
+                        GL.End();
+                    }
 
-					GL.PopMatrix();
+                    GL.PopMatrix();
 
-					glControl.SwapBuffers();
-					glControl.Context.MakeCurrent(null);
-					Monitor.Exit(glControl);
-				}
-			}
-			catch (ObjectDisposedException)
-			{
+                    glControl.SwapBuffers();
+                    glControl.Context.MakeCurrent(null);
+                    Monitor.Exit(glControl);
+                }
+            }
+            catch (ObjectDisposedException)
+            {
 
-			}
+            }
+            catch (InvalidOperationException)
+            {
+
+            }
 		}
 
 		void glControl_Resize(object sender, EventArgs e)

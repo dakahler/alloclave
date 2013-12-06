@@ -157,7 +157,19 @@ namespace Alloclave
 
 		void newToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+            RenderManager_OGL.Suspend = true;
+
+            if (TransportForm != null)
+            {
+                TransportForm.Dispose();
+            }
+
+            panel1.Controls.Remove(StartScreen);
+            menuStrip1.Show();
+
 			StartNewSession();
+
+            RenderManager_OGL.Suspend = false;
 		}
 
 		void SpawnTransport(ExportFactory<Transport, ITransportName> transportAdapter)
@@ -270,11 +282,6 @@ namespace Alloclave
 		void helpToolStripMenuItem_DropDownClosed(object sender, EventArgs e)
 		{
 			helpToolStripMenuItem.ForeColor = Color.White;
-		}
-
-		void NewMenuItem_Click(object sender, EventArgs e)
-		{
-
 		}
 
 		public void OpenMenuItem_Click(object sender, EventArgs e)

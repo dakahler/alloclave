@@ -149,6 +149,10 @@ namespace Alloclave
 			{
 
 			}
+            catch (InvalidOperationException)
+            {
+
+            }
 		}
 
 		void glControl_Resize(object sender, EventArgs e)
