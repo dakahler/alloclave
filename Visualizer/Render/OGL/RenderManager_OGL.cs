@@ -226,11 +226,13 @@ namespace Alloclave
 							Array.Resize(ref vbo, vbo.Length * 2);
 						}
 
-						vbo[numVertices].R = block._Color.R;
-						vbo[numVertices].G = block._Color.G;
-						vbo[numVertices].B = block._Color.B;
-						vbo[numVertices].A = block._Color.A;
-						vbo[numVertices].Position = new Vector3((float)vertex.X * width, (float)vertex.Y, 0);
+                        vbo[numVertices].R = block._Color[0];
+                        vbo[numVertices].G = block._Color[1];
+                        vbo[numVertices].B = block._Color[2];
+                        vbo[numVertices].A = 255;
+						vbo[numVertices].Position.X = (float)vertex.X * width;
+                        vbo[numVertices].Position.Y = (float)vertex.Y;
+                        vbo[numVertices].Position.Z = 0;
 						numVertices++;
 					}
 				}

@@ -34,7 +34,8 @@ namespace Alloclave
 		// TODO: Better encapsulation
 		const int RowHeight = 2;
 
-		public Color _Color = Color.Red;
+        // Using System.Drawing.Color here is expensive for how often it's accessed
+        public byte[] _Color = new byte[3];
 
 		public Allocation Allocation;
 
@@ -60,7 +61,7 @@ namespace Alloclave
 
 		public MemoryBlock(MemoryBlock other)
 		{
-			_Color = other._Color;
+			other._Color.CopyTo(_Color, 0);
 			Allocation = other.Allocation;
 			GraphicsPath = other.GraphicsPath;
 			_Bounds = other._Bounds;
@@ -73,8 +74,18 @@ namespace Alloclave
 
 			Allocation = allocation;
 
-			Create(allocation, startAddress, addressWidth, color);
+            Create(allocation, startAddress, addressWidth, ColorToByteArray(color));
 		}
+
+        public static byte[] ColorToByteArray(Color color)
+        {
+            byte[] tempArray = new byte[3];
+            tempArray[0] = color.R;
+            tempArray[1] = color.G;
+            tempArray[2] = color.B;
+
+            return tempArray;
+        }
 
 		static Vector GetPixelPos(UInt64 address, UInt64 startAddress, UInt64 addressWidth)
 		{
@@ -97,7 +108,7 @@ namespace Alloclave
 			return new Vector((int)pixelX, (int)pixelY);
 		}
 
-		void Create(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, Color color)
+		void Create(Allocation allocation, UInt64 startAddress, UInt64 addressWidth, byte[] color)
 		{
 			Triangles.Clear();
 
@@ -178,7 +189,7 @@ namespace Alloclave
 				Triangles.Add(upper2);
 			}
 
-			_Color = color;
+			color.CopyTo(_Color, 0);
 		}
 
 		public void Rebase(UInt64 startAddress, UInt64 addressWidth)

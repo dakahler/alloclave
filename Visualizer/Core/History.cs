@@ -398,6 +398,7 @@ namespace Alloclave
 
 				if (finalList.Any())
 				{
+                    // TODO: IndexOfValue is very expensive
 					Position = PacketList.IndexOfValue(finalList.Last().Value);
 				}
 

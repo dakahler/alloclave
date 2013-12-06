@@ -287,7 +287,8 @@ namespace Alloclave
 			{
 				MemoryBlock tempBlock = new MemoryBlock(block);
 				tempBlock.IsValid = false;
-				tempBlock._Color = LerpColor(tempBlock._Color, Color.FromArgb(102, 102, 102), 0.1f);
+				tempBlock._Color = MemoryBlock.ColorToByteArray(
+                    LerpColor(tempBlock._Color, Color.FromArgb(102, 102, 102), 0.1f));
 
 				if (!finalSnapshot.Contains(tempBlock.Allocation.Address))
 				{
@@ -321,11 +322,11 @@ namespace Alloclave
 		}
 
 		// TODO: This can be a more generic lerp extension method
-		private static Color LerpColor(Color start, Color end, float t)
+		private static Color LerpColor(byte[] start, Color end, float t)
 		{
-			byte r = (byte)((start.R * t) + end.R * (1 - t));
-			byte g = (byte)((start.G * t) + end.G * (1 - t));
-			byte b = (byte)((start.B * t) + end.B * (1 - t));
+			byte r = (byte)((start[0] * t) + end.R * (1 - t));
+            byte g = (byte)((start[1] * t) + end.G * (1 - t));
+            byte b = (byte)((start[2] * t) + end.B * (1 - t));
 
 			return Color.FromArgb(r, g, b);
 		}
