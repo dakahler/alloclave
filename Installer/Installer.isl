@@ -366,7 +366,7 @@
 		<row><td>ISX_DEFAULTCOMPONENT5</td><td>{73A949F6-4430-40D6-ACAA-0C7F72BE88B4}</td><td>COMMANDLINEPARSER</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT6</td><td>{2C646F7E-6A2C-49BC-9347-5EA436B8A578}</td><td>DOCKPANELSUITE</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT7</td><td>{CF53CB04-7E03-4B85-9DFA-203EA6ACA269}</td><td>HEAPWALKER</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>ISX_DEFAULTCOMPONENT8</td><td>{274A58DF-36CC-4F0E-BC34-6C134F8E3E6E}</td><td>TEST</td><td>258</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT8</td><td>{99BCBBFE-607A-40C6-BD41-04FF5507FEB3}</td><td>TEST</td><td>258</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT9</td><td>{960E5221-AC16-4C49-88A9-3F44796214CF}</td><td>MHOOK</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>NAppUpdate.Framework.dll</td><td>{7F0B4560-E1A6-4244-BE7B-8A8D57A66CD5}</td><td>INSTALLDIR</td><td>258</td><td/><td>nappupdate.framework.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>NBug.Primary_output</td><td>{B9BFC7C7-0990-415B-B893-D350C520EB5A}</td><td>INSTALLDIR</td><td>2</td><td/><td>nbug.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -375,7 +375,7 @@
 		<row><td>OpenTK.dll</td><td>{D6E23330-ABBA-47EB-9F65-93EC112E6971}</td><td>INSTALLDIR</td><td>258</td><td/><td>opentk.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>PdbParser.Primary_Output</td><td>{50000A6F-D4C7-4EAF-8B0D-ABE238FA46B8}</td><td>INSTALLDIR</td><td>2</td><td/><td>pdbparser.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>SymbolLookup_PDB.Primary_output2</td><td>{CE2FAE16-EAD9-42B9-9365-0B309A9AA2B1}</td><td>SYMBOLLOOKUP</td><td>2</td><td/><td>symbollookup_pdb.primary_out2</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>TestAlloclaveCollector.exe</td><td>{F5E693CB-BB07-47DA-9D42-DEC4D139F02E}</td><td>TEST</td><td>258</td><td/><td>testalloclavecollector.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>TestAlloclaveCollector.exe</td><td>{82F7C77A-36D5-41B2-8476-E5231D54DCEC}</td><td>TEST</td><td>258</td><td/><td>testalloclavecollector.exe</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Visualizer.Primary_output</td><td>{56C23488-C214-4764-84E3-64A26EC02F97}</td><td>INSTALLDIR</td><td>2</td><td/><td>visualizer.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Win32Transport.Primary_output2</td><td>{D67BF725-136F-4437-87CA-6EE10A4F326E}</td><td>TRANSPORT</td><td>2</td><td/><td>win32transport.primary_outpu2</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Win32Transport.Source_Files1</td><td>{A21B3E4A-BA79-4FF3-9519-72F58E486843}</td><td>WIN32TRANSPORT</td><td>2</td><td/><td>win32transport.source_files1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -2005,8 +2005,8 @@
 		<row><td>opentk.glcontrol.dll</td><td>OpenTK.GLControl.dll</td><td>OPENTK~1.DLL|OpenTK.GLControl.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\External\opentk\Binaries\OpenTK\Release\OpenTK.GLControl.dll</td><td>1</td><td/></row>
 		<row><td>pdbparser.primary_output</td><td>PdbParser.Primary_Output</td><td>PdbParser.Primary Output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PdbParser&gt;|Built</td><td>3</td><td/></row>
 		<row><td>symbollookup_pdb.primary_out2</td><td>SymbolLookup_PDB.Primary_output2</td><td>SymbolLookup_PDB.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;SymbolLookup_PDB&gt;|Built</td><td>3</td><td/></row>
-		<row><td>testalloclavecollector.exe</td><td>TestAlloclaveCollector.exe</td><td>TESTAL~1.EXE|TestAlloclaveCollector.exe</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Collector\Release\TestAlloclaveCollector.exe</td><td>1</td><td/></row>
-		<row><td>testalloclavecollector.pdb</td><td>ISX_DEFAULTCOMPONENT8</td><td>TESTAL~1.PDB|TestAlloclaveCollector.pdb</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Collector\Release\TestAlloclaveCollector.pdb</td><td>1</td><td/></row>
+		<row><td>testalloclavecollector.exe</td><td>TestAlloclaveCollector.exe</td><td>TESTAL~1.EXE|TestAlloclaveCollector.exe</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Collector\x64\Release\TestAlloclaveCollector.exe</td><td>1</td><td/></row>
+		<row><td>testalloclavecollector.pdb</td><td>ISX_DEFAULTCOMPONENT8</td><td>TESTAL~1.PDB|TestAlloclaveCollector.pdb</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Collector\x64\Release\TestAlloclaveCollector.pdb</td><td>1</td><td/></row>
 		<row><td>visualizer.primary_output</td><td>Visualizer.Primary_output</td><td>Visualizer.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;Visualizer&gt;|Built</td><td>3</td><td/></row>
 		<row><td>win32transport.primary_outpu2</td><td>Win32Transport.Primary_output2</td><td>Win32Transport.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;Win32Transport&gt;|Built</td><td>3</td><td/></row>
 		<row><td>win32transport.source_files1</td><td>Win32Transport.Source_Files1</td><td>Win32Transport.Source Files</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;Win32Transport&gt;|SourceFiles</td><td>3</td><td/></row>
@@ -2177,7 +2177,7 @@
 		<row><td>ISX_DEFAULTCOMPONENT5</td><td/><td/><td>_B43E665F_86CF_4748_9369_EAAD3A73272E_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT6</td><td/><td/><td>_47B43F3B_FC5B_461C_BBF8_041DABF2F9EE_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT7</td><td/><td/><td>_3D75C4E1_18E4_4A21_A14D_F5681BE70234_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>ISX_DEFAULTCOMPONENT8</td><td/><td/><td>_F9D3C93A_46E8_4670_8DA0_4B80D82D4F3C_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT8</td><td/><td/><td>_397C51E3_6C9E_4B06_BAA1_FD91E4EF5C16_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT9</td><td/><td/><td>_A90E03E0_4BD0_46A3_9AFC_8FCF0146EBE2_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NAppUpdate.Framework.dll</td><td/><td/><td>_E08CED8A_05E7_4414_8CDC_5F52427F4EA5_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NBug.Primary_output</td><td/><td/><td>_219260D3_3051_4D72_B8F8_D12EE418B803_FILTER</td><td/><td/><td/><td/></row>
@@ -2186,7 +2186,7 @@
 		<row><td>OpenTK.dll</td><td/><td/><td>_39E5A850_9930_43FF_B84C_94F79317BF1F_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>PdbParser.Primary_Output</td><td/><td/><td>_2E63B788_D35D_44A1_A46B_994739B335F5_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>SymbolLookup_PDB.Primary_output2</td><td/><td/><td>_E4CCB6F5_8A5D_4F8E_AAF1_9B284E4881C9_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>TestAlloclaveCollector.exe</td><td/><td/><td>_EC05389E_345B_45C6_A674_DDC600EB9B5F_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>TestAlloclaveCollector.exe</td><td/><td/><td>_AC43B357_2784_4B15_8775_6091F6D36180_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Visualizer.Primary_output</td><td/><td/><td>_6EDF29DE_4143_4EF4_908E_680974CBB88A_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Win32Transport.Primary_output2</td><td/><td/><td>_8428687D_03A4_4A5D_93B0_5E4F6BA819C1_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Win32Transport.Source_Files1</td><td/><td/><td>_E1295699_25E4_4160_9D6F_430047AEB843_FILTER</td><td/><td/><td/><td/></row>
@@ -2292,6 +2292,7 @@
 		<col key="yes" def="s38">Feature_</col>
 		<col key="yes" def="s255">ISMergeModule_</col>
 		<col key="yes" def="i2">Language_</col>
+		<row><td>AlwaysInstall</td><td>Microsoft_VC120_CRT_x64.05F0B5F5_44A8_3793_976B_A4F17AECF92C</td><td>0</td></row>
 	</table>
 
 	<table name="ISFeatureSetupPrerequisites">
@@ -2414,6 +2415,7 @@
 		<col def="s255">Name</col>
 		<col def="S255">Destination</col>
 		<col def="I4">ISAttributes</col>
+		<row><td>Microsoft_VC120_CRT_x64.05F0B5F5_44A8_3793_976B_A4F17AECF92C</td><td>0</td><td>Visual C++ 12.0 CRT (x64)</td><td/><td/></row>
 	</table>
 
 	<table name="ISMergeModuleCfgValues">
