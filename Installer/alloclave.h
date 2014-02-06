@@ -46,7 +46,7 @@
 #define _ALLOCLAVE_CONSTANTS_H
 
 #define ALLOCLAVE_WIN32_ID		0x729a04e2
-#define ALLOCLAVE_WIN32_GUID	"857E3F44-91FB-456B-9D53-03B75C751B28"
+#define ALLOCLAVE_WIN32_GUID	L"857E3F44-91FB-456B-9D53-03B75C751B28"
 
 
 #endif // _ALLOCLAVE_CONSTANTS_H
@@ -437,7 +437,7 @@ namespace Alloclave
 	void RegisterCallStackParser(CallStack* parser);
 
 	// Tells the visualizer where to look for this program's symbols
-	void RegisterSymbolsPath(const char* symbolsPath);
+	void RegisterSymbolsPath(const wchar_t* symbolsPath);
 };
 
 #endif // _ALLOCLAVE_REGISTRATION_H
@@ -494,7 +494,7 @@ namespace Alloclave
 	{
 	public:
 
-		SetSymbols(const char* symbolsPath);
+		SetSymbols(const wchar_t* symbolsPath);
 
 		virtual Buffer& Serialize() const;
 		virtual void Deserialize(const Buffer& buffer, unsigned int bufferLength);
@@ -503,7 +503,7 @@ namespace Alloclave
 		PacketType GetPacketType() const;
 
 	private:
-		const char* SymbolsPath;
+		const wchar_t* SymbolsPath;
 	};
 
 };
@@ -544,7 +544,7 @@ namespace Alloclave
 
 		static unsigned int NumItems;
 
-		static const unsigned short Version = 0;
+		static const unsigned short Version = 1;
 	};
 
 };

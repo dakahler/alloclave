@@ -547,12 +547,14 @@ namespace Alloclave
 
 		#ifdef _WIN32
 			// Attempt to find the symbols automatically in win32
-			char path[MAX_PATH];
-			GetModuleFileName(NULL, path, sizeof(path));
-			size_t pathLength = strlen(path);
+			wchar_t path[MAX_PATH];
+			GetModuleFileNameW(NULL, path, sizeof(path));
+			size_t pathLength = wcslen(path);
 			if (pathLength > 3)
 			{
-				strcpy(path + (pathLength - 3), "pdb");
+				path[pathLength - 3] = 'p';
+				path[pathLength - 2] = 'd';
+				path[pathLength - 1] = 'b';
 			}
 			RegisterSymbolsPath(path);
 		#endif
@@ -628,7 +630,7 @@ namespace Alloclave
 		// TODO
 	}
 
-	void RegisterSymbolsPath(const char* symbolsPath)
+	void RegisterSymbolsPath(const wchar_t* symbolsPath)
 	{
 		GetThreadModel().StartCriticalSection();
 
@@ -642,7 +644,7 @@ namespace Alloclave
 	void RegisterHeap(void* /*address*/, unsigned int /*size*/, unsigned int /*heapId*/) {}
 	void RegisterFree(void* /*address*/, unsigned int /*heapId*/) {}
 	void RegisterScreenshot() {}
-	void RegisterSymbolsPath(const char* /*symbolsPath*/) {}
+	void RegisterSymbolsPath(const wchar_t* /*symbolsPath*/) {}
 #endif // ALLOCLAVE_ENABLED
 
 };
@@ -738,11 +740,13 @@ Packet::PacketType SetArchitecture::GetPacketType() const
 namespace Alloclave
 {
 
-SetSymbols::SetSymbols(const char* symbolsPath)
+SetSymbols::SetSymbols(const wchar_t* symbolsPath)
 	: SymbolsPath(symbolsPath)
 {
 	
 }
+
+#include <stdio.h>
 
 Buffer& SetSymbols::Serialize() const
 {
@@ -751,7 +755,7 @@ Buffer& SetSymbols::Serialize() const
 	buffer.Clear();
 
 	// This sends the path of the symbols file to the visualizer
-	unsigned short stringLength = (unsigned short)strlen(SymbolsPath);
+	unsigned short stringLength = (unsigned short)wcslen(SymbolsPath) * sizeof(wchar_t);
 	buffer.Add((void*)baseBuffer.GetData(), baseBuffer.GetSize());
 	buffer.Add((void*)&stringLength, sizeof(stringLength));
 	buffer.Add((void*)SymbolsPath, stringLength);
@@ -951,7 +955,7 @@ void Win32Transport::FindVisualizer()
 {
 	if (VisualizerHandle == NULL)
 	{
-		VisualizerHandle = FindWindow(NULL, ALLOCLAVE_WIN32_GUID);
+		VisualizerHandle = FindWindowW(NULL, ALLOCLAVE_WIN32_GUID);
 	}
 }
 
