@@ -20,7 +20,7 @@ Buffer& SetSymbols::Serialize() const
 	// This sends the path of the symbols file to the visualizer
 	unsigned short stringLength = (unsigned short)wcslen(SymbolsPath);
 	buffer.Add((void*)baseBuffer.GetData(), baseBuffer.GetSize());
-	buffer.Add((void*)&stringLength, sizeof(stringLength));
+	buffer.Add((void*)&stringLength, sizeof(stringLength)* sizeof(wchar_t));
 	buffer.Add((void*)SymbolsPath, stringLength * sizeof(wchar_t));
 
 	return buffer;
