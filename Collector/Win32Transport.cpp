@@ -41,7 +41,7 @@ void Win32Transport::FindVisualizer()
 {
 	if (VisualizerHandle == NULL)
 	{
-		VisualizerHandle = FindWindow(NULL, ALLOCLAVE_WIN32_GUID);
+		VisualizerHandle = FindWindowW(NULL, ALLOCLAVE_WIN32_GUID);
 	}
 }
 

@@ -19,7 +19,7 @@ namespace Alloclave
 	void RegisterCallStackParser(CallStack* parser);
 
 	// Tells the visualizer where to look for this program's symbols
-	void RegisterSymbolsPath(const char* symbolsPath);
+	void RegisterSymbolsPath(const wchar_t* symbolsPath);
 };
 
 #endif // _ALLOCLAVE_REGISTRATION_H

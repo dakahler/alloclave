@@ -5,7 +5,7 @@
 namespace Alloclave
 {
 
-SetSymbols::SetSymbols(const char* symbolsPath)
+SetSymbols::SetSymbols(const wchar_t* symbolsPath)
 	: SymbolsPath(symbolsPath)
 {
 	
@@ -18,10 +18,10 @@ Buffer& SetSymbols::Serialize() const
 	buffer.Clear();
 
 	// This sends the path of the symbols file to the visualizer
-	unsigned short stringLength = (unsigned short)strlen(SymbolsPath);
+	unsigned short stringLength = (unsigned short)wcslen(SymbolsPath);
 	buffer.Add((void*)baseBuffer.GetData(), baseBuffer.GetSize());
 	buffer.Add((void*)&stringLength, sizeof(stringLength));
-	buffer.Add((void*)SymbolsPath, stringLength);
+	buffer.Add((void*)SymbolsPath, stringLength * sizeof(wchar_t));
 
 	return buffer;
 }

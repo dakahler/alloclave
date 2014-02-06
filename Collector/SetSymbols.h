@@ -11,7 +11,7 @@ namespace Alloclave
 	{
 	public:
 
-		SetSymbols(const char* symbolsPath);
+		SetSymbols(const wchar_t* symbolsPath);
 
 		virtual Buffer& Serialize() const;
 		virtual void Deserialize(const Buffer& buffer, unsigned int bufferLength);
@@ -20,7 +20,7 @@ namespace Alloclave
 		PacketType GetPacketType() const;
 
 	private:
-		const char* SymbolsPath;
+		const wchar_t* SymbolsPath;
 	};
 
 };
