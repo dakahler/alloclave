@@ -25,7 +25,7 @@ namespace Alloclave
 		{
 			UInt16 stringLength = binaryReader.ReadUInt16();
 			byte[] rawBytes = binaryReader.ReadBytes(stringLength);
-			SymbolsPath = Encoding.ASCII.GetString(rawBytes);
+			SymbolsPath = Encoding.Unicode.GetString(rawBytes);
 		}
 	}
 }
