@@ -11,6 +11,8 @@ SetSymbols::SetSymbols(const wchar_t* symbolsPath)
 	
 }
 
+#include <stdio.h>
+
 Buffer& SetSymbols::Serialize() const
 {
 	Buffer& baseBuffer = Packet::Serialize();
@@ -18,10 +20,10 @@ Buffer& SetSymbols::Serialize() const
 	buffer.Clear();
 
 	// This sends the path of the symbols file to the visualizer
-	unsigned short stringLength = (unsigned short)wcslen(SymbolsPath);
+	unsigned short stringLength = (unsigned short)wcslen(SymbolsPath) * sizeof(wchar_t);
 	buffer.Add((void*)baseBuffer.GetData(), baseBuffer.GetSize());
-	buffer.Add((void*)&stringLength, sizeof(stringLength)* sizeof(wchar_t));
-	buffer.Add((void*)SymbolsPath, stringLength * sizeof(wchar_t));
+	buffer.Add((void*)&stringLength, sizeof(stringLength));
+	buffer.Add((void*)SymbolsPath, stringLength);
 
 	return buffer;
 }
