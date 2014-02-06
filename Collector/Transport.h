@@ -26,7 +26,7 @@ namespace Alloclave
 
 		static unsigned int NumItems;
 
-		static const unsigned short Version = 0;
+		static const unsigned short Version = 1;
 	};
 
 };
