@@ -198,6 +198,7 @@ class SourceInfo:
 				for filename in files:
 					path =  os.path.join(root, filename)
 					self.ScanSourceFile(path , 0)
+				return
 		
 	def WriteBeginFileHeader(self, filename, stream):
 		stream.write("// Begin File: %s\n\n" % (os.path.basename(filename)))
