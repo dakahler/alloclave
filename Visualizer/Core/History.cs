@@ -220,167 +220,150 @@ namespace Alloclave
                 return;
             }
 
-			//NBug.Exceptions.Handle(false, () =>
+			lock (AddLock)
 			{
-				lock (AddLock)
+				// Start by rebasing if necessary
+				bool forceUpdate = false;
+				if (RebaseBlocks)
 				{
-					// Start by rebasing if necessary
-					bool forceUpdate = false;
-					if (RebaseBlocks)
+					snapshot.Rebase(AddressRange.Min, AddressWidth);
+					RebaseBlocks = false;
+					forceUpdate = true;
+				}
+
+				UInt64 maxTime = ArtificialMaxTime;
+				if (maxTime == 0)
+				{
+					maxTime = TimeRange.Max;
+				}
+
+				IEnumerable<KeyValuePair<TimeStamp, IPacket>> packets = null;
+				bool isBackward = false;
+				if (forceFullRebuild)
+				{
+					snapshot.Reset();
+					packets = Get();
+				}
+				else
+				{
+					// Determine what entries we need to get based off scrubber position
+					UInt64 timeRange = maxTime - TimeRange.Min;
+
+					// Readjust the position if needed
+					if (ArtificialMaxTime == 0 && timeRange > 0)
 					{
-						snapshot.Rebase(AddressRange.Min, AddressWidth);
-						RebaseBlocks = false;
-						forceUpdate = true;
+						double rangeScale = (double)LastRange / (double)timeRange;
+
+						if (rangeScale > 0 && Scrubber._Position < 1.0)
+						{
+							// Hacky
+							Scrubber._Position *= rangeScale;
+							Scrubber._Position = Scrubber._Position.Clamp(0.0, 1.0);
+							Scrubber.FlagRedraw();
+						}
 					}
 
-					UInt64 maxTime = ArtificialMaxTime;
-					if (maxTime == 0)
-					{
-						maxTime = TimeRange.Max;
-					}
+					LastRange = timeRange;
 
-					IEnumerable<KeyValuePair<TimeStamp, IPacket>> packets = null;
-					bool isBackward = false;
-					if (forceFullRebuild)
+					double position = Scrubber.Position;
+					UInt64 currentTime = TimeRange.Min + (UInt64)((double)timeRange * position);
+
+					bool nothingToProcess = false;
+					if (currentTime > LastTimestamp.Time)
 					{
-						snapshot.Reset();
-						packets = Get();
+						packets = GetForward(new TimeStamp(currentTime));
+					}
+					else if (currentTime < LastTimestamp.Time)
+					{
+						packets = GetBackward(new TimeStamp(currentTime));
+						isBackward = true;
 					}
 					else
 					{
-						// Determine what entries we need to get based off scrubber position
-						UInt64 timeRange = maxTime - TimeRange.Min;
-
-						// Readjust the position if needed
-						if (ArtificialMaxTime == 0 && timeRange > 0)
-						{
-							double rangeScale = (double)LastRange / (double)timeRange;
-
-							if (rangeScale > 0 && Scrubber._Position < 1.0)
-							{
-								// Hacky
-								Scrubber._Position *= rangeScale;
-								Scrubber._Position = Scrubber._Position.Clamp(0.0, 1.0);
-								Scrubber.FlagRedraw();
-							}
-						}
-
-						LastRange = timeRange;
-
-						double position = Scrubber.Position;
-						UInt64 currentTime = TimeRange.Min + (UInt64)((double)timeRange * position);
-
-						bool nothingToProcess = false;
-						if (currentTime > LastTimestamp.Time)
-						{
-							packets = GetForward(new TimeStamp(currentTime));
-						}
-						else if (currentTime < LastTimestamp.Time)
-						{
-							packets = GetBackward(new TimeStamp(currentTime));
-							isBackward = true;
-						}
-						else
-						{
-							nothingToProcess = true;
-						}
-
-						LastTimestamp = new TimeStamp(currentTime);
-
-						if (nothingToProcess && !forceUpdate)
-						{
-							return;
-						}
+						nothingToProcess = true;
 					}
 
-					if (AddressRange.Max < AddressRange.Min)
+					LastTimestamp = new TimeStamp(currentTime);
+
+					if (nothingToProcess && !forceUpdate)
 					{
 						return;
 					}
+				}
 
-					// Create final list, removing allocations as frees are encountered
-					if (packets != null)
+				if (AddressRange.Max < AddressRange.Min)
+				{
+					return;
+				}
+
+				// Create final list, removing allocations as frees are encountered
+				if (packets != null)
+				{
+					int index = 0;
+					foreach (var pair in packets)
 					{
-						int index = 0;
-						foreach (var pair in packets)
-						//Parallel.ForEach(newList, pair =>
+						// On a full rebuild, if there's a position specified in
+						// the snapshot, only go up to that position
+						if (forceFullRebuild && snapshot.Position > 0)
 						{
-							// On a full rebuild, if there's a position specified in
-							// the snapshot, only go up to that position
-							if (forceFullRebuild && snapshot.Position > 0)
+							if (index > snapshot.Position)
 							{
-								if (index > snapshot.Position)
-								{
-									break;
-								}
+								break;
 							}
+						}
 
-							// TODO: Can allocation and free processing be combined?
-							// They should be exact opposites of each other
-							if (pair.Value is Allocation)
+						// TODO: Can allocation and free processing be combined?
+						// They should be exact opposites of each other
+						if (pair.Value is Allocation)
+						{
+							Allocation allocation = pair.Value as Allocation;
+
+							if (!isBackward)
 							{
-								Allocation allocation = pair.Value as Allocation;
+								MemoryBlock newBlock = snapshot.Add(
+									allocation, AddressRange.Min, AddressWidth);
+							}
+							else
+							{
+								snapshot.Remove(allocation.Address);
+							}
+						}
+						else
+						{
+							Free free = pair.Value as Free;
 
-								if (!isBackward)
+							if (snapshot.Find(free.Address) != null)
+							{
+								MemoryBlock removedBlock = snapshot.Remove(free.Address);
+								if (removedBlock != null)
 								{
-									MemoryBlock newBlock = snapshot.Add(
-										allocation, AddressRange.Min, AddressWidth);
-
-									if (newBlock == null)
-									{
-										//MessagesForm.Add(MessagesForm.MessageType.Error, allocation, "Duplicate allocation!");
-									}
-								}
-								else
-								{
-									snapshot.Remove(allocation.Address);
+									removedBlock.Allocation.AssociatedFree = free;
+									free.AssociatedAllocation = removedBlock.Allocation;
 								}
 							}
 							else
 							{
-								Free free = pair.Value as Free;
-
-								if (snapshot.Find(free.Address) != null)
+								if (isBackward)
 								{
-									MemoryBlock removedBlock = snapshot.Remove(free.Address);
-									if (removedBlock != null)
-									{
-										removedBlock.Allocation.AssociatedFree = free;
-										free.AssociatedAllocation = removedBlock.Allocation;
-									}
-									else
-									{
-										//throw new DataException();
-									}
-								}
-								else
-								{
-									if (isBackward)
-									{
-										MemoryBlock newBlock = snapshot.Add(
-											free.AssociatedAllocation, AddressRange.Min, AddressWidth);
-									}
-									else
-									{
-										//MessagesForm.Add(MessagesForm.MessageType.Error, free.AssociatedAllocation, "Duplicate free!");
-									}
+									MemoryBlock newBlock = snapshot.Add(
+										free.AssociatedAllocation, AddressRange.Min, AddressWidth);
 								}
 							}
-
-							index++;
-						} //);
-
-						if (!forceFullRebuild || snapshot.Position == 0)
-						{
-							snapshot.Position = Position;
 						}
+
+						index++;
 					}
 
-                    if (Rebuilt != null)
-                    {
-                        EventArgs e = new EventArgs();
-                        Rebuilt.Invoke(this, e);
-                    }
+					if (!forceFullRebuild || snapshot.Position == 0)
+					{
+						snapshot.Position = Position;
+					}
+				}
+
+				if (Rebuilt != null)
+				{
+					EventArgs e = new EventArgs();
+					Rebuilt.Invoke(this, e);
 				}
 			} //);
 		}

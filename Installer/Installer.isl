@@ -380,6 +380,7 @@
 		<row><td>Win32Transport.Primary_output2</td><td>{D67BF725-136F-4437-87CA-6EE10A4F326E}</td><td>TRANSPORT</td><td>2</td><td/><td>win32transport.primary_outpu2</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Win32Transport.Source_Files1</td><td>{A21B3E4A-BA79-4FF3-9519-72F58E486843}</td><td>WIN32TRANSPORT</td><td>2</td><td/><td>win32transport.source_files1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>WinFormsUI.Primary_output</td><td>{08A6F70C-CDAB-43F3-BF0B-07904D74E832}</td><td>INSTALLDIR</td><td>2</td><td/><td>winformsui.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>msdia120.dll</td><td>{271F41DC-1E4D-4ED3-AC48-63AED5AA1FF6}</td><td>INSTALLDIR</td><td>258</td><td/><td>msdia120.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
 
 	<table name="Condition">
@@ -1968,6 +1969,7 @@
 		<row><td>AlwaysInstall</td><td>Win32Transport.Primary_output2</td></row>
 		<row><td>AlwaysInstall</td><td>Win32Transport.Source_Files1</td></row>
 		<row><td>AlwaysInstall</td><td>WinFormsUI.Primary_output</td></row>
+		<row><td>AlwaysInstall</td><td>msdia120.dll</td></row>
 	</table>
 
 	<table name="File">
@@ -1996,6 +1998,7 @@
 		<row><td>license.txt5</td><td>ISX_DEFAULTCOMPONENT18</td><td>license.txt</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Collector\license.txt</td><td>1</td><td/></row>
 		<row><td>license1</td><td>ISX_DEFAULTCOMPONENT10</td><td>LICENSE</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Licenses\NAppUpdate\LICENSE</td><td>1</td><td/></row>
 		<row><td>main.cpp</td><td>ISX_DEFAULTCOMPONENT20</td><td>Main.cpp</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Collector\TestCollector\Main.cpp</td><td>1</td><td/></row>
+		<row><td>msdia120.dll</td><td>msdia120.dll</td><td>msdia120.dll</td><td>0</td><td/><td/><td>0</td><td>1</td><td>C:\Program Files (x86)\Microsoft Visual Studio 12.0\DIA SDK\bin\amd64\msdia120.dll</td><td>1</td><td/></row>
 		<row><td>nappupdate.framework.dll</td><td>NAppUpdate.Framework.dll</td><td>NAPPUP~1.DLL|NAppUpdate.Framework.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\External\NAppUpdate\src\NAppUpdate.Framework\bin\Release\NAppUpdate.Framework.dll</td><td>1</td><td/></row>
 		<row><td>nbug.primary_output</td><td>NBug.Primary_output</td><td>NBug.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;NBug&gt;|Built</td><td>3</td><td/></row>
 		<row><td>nbuglicense.txt</td><td>ISX_DEFAULTCOMPONENT11</td><td>NBUGLI~1.TXT|NBugLicense.txt</td><td>0</td><td/><td/><td/><td>1</td><td>C:\dev\Alloclave\Licenses\NBug\NBugLicense.txt</td><td>1</td><td/></row>
@@ -2191,6 +2194,7 @@
 		<row><td>Win32Transport.Primary_output2</td><td/><td/><td>_8428687D_03A4_4A5D_93B0_5E4F6BA819C1_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Win32Transport.Source_Files1</td><td/><td/><td>_E1295699_25E4_4160_9D6F_430047AEB843_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>WinFormsUI.Primary_output</td><td/><td/><td>_CD1CC617_6F84_4F74_B314_0609E248B50B_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>msdia120.dll</td><td/><td/><td>_CD0B6A8C_E622_4D84_82E0_8644ED0BB2CD_FILTER</td><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="ISCustomActionReference">
@@ -2260,6 +2264,20 @@
 	<table name="ISDependency">
 		<col key="yes" def="S50">ISDependency</col>
 		<col def="I2">Exclude</col>
+		<row><td>ALUT.DLL</td><td>1</td></row>
+		<row><td>LIBC.DLL</td><td>1</td></row>
+		<row><td>LIBDL.DYLIB</td><td>1</td></row>
+		<row><td>LIBEGL.DLL</td><td>1</td></row>
+		<row><td>LIBGL.SO.1</td><td>1</td></row>
+		<row><td>LIBGLES.DLL</td><td>1</td></row>
+		<row><td>LIBGLESV2.DLL</td><td>1</td></row>
+		<row><td>LIBX11.DLL</td><td>1</td></row>
+		<row><td>LIBXINERAMA.DLL</td><td>1</td></row>
+		<row><td>LIBXRANDR.SO.2</td><td>1</td></row>
+		<row><td>LIBXXF86VM.DLL</td><td>1</td></row>
+		<row><td>OPENAL32.DLL</td><td>1</td></row>
+		<row><td>OPENTK.DLL</td><td>1</td></row>
+		<row><td>OPENTK.GLCONTROL.DLL</td><td>1</td></row>
 	</table>
 
 	<table name="ISDisk1File">
@@ -4562,9 +4580,9 @@ QwBEAF8AUgBPAE0AAQBFAHgAcAByAGUAcwBzAA==
 		<row><td>PROGMSG_IIS_ROLLBACKVROOTS</td><td>##IDS_PROGMSG_IIS_ROLLBACKVROOTS##</td><td/></row>
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>PROGRAMFILETOLAUNCHATEND</td><td>[INSTALLDIR]Visualizer.Primary output</td><td/></row>
-		<row><td>ProductCode</td><td>{A03E032F-6214-43B9-B761-9DDED8AC626D}</td><td/></row>
+		<row><td>ProductCode</td><td>{D6992F5E-0596-4D7B-8CB2-3FA5DD0F23B3}</td><td/></row>
 		<row><td>ProductName</td><td>Alloclave</td><td/></row>
-		<row><td>ProductVersion</td><td>0.2.0</td><td/></row>
+		<row><td>ProductVersion</td><td>0.2.1</td><td/></row>
 		<row><td>ProgressType0</td><td>install</td><td/></row>
 		<row><td>ProgressType1</td><td>Installing</td><td/></row>
 		<row><td>ProgressType2</td><td>installed</td><td/></row>
