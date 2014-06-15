@@ -23,10 +23,7 @@ namespace Alloclave
 		{
 			InitializeComponent();
 
-			if (Licensing.IsLicensed)
-			{
-				purchaseButton.Hide();
-			}
+			purchaseButton.Hide();
 
 			dataGrid.Rows.Clear();
 			dataGrid.Rows.Add("Alloclave");

@@ -249,6 +249,7 @@
     <Compile Include="Core\Common.cs" />
     <Compile Include="Core\Diff.cs" />
     <Compile Include="Core\History.cs" />
+    <Compile Include="Core\Licensing.cs" />
     <Compile Include="Core\MessageBoxHelper.cs" />
     <Compile Include="Core\Profile.cs" />
     <Compile Include="Core\Program.cs" />
@@ -279,12 +280,6 @@
     </Compile>
     <Compile Include="Forms\ItemDetailForm.Designer.cs">
       <DependentUpon>ItemDetailForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Licensing.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Licensing.Designer.cs">
-      <DependentUpon>Licensing.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Main.cs">
       <SubType>Form</SubType>
@@ -391,9 +386,6 @@
     <EmbeddedResource Include="Forms\ItemDetailForm.resx">
       <DependentUpon>ItemDetailForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Licensing.resx">
-      <DependentUpon>Licensing.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -481,9 +473,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AlloclaveIcon.ico" />
     <Content Include="AlloclaveIcon_NSIS.ico" />
-    <Content Include="Core\AlloclaveIcon.ico" />
     <None Include="Resources\openprofile_hover.png" />
     <None Include="Resources\openprofile.png" />
     <None Include="Resources\Diff2.png" />
@@ -501,11 +491,6 @@
     <None Include="Resources\quickstart_hover.png" />
     <None Include="Resources\quickstart1.png" />
     <None Include="Resources\quickstart.png" />
-    <None Include="Resources\Dot_Selected.png" />
-    <None Include="Resources\Dot_Unselected.png" />
-    <None Include="Resources\AlloclaveLogo.png" />
-    <None Include="Resources\publickey.xml" />
-    <None Include="Resources\ScrubberDot.png" />
     <Resource Include="ColorPicker\colorbarIndicators.bmp" />
     <Resource Include="ColorPicker\eyedropper.bmp" />
     <Content Include="ColorPicker\popupcontainerbuttons.bmp" />

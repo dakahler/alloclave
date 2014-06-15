@@ -113,29 +113,20 @@ namespace Alloclave
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
-			Licensing licensing = new Licensing();
-			if (!licensing.Disposing && !licensing.IsDisposed)
+			AttachConsole(ATTACH_PARENT_PROCESS);
+
+			Main main = new Main();
+			if (!main.Disposing && !main.IsDisposed)
 			{
-				Application.Run(licensing);
+				UpdateManager.Instance.UpdateFeedReader = new InstallerAwareAppcastReader(Application.ProductVersion);
+				UpdateManager.Instance.UpdateSource = new NAppUpdate.Framework.Sources.SimpleWebSource(
+					Common.CompanyWebsiteUrl + "/alloclave/updatefeed.xml");
+				UpdateManager.Instance.ReinstateIfRestarted();
+
+				Application.Run(main);
 			}
 
-			if (Licensing.Status != Licensing.LicenseStatus.Invalid)
-			{
-				AttachConsole(ATTACH_PARENT_PROCESS);
-
-				Main main = new Main();
-				if (!main.Disposing && !main.IsDisposed)
-				{
-					UpdateManager.Instance.UpdateFeedReader = new InstallerAwareAppcastReader(Application.ProductVersion);
-					UpdateManager.Instance.UpdateSource = new NAppUpdate.Framework.Sources.SimpleWebSource(
-						Common.CompanyWebsiteUrl + "/alloclave/updatefeed.xml");
-					UpdateManager.Instance.ReinstateIfRestarted();
-
-					Application.Run(main);
-				}
-
-				FreeConsole();
-			}
+			FreeConsole();
 		}
 	}
 }
