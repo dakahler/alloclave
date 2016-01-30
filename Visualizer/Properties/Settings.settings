@@ -1,0 +1,33 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Alloclave.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Heap1_Allocation1" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">243, 184, 126</Value>
+    </Setting>
+    <Setting Name="Heap1_Allocation2" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">255, 228, 183</Value>
+    </Setting>
+    <Setting Name="Heap2_Allocation1" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">106, 177, 208</Value>
+    </Setting>
+    <Setting Name="Heap2_Allocation2" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">154, 207, 222</Value>
+    </Setting>
+    <Setting Name="Heap3_Allocation1" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">171, 253, 165</Value>
+    </Setting>
+    <Setting Name="Heap3_Allocation2" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">112, 212, 104</Value>
+    </Setting>
+    <Setting Name="Heap4_Allocation1" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">221, 196, 218</Value>
+    </Setting>
+    <Setting Name="Heap4_Allocation2" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">186, 130, 179</Value>
+    </Setting>
+    <Setting Name="LicenseText" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>
